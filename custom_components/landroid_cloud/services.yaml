@@ -1,0 +1,6 @@
+start:
+  description: Start mowing
+pause:
+  description: Pause mowing
+home:
+  description: Send Landroid home
