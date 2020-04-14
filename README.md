@@ -29,3 +29,7 @@ landroid_cloud:
   email: your@email.ocm
   password: YourPassword
 ```
+
+### Please note
+
+Currently this integration is only supporting 1 mower pr. account. Unfortunately I don't have multiple myself, so having a hard time testing this.
