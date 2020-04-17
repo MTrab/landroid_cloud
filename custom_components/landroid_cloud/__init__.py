@@ -9,6 +9,7 @@ import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.discovery import load_platform
 from homeassistant.helpers.dispatcher import dispatcher_send
 from homeassistant.helpers.event import async_track_time_interval
+from homeassistant.util import slugify as util_slugify
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -87,7 +88,7 @@ async def async_setup(hass, config):
     auth = await client.initialize(cloud_email, cloud_password, cloud_device_id)
 
     if not auth:
-        _LOGGER.warning("Fejl ved auth!")
+        _LOGGER.warning("Error in authentication!")
         return False
 
     api = WorxLandroidAPI(hass, client, config)
@@ -126,7 +127,7 @@ class WorxLandroidAPI:
 
         sensor_info = []
         info = {}
-        info["name"] = f"{DEFAULT_NAME}_{self._client.name}"
+        info["name"] = util_slugify(f"{DEFAULT_NAME}_{self._client.name}")
         info["friendly"] = self._client.name
         sensor_info.append(info)
 
