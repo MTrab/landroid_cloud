@@ -1,3 +1,6 @@
+[![](https://img.shields.io/github/release/mtrab/landroid_cloud/all.svg?style=plastic)](https://github.com/mtrab/landroid_cloud/releases)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg?style=plastic)](https://github.com/custom-components/hacs)
+
 # Landroid Cloud
 
 This component has been created to be used with Home Assistant.
