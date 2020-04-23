@@ -11,6 +11,8 @@ from . import API_WORX_SENSORS, LANDROID_API, UPDATE_SIGNAL
 
 _LOGGER = logging.getLogger(__name__)
 
+STATE_INITIALIZING = "Initializing"
+
 
 async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
     """Set up the available sensors for Worx Landroid."""
@@ -18,15 +20,16 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
         return
 
     entities = []
-    api = hass.data[LANDROID_API]
 
     info = discovery_info[0]
     for tSensor in API_WORX_SENSORS:
         name = "{}_{}".format(info["name"].lower(), tSensor.lower())
         friendly_name = "{} {}".format(info["friendly"], tSensor)
+        dev_id = info["id"]
+        api = hass.data[LANDROID_API][dev_id]
         sensor_type = tSensor
-        _LOGGER.debug("Init Landroid %s sensor", sensor_type)
-        entity = LandroidSensor(api, name, sensor_type, friendly_name)
+        _LOGGER.debug("Init Landroid %s sensor for %s", sensor_type, info["friendly"])
+        entity = LandroidSensor(api, name, sensor_type, friendly_name, dev_id)
         entities.append(entity)
 
     async_add_entities(entities, True)
@@ -35,15 +38,16 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
 class LandroidSensor(Entity):
     """Class to create and populate a Landroid Sensor."""
 
-    def __init__(self, api, name, sensor_type, friendly_name):
+    def __init__(self, api, name, sensor_type, friendly_name, dev_id):
         """Init new sensor."""
 
         self._api = api
         self._attributes = {}
         self._available = False
         self._name = friendly_name
-        self._state = None
+        self._state = STATE_INITIALIZING
         self._sensor_type = sensor_type
+        self._dev_id = dev_id
         self.entity_id = sensor.ENTITY_ID_FORMAT.format(name)
 
     @property
@@ -54,6 +58,8 @@ class LandroidSensor(Entity):
     @property
     def device_state_attributes(self):
         """Return sensor attributes."""
+        #attributes = self._attributes
+        #attributes["ID"] = self._dev_id
         return self._attributes
 
     @property
@@ -98,6 +104,7 @@ class LandroidSensor(Entity):
 
     def update(self):
         """Update the sensor."""
+        _LOGGER.debug("Updating %s", self.entity_id)
         data = self._get_data()
         if "state" in data:
             _LOGGER.debug(data)
@@ -106,5 +113,5 @@ class LandroidSensor(Entity):
             self._attributes.update(data)
             self._state = state
         else:
-            _LOGGER.debug("Something went wrong when updating state")
-            self._state = STATE_UNKNOWN
+            _LOGGER.warning("No data received for %s", self.entity_id)
+            _LOGGER.debug(data)

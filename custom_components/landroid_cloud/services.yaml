@@ -1,6 +1,24 @@
 start:
   description: Start mowing
+  fields:
+    id:
+      description: Landroid ID - found as attribute on the Landroid status sensor
+      example: 123435
 pause:
   description: Pause mowing
+  fields:
+    id:
+      description: Landroid ID - found as attribute on the Landroid status sensor
+      example: 123435
 home:
   description: Send Landroid home
+  fields:
+    id:
+      description: Landroid ID - found as attribute on the Landroid status sensor
+      example: 123435
+#config:
+#  description: Set config parameters - EXPERIMENTAL - NO FUNCTION YET
+#  fields:
+#    id:
+#      description: Landroid ID - found on status sensor
+#      example: 0
