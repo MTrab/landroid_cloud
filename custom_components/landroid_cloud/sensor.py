@@ -58,8 +58,6 @@ class LandroidSensor(Entity):
     @property
     def device_state_attributes(self):
         """Return sensor attributes."""
-        #attributes = self._attributes
-        #attributes["ID"] = self._dev_id
         return self._attributes
 
     @property

@@ -155,19 +155,19 @@ async def async_setup(hass, config):
 
     hass.services.async_register(DOMAIN, SERVICE_HOME, handle_home)
 
-#    async def handle_config(call):
-#        """Handle config service call."""
-#        if "id" in call.data:
-#            _LOGGER.debug("Data from Home Assistant: %s", call.data["id"])
-#
-#            for cli in client:
-#                attrs = vars(cli)
-#                if (attrs["id"] == call.data["id"]):
-#                    _LOGGER.debug(attrs["name"])
-#        else:
-#            _LOGGER.debug("No ID present - using 0")
-#
-#    hass.services.async_register(DOMAIN, SERVICE_CONFIG, handle_config)
+    async def handle_config(call):
+        """Handle config service call."""
+        if "id" in call.data:
+            _LOGGER.debug("Data from Home Assistant: %s", call.data["id"])
+
+            for cli in client:
+                attrs = vars(cli)
+                if (attrs["id"] == call.data["id"]):
+                    _LOGGER.debug(attrs["name"])
+        else:
+            _LOGGER.debug("No ID present - using 0")
+
+    hass.services.async_register(DOMAIN, SERVICE_CONFIG, handle_config)
 
     return True
 
