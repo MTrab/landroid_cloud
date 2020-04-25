@@ -1,4 +1,6 @@
 """Support for monitoring Worx Landroid Sensors."""
+import async_timeout
+import asyncio
 import logging
 
 from homeassistant.components import sensor
@@ -12,6 +14,7 @@ from . import API_WORX_SENSORS, LANDROID_API, UPDATE_SIGNAL
 _LOGGER = logging.getLogger(__name__)
 
 STATE_INITIALIZING = "Initializing"
+STATE_OFFLINE = "Offline"
 
 
 async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
@@ -58,8 +61,6 @@ class LandroidSensor(Entity):
     @property
     def device_state_attributes(self):
         """Return sensor attributes."""
-        #attributes = self._attributes
-        #attributes["ID"] = self._dev_id
         return self._attributes
 
     @property
@@ -102,7 +103,7 @@ class LandroidSensor(Entity):
         self._available = True
         return data
 
-    def update(self):
+    async def async_update(self):
         """Update the sensor."""
         _LOGGER.debug("Updating %s", self.entity_id)
         data = self._get_data()
@@ -113,5 +114,14 @@ class LandroidSensor(Entity):
             self._attributes.update(data)
             self._state = state
         else:
-            _LOGGER.warning("No data received for %s", self.entity_id)
-            _LOGGER.debug(data)
+            _LOGGER.debug("No data received for %s", self.entity_id)
+            reachable = self._api._client.online
+            if not reachable:
+                if "_battery" in self.entity_id:
+                    self._state = "Unknown"
+                else:
+                    self._state = STATE_OFFLINE
+            else:
+                attrs = vars(self._api._client)
+                for item in attrs:
+                    _LOGGER.debug("%s : %s", item, attrs[item])

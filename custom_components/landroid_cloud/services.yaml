@@ -20,5 +20,5 @@ home:
 #  description: Set config parameters - EXPERIMENTAL - NO FUNCTION YET
 #  fields:
 #    id:
-#      description: Landroid ID - found on status sensor
-#      example: 0
+#      description: Landroid ID - found as attribute on the Landroid status sensor
+#      example: 123435
