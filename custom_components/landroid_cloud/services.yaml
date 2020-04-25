@@ -16,9 +16,9 @@ home:
     id:
       description: Landroid ID - found as attribute on the Landroid status sensor
       example: 123435
-config:
-  description: Set config parameters - EXPERIMENTAL - NO FUNCTION YET
-  fields:
-    id:
-      description: Landroid ID - found as attribute on the Landroid status sensor
-      example: 123435
+#config:
+#  description: Set config parameters - EXPERIMENTAL - NO FUNCTION YET
+#  fields:
+#    id:
+#      description: Landroid ID - found as attribute on the Landroid status sensor
+#      example: 123435
