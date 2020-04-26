@@ -121,7 +121,7 @@ class LandroidSensor(Entity):
                     self._state = "Unknown"
                 else:
                     self._state = STATE_OFFLINE
-            else:
-                attrs = vars(self._api._client)
-                for item in attrs:
-                    _LOGGER.debug("%s : %s", item, attrs[item])
+            #else:
+            #    attrs = vars(self._api._client)
+            #    for item in attrs:
+            #        _LOGGER.debug("%s : %s", item, attrs[item])
