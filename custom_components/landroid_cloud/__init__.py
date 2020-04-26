@@ -93,7 +93,6 @@ async def async_setup(hass, config):
 
     cloud_email = config[DOMAIN][CONF_EMAIL]
     cloud_password = config[DOMAIN][CONF_PASSWORD]
-    refresh_rate = timedelta(seconds=config[DOMAIN][CONF_SCAN_INTERVAL])
 
     master = pyworxcloud.WorxCloud()
     auth = await master.initialize(cloud_email, cloud_password)
