@@ -113,7 +113,7 @@ async def async_setup(hass, config):
         await client[device].connect(device, False)
         
         api = WorxLandroidAPI(hass, device, client[device], config)
-        async_track_time_interval(hass, api.async_update, refresh_rate)
+        async_track_time_interval(hass, api.async_update, SCAN_INTERVAL)
         hass.data[LANDROID_API][device] = api
 
     async def handle_start(call):
