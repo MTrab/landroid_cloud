@@ -9,7 +9,7 @@ from homeassistant.const import (
     CONF_EMAIL,
     CONF_PASSWORD,
     CONF_DEVICES,
-    CONF_VERIFY_SSL,
+    CONF_SCAN_INTERVAL,
 )
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.discovery import load_platform
@@ -23,7 +23,7 @@ DEFAULT_VERIFY_SSL = True
 DEFAULT_NAME = "landroid"
 DOMAIN = "landroid_cloud"
 LANDROID_API = "landroid_cloud_api"
-SCAN_INTERVAL = timedelta(seconds=10)
+SCAN_INTERVAL = timedelta(seconds=30)
 UPDATE_SIGNAL = "landroid_cloud_update_signal"
 
 
@@ -33,7 +33,7 @@ CONFIG_SCHEMA = vol.Schema(
             {
                 vol.Required(CONF_EMAIL): cv.string,
                 vol.Required(CONF_PASSWORD): cv.string,
-                vol.Optional(CONF_VERIFY_SSL, default=DEFAULT_VERIFY_SSL): cv.boolean,
+                vol.Optional(CONF_SCAN_INTERVAL, default=SCAN_INTERVAL): cv.boolean,
             }
         )
     },
@@ -94,6 +94,7 @@ async def async_setup(hass, config):
 
     cloud_email = config[DOMAIN][CONF_EMAIL]
     cloud_password = config[DOMAIN][CONF_PASSWORD]
+    refresh_rate = timedelta(seconds=config[DOMAIN][CONF_SCAN_INTERVAL])
 
     master = pyworxcloud.WorxCloud()
     auth = await master.initialize(cloud_email, cloud_password)
@@ -112,7 +113,7 @@ async def async_setup(hass, config):
         await client[device].connect(device, False)
         
         api = WorxLandroidAPI(hass, device, client[device], config)
-        async_track_time_interval(hass, api.async_update, SCAN_INTERVAL)
+        async_track_time_interval(hass, api.async_update, refresh_rate)
         hass.data[LANDROID_API][device] = api
 
     async def handle_start(call):
@@ -205,5 +206,5 @@ class WorxLandroidAPI:
 
     async def async_update(self, now=None):
         """Update the state cache from Landroid API."""
-        self._client.update()
+        #self._client.update()
         dispatcher_send(self._hass, UPDATE_SIGNAL)
