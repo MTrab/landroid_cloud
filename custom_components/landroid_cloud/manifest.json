@@ -2,7 +2,7 @@
   "domain": "landroid_cloud",
   "name": "Worx Landroid Cloud",
   "documentation": "https://www.home-assistant.io/integrations/landroid_cloud/",
-  "requirements": ["pyworxcloud==1.2.13"],
+  "requirements": ["pyworxcloud==1.2.14"],
   "dependencies": [],
   "codeowners": ["@MTrab"]
 }
