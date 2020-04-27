@@ -29,7 +29,7 @@ Credit for inspiring to this component goes to [virtualzone](https://github.com/
 
 ```
 landroid_cloud:
-  - email: your@email.ocm
+  - email: this@example.com
     password: YourPassword
 ```
 
@@ -37,9 +37,9 @@ You can add multiple accounts like in this example:
 
 ```
 landroid_cloud:
-  - email: your@email.ocm
+  - email: this@example.com
     password: YourPassword
-  - email: another@email.ocm
+  - email: another@example.com
     password: AnotherPassword
 ```
 
