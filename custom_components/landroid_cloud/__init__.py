@@ -23,17 +23,22 @@ DEFAULT_VERIFY_SSL = True
 DEFAULT_NAME = "landroid"
 DOMAIN = "landroid_cloud"
 LANDROID_API = "landroid_cloud_api"
-SCAN_INTERVAL = timedelta(seconds=30)
+SCAN_INTERVAL = timedelta(seconds=60)
 UPDATE_SIGNAL = "landroid_cloud_update_signal"
 
 
 CONFIG_SCHEMA = vol.Schema(
     {
-        DOMAIN: vol.Schema(
-            {
-                vol.Required(CONF_EMAIL): cv.string,
-                vol.Required(CONF_PASSWORD): cv.string,
-            }
+        DOMAIN:vol.All(
+            cv.ensure_list,
+            [
+                vol.Schema(
+                    {
+                        vol.Required(CONF_EMAIL): cv.string,
+                        vol.Required(CONF_PASSWORD): cv.string,
+                    }
+                )
+            ],
         )
     },
     extra=vol.ALLOW_EXTRA,
@@ -90,29 +95,32 @@ async def async_setup(hass, config):
     """Set up the Worx Landroid Cloud component."""
     import pyworxcloud
     hass.data[LANDROID_API] = {}
+    dev = 0
 
-    cloud_email = config[DOMAIN][CONF_EMAIL]
-    cloud_password = config[DOMAIN][CONF_PASSWORD]
+    for cloud in config[DOMAIN]:
+        cloud_email = cloud[CONF_EMAIL]
+        cloud_password = cloud[CONF_PASSWORD]
 
-    master = pyworxcloud.WorxCloud()
-    auth = await master.initialize(cloud_email, cloud_password)
+        master = pyworxcloud.WorxCloud()
+        auth = await master.initialize(cloud_email, cloud_password)
 
-    if not auth:
-        _LOGGER.warning("Error in authentication!")
-        return False
+        if not auth:
+            _LOGGER.warning("Error in authentication!")
+            return False
 
-    num_dev = master.enumerate()
+        num_dev = master.enumerate()
 
-    for device in range(num_dev):
-        client.append(device)
-        _LOGGER.debug("Connecting to device ID %s", device)
-        client[device] = pyworxcloud.WorxCloud()
-        await client[device].initialize(cloud_email, cloud_password)
-        await client[device].connect(device, False)
-        
-        api = WorxLandroidAPI(hass, device, client[device], config)
-        async_track_time_interval(hass, api.async_update, SCAN_INTERVAL)
-        hass.data[LANDROID_API][device] = api
+        for device in range(num_dev):
+            client.append(dev)
+            _LOGGER.debug("Connecting to device ID %s (%s)", device, cloud_email)
+            client[dev] = pyworxcloud.WorxCloud()
+            await client[dev].initialize(cloud_email, cloud_password)
+            await client[dev].connect(device, False)
+
+            api = WorxLandroidAPI(hass, dev, client[dev], config)
+            async_track_time_interval(hass, api.async_update, SCAN_INTERVAL)
+            hass.data[LANDROID_API][dev] = api
+            dev += 1
 
     async def handle_start(call):
         """Handle start service call."""
@@ -205,4 +213,6 @@ class WorxLandroidAPI:
     async def async_update(self, now=None):
         """Update the state cache from Landroid API."""
         #self._client.update()
+        self._client.getStatus()
+
         dispatcher_send(self._hass, UPDATE_SIGNAL)

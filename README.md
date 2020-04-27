@@ -29,8 +29,18 @@ Credit for inspiring to this component goes to [virtualzone](https://github.com/
 
 ```
 landroid_cloud:
-  email: your@email.ocm
-  password: YourPassword
+  - email: your@email.ocm
+    password: YourPassword
+```
+
+You can add multiple accounts like in this example:
+
+```
+landroid_cloud:
+  - email: your@email.ocm
+    password: YourPassword
+  - email: another@email.ocm
+    password: AnotherPassword
 ```
 
 ### Please note
