@@ -43,6 +43,8 @@ landroid_cloud:
     password: AnotherPassword
 ```
 
-### Please note
+### Known bugs
 
-Currently this integration is only supporting 1 mower pr. account. Unfortunately I don't have multiple myself, so having a hard time testing this.
+If upgrading from version lower than 1.4, please comment out the landroid_cloud section from configuration.yaml, restart Home Assistant, reinsert the landroid_cloud section and restart again.
+
+
