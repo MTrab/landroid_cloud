@@ -212,7 +212,4 @@ class WorxLandroidAPI:
 
     async def async_update(self, now=None):
         """Update the state cache from Landroid API."""
-        #self._client.update()
-        self._client.getStatus()
-
         dispatcher_send(self._hass, UPDATE_SIGNAL)
