@@ -16,6 +16,12 @@ home:
     id:
       description: Landroid ID - found as attribute on the Landroid status sensor
       example: 123435
+update:
+  description: Send update request to Landroid
+  fields:
+    id:
+      description: Landroid ID - found as attribute on the Landroid status sensor. Be careful using this as too many requests result in a ban from the cloud service.
+      example: 123435
 #config:
 #  description: Set config parameters - EXPERIMENTAL - NO FUNCTION YET
 #  fields:

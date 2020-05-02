@@ -4,13 +4,7 @@ import logging
 
 import voluptuous as vol
 
-from homeassistant.const import (
-    CONF_DEVICE,
-    CONF_EMAIL,
-    CONF_PASSWORD,
-    CONF_DEVICES,
-    CONF_SCAN_INTERVAL,
-)
+from homeassistant.const import CONF_EMAIL, CONF_PASSWORD
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.discovery import load_platform
 from homeassistant.helpers.dispatcher import dispatcher_send
@@ -23,13 +17,14 @@ DEFAULT_VERIFY_SSL = True
 DEFAULT_NAME = "landroid"
 DOMAIN = "landroid_cloud"
 LANDROID_API = "landroid_cloud_api"
-SCAN_INTERVAL = timedelta(seconds=60)
+SCAN_INTERVAL = timedelta(seconds=30)
+FORCED_UPDATE = timedelta(minutes=30)
 UPDATE_SIGNAL = "landroid_cloud_update_signal"
 
 
 CONFIG_SCHEMA = vol.Schema(
     {
-        DOMAIN:vol.All(
+        DOMAIN: vol.All(
             cv.ensure_list,
             [
                 vol.Schema(
@@ -48,6 +43,7 @@ SERVICE_START = "start"
 SERVICE_PAUSE = "pause"
 SERVICE_HOME = "home"
 SERVICE_CONFIG = "config"
+SERVICE_UPDATE = "update"
 
 
 API_WORX_SENSORS = {
@@ -91,9 +87,11 @@ API_WORX_SENSORS = {
 
 client = []
 
+
 async def async_setup(hass, config):
     """Set up the Worx Landroid Cloud component."""
     import pyworxcloud
+
     hass.data[LANDROID_API] = {}
     dev = 0
 
@@ -108,17 +106,19 @@ async def async_setup(hass, config):
             _LOGGER.warning("Error in authentication!")
             return False
 
-        num_dev = master.enumerate()
+        num_dev = await hass.async_add_executor_job(master.enumerate)
 
         for device in range(num_dev):
             client.append(dev)
             _LOGGER.debug("Connecting to device ID %s (%s)", device, cloud_email)
             client[dev] = pyworxcloud.WorxCloud()
             await client[dev].initialize(cloud_email, cloud_password)
-            await client[dev].connect(device, False)
+            await hass.async_add_executor_job(client[dev].connect, device, False)
 
             api = WorxLandroidAPI(hass, dev, client[dev], config)
+            await api.async_force_update()
             async_track_time_interval(hass, api.async_update, SCAN_INTERVAL)
+            async_track_time_interval(hass, api.async_force_update, FORCED_UPDATE)
             hass.data[LANDROID_API][dev] = api
             dev += 1
 
@@ -129,7 +129,7 @@ async def async_setup(hass, config):
 
             for cli in client:
                 attrs = vars(cli)
-                if (attrs["id"] == ID):
+                if attrs["id"] == ID:
                     cli.start()
         else:
             client[0].start()
@@ -143,7 +143,7 @@ async def async_setup(hass, config):
 
             for cli in client:
                 attrs = vars(cli)
-                if (attrs["id"] == ID):
+                if attrs["id"] == ID:
                     cli.pause()
         else:
             client[0].pause()
@@ -157,26 +157,47 @@ async def async_setup(hass, config):
 
             for cli in client:
                 attrs = vars(cli)
-                if (attrs["id"] == ID):
+                if attrs["id"] == ID:
                     cli.stop()
         else:
             client[0].stop()
 
     hass.services.async_register(DOMAIN, SERVICE_HOME, handle_home)
 
-#    async def handle_config(call):
-#        """Handle config service call."""
-#        if "id" in call.data:
-#            _LOGGER.debug("Data from Home Assistant: %s", call.data["id"])
-#
-#            for cli in client:
-#                attrs = vars(cli)
-#                if (attrs["id"] == call.data["id"]):
-#                    _LOGGER.debug(attrs["name"])
-#        else:
-#            _LOGGER.debug("No ID present - using 0")
-#
-#    hass.services.async_register(DOMAIN, SERVICE_CONFIG, handle_config)
+    async def handle_update(call):
+        """Handle update service call."""
+
+        #attrs = vars(hass)
+        #for item in attrs:
+        #    print(item , ':' , attrs[item])
+
+        if "id" in call.data:
+            ID = call.data["id"]
+
+            for cli in client:
+                attrs = vars(cli)
+                if attrs["id"] == ID:
+                    _LOGGER.debug("Update of %s as requested by update service", cli.name)
+                    await hass.async_add_executor_job(cli.update)
+        else:
+            _LOGGER.debug("Update of %s as requested by update service", client[0].name)
+            await hass.async_add_executor_job(client[0].update)
+
+    hass.services.async_register(DOMAIN, SERVICE_UPDATE, handle_update)
+
+    #    async def handle_config(call):
+    #        """Handle config service call."""
+    #        if "id" in call.data:
+    #            _LOGGER.debug("Data from Home Assistant: %s", call.data["id"])
+    #
+    #            for cli in client:
+    #                attrs = vars(cli)
+    #                if (attrs["id"] == call.data["id"]):
+    #                    _LOGGER.debug(attrs["name"])
+    #        else:
+    #            _LOGGER.debug("No ID present - using 0")
+    #
+    #    hass.services.async_register(DOMAIN, SERVICE_CONFIG, handle_config)
 
     return True
 
@@ -212,4 +233,10 @@ class WorxLandroidAPI:
 
     async def async_update(self, now=None):
         """Update the state cache from Landroid API."""
+        #await self._hass.async_add_executor_job(self._client.getStatus)
         dispatcher_send(self._hass, UPDATE_SIGNAL)
+
+    async def async_force_update(self, now=None):
+        """Try forcing update."""
+        _LOGGER.debug("Forcing update for %s", self._client.name)
+        await self._hass.async_add_executor_job(self._client.getStatus)
