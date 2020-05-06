@@ -59,6 +59,7 @@ In addition, the following services are created:
 landroid_cloud.start
 landroid_cloud.home
 landroid_cloud.pause
+landroid_cloud.configure (can be used to set rain delay and time extension)
 ```
 
 You can simply add these to your Lovelace setup by adding an entity card. A recommended Lovelace layout is being considered for a future release.
