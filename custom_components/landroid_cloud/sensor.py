@@ -8,6 +8,7 @@ from homeassistant.const import STATE_UNKNOWN
 from homeassistant.core import callback
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.entity import Entity
+from homeassistant.helpers.icon import icon_for_battery_level
 
 from . import API_WORX_SENSORS, LANDROID_API, UPDATE_SIGNAL
 
@@ -73,9 +74,12 @@ class LandroidSensor(Entity):
         """Return the unit of measurement of this entity, if any."""
         return API_WORX_SENSORS[self._sensor_type]["unit"]
 
-    @property
     def icon(self):
         """Icon to use in the frontend."""
+        if self._sensor_type == "battery" and isinstance(self.state, int):
+            charging = self._attributes["charging"]
+            return icon_for_battery_level(battery_level=self.state, charging=charging)
+
         return API_WORX_SENSORS[self._sensor_type]["icon"]
 
     @property
@@ -118,7 +122,7 @@ class LandroidSensor(Entity):
             reachable = self._api._client.online
             if not reachable:
                 if "_battery" in self.entity_id:
-                    self._state = "Unknown"
+                    self._state = STATE_UNKNOWN
                 else:
                     self._state = STATE_OFFLINE
             #else:
