@@ -57,11 +57,11 @@ API_WORX_SENSORS = {
         },
         "icon": "mdi:battery",
         "unit": "%",
-        "device_class": None,
+        "device_class": "battery",
     },
     "error": {
         "state": {"error_description": "state", "error": "error_id"},
-        "icon": None,
+        "icon": "mdi:alert",
         "unit": None,
         "device_class": None,
     },
