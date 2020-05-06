@@ -72,7 +72,7 @@ If upgrading from version lower than 1.4, please comment out the landroid_cloud 
 
 You might experience being banned from Worx Landroid Cloud service.
 Follow this simple guide to make it work again:
-* Go to <My Landroids>(https://account.worxlandroid.com/product-items)
+* Go to [My Landroids](https://account.worxlandroid.com/product-items)
 * Unlink your Landroid(s)
 * Open app on mobile device
 * Add Landroid(s)
