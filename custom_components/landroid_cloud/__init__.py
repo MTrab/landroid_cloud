@@ -1,5 +1,6 @@
 """Support for Worx Landroid Cloud based lawn mowers."""
 from datetime import timedelta
+import json
 import logging
 
 import voluptuous as vol
@@ -43,7 +44,6 @@ SERVICE_START = "start"
 SERVICE_PAUSE = "pause"
 SERVICE_HOME = "home"
 SERVICE_CONFIG = "config"
-SERVICE_UPDATE = "update"
 
 
 API_WORX_SENSORS = {
@@ -78,6 +78,11 @@ API_WORX_SENSORS = {
             "yaw": "yaw",
             "roll": "roll",
             "pitch": "pitch",
+            "gps_latitude": "latitude",
+            "gps_longitude": "longitude",
+            "rain_delay": "raindelay",
+            "schedule_variation": "timeextension",
+            "firmware": "firmware_version",
         },
         "icon": None,
         "unit": None,
@@ -164,40 +169,40 @@ async def async_setup(hass, config):
 
     hass.services.async_register(DOMAIN, SERVICE_HOME, handle_home)
 
-    async def handle_update(call):
-        """Handle update service call."""
-
-        #attrs = vars(hass)
-        #for item in attrs:
-        #    print(item , ':' , attrs[item])
+    async def handle_config(call):
+        """Handle config service call."""
+        id = 0
+        sendData = False
+        tmpdata = {}
 
         if "id" in call.data:
-            ID = call.data["id"]
-
+            _LOGGER.debug("Data from Home Assistant: %s", call.data["id"])
+    
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == ID:
-                    _LOGGER.debug("Update of %s as requested by update service", cli.name)
-                    await hass.async_add_executor_job(cli.update)
-        else:
-            _LOGGER.debug("Update of %s as requested by update service", client[0].name)
-            await hass.async_add_executor_job(client[0].update)
+                if (attrs["id"] == call.data["id"]):
+                    break
+                else:
+                    id += 1
 
-    hass.services.async_register(DOMAIN, SERVICE_UPDATE, handle_update)
+        if "raindelay" in call.data:
+            tmpdata["rd"] = call.data["raindelay"]
+            _LOGGER.debug("Setting rain_delay for %s to %s", client[id].name, call.data["raindelay"])
+            sendData = True
 
-    #    async def handle_config(call):
-    #        """Handle config service call."""
-    #        if "id" in call.data:
-    #            _LOGGER.debug("Data from Home Assistant: %s", call.data["id"])
-    #
-    #            for cli in client:
-    #                attrs = vars(cli)
-    #                if (attrs["id"] == call.data["id"]):
-    #                    _LOGGER.debug(attrs["name"])
-    #        else:
-    #            _LOGGER.debug("No ID present - using 0")
-    #
-    #    hass.services.async_register(DOMAIN, SERVICE_CONFIG, handle_config)
+        if "timeextension" in call.data:
+            tmpdata["sc"] = {} 
+            tmpdata["sc"]["p"] = call.data["timeextension"]
+            data = json.dumps(tmpdata)
+            _LOGGER.debug("Setting time_extension for %s to %s", client[id].name, call.data["timeextension"])
+            sendData = True
+
+        if sendData:
+            data = json.dumps(tmpdata)
+            _LOGGER.debug("Sending: %s", data)
+            client[id].sendData(data)
+            
+    hass.services.async_register(DOMAIN, SERVICE_CONFIG, handle_config)
 
     return True
 
