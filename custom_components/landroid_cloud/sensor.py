@@ -74,6 +74,7 @@ class LandroidSensor(Entity):
         """Return the unit of measurement of this entity, if any."""
         return API_WORX_SENSORS[self._sensor_type]["unit"]
 
+    @property
     def icon(self):
         """Icon to use in the frontend."""
         if self._sensor_type == "battery" and isinstance(self.state, int):
