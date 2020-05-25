@@ -7,7 +7,7 @@ This component has been created to be used with Home Assistant.
 
 Landroid Cloud presents a possibility to connect your cloud connected Worx Landroid mowers to Home Assistant.
 
-### Credit
+## Credit
 
 Credit for inspiring to this component goes to [virtualzone](https://github.com/virtualzone).
 
@@ -57,7 +57,7 @@ In addition, the following services are created:
 
 ```
 landroid_cloud.start
-landroid_cloud.stop
+landroid_cloud.home
 landroid_cloud.pause
 landroid_cloud.configure (can be used to set rain delay and time extension)
 ```
@@ -67,3 +67,13 @@ You can simply add these to your Lovelace setup by adding an entity card. A reco
 ### Known bugs
 
 If upgrading from version lower than 1.4, please comment out the landroid_cloud section from configuration.yaml, restart Home Assistant, reinsert the landroid_cloud section and restart again.
+
+### Other useful information
+#### Services and app stopped working
+
+You might experience being banned from Worx Landroid Cloud service.
+Follow this simple guide to make it work again:
+* Go to [My Landroids](https://account.worxlandroid.com/product-items)
+* Unlink your Landroid(s)
+* Open app on mobile device
+* Add Landroid(s)
