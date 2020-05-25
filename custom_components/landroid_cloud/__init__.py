@@ -186,13 +186,13 @@ async def async_setup(hass, config):
                     id += 1
 
         if "raindelay" in call.data:
-            tmpdata["rd"] = call.data["raindelay"]
+            tmpdata["rd"] = int(call.data["raindelay"])
             _LOGGER.debug("Setting rain_delay for %s to %s", client[id].name, call.data["raindelay"])
             sendData = True
 
         if "timeextension" in call.data:
             tmpdata["sc"] = {} 
-            tmpdata["sc"]["p"] = call.data["timeextension"]
+            tmpdata["sc"]["p"] = int(call.data["timeextension"])
             data = json.dumps(tmpdata)
             _LOGGER.debug("Setting time_extension for %s to %s", client[id].name, call.data["timeextension"])
             sendData = True

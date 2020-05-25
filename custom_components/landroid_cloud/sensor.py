@@ -118,6 +118,10 @@ class LandroidSensor(Entity):
             _LOGGER.debug("Mower %s State %s", self._name, state)
             self._attributes.update(data)
             self._state = state
+            if "latitude" in self._attributes:
+                if self._attributes["latitude"] == None:
+                    del self._attributes["latitude"]
+                    del self._attributes["longitude"]
         else:
             _LOGGER.debug("No data received for %s", self.entity_id)
             reachable = self._api._client.online
@@ -126,7 +130,3 @@ class LandroidSensor(Entity):
                     self._state = STATE_UNKNOWN
                 else:
                     self._state = STATE_OFFLINE
-            #else:
-            #    attrs = vars(self._api._client)
-            #    for item in attrs:
-            #        _LOGGER.debug("%s : %s", item, attrs[item])
