@@ -130,7 +130,7 @@ async def async_setup(hass, config):
     async def handle_start(call):
         """Handle start service call."""
         if "id" in call.data:
-            ID = call.data["id"]
+            ID = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
@@ -144,7 +144,7 @@ async def async_setup(hass, config):
     async def handle_pause(call):
         """Handle pause service call."""
         if "id" in call.data:
-            ID = call.data["id"]
+            ID = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
@@ -158,7 +158,7 @@ async def async_setup(hass, config):
     async def handle_home(call):
         """Handle pause service call."""
         if "id" in call.data:
-            ID = call.data["id"]
+            ID = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
@@ -180,7 +180,7 @@ async def async_setup(hass, config):
     
             for cli in client:
                 attrs = vars(cli)
-                if (attrs["id"] == call.data["id"]):
+                if (attrs["id"] == int(call.data["id"])):
                     break
                 else:
                     id += 1
