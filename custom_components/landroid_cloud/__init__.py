@@ -205,7 +205,7 @@ async def async_setup(hass, config):
 
         if "multizone_probabilities" in call.data:
             tmpdata["mzv"] = []
-            for idx, val in enumerate(call.data["multizone_probabilities"]]):
+            for idx, val in enumerate(call.data["multizone_probabilities"]):
                 for _ in range(val):
                     tmpdata["mzv"].append(idx)
             data = json.dumps(tmpdata)
