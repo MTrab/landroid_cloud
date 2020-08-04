@@ -83,6 +83,8 @@ API_WORX_SENSORS = {
             "rain_delay": "raindelay",
             "schedule_variation": "timeextension",
             "firmware": "firmware_version",
+            "serial": "serial",
+            "mac": "mac",
         },
         "icon": None,
         "unit": None,
