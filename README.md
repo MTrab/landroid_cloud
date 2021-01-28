@@ -79,3 +79,10 @@ Follow this simple guide to make it work again:
 * Unlink your Landroid(s)
 * Open app on mobile device
 * Add Landroid(s)
+
+### To-do
+
+* Add proper integration flow
+* Code optimization
+* Make this an official integration
+* Make this vacuum compatible - might make this easier to move to a mower "domain" if/when this is made available in Home Assistant
