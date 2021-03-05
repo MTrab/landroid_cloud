@@ -3,5 +3,6 @@
   "name": "Worx Landroid Cloud",
   "documentation": "https://www.home-assistant.io/integrations/landroid_cloud/",
   "requirements": ["pyworxcloud==1.2.17"],
+  "version": "1.6.5",
   "codeowners": ["@MTrab"]
 }
