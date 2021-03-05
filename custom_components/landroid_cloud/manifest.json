@@ -4,5 +4,6 @@
   "documentation": "https://github.com/MTrab/landroid_cloud/blob/master/README.md",
   "issue_tracker": "https://github.com/MTrab/landroid_cloud/issues",
   "requirements": ["pyworxcloud==1.2.21"],
+  "version": "1.6.5",
   "codeowners": ["@MTrab"]
 }
