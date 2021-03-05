@@ -28,3 +28,9 @@ config:
     timeextension:
       description: Set time extension. Extension in % ranging from -100 to 100
       example: -23
+    multizone_distances:
+      description: Set multizone distances. Distances in meter. 0 = Disabled
+      example: '[15, 80, 120, 155]'
+    multizone_probabilities:
+      description: Set multizone probabilities. Probabilities in parts-of-ten. 1 = 10%, 2 = 20%, ...
+      example: '[5, 1, 2, 2]'

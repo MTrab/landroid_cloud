@@ -83,6 +83,8 @@ API_WORX_SENSORS = {
             "rain_delay": "raindelay",
             "schedule_variation": "timeextension",
             "firmware": "firmware_version",
+            "serial": "serial",
+            "mac": "mac",
         },
         "icon": None,
         "unit": None,
@@ -177,7 +179,7 @@ async def async_setup(hass, config):
 
         if "id" in call.data:
             _LOGGER.debug("Data from Home Assistant: %s", call.data["id"])
-    
+
             for cli in client:
                 attrs = vars(cli)
                 if (attrs["id"] == int(call.data["id"])):
@@ -191,17 +193,32 @@ async def async_setup(hass, config):
             sendData = True
 
         if "timeextension" in call.data:
-            tmpdata["sc"] = {} 
+            tmpdata["sc"] = {}
             tmpdata["sc"]["p"] = int(call.data["timeextension"])
             data = json.dumps(tmpdata)
             _LOGGER.debug("Setting time_extension for %s to %s", client[id].name, call.data["timeextension"])
+            sendData = True
+
+        if "multizone_distances" in call.data:
+            tmpdata["mz"] = [int(x) for x in call.data["multizone_distances"]]
+            data = json.dumps(tmpdata)
+            _LOGGER.debug("Setting multizone distances for %s to %s", client[id].name, call.data["multizone_distances"])
+            sendData = True
+
+        if "multizone_probabilities" in call.data:
+            tmpdata["mzv"] = []
+            for idx, val in enumerate(call.data["multizone_probabilities"]):
+                for _ in range(val):
+                    tmpdata["mzv"].append(idx)
+            data = json.dumps(tmpdata)
+            _LOGGER.debug("Setting multizone probabilities for %s to %s", client[id].name, call.data["multizone_probabilities"])
             sendData = True
 
         if sendData:
             data = json.dumps(tmpdata)
             _LOGGER.debug("Sending: %s", data)
             client[id].sendData(data)
-            
+
     hass.services.async_register(DOMAIN, SERVICE_CONFIG, handle_config)
 
     return True
