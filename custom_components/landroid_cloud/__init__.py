@@ -1,5 +1,6 @@
 """Support for Worx Landroid Cloud based lawn mowers."""
 from datetime import timedelta
+from time import sleep
 import json
 import logging
 
@@ -44,6 +45,7 @@ SERVICE_START = "start"
 SERVICE_PAUSE = "pause"
 SERVICE_HOME = "home"
 SERVICE_CONFIG = "config"
+SERVICE_BORDER = "border"
 
 
 API_WORX_SENSORS = {
@@ -170,6 +172,28 @@ async def async_setup(hass, config):
             client[0].stop()
 
     hass.services.async_register(DOMAIN, SERVICE_HOME, handle_home)
+
+    async def handle_border(call):
+        """Handle bordercut service call."""
+        if "id" in call.data:
+            ID = int(call.data["id"])
+
+            for cli in client:
+                attrs = vars(cli)
+                if attrs["id"] == ID:
+                    cli.zonetraining()
+                    time.sleep(3)
+                    cli.pause()
+                    time.sleep(3)
+                    cli.stop()
+        else:
+            client[0].zonetraining()
+            time.sleep(3)
+            client[0].pause()
+            time.sleep(3)
+            client[0].stop()
+
+    hass.services.async_register(DOMAIN, SERVICE_BORDER, handle_border)
 
     async def handle_config(call):
         """Handle config service call."""
