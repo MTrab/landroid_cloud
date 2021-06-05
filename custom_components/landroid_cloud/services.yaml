@@ -17,7 +17,7 @@ home:
       description: Landroid ID. Found as attribute on the Landroid status sensor
       example: 123435
 border:
-  descripotion: Start border cut
+  description: Start border cut
   fields:
     id:
       description: Landroid ID. Found as attribute on the Landroid status sensor
