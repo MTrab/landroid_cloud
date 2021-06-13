@@ -136,9 +136,14 @@ async def async_setup(hass, config):
             for cli in client:
                 attrs = vars(cli)
                 if attrs["id"] == ID:
-                    cli.poll()
+                    error = cli.tryToPoll()
+                    if error is not None:
+                        _LOGGER.warning(error)
+
         else:
-            client[0].poll()
+            error = client[0].tryToPoll()
+            if error is not None:
+                _LOGGER.warning(error)
 
     hass.services.async_register(DOMAIN, SERVICE_POLL, handle_poll)
 
