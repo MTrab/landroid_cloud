@@ -89,6 +89,7 @@ API_WORX_SENSORS = {
             "firmware": "firmware_version",
             "serial": "serial",
             "mac": "mac",
+            "schedule_mower_active": "schedule_enabled",
         },
         "icon": None,
         "unit": None,
