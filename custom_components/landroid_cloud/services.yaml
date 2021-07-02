@@ -16,8 +16,14 @@ home:
     id:
       description: Landroid ID. Found as attribute on the Landroid status sensor
       example: 123435
-border:
-  descripotion: Start border cut
+enable:
+  descripotion: Enable schedule
+  fields:
+    id:
+      description: Landroid ID. Found as attribute on the Landroid status sensor
+      example: 123435
+disable:
+  descripotion: Disable schedule
   fields:
     id:
       description: Landroid ID. Found as attribute on the Landroid status sensor
