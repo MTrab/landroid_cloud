@@ -111,8 +111,7 @@ async def async_setup(hass, config):
     for cloud in config[DOMAIN]:
         cloud_email = cloud[CONF_EMAIL]
         cloud_password = cloud[CONF_PASSWORD]
-        if cloud[CONF_TYPE] = None:
-            cloud_type = 'worx'
+        cloud_type = cloud.get(CONF_TYPE, 'worx')
 
         master = pyworxcloud.WorxCloud()
         auth = await master.initialize(cloud_email, cloud_password, cloud_type)
