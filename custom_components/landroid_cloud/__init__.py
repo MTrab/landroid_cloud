@@ -6,7 +6,7 @@ import time
 
 import voluptuous as vol
 
-from homeassistant.const import CONF_EMAIL, CONF_PASSWORD
+from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.discovery import load_platform
 from homeassistant.helpers.dispatcher import dispatcher_send
@@ -33,7 +33,7 @@ CONFIG_SCHEMA = vol.Schema(
                     {
                         vol.Required(CONF_EMAIL): cv.string,
                         vol.Required(CONF_PASSWORD): cv.string,
-                        vol.Optional('type'): cv.string,
+                        vol.Optional(CONF_TYPE): cv.string,
                     }
                 )
             ],
@@ -111,7 +111,8 @@ async def async_setup(hass, config):
     for cloud in config[DOMAIN]:
         cloud_email = cloud[CONF_EMAIL]
         cloud_password = cloud[CONF_PASSWORD]
-        cloud_type = cloud['type'] if cloud['type'] else 'worx'
+        if cloud[CONF_TYPE] = None:
+            cloud_type = 'worx'
 
         master = pyworxcloud.WorxCloud()
         auth = await master.initialize(cloud_email, cloud_password, cloud_type)
