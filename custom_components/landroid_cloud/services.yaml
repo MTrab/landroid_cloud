@@ -1,9 +1,3 @@
-poll:
-  description: Poll mower status info
-  fields:
-    id:
-      description: Landroid ID. Found as attribute on the Landroid status sensor
-      example: 123435
 start:
   description: Start mowing
   fields:

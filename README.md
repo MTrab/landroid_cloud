@@ -56,7 +56,6 @@ sensor.landroid_[NAME_FROM_APP]_status
 In addition, the following services are created:
 
 ```
-landroid_cloud.poll
 landroid_cloud.start
 landroid_cloud.home
 landroid_cloud.pause
