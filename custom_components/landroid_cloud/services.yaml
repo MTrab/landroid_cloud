@@ -16,18 +16,6 @@ home:
     id:
       description: Landroid ID. Found as attribute on the Landroid status sensor
       example: 123435
-enable:
-  description: Enable schedule
-  fields:
-    id:
-      description: Landroid ID. Found as attribute on the Landroid status sensor
-      example: 123435
-disable:
-  description: Disable schedule
-  fields:
-    id:
-      description: Landroid ID. Found as attribute on the Landroid status sensor
-      example: 123435
 config:
   description: Set config parameters
   fields:
