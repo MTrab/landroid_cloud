@@ -42,6 +42,7 @@ CONFIG_SCHEMA = vol.Schema(
     extra=vol.ALLOW_EXTRA,
 )
 
+SERVICE_POLL = "poll"
 SERVICE_START = "start"
 SERVICE_PAUSE = "pause"
 SERVICE_HOME = "home"
@@ -133,6 +134,25 @@ async def async_setup(hass, config):
             async_track_time_interval(hass, api.async_force_update, FORCED_UPDATE)
             hass.data[LANDROID_API][dev] = api
             dev += 1
+    
+    async def handle_poll(call):
+        """Handle poll service call."""
+        if "id" in call.data:
+            ID = int(call.data["id"])
+
+            for cli in client:
+                attrs = vars(cli)
+                if attrs["id"] == ID:
+                    error = cli.tryToPoll()
+                    if error is not None:
+                        _LOGGER.warning(error)
+
+        else:
+            error = client[0].tryToPoll()
+            if error is not None:
+                _LOGGER.warning(error)
+
+    hass.services.async_register(DOMAIN, SERVICE_POLL, handle_poll)
 
     async def handle_start(call):
         """Handle start service call."""
