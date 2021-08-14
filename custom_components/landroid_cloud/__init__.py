@@ -146,11 +146,17 @@ async def async_setup(hass, config):
                     error = cli.tryToPoll()
                     if error is not None:
                         _LOGGER.warning(error)
+                    elif error is None:
+                        _LOGGER.debug("Poll successful - updating info")
+                        cli.getStatus()
 
         else:
             error = client[0].tryToPoll()
             if error is not None:
                 _LOGGER.warning(error)
+            elif error is None:
+                _LOGGER.debug("Poll successful - updating info")
+                client[0].getStatus()
 
     hass.services.async_register(DOMAIN, SERVICE_POLL, handle_poll)
 
