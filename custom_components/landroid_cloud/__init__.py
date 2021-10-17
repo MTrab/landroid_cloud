@@ -48,6 +48,7 @@ SERVICE_PAUSE = "pause"
 SERVICE_HOME = "home"
 SERVICE_CONFIG = "config"
 SERVICE_BORDER = "border"
+SERVICE_PARTYMODE = "partymode"
 
 
 API_WORX_SENSORS = {
@@ -90,6 +91,7 @@ API_WORX_SENSORS = {
             "serial": "serial",
             "mac": "mac",
             "schedule_mower_active": "schedule_enabled",
+            "partymode_enabled": "partymode_enabled",
         },
         "icon": None,
         "unit": None,
@@ -148,7 +150,7 @@ async def async_setup(hass, config):
                         _LOGGER.warning(error)
                     elif error is None:
                         _LOGGER.debug("Poll successful - updating info")
-                        cli.getStatus()
+                        await hass.async_add_executor_job(cli.getStatus)
 
         else:
             error = client[0].tryToPoll()
@@ -156,7 +158,7 @@ async def async_setup(hass, config):
                 _LOGGER.warning(error)
             elif error is None:
                 _LOGGER.debug("Poll successful - updating info")
-                client[0].getStatus()
+                await hass.async_add_executor_job(client[0].getStatus)
 
     hass.services.async_register(DOMAIN, SERVICE_POLL, handle_poll)
 
@@ -252,6 +254,19 @@ async def async_setup(hass, config):
 
     hass.services.async_register(DOMAIN, SERVICE_CONFIG, handle_config)
 
+    async def handle_partymode(call):
+        """Handle pause service call."""
+        if "id" in call.data:
+            ID = int(call.data["id"])
+
+            for cli in client:
+                attrs = vars(cli)
+                if attrs["id"] == ID:
+                    cli.partyMode(call.data["enable"])
+        else:
+            client[0].partyMode(call.data["enable"])
+
+    hass.services.async_register(DOMAIN, SERVICE_PARTYMODE, handle_partymode)
     return True
 
 

@@ -22,6 +22,18 @@ home:
     id:
       description: Landroid ID. Found as attribute on the Landroid status sensor
       example: 123435
+partymode:
+  description: Enable or disable partymode
+  fields:
+    id:
+      description: Landroid ID. Found as attribute on the Landroid status sensor
+      example: 123435
+    enable:
+      description: Set true for enabling of PartyMode and false for disabling
+      example: true
+      required: true
+      selector:
+        boolean:
 config:
   description: Set config parameters
   fields:
