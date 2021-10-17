@@ -89,9 +89,9 @@ API_WORX_SENSORS = {
             "schedule_variation": "timeextension",
             "firmware": "firmware_version",
             "serial": "serial",
-            "mac": "mac",
+            "mac": "mac",a
             "schedule_mower_active": "schedule_enabled",
-            "partymode_enabled": "partymode_enabled",
+            "partymode_enabled": "party_mode_enabled",
         },
         "icon": None,
         "unit": None,
