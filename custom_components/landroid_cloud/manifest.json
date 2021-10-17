@@ -5,6 +5,6 @@
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/MTrab/landroid_cloud/issues",
   "name": "Worx Landroid Cloud",
-  "requirements": [ "pyworxcloud==1.4.2" ],
+  "requirements": [ "pyworxcloud==1.4.6" ],
   "version": "1.8.0"
 }
