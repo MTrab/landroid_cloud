@@ -47,12 +47,11 @@ SERVICE_START = "start"
 SERVICE_PAUSE = "pause"
 SERVICE_HOME = "home"
 SERVICE_CONFIG = "config"
-SERVICE_BORDER = "border"
 SERVICE_PARTYMODE = "partymode"
 SERVICE_SETZONE = "setzone"
 SERVICE_LOCK = "lock"
-SERVICE_UNLOCK = "unlock"
 SERVICE_RESTART = "restart"
+SERVICE_EDGECUT = "edgecut"
 
 
 API_WORX_SENSORS = {
@@ -120,6 +119,7 @@ async def async_setup(hass, config):
     hass.data[LANDROID_API] = {}
     dev = 0
     partymode = False
+    ots = False
 
     for cloud in config[DOMAIN]:
         cloud_email = cloud[CONF_EMAIL]
@@ -127,19 +127,23 @@ async def async_setup(hass, config):
         cloud_type = cloud.get(CONF_TYPE, 'worx')
 
         master = pyworxcloud.WorxCloud()
-        auth = await master.initialize(cloud_email, cloud_password, cloud_type)
+        auth = await hass.async_add_executor_job(master.initialize, cloud_email, cloud_password, cloud_type)
 
         if not auth:
             _LOGGER.warning("Error in authentication!")
             return False
 
-        num_dev = await hass.async_add_executor_job(master.enumerate)
+        try:
+            num_dev = await hass.async_add_executor_job(master.enumerate)
+        except Exception as err:
+            _LOGGER.warning(err)
+            return False
 
         for device in range(num_dev):
             client.append(dev)
             _LOGGER.debug("Connecting to device ID %s (%s)", device, cloud_email)
             client[dev] = pyworxcloud.WorxCloud()
-            await client[dev].initialize(cloud_email, cloud_password, cloud_type)
+            await hass.async_add_executor_job(client[dev].initialize, cloud_email, cloud_password, cloud_type)
             await hass.async_add_executor_job(client[dev].connect, device, False)
 
             api = WorxLandroidAPI(hass, dev, client[dev], config)
@@ -150,6 +154,8 @@ async def async_setup(hass, config):
             _LOGGER.debug("Partymode available: %s", client[dev].partymode)
             if not partymode and client[dev].partymode:
                 partymode = True
+            if not ots and client[dev].ots_enabled:
+                ots = True
             dev += 1
     
     async def handle_poll(call):
@@ -306,25 +312,11 @@ async def async_setup(hass, config):
             for cli in client:
                 attrs = vars(cli)
                 if attrs["id"] == ID:
-                    cli.lock()
+                    cli.lock(call.data["enable"])
         else:
-            client[0].lock()
+            client[0].lock(call.data["enable"])
 
     hass.services.async_register(DOMAIN, SERVICE_LOCK, handle_lock)
-
-    async def handle_unlock(call):
-        """Handle unlock service call."""
-        if "id" in call.data:
-            ID = int(call.data["id"])
-
-            for cli in client:
-                attrs = vars(cli)
-                if attrs["id"] == ID:
-                    cli.unlock()
-        else:
-            client[0].unlock()
-
-    hass.services.async_register(DOMAIN, SERVICE_UNLOCK, handle_unlock)
 
     async def handle_restart(call):
         """Handle restart service call."""
@@ -339,6 +331,21 @@ async def async_setup(hass, config):
             client[0].restart()
 
     hass.services.async_register(DOMAIN, SERVICE_RESTART, handle_restart)
+
+    async def handle_edgecut(call):
+        """Handle restart service call."""
+        if "id" in call.data:
+            ID = int(call.data["id"])
+
+            for cli in client:
+                attrs = vars(cli)
+                if attrs["id"] == ID:
+                    cli.startEdgecut()
+        else:
+            client[0].startEdgecut()
+
+    if ots:
+        hass.services.async_register(DOMAIN, SERVICE_EDGECUT, handle_edgecut)
 
 
     return True

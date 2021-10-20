@@ -4,42 +4,55 @@ poll:
     id:
       description: Landroid ID. Found as attribute on the Landroid status sensor
       example: 123435
+
 start:
   description: Start mowing
   fields:
     id:
       description: Landroid ID. Found as attribute on the Landroid status sensor
       example: 123435
+
 pause:
   description: Pause mowing
   fields:
     id:
       description: Landroid ID. Found as attribute on the Landroid status sensor
       example: 123435
+
 home:
   description: Send Landroid home
   fields:
     id:
       description: Landroid ID. Found as attribute on the Landroid status sensor
       example: 123435
+
 lock:
   description: Lock Landroid
   fields:
     id:
       description: Landroid ID. Found as attribute on the Landroid status sensor
       example: 123435
-unlock:
-  description: Unlock Landroid
-  fields:
-    id:
-      description: Landroid ID. Found as attribute on the Landroid status sensor
-      example: 123435
+    enable:
+      description: Set true for enabling of lock and false for disabling
+      example: true
+      required: true
+      selector:
+        boolean:
+
 restart:
   description: Restart Landroid
   fields:
     id:
       description: Landroid ID. Found as attribute on the Landroid status sensor
       example: 123435
+
+edgecut:
+  description: Start Edgecut routine
+  fields:
+    id:
+      description: Landroid ID. Found as attribute on the Landroid status sensor
+      example: 123435
+
 partymode:
   description: Enable or disable partymode
   fields:
@@ -52,6 +65,7 @@ partymode:
       required: true
       selector:
         boolean:
+
 setzone:
   description: Set which zone to be mowed next
   fields:
@@ -70,6 +84,7 @@ setzone:
             - 1
             - 2
             - 3
+
 config:
   description: Set config parameters
   fields:
