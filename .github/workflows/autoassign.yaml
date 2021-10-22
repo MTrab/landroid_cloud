@@ -22,22 +22,6 @@ jobs:
         project: 'https://github.com/MTrab/landroid_cloud/projects/4'
         column_name: 'Needs triage'
 
-    - name: Assign issues and pull requests with `High priority` label to project 4
-      uses: srggrs/assign-one-project-github-action@1.2.1
-      if: |
-        contains(github.event.issue.labels.*.name, 'high priority')
-      with:
-        project: 'https://github.com/MTrab/landroid_cloud/projects/4'
-        column_name: 'High priority'
-
-    - name: Assign issues and pull requests with `Low priority` label to project 4
-      uses: srggrs/assign-one-project-github-action@1.2.1
-      if: |
-        contains(github.event.issue.labels.*.name, 'low priority')
-      with:
-        project: 'https://github.com/MTrab/landroid_cloud/projects/4'
-        column_name: 'low priority'
-
     - name: Assign issues and pull requests with `in progress` label to project 3
       uses: srggrs/assign-one-project-github-action@1.2.1
       if: |
@@ -45,11 +29,3 @@ jobs:
       with:
         project: 'https://github.com/MTrab/landroid_cloud/projects/3'
         column_name: 'In progress'
-
-    - name: Assign issues and pull requests with `done` label to project 3
-      uses: srggrs/assign-one-project-github-action@1.2.1
-      if: |
-        contains(github.event.issue.labels.*.name, 'done')
-      with:
-        project: 'https://github.com/MTrab/landroid_cloud/projects/3'
-        column_name: 'Done'
