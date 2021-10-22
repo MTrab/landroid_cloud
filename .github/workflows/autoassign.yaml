@@ -13,7 +13,7 @@ env:
 jobs:
   assign_to_prioritizing:
     runs-on: ubuntu-latest
-    name: Assign to Prioritizing project
+    name: Assign to project(s)
     steps:
     - name: Assign NEW issues and NEW pull requests to project 4
       uses: srggrs/assign-one-project-github-action@1.2.1
