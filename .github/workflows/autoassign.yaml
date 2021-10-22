@@ -2,9 +2,9 @@ name: Auto Assign to Project(s)
 
 on:
   issues:
-    types: [opened, labeled]
+    types: [opened, labeled, unlabeled]
   pull_request_target:
-    types: [opened, labeled]
+    types: [opened, labeled, unlabeled]
   issue_comment:
     types: [created]
 env:
