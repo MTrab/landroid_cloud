@@ -74,8 +74,8 @@ landroid_cloud.configure (can be used to set rain delay and time extension)
 landroid_cloud.partymode (if a partymode capable device was found)
 landroid_cloud.setzone
 landroid_cloud.lock
-landroid_cloud.unlock
 landroid_cloud.restart
+landroid_cloud.edgecut (only for models with the function available in the app)
 ```
 
 You can simply add these to your Lovelace setup by adding an entity card or using [Barma-lej halandroid package](https://github.com/Barma-lej/halandroid)
