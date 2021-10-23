@@ -79,11 +79,11 @@ setzone:
       default: 0
       selector:
         select:
-          option:
-            - 0
-            - 1
-            - 2
-            - 3
+          options:
+            - "0"
+            - "1"
+            - "2"
+            - "3"
 
 config:
   description: Set config parameters
