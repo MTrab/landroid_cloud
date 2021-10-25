@@ -14,9 +14,12 @@ Issues not containing the minimum requirements will be closed:
 
 -->
 
-## Version of the custom_component
-<!-- If you are not using the newest version, download and try that before opening an issue
-If you are unsure about the version check the const.py file.
+### Environment:
+<!--
+Example:
+- Home Assistant version: 2021.10.1
+- Landroid_cloud version: 1.8.0
+- Operation system: HAOS
 -->
 
 ## Configuration
