@@ -73,7 +73,7 @@ setzone:
       description: Landroid ID. Found as attribute on the Landroid status sensor
       example: 123435
     zone:
-      description: Sets the zone number, ranging from 0 to 4, to be mowed next
+      description: Sets the zone number, ranging from 0 to 3, to be mowed next
       example: 1
       required: true
       default: 0
