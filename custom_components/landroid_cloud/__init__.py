@@ -151,10 +151,15 @@ async def async_setup(hass, config):
             async_track_time_interval(hass, api.async_update, SCAN_INTERVAL)
             async_track_time_interval(hass, api.async_force_update, FORCED_UPDATE)
             hass.data[LANDROID_API][dev] = api
-            _LOGGER.debug("Partymode available: %s", client[dev].partymode)
-            if not partymode and client[dev].partymode:
+            if not hasattr(client[dev], 'partymode'):
+                partymode = False
+            elif not partymode and client[dev].partymode:
+                _LOGGER.debug("Partymode available: %s", client[dev].partymode)
                 partymode = True
-            if not ots and client[dev].ots_enabled:
+            if not hasattr(client[dev], 'ots_enabled'):
+                ots = False
+            elif not ots and client[dev].ots_enabled:
+                _LOGGER.debug("OTS enabled: %s", client[dev].ots_enabled)
                 ots = True
             dev += 1
     
