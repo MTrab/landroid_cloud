@@ -1,7 +1,10 @@
 {
+  "codeowners": [ "@MTrab" ],
+  "documentation": "https://github.com/MTrab/landroid_cloud/blob/master/README.md",
   "domain": "landroid_cloud",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/MTrab/landroid_cloud/issues",
   "name": "Worx Landroid Cloud",
-  "documentation": "https://www.home-assistant.io/integrations/landroid_cloud/",
-  "requirements": ["pyworxcloud==1.2.17"],
-  "codeowners": ["@MTrab"]
+  "requirements": [ "pyworxcloud==1.4.13" ],
+  "version": "1.8.3"
 }

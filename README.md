@@ -1,6 +1,8 @@
 [![](https://img.shields.io/github/release/mtrab/landroid_cloud/all.svg?style=plastic)](https://github.com/mtrab/landroid_cloud/releases)
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg?style=plastic)](https://github.com/custom-components/hacs)
 
+<a href="https://www.buymeacoffee.com/mtrab" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
+
 # Landroid Cloud
 
 This component has been created to be used with Home Assistant.
@@ -43,6 +45,15 @@ landroid_cloud:
     password: AnotherPassword
 ```
 
+If you have LandXcape or Kress robots you can add `type` to the config instead of default 'worx':
+
+```
+landroid_cloud:
+  - email: this@example.com
+    password: YourPassword
+    type: landxcape
+```
+
 ### Entities & Services
 
 Once installed, the following entities are created in Home Assistant:
@@ -60,9 +71,14 @@ landroid_cloud.start
 landroid_cloud.home
 landroid_cloud.pause
 landroid_cloud.configure (can be used to set rain delay and time extension)
+landroid_cloud.partymode (if a partymode capable device was found)
+landroid_cloud.setzone
+landroid_cloud.lock
+landroid_cloud.restart
+landroid_cloud.edgecut (only for models with the function available in the app)
 ```
 
-You can simply add these to your Lovelace setup by adding an entity card. A recommended Lovelace layout is being considered for a future release.
+You can simply add these to your Lovelace setup by adding an entity card or using [Barma-lej halandroid package](https://github.com/Barma-lej/halandroid)
 
 ### Known bugs
 
@@ -77,3 +93,10 @@ Follow this simple guide to make it work again:
 * Unlink your Landroid(s)
 * Open app on mobile device
 * Add Landroid(s)
+
+### To-do
+
+* Add proper integration flow
+* Code optimization
+* Make this an official integration
+* Make this vacuum compatible - might make this easier to move to a mower "domain" if/when this is made available in Home Assistant

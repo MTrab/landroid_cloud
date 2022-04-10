@@ -4,24 +4,87 @@ poll:
     id:
       description: Landroid ID. Found as attribute on the Landroid status sensor
       example: 123435
+
 start:
   description: Start mowing
   fields:
     id:
       description: Landroid ID. Found as attribute on the Landroid status sensor
       example: 123435
+
 pause:
   description: Pause mowing
   fields:
     id:
       description: Landroid ID. Found as attribute on the Landroid status sensor
       example: 123435
+
 home:
   description: Send Landroid home
   fields:
     id:
       description: Landroid ID. Found as attribute on the Landroid status sensor
       example: 123435
+
+lock:
+  description: Lock Landroid
+  fields:
+    id:
+      description: Landroid ID. Found as attribute on the Landroid status sensor
+      example: 123435
+    enable:
+      description: Set true for enabling of lock and false for disabling
+      example: true
+      required: true
+      selector:
+        boolean:
+
+restart:
+  description: Restart Landroid
+  fields:
+    id:
+      description: Landroid ID. Found as attribute on the Landroid status sensor
+      example: 123435
+
+edgecut:
+  description: Start Edgecut routine
+  fields:
+    id:
+      description: Landroid ID. Found as attribute on the Landroid status sensor
+      example: 123435
+
+partymode:
+  description: Enable or disable partymode
+  fields:
+    id:
+      description: Landroid ID. Found as attribute on the Landroid status sensor
+      example: 123435
+    enable:
+      description: Set true for enabling of PartyMode and false for disabling
+      example: true
+      required: true
+      selector:
+        boolean:
+
+setzone:
+  description: Set which zone to be mowed next
+  fields:
+    id:
+      description: Landroid ID. Found as attribute on the Landroid status sensor
+      example: 123435
+    zone:
+      description: Sets the zone number, ranging from 0 to 3, to be mowed next
+      example: 1
+      required: true
+      default: 0
+      selector:
+        select:
+          options:
+            - "0"
+            - "1"
+            - "2"
+            - "3"
+
 config:
   description: Set config parameters
   fields:
@@ -34,3 +97,16 @@ config:
     timeextension:
       description: Set time extension. Extension in % ranging from -100 to 100
       example: -23
+      selector:
+        number:
+          min: -100
+          max: 100
+          step: 1
+          unit_of_measurement: "%"
+          mode: slider
+    multizone_distances:
+      description: Set multizone distances. Distances in meter. 0 = Disabled
+      example: '[15, 80, 120, 155]'
+    multizone_probabilities:
+      description: Set multizone probabilities. Probabilities in parts-of-ten. 1 = 10%, 2 = 20%, ...
+      example: '[5, 1, 2, 2]'
