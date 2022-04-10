@@ -1,13 +1,13 @@
 """Support for Worx Landroid Cloud based lawn mowers."""
-from datetime import timedelta
 import json
 import logging
 import pyworxcloud
 import time
-
-import voluptuous as vol
+from datetime import timedelta
 
 import homeassistant.helpers.config_validation as cv
+import voluptuous as vol
+from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
 from homeassistant.helpers.discovery import load_platform
 from homeassistant.helpers.dispatcher import dispatcher_send
 from homeassistant.helpers.event import async_track_time_interval
@@ -200,6 +200,25 @@ async def async_setup(hass, config):
 
     hass.services.async_register(DOMAIN, SERVICE_POLL, handle_poll)
 
+    async def handle_poll(call):
+        """Handle poll service call."""
+        if "id" in call.data:
+            ID = int(call.data["id"])
+
+            for cli in client:
+                attrs = vars(cli)
+                if attrs["id"] == ID:
+                    error = cli.tryToPoll()
+                    if error is not None:
+                        _LOGGER.warning(error)
+
+        else:
+            error = client[0].tryToPoll()
+            if error is not None:
+                _LOGGER.warning(error)
+
+    hass.services.async_register(DOMAIN, SERVICE_POLL, handle_poll)
+
     async def handle_start(call):
         """Handle start service call."""
         if "id" in call.data:
@@ -325,6 +344,11 @@ async def async_setup(hass, config):
 
     async def handle_setzone(call):
         """Handle setzone service call."""
+        zone = call.data["zone"]
+
+        if not type(zone) == str:
+            zone = str(zone)
+
         if "id" in call.data:
             devID = int(call.data["id"])
 

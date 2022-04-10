@@ -1,0 +1,46 @@
+name-template: 'v$RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+change-template: '- #$NUMBER $TITLE @$AUTHOR'
+sort-direction: ascending
+categories:
+  - title: '🚀 Features'
+    labels:
+      - 'feature request'
+      - 'enhancement'
+
+  - title: '🐛 Bug Fixes'
+    labels:
+      - 'fix'
+      - 'bugfix'
+      - 'bug'
+
+  - title: '🧰 Maintenance'
+    label: 'chore'
+
+  - title: ":package: Dependencies"
+    labels:
+      - 'dependencies'
+
+version-resolver:
+  major:
+    labels:
+      - 'major'
+  minor:
+    labels:
+      - 'minor'
+  patch:
+    labels:
+      - 'patch'
+  default: patch
+template: |
+  ## Changes
+
+  $CHANGES
+
+autolabeler:
+  - label: 'bug'
+    branch:
+      - '/fix\/.+/'
+  - label: 'feature request'
+    branch:
+      - '/feature\/.+/'
