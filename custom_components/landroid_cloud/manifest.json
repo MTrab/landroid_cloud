@@ -1,10 +1,14 @@
 {
-  "codeowners": [ "@MTrab" ],
+  "codeowners": [
+    "@MTrab"
+  ],
   "documentation": "https://github.com/MTrab/landroid_cloud/blob/master/README.md",
   "domain": "landroid_cloud",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/MTrab/landroid_cloud/issues",
   "name": "Worx Landroid Cloud",
-  "requirements": [ "pyworxcloud==1.4.13" ],
-  "version": "1.8.3"
+  "requirements": [
+    "pyworxcloud==1.4.13"
+  ],
+  "version": "1.8.4b"
 }
