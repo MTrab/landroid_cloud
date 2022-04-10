@@ -1,13 +1,12 @@
 """Support for Worx Landroid Cloud based lawn mowers."""
-from datetime import timedelta
 import json
 import logging
 import time
+from datetime import timedelta
 
-import voluptuous as vol
-
-from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
 import homeassistant.helpers.config_validation as cv
+import voluptuous as vol
+from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
 from homeassistant.helpers.discovery import load_platform
 from homeassistant.helpers.dispatcher import dispatcher_send
 from homeassistant.helpers.event import async_track_time_interval
@@ -124,10 +123,12 @@ async def async_setup(hass, config):
     for cloud in config[DOMAIN]:
         cloud_email = cloud[CONF_EMAIL]
         cloud_password = cloud[CONF_PASSWORD]
-        cloud_type = cloud.get(CONF_TYPE, 'worx')
+        cloud_type = cloud.get(CONF_TYPE, "worx")
 
         master = pyworxcloud.WorxCloud()
-        auth = await hass.async_add_executor_job(master.initialize, cloud_email, cloud_password, cloud_type)
+        auth = await hass.async_add_executor_job(
+            master.initialize, cloud_email, cloud_password, cloud_type
+        )
 
         if not auth:
             _LOGGER.warning("Error in authentication!")
@@ -143,7 +144,9 @@ async def async_setup(hass, config):
             client.append(dev)
             _LOGGER.debug("Connecting to device ID %s (%s)", device, cloud_email)
             client[dev] = pyworxcloud.WorxCloud()
-            await hass.async_add_executor_job(client[dev].initialize, cloud_email, cloud_password, cloud_type)
+            await hass.async_add_executor_job(
+                client[dev].initialize, cloud_email, cloud_password, cloud_type
+            )
             await hass.async_add_executor_job(client[dev].connect, device, False)
 
             api = WorxLandroidAPI(hass, dev, client[dev], config)
@@ -151,18 +154,18 @@ async def async_setup(hass, config):
             async_track_time_interval(hass, api.async_update, SCAN_INTERVAL)
             async_track_time_interval(hass, api.async_force_update, FORCED_UPDATE)
             hass.data[LANDROID_API][dev] = api
-            if not hasattr(client[dev], 'partymode'):
+            if not hasattr(client[dev], "partymode"):
                 partymode = False
             elif not partymode and client[dev].partymode:
                 _LOGGER.debug("Partymode available: %s", client[dev].partymode)
                 partymode = True
-            if not hasattr(client[dev], 'ots_enabled'):
+            if not hasattr(client[dev], "ots_enabled"):
                 ots = False
             elif not ots and client[dev].ots_enabled:
                 _LOGGER.debug("OTS enabled: %s", client[dev].ots_enabled)
                 ots = True
             dev += 1
-    
+
     async def handle_poll(call):
         """Handle poll service call."""
         if "id" in call.data:
@@ -260,27 +263,39 @@ async def async_setup(hass, config):
 
             for cli in client:
                 attrs = vars(cli)
-                if (attrs["id"] == int(call.data["id"])):
+                if attrs["id"] == int(call.data["id"]):
                     break
                 else:
                     id += 1
 
         if "raindelay" in call.data:
             tmpdata["rd"] = int(call.data["raindelay"])
-            _LOGGER.debug("Setting rain_delay for %s to %s", client[id].name, call.data["raindelay"])
+            _LOGGER.debug(
+                "Setting rain_delay for %s to %s",
+                client[id].name,
+                call.data["raindelay"],
+            )
             sendData = True
 
         if "timeextension" in call.data:
             tmpdata["sc"] = {}
             tmpdata["sc"]["p"] = int(call.data["timeextension"])
             data = json.dumps(tmpdata)
-            _LOGGER.debug("Setting time_extension for %s to %s", client[id].name, call.data["timeextension"])
+            _LOGGER.debug(
+                "Setting time_extension for %s to %s",
+                client[id].name,
+                call.data["timeextension"],
+            )
             sendData = True
 
         if "multizone_distances" in call.data:
             tmpdata["mz"] = [int(x) for x in call.data["multizone_distances"]]
             data = json.dumps(tmpdata)
-            _LOGGER.debug("Setting multizone distances for %s to %s", client[id].name, call.data["multizone_distances"])
+            _LOGGER.debug(
+                "Setting multizone distances for %s to %s",
+                client[id].name,
+                call.data["multizone_distances"],
+            )
             sendData = True
 
         if "multizone_probabilities" in call.data:
@@ -289,7 +304,11 @@ async def async_setup(hass, config):
                 for _ in range(val):
                     tmpdata["mzv"].append(idx)
             data = json.dumps(tmpdata)
-            _LOGGER.debug("Setting multizone probabilities for %s to %s", client[id].name, call.data["multizone_probabilities"])
+            _LOGGER.debug(
+                "Setting multizone probabilities for %s to %s",
+                client[id].name,
+                call.data["multizone_probabilities"],
+            )
             sendData = True
 
         if sendData:
@@ -317,7 +336,7 @@ async def async_setup(hass, config):
     async def handle_setzone(call):
         """Handle setzone service call."""
         zone = call.data["zone"]
-    
+
         if not type(zone) == str:
             zone = str(zone)
 
@@ -376,7 +395,6 @@ async def async_setup(hass, config):
     if ots:
         hass.services.async_register(DOMAIN, SERVICE_EDGECUT, handle_edgecut)
 
-
     return True
 
 
@@ -411,7 +429,7 @@ class WorxLandroidAPI:
 
     async def async_update(self, now=None):
         """Update the state cache from Landroid API."""
-        #await self._hass.async_add_executor_job(self._client.getStatus)
+        # await self._hass.async_add_executor_job(self._client.getStatus)
         dispatcher_send(self._hass, UPDATE_SIGNAL)
 
     async def async_force_update(self, now=None):

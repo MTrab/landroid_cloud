@@ -1,8 +1,8 @@
 """Support for monitoring Worx Landroid Sensors."""
-import async_timeout
 import asyncio
 import logging
 
+import async_timeout
 from homeassistant.components import sensor
 from homeassistant.const import STATE_UNKNOWN
 from homeassistant.core import callback
