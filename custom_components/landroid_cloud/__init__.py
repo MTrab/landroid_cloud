@@ -1,11 +1,11 @@
 """Support for Worx Landroid Cloud based lawn mowers."""
 import json
 import logging
-import pyworxcloud
 import time
 from datetime import timedelta
 
 import homeassistant.helpers.config_validation as cv
+import pyworxcloud
 import voluptuous as vol
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
 from homeassistant.helpers.discovery import load_platform
@@ -13,17 +13,10 @@ from homeassistant.helpers.dispatcher import dispatcher_send
 from homeassistant.helpers.event import async_track_time_interval
 from homeassistant.util import slugify as util_slugify
 
-from homeassistant.const import (
-    CONF_EMAIL,
-    CONF_PASSWORD,
-    CONF_TYPE,
-)
-
 from .const import (
     DEFAULT_NAME,
     DOMAIN,
     LANDROID_API,
-    UPDATE_SIGNAL,
     SERVICE_CONFIG,
     SERVICE_EDGECUT,
     SERVICE_HOME,
@@ -34,8 +27,8 @@ from .const import (
     SERVICE_RESTART,
     SERVICE_SETZONE,
     SERVICE_START,
+    UPDATE_SIGNAL,
 )
-
 
 _LOGGER = logging.getLogger(__name__)
 

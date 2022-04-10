@@ -3,12 +3,11 @@ import logging
 
 import requests.exceptions
 import voluptuous as vol
-
 from homeassistant import config_entries, core, exceptions
+from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE, CONF_UNIQUE_ID
 from homeassistant.core import callback
 from pyworxcloud import WorxCloud
 
-from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE, CONF_UNIQUE_ID
 from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
