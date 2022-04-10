@@ -364,4 +364,5 @@ FodyWeavers.xsd
 
 test.py
 whatisupdated.txt
+configuration.yaml
 .devcontainer/configuration.yaml
