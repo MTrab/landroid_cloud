@@ -113,6 +113,11 @@ API_WORX_SENSORS = {
 
 client = []
 
+def check_id(data):
+    if "id" in data and data["id"] is not None:
+        return True
+    else:
+        return False
 
 async def async_setup(hass, config):
     """Set up the Worx Landroid Cloud component."""
@@ -170,7 +175,7 @@ async def async_setup(hass, config):
 
     async def handle_poll(call):
         """Handle poll service call."""
-        if "id" in call.data:
+        if check_id(call.data):
             devID = int(call.data["id"])
 
             for cli in client:
@@ -195,7 +200,7 @@ async def async_setup(hass, config):
 
     async def handle_poll(call):
         """Handle poll service call."""
-        if "id" in call.data:
+        if check_id(call.data):
             ID = int(call.data["id"])
 
             for cli in client:
@@ -214,7 +219,7 @@ async def async_setup(hass, config):
 
     async def handle_start(call):
         """Handle start service call."""
-        if "id" in call.data:
+        if check_id(call.data):
             devID = int(call.data["id"])
 
             for cli in client:
@@ -228,7 +233,7 @@ async def async_setup(hass, config):
 
     async def handle_pause(call):
         """Handle pause service call."""
-        if "id" in call.data:
+        if check_id(call.data):
             devID = int(call.data["id"])
 
             for cli in client:
@@ -242,7 +247,7 @@ async def async_setup(hass, config):
 
     async def handle_home(call):
         """Handle pause service call."""
-        if "id" in call.data:
+        if check_id(call.data):
             devID = int(call.data["id"])
 
             for cli in client:
@@ -260,7 +265,7 @@ async def async_setup(hass, config):
         sendData = False
         tmpdata = {}
 
-        if "id" in call.data:
+        if check_id(call.data):
             _LOGGER.debug("Data from Home Assistant: %s", call.data["id"])
 
             for cli in client:
@@ -322,7 +327,7 @@ async def async_setup(hass, config):
 
     async def handle_partymode(call):
         """Handle partymode service call."""
-        if "id" in call.data:
+        if check_id(call.data):
             devID = int(call.data["id"])
 
             for cli in client:
@@ -342,7 +347,7 @@ async def async_setup(hass, config):
         if not type(zone) == str:
             zone = str(zone)
 
-        if "id" in call.data:
+        if check_id(call.data):
             devID = int(call.data["id"])
 
             for cli in client:
@@ -356,7 +361,7 @@ async def async_setup(hass, config):
 
     async def handle_lock(call):
         """Handle lock service call."""
-        if "id" in call.data:
+        if check_id(call.data):
             devID = int(call.data["id"])
 
             for cli in client:
@@ -370,7 +375,7 @@ async def async_setup(hass, config):
 
     async def handle_restart(call):
         """Handle restart service call."""
-        if "id" in call.data:
+        if check_id(call.data):
             devID = int(call.data["id"])
 
             for cli in client:
@@ -384,7 +389,7 @@ async def async_setup(hass, config):
 
     async def handle_edgecut(call):
         """Handle restart service call."""
-        if "id" in call.data:
+        if check_id(call.data):
             devID = int(call.data["id"])
 
             for cli in client:
