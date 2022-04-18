@@ -193,25 +193,6 @@ async def async_setup(hass, config):
 
     hass.services.async_register(DOMAIN, SERVICE_POLL, handle_poll)
 
-    async def handle_poll(call):
-        """Handle poll service call."""
-        if "id" in call.data:
-            ID = int(call.data["id"])
-
-            for cli in client:
-                attrs = vars(cli)
-                if attrs["id"] == ID:
-                    error = cli.tryToPoll()
-                    if error is not None:
-                        _LOGGER.warning(error)
-
-        else:
-            error = client[0].tryToPoll()
-            if error is not None:
-                _LOGGER.warning(error)
-
-    hass.services.async_register(DOMAIN, SERVICE_POLL, handle_poll)
-
     async def handle_start(call):
         """Handle start service call."""
         if "id" in call.data:
@@ -348,9 +329,9 @@ async def async_setup(hass, config):
             for cli in client:
                 attrs = vars(cli)
                 if attrs["id"] == devID:
-                    cli.setZone(call.data["zone"])
+                    cli.setZone(zone)
         else:
-            client[0].setZone(call.data["zone"])
+            client[0].setZone(zone)
 
     hass.services.async_register(DOMAIN, SERVICE_SETZONE, handle_setzone)
 
