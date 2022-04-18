@@ -5,6 +5,7 @@ import time
 from datetime import timedelta
 
 import homeassistant.helpers.config_validation as cv
+import pyworxcloud
 import voluptuous as vol
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
 from homeassistant.helpers.discovery import load_platform
@@ -12,15 +13,28 @@ from homeassistant.helpers.dispatcher import dispatcher_send
 from homeassistant.helpers.event import async_track_time_interval
 from homeassistant.util import slugify as util_slugify
 
+from .const import (
+    DEFAULT_NAME,
+    DOMAIN,
+    LANDROID_API,
+    SERVICE_CONFIG,
+    SERVICE_EDGECUT,
+    SERVICE_HOME,
+    SERVICE_LOCK,
+    SERVICE_PARTYMODE,
+    SERVICE_PAUSE,
+    SERVICE_POLL,
+    SERVICE_RESTART,
+    SERVICE_SETZONE,
+    SERVICE_START,
+    UPDATE_SIGNAL,
+)
+
 _LOGGER = logging.getLogger(__name__)
 
 DEFAULT_VERIFY_SSL = True
-DEFAULT_NAME = "landroid"
-DOMAIN = "landroid_cloud"
-LANDROID_API = "landroid_cloud_api"
 SCAN_INTERVAL = timedelta(seconds=30)
 FORCED_UPDATE = timedelta(minutes=30)
-UPDATE_SIGNAL = "landroid_cloud_update_signal"
 
 
 CONFIG_SCHEMA = vol.Schema(
@@ -40,17 +54,6 @@ CONFIG_SCHEMA = vol.Schema(
     },
     extra=vol.ALLOW_EXTRA,
 )
-
-SERVICE_POLL = "poll"
-SERVICE_START = "start"
-SERVICE_PAUSE = "pause"
-SERVICE_HOME = "home"
-SERVICE_CONFIG = "config"
-SERVICE_PARTYMODE = "partymode"
-SERVICE_SETZONE = "setzone"
-SERVICE_LOCK = "lock"
-SERVICE_RESTART = "restart"
-SERVICE_EDGECUT = "edgecut"
 
 
 API_WORX_SENSORS = {
@@ -113,7 +116,6 @@ client = []
 
 async def async_setup(hass, config):
     """Set up the Worx Landroid Cloud component."""
-    import pyworxcloud
 
     hass.data[LANDROID_API] = {}
     dev = 0
@@ -169,11 +171,11 @@ async def async_setup(hass, config):
     async def handle_poll(call):
         """Handle poll service call."""
         if "id" in call.data:
-            ID = int(call.data["id"])
+            devID = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == ID:
+                if attrs["id"] == devID:
                     error = cli.tryToPoll()
                     if error is not None:
                         _LOGGER.warning(error)
@@ -213,11 +215,11 @@ async def async_setup(hass, config):
     async def handle_start(call):
         """Handle start service call."""
         if "id" in call.data:
-            ID = int(call.data["id"])
+            devID = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == ID:
+                if attrs["id"] == devID:
                     cli.start()
         else:
             client[0].start()
@@ -227,11 +229,11 @@ async def async_setup(hass, config):
     async def handle_pause(call):
         """Handle pause service call."""
         if "id" in call.data:
-            ID = int(call.data["id"])
+            devID = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == ID:
+                if attrs["id"] == devID:
                     cli.pause()
         else:
             client[0].pause()
@@ -241,11 +243,11 @@ async def async_setup(hass, config):
     async def handle_home(call):
         """Handle pause service call."""
         if "id" in call.data:
-            ID = int(call.data["id"])
+            devID = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == ID:
+                if attrs["id"] == devID:
                     cli.stop()
         else:
             client[0].stop()
@@ -321,11 +323,11 @@ async def async_setup(hass, config):
     async def handle_partymode(call):
         """Handle partymode service call."""
         if "id" in call.data:
-            ID = int(call.data["id"])
+            devID = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == ID:
+                if attrs["id"] == devID:
                     cli.partyMode(call.data["enable"])
         else:
             client[0].partyMode(call.data["enable"])
@@ -341,11 +343,11 @@ async def async_setup(hass, config):
             zone = str(zone)
 
         if "id" in call.data:
-            ID = int(call.data["id"])
+            devID = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == ID:
+                if attrs["id"] == devID:
                     cli.setZone(call.data["zone"])
         else:
             client[0].setZone(call.data["zone"])
@@ -355,11 +357,11 @@ async def async_setup(hass, config):
     async def handle_lock(call):
         """Handle lock service call."""
         if "id" in call.data:
-            ID = int(call.data["id"])
+            devID = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == ID:
+                if attrs["id"] == devID:
                     cli.lock(call.data["enable"])
         else:
             client[0].lock(call.data["enable"])
@@ -369,11 +371,11 @@ async def async_setup(hass, config):
     async def handle_restart(call):
         """Handle restart service call."""
         if "id" in call.data:
-            ID = int(call.data["id"])
+            devID = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == ID:
+                if attrs["id"] == devID:
                     cli.restart()
         else:
             client[0].restart()
@@ -383,11 +385,11 @@ async def async_setup(hass, config):
     async def handle_edgecut(call):
         """Handle restart service call."""
         if "id" in call.data:
-            ID = int(call.data["id"])
+            devID = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == ID:
+                if attrs["id"] == devID:
                     cli.startEdgecut()
         else:
             client[0].startEdgecut()

@@ -15,11 +15,11 @@ jobs:
         with:
           fetch-depth: 0
       - name: Set up Python 3.8
-        uses: actions/setup-python@v3.1.1
+        uses: actions/setup-python@v3.1.2
         with:
           python-version: 3.8
       - name: Cache
-        uses: actions/cache@v3.0.1
+        uses: actions/cache@v3.0.2
         with:
           path: ~/.cache/pip
           key: pip-format
