@@ -119,7 +119,7 @@ class LandroidSensor(Entity):
             self._attributes.update(data)
             self._state = state
             if "latitude" in self._attributes:
-                if self._attributes["latitude"] == None:
+                if self._attributes["latitude"] is None:
                     del self._attributes["latitude"]
                     del self._attributes["longitude"]
         else:
