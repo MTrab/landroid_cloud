@@ -387,14 +387,14 @@ class WorxLandroidAPI:
     def __init__(self, hass, device, client, config):
         """Set up instance."""
         self._hass = hass
-        self._client = client
+        self.client = client
         self._device = device
         self.config = config
 
         sensor_info = []
         info = {}
-        info["name"] = util_slugify(f"{DEFAULT_NAME}_{self._client.name}")
-        info["friendly"] = self._client.name
+        info["name"] = util_slugify(f"{DEFAULT_NAME}_{self.client.name}")
+        info["friendly"] = self.client.name
         info["id"] = self._device
         sensor_info.append(info)
 
@@ -405,17 +405,17 @@ class WorxLandroidAPI:
         methods = API_WORX_SENSORS[sensor_type]
         data = {}
         for prop, attr in methods["state"].items():
-            if hasattr(self._client, prop):
-                prop_data = getattr(self._client, prop)
+            if hasattr(self.client, prop):
+                prop_data = getattr(self.client, prop)
                 data[attr] = prop_data
         return data
 
     async def async_update(self, now=None):
         """Update the state cache from Landroid API."""
-        # await self._hass.async_add_executor_job(self._client.getStatus)
+        # await self._hass.async_add_executor_job(self.client.getStatus)
         dispatcher_send(self._hass, UPDATE_SIGNAL)
 
     async def async_force_update(self, now=None):
         """Try forcing update."""
-        _LOGGER.debug("Forcing update for %s", self._client.name)
-        await self._hass.async_add_executor_job(self._client.getStatus)
+        _LOGGER.debug("Forcing update for %s", self.client.name)
+        await self._hass.async_add_executor_job(self.client.getStatus)

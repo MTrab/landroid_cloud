@@ -124,7 +124,7 @@ class LandroidSensor(Entity):
                     del self._attributes["longitude"]
         else:
             _LOGGER.debug("No data received for %s", self.entity_id)
-            reachable = self._api._client.online
+            reachable = self._api.client.online
             if not reachable:
                 if "_battery" in self.entity_id:
                     self._state = STATE_UNKNOWN
