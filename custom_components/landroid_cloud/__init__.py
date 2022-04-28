@@ -171,11 +171,11 @@ async def async_setup(hass, config):
     async def handle_poll(call):
         """Handle poll service call."""
         if "id" in call.data:
-            devID = int(call.data["id"])
+            dev_id = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == devID:
+                if attrs["id"] == dev_id:
                     error = cli.tryToPoll()
                     if error is not None:
                         _LOGGER.warning(error)
@@ -196,11 +196,11 @@ async def async_setup(hass, config):
     async def handle_start(call):
         """Handle start service call."""
         if "id" in call.data:
-            devID = int(call.data["id"])
+            dev_id = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == devID:
+                if attrs["id"] == dev_id:
                     cli.start()
         else:
             client[0].start()
@@ -210,11 +210,11 @@ async def async_setup(hass, config):
     async def handle_pause(call):
         """Handle pause service call."""
         if "id" in call.data:
-            devID = int(call.data["id"])
+            dev_id = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == devID:
+                if attrs["id"] == dev_id:
                     cli.pause()
         else:
             client[0].pause()
@@ -224,11 +224,11 @@ async def async_setup(hass, config):
     async def handle_home(call):
         """Handle pause service call."""
         if "id" in call.data:
-            devID = int(call.data["id"])
+            dev_id = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == devID:
+                if attrs["id"] == dev_id:
                     cli.stop()
         else:
             client[0].stop()
@@ -304,11 +304,11 @@ async def async_setup(hass, config):
     async def handle_partymode(call):
         """Handle partymode service call."""
         if "id" in call.data:
-            devID = int(call.data["id"])
+            dev_id = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == devID:
+                if attrs["id"] == dev_id:
                     cli.partyMode(call.data["enable"])
         else:
             client[0].partyMode(call.data["enable"])
@@ -324,11 +324,11 @@ async def async_setup(hass, config):
             zone = str(zone)
 
         if "id" in call.data:
-            devID = int(call.data["id"])
+            dev_id = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == devID:
+                if attrs["id"] == dev_id:
                     cli.setZone(zone)
         else:
             client[0].setZone(zone)
@@ -338,11 +338,11 @@ async def async_setup(hass, config):
     async def handle_lock(call):
         """Handle lock service call."""
         if "id" in call.data:
-            devID = int(call.data["id"])
+            dev_id = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == devID:
+                if attrs["id"] == dev_id:
                     cli.lock(call.data["enable"])
         else:
             client[0].lock(call.data["enable"])
@@ -352,11 +352,11 @@ async def async_setup(hass, config):
     async def handle_restart(call):
         """Handle restart service call."""
         if "id" in call.data:
-            devID = int(call.data["id"])
+            dev_id = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == devID:
+                if attrs["id"] == dev_id:
                     cli.restart()
         else:
             client[0].restart()
@@ -366,11 +366,11 @@ async def async_setup(hass, config):
     async def handle_edgecut(call):
         """Handle restart service call."""
         if "id" in call.data:
-            devID = int(call.data["id"])
+            dev_id = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == devID:
+                if attrs["id"] == dev_id:
                     cli.startEdgecut()
         else:
             client[0].startEdgecut()
