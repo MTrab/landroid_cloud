@@ -320,7 +320,7 @@ async def async_setup(hass, config):
         """Handle setzone service call."""
         zone = call.data["zone"]
 
-        if not type(zone) == str:
+        if not isinstance(zone, str):
             zone = str(zone)
 
         if "id" in call.data:
