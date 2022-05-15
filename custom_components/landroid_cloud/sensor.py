@@ -14,7 +14,9 @@ from .const import STATE_INITIALIZING, STATE_OFFLINE
 _LOGGER = logging.getLogger(__name__)
 
 
-async def async_setup_platform(hass, config, async_add_entities, discovery_info=None): # pylint: disable=unused-argument
+async def async_setup_platform(
+    hass, config, async_add_entities, discovery_info=None
+):  # pylint: disable=unused-argument
     """Set up the available sensors for Worx Landroid."""
     if discovery_info is None:
         return
@@ -115,7 +117,10 @@ class LandroidSensor(Entity):
 
             # Set state to offline if mower is not online
             if self._sensor_type == "status":
-                if not self._api.client.online:
+                _LOGGER.debug(
+                    "Mower %s online: %s", self._name, self._attributes["online"]
+                )
+                if not self._attributes["online"]:
                     state = STATE_OFFLINE
 
             _LOGGER.debug("Mower %s State %s", self._name, state)
