@@ -1,3 +1,6 @@
+"""Constants used by Landroid Cloud integration."""
+from __future__ import annotations
+
 DEFAULT_NAME = "landroid"
 DOMAIN = "landroid_cloud"
 LANDROID_API = "landroid_cloud_api"
