@@ -20,4 +20,4 @@ SERVICE_EDGECUT = "edgecut"
 
 # Extra states
 STATE_INITIALIZING = "Initializing"
-STATE_OFFLINE = "offline"
+STATE_OFFLINE = "Offline"
