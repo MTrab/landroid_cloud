@@ -104,6 +104,7 @@ API_WORX_SENSORS = {
             "mowing_zone": "mowing_zone",
             "accessories": "accessories",
             "islocked": "locked",
+            "online": "online",
         },
         "icon": None,
         "unit": None,
