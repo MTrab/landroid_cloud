@@ -1,8 +1,6 @@
 """Support for monitoring Worx Landroid Sensors."""
-import asyncio
 import logging
 
-import async_timeout
 from homeassistant.components import sensor
 from homeassistant.const import STATE_UNKNOWN
 from homeassistant.core import callback
@@ -11,14 +9,12 @@ from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.icon import icon_for_battery_level
 
 from . import API_WORX_SENSORS, LANDROID_API, UPDATE_SIGNAL
+from .const import STATE_INITIALIZING, STATE_OFFLINE
 
 _LOGGER = logging.getLogger(__name__)
 
-STATE_INITIALIZING = "Initializing"
-STATE_OFFLINE = "Offline"
 
-
-async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
+async def async_setup_platform(hass, config, async_add_entities, discovery_info=None): # pylint: disable=unused-argument
     """Set up the available sensors for Worx Landroid."""
     if discovery_info is None:
         return
@@ -26,12 +22,12 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
     entities = []
 
     info = discovery_info[0]
-    for tSensor in API_WORX_SENSORS:
-        name = "{}_{}".format(info["name"].lower(), tSensor.lower())
-        friendly_name = "{} {}".format(info["friendly"], tSensor)
+    for tsensor in API_WORX_SENSORS:
+        name = f"{info['name'].lower()}_{tsensor.lower()}"
+        friendly_name = f"{info['friendly']} {tsensor}"
         dev_id = info["id"]
         api = hass.data[LANDROID_API][dev_id]
-        sensor_type = tSensor
+        sensor_type = tsensor
         _LOGGER.debug("Init Landroid %s sensor for %s", sensor_type, info["friendly"])
         entity = LandroidSensor(api, name, sensor_type, friendly_name, dev_id)
         entities.append(entity)
@@ -115,16 +111,22 @@ class LandroidSensor(Entity):
         if "state" in data:
             _LOGGER.debug(data)
             state = data.pop("state")
-            _LOGGER.debug("Mower %s State %s", self._name, state)
             self._attributes.update(data)
+
+            # Set state to offline if mower is not online
+            if self._sensor_type == "status":
+                if not self._api.client.online:
+                    state = STATE_OFFLINE
+
+            _LOGGER.debug("Mower %s State %s", self._name, state)
             self._state = state
             if "latitude" in self._attributes:
-                if self._attributes["latitude"] == None:
+                if self._attributes["latitude"] is None:
                     del self._attributes["latitude"]
                     del self._attributes["longitude"]
         else:
             _LOGGER.debug("No data received for %s", self.entity_id)
-            reachable = self._api._client.online
+            reachable = self._api.client.online
             if not reachable:
                 if "_battery" in self.entity_id:
                     self._state = STATE_UNKNOWN
