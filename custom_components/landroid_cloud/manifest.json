@@ -8,7 +8,7 @@
   "issue_tracker": "https://github.com/MTrab/landroid_cloud/issues",
   "name": "Worx Landroid Cloud",
   "requirements": [
-    "pyworxcloud==1.4.17"
+    "pyworxcloud==1.4.18"
   ],
-  "version": "1.8.7"
+  "version": "1.8.8"
 }

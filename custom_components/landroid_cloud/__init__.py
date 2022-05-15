@@ -138,7 +138,7 @@ async def async_setup(hass, config):
 
         try:
             num_dev = await hass.async_add_executor_job(master.enumerate)
-        except Exception as err:
+        except Exception as err: # pylint: disable=broad-except
             _LOGGER.warning(err)
             return False
 
@@ -237,28 +237,28 @@ async def async_setup(hass, config):
 
     async def handle_config(call):
         """Handle config service call."""
-        id = 0
-        sendData = False
+        devid = 0
+        senddata = False
         tmpdata = {}
 
-        if "id" in call.data:
-            _LOGGER.debug("Data from Home Assistant: %s", call.data["id"])
+        if "devid" in call.data:
+            _LOGGER.debug("Data from Home Assistant: %s", call.data["devid"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == int(call.data["id"]):
+                if attrs["devid"] == int(call.data["devid"]):
                     break
                 else:
-                    id += 1
+                    devid += 1
 
         if "raindelay" in call.data:
             tmpdata["rd"] = int(call.data["raindelay"])
             _LOGGER.debug(
                 "Setting rain_delay for %s to %s",
-                client[id].name,
+                client[devid].name,
                 call.data["raindelay"],
             )
-            sendData = True
+            senddata = True
 
         if "timeextension" in call.data:
             tmpdata["sc"] = {}
@@ -266,7 +266,7 @@ async def async_setup(hass, config):
             data = json.dumps(tmpdata)
             _LOGGER.debug(
                 "Setting time_extension for %s to %s",
-                client[id].name,
+                client[devid].name,
                 call.data["timeextension"],
             )
             sendData = True
@@ -276,7 +276,7 @@ async def async_setup(hass, config):
             data = json.dumps(tmpdata)
             _LOGGER.debug(
                 "Setting multizone distances for %s to %s",
-                client[id].name,
+                client[devid].name,
                 call.data["multizone_distances"],
             )
             sendData = True
