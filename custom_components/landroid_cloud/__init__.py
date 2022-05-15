@@ -138,7 +138,7 @@ async def async_setup(hass, config):
 
         try:
             num_dev = await hass.async_add_executor_job(master.enumerate)
-        except Exception as err: # pylint: disable=broad-except
+        except Exception as err:  # pylint: disable=broad-except
             _LOGGER.warning(err)
             return False
 
@@ -171,11 +171,11 @@ async def async_setup(hass, config):
     async def handle_poll(call):
         """Handle poll service call."""
         if "id" in call.data:
-            dev_id = int(call.data["id"])
+            devid = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == dev_id:
+                if attrs["id"] == devid:
                     error = cli.tryToPoll()
                     if error is not None:
                         _LOGGER.warning(error)
@@ -196,11 +196,11 @@ async def async_setup(hass, config):
     async def handle_start(call):
         """Handle start service call."""
         if "id" in call.data:
-            dev_id = int(call.data["id"])
+            devid = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == dev_id:
+                if attrs["id"] == devid:
                     cli.start()
         else:
             client[0].start()
@@ -210,11 +210,11 @@ async def async_setup(hass, config):
     async def handle_pause(call):
         """Handle pause service call."""
         if "id" in call.data:
-            dev_id = int(call.data["id"])
+            devid = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == dev_id:
+                if attrs["id"] == devid:
                     cli.pause()
         else:
             client[0].pause()
@@ -224,11 +224,11 @@ async def async_setup(hass, config):
     async def handle_home(call):
         """Handle pause service call."""
         if "id" in call.data:
-            dev_id = int(call.data["id"])
+            devid = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == dev_id:
+                if attrs["id"] == devid:
                     cli.stop()
         else:
             client[0].stop()
@@ -269,7 +269,7 @@ async def async_setup(hass, config):
                 client[devid].name,
                 call.data["timeextension"],
             )
-            sendData = True
+            senddata = True
 
         if "multizone_distances" in call.data:
             tmpdata["mz"] = [int(x) for x in call.data["multizone_distances"]]
@@ -279,7 +279,7 @@ async def async_setup(hass, config):
                 client[devid].name,
                 call.data["multizone_distances"],
             )
-            sendData = True
+            senddata = True
 
         if "multizone_probabilities" in call.data:
             tmpdata["mzv"] = []
@@ -289,26 +289,26 @@ async def async_setup(hass, config):
             data = json.dumps(tmpdata)
             _LOGGER.debug(
                 "Setting multizone probabilities for %s to %s",
-                client[id].name,
+                client[devid].name,
                 call.data["multizone_probabilities"],
             )
-            sendData = True
+            senddata = True
 
-        if sendData:
+        if senddata:
             data = json.dumps(tmpdata)
             _LOGGER.debug("Sending: %s", data)
-            client[id].sendData(data)
+            client[devid].sendData(data)
 
     hass.services.async_register(DOMAIN, SERVICE_CONFIG, handle_config)
 
     async def handle_partymode(call):
         """Handle partymode service call."""
         if "id" in call.data:
-            dev_id = int(call.data["id"])
+            devid = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == dev_id:
+                if attrs["id"] == devid:
                     cli.partyMode(call.data["enable"])
         else:
             client[0].partyMode(call.data["enable"])
@@ -324,11 +324,11 @@ async def async_setup(hass, config):
             zone = str(zone)
 
         if "id" in call.data:
-            dev_id = int(call.data["id"])
+            devid = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == dev_id:
+                if attrs["id"] == devid:
                     cli.setZone(zone)
         else:
             client[0].setZone(zone)
@@ -338,11 +338,11 @@ async def async_setup(hass, config):
     async def handle_lock(call):
         """Handle lock service call."""
         if "id" in call.data:
-            dev_id = int(call.data["id"])
+            devid = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == dev_id:
+                if attrs["id"] == devid:
                     cli.lock(call.data["enable"])
         else:
             client[0].lock(call.data["enable"])
@@ -352,11 +352,11 @@ async def async_setup(hass, config):
     async def handle_restart(call):
         """Handle restart service call."""
         if "id" in call.data:
-            dev_id = int(call.data["id"])
+            devid = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == dev_id:
+                if attrs["id"] == devid:
                     cli.restart()
         else:
             client[0].restart()
@@ -366,11 +366,11 @@ async def async_setup(hass, config):
     async def handle_edgecut(call):
         """Handle restart service call."""
         if "id" in call.data:
-            dev_id = int(call.data["id"])
+            devid = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == dev_id:
+                if attrs["id"] == devid:
                     cli.startEdgecut()
         else:
             client[0].startEdgecut()
