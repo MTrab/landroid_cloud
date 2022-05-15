@@ -14,3 +14,6 @@ SERVICE_SETZONE = "setzone"
 SERVICE_LOCK = "lock"
 SERVICE_RESTART = "restart"
 SERVICE_EDGECUT = "edgecut"
+
+# Extra states
+STATE_OFFLINE = "offline"
