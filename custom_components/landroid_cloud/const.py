@@ -19,4 +19,5 @@ SERVICE_RESTART = "restart"
 SERVICE_EDGECUT = "edgecut"
 
 # Extra states
+STATE_INITIALIZING = "Initializing"
 STATE_OFFLINE = "offline"
