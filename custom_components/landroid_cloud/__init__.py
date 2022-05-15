@@ -104,6 +104,7 @@ API_WORX_SENSORS = {
             "mowing_zone": "mowing_zone",
             "accessories": "accessories",
             "islocked": "locked",
+            "online": "online",
         },
         "icon": None,
         "unit": None,
@@ -138,7 +139,7 @@ async def async_setup(hass, config):
 
         try:
             num_dev = await hass.async_add_executor_job(master.enumerate)
-        except Exception as err: # pylint: disable=broad-except
+        except Exception as err:  # pylint: disable=broad-except
             _LOGGER.warning(err)
             return False
 
@@ -171,11 +172,11 @@ async def async_setup(hass, config):
     async def handle_poll(call):
         """Handle poll service call."""
         if "id" in call.data:
-            dev_id = int(call.data["id"])
+            devid = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == dev_id:
+                if attrs["id"] == devid:
                     error = cli.tryToPoll()
                     if error is not None:
                         _LOGGER.warning(error)
@@ -196,11 +197,11 @@ async def async_setup(hass, config):
     async def handle_start(call):
         """Handle start service call."""
         if "id" in call.data:
-            dev_id = int(call.data["id"])
+            devid = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == dev_id:
+                if attrs["id"] == devid:
                     cli.start()
         else:
             client[0].start()
@@ -210,11 +211,11 @@ async def async_setup(hass, config):
     async def handle_pause(call):
         """Handle pause service call."""
         if "id" in call.data:
-            dev_id = int(call.data["id"])
+            devid = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == dev_id:
+                if attrs["id"] == devid:
                     cli.pause()
         else:
             client[0].pause()
@@ -224,11 +225,11 @@ async def async_setup(hass, config):
     async def handle_home(call):
         """Handle pause service call."""
         if "id" in call.data:
-            dev_id = int(call.data["id"])
+            devid = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == dev_id:
+                if attrs["id"] == devid:
                     cli.stop()
         else:
             client[0].stop()
@@ -269,7 +270,7 @@ async def async_setup(hass, config):
                 client[devid].name,
                 call.data["timeextension"],
             )
-            sendData = True
+            senddata = True
 
         if "multizone_distances" in call.data:
             tmpdata["mz"] = [int(x) for x in call.data["multizone_distances"]]
@@ -279,7 +280,7 @@ async def async_setup(hass, config):
                 client[devid].name,
                 call.data["multizone_distances"],
             )
-            sendData = True
+            senddata = True
 
         if "multizone_probabilities" in call.data:
             tmpdata["mzv"] = []
@@ -289,26 +290,26 @@ async def async_setup(hass, config):
             data = json.dumps(tmpdata)
             _LOGGER.debug(
                 "Setting multizone probabilities for %s to %s",
-                client[id].name,
+                client[devid].name,
                 call.data["multizone_probabilities"],
             )
-            sendData = True
+            senddata = True
 
-        if sendData:
+        if senddata:
             data = json.dumps(tmpdata)
             _LOGGER.debug("Sending: %s", data)
-            client[id].sendData(data)
+            client[devid].sendData(data)
 
     hass.services.async_register(DOMAIN, SERVICE_CONFIG, handle_config)
 
     async def handle_partymode(call):
         """Handle partymode service call."""
         if "id" in call.data:
-            dev_id = int(call.data["id"])
+            devid = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == dev_id:
+                if attrs["id"] == devid:
                     cli.partyMode(call.data["enable"])
         else:
             client[0].partyMode(call.data["enable"])
@@ -324,11 +325,11 @@ async def async_setup(hass, config):
             zone = str(zone)
 
         if "id" in call.data:
-            dev_id = int(call.data["id"])
+            devid = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == dev_id:
+                if attrs["id"] == devid:
                     cli.setZone(zone)
         else:
             client[0].setZone(zone)
@@ -338,11 +339,11 @@ async def async_setup(hass, config):
     async def handle_lock(call):
         """Handle lock service call."""
         if "id" in call.data:
-            dev_id = int(call.data["id"])
+            devid = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == dev_id:
+                if attrs["id"] == devid:
                     cli.lock(call.data["enable"])
         else:
             client[0].lock(call.data["enable"])
@@ -352,11 +353,11 @@ async def async_setup(hass, config):
     async def handle_restart(call):
         """Handle restart service call."""
         if "id" in call.data:
-            dev_id = int(call.data["id"])
+            devid = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == dev_id:
+                if attrs["id"] == devid:
                     cli.restart()
         else:
             client[0].restart()
@@ -366,11 +367,11 @@ async def async_setup(hass, config):
     async def handle_edgecut(call):
         """Handle restart service call."""
         if "id" in call.data:
-            dev_id = int(call.data["id"])
+            devid = int(call.data["id"])
 
             for cli in client:
                 attrs = vars(cli)
-                if attrs["id"] == dev_id:
+                if attrs["id"] == devid:
                     cli.startEdgecut()
         else:
             client[0].startEdgecut()
@@ -384,17 +385,17 @@ async def async_setup(hass, config):
 class WorxLandroidAPI:
     """Handle the API calls."""
 
-    def __init__(self, hass, device, client, config):
+    def __init__(self, hass, device, client_id, config):
         """Set up instance."""
         self._hass = hass
-        self._client = client
+        self.client = client_id
         self._device = device
         self.config = config
 
         sensor_info = []
         info = {}
-        info["name"] = util_slugify(f"{DEFAULT_NAME}_{self._client.name}")
-        info["friendly"] = self._client.name
+        info["name"] = util_slugify(f"{DEFAULT_NAME}_{self.client.name}")
+        info["friendly"] = self.client.name
         info["id"] = self._device
         sensor_info.append(info)
 
@@ -405,17 +406,16 @@ class WorxLandroidAPI:
         methods = API_WORX_SENSORS[sensor_type]
         data = {}
         for prop, attr in methods["state"].items():
-            if hasattr(self._client, prop):
-                prop_data = getattr(self._client, prop)
+            if hasattr(self.client, prop):
+                prop_data = getattr(self.client, prop)
                 data[attr] = prop_data
         return data
 
-    async def async_update(self, now=None):
+    async def async_update(self, now=None):  # pylint: disable=unused-argument
         """Update the state cache from Landroid API."""
-        # await self._hass.async_add_executor_job(self._client.getStatus)
         dispatcher_send(self._hass, UPDATE_SIGNAL)
 
-    async def async_force_update(self, now=None):
+    async def async_force_update(self, now=None):  # pylint: disable=unused-argument
         """Try forcing update."""
-        _LOGGER.debug("Forcing update for %s", self._client.name)
-        await self._hass.async_add_executor_job(self._client.getStatus)
+        _LOGGER.debug("Forcing update for %s", self.client.name)
+        await self._hass.async_add_executor_job(self.client.getStatus)
