@@ -144,7 +144,7 @@ class LandroidSensor(Entity):
         _LOGGER.debug("Added sensor %s", self.entity_id)
         await self.api.async_refresh()
         async_dispatcher_connect(
-            self.hass, f"{UPDATE_SIGNAL}_{self.api.index}", self.update_callback
+            self.hass, f"{UPDATE_SIGNAL}_{self.api.device.name}", self.update_callback
         )
 
     def _get_data(self):

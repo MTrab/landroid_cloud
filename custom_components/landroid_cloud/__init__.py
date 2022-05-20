@@ -156,13 +156,13 @@ class LandroidAPI:
         _LOGGER.debug(
             "Update signal received from API on %s", self.data.get(CONF_EMAIL)
         )
-        dispatcher_send(self._hass, f"{UPDATE_SIGNAL}_{self.index}")
+        dispatcher_send(self._hass, f"{UPDATE_SIGNAL}_{self.device.name}")
 
     async def async_refresh(self):
         """Try fetching data from cloud."""
         await self._hass.async_add_executor_job(self.device.update)
-        dispatcher_send(self._hass, f"{UPDATE_SIGNAL}_{self.index}")
+        dispatcher_send(self._hass, f"{UPDATE_SIGNAL}_{self.device.name}")
 
     async def async_update(self):
         """Update the state cache from cloud API."""
-        dispatcher_send(self._hass, f"{UPDATE_SIGNAL}_{self.index}")
+        dispatcher_send(self._hass, f"{UPDATE_SIGNAL}_{self.device.name}")
