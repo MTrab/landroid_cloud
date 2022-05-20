@@ -24,7 +24,7 @@ async def async_setup_entry(hass, config_entry: ConfigEntry, async_add_devices):
     entities = []
 
     for sensor_type in API_WORX_SENSORS:
-        api = hass.data[DOMAIN][config.entry_id]
+        api = hass.data[DOMAIN][config.entry_id]["api"]
         _LOGGER.debug("Init Landroid %s sensor for %s", sensor_type, api.friendly_name)
         entity = LandroidSensor(api, hass, sensor_type)
         entities.append(entity)

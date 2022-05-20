@@ -1,7 +1,8 @@
 """Constants used by Landroid Cloud integration."""
 from __future__ import annotations
 
-from pyworxcloud.worxlandroidapi import clouds as api_clouds
+# from pyworxcloud.worxlandroidapi import clouds as api_clouds
+from .pyworxcloud.worxlandroidapi import clouds as api_clouds
 
 # Startup banner
 STARTUP = """

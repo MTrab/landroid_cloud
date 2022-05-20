@@ -1,25 +1,23 @@
 """Adds support for Landroid Cloud compatible devices."""
 from __future__ import annotations
 
+import asyncio
 import logging
 
 from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
-from homeassistant.const import Platform, CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
-from homeassistant.core import HomeAssistant, callback
+from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers.dispatcher import dispatcher_send
-from homeassistant.helpers.entity import Entity
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.loader import async_get_integration
 from homeassistant.util import slugify as util_slugify
-from pyworxcloud import WorxCloud
+
+# from pyworxcloud import WorxCloud
+from .pyworxcloud import WorxCloud
 
 from .const import DOMAIN, LANDROID_API, STARTUP, UPDATE_SIGNAL
 from .sensor_definition import API_WORX_SENSORS
 
 _LOGGER = logging.getLogger(__name__)
-_PLATFORMS = [Platform.SENSOR]
-
-CLIENTS = []
 
 
 async def async_setup(hass: HomeAssistant, config: dict):
@@ -84,15 +82,8 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     cloud_password = entry.data.get(CONF_PASSWORD)
     cloud_type = entry.data.get(CONF_TYPE)
 
-    dev = 0
-
-    master = WorxCloud()
-    auth = await hass.async_add_executor_job(
-        master.initialize,
-        cloud_email,
-        cloud_password,
-        cloud_type.lower(),
-    )
+    master = WorxCloud(cloud_email, cloud_password, cloud_type.lower())
+    auth = await hass.async_add_executor_job(master.initialize)
 
     if not auth:
         _LOGGER.warning("Error in authentication!")
@@ -104,18 +95,25 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         _LOGGER.warning(err)
         return False
 
-    for device in range(num_dev):
-        CLIENTS.append(dev)
-        _LOGGER.debug("Setting up device %s (%s)", device, cloud_email)
-        CLIENTS[dev] = WorxCloud()
-        await hass.async_add_executor_job(
-            CLIENTS[dev].initialize, cloud_email, cloud_password, cloud_type.lower()
-        )
-        await hass.async_add_executor_job(CLIENTS[dev].connect, device, False)
+    hass.data[DOMAIN][entry.entry_id] = {}
+    hass.data[DOMAIN][entry.entry_id]["clients"] = []
 
-        api = WorxLandroidAPI(hass, dev, CLIENTS[dev], entry)
-        hass.data[DOMAIN][entry.entry_id] = api
-        dev += 1
+    for device in range(num_dev):
+        hass.data[DOMAIN][entry.entry_id]["clients"].append(device)
+        _LOGGER.debug("Setting up device %s (%s)", device, cloud_email)
+        hass.data[DOMAIN][entry.entry_id]["clients"][device] = WorxCloud(
+            cloud_email, cloud_password, cloud_type.lower()
+        )
+        await hass.async_add_executor_job(
+            hass.data[DOMAIN][entry.entry_id]["clients"][device].initialize
+        )
+        await hass.async_add_executor_job(
+            hass.data[DOMAIN][entry.entry_id]["clients"][device].connect, device, False
+        )
+        api = WorxLandroidAPI(
+            hass, device, hass.data[DOMAIN][entry.entry_id]["clients"][device], entry
+        )
+        hass.data[DOMAIN][entry.entry_id]["api"] = api
 
     return True
 
@@ -137,6 +135,8 @@ class WorxLandroidAPI:
         self.name = util_slugify(f"{self.device.name}")
         self.friendly_name = self.device.name
 
+        self.device.set_callback(self.receive_data)
+
     def get_data(self, sensor_type):
         """Get data from state cache."""
         methods = API_WORX_SENSORS[sensor_type]
@@ -148,9 +148,14 @@ class WorxLandroidAPI:
                 data[attr] = prop_data
         return data
 
+    def receive_data(self):
+        """Used as callback from API when data is received."""
+        _LOGGER.debug("Update signal received from API on %s", self.data.get(CONF_EMAIL))
+        dispatcher_send(self._hass, f"{UPDATE_SIGNAL}_{self.index}")
+
     async def async_refresh(self):
         """Try fetching data from cloud."""
-        await self._hass.async_add_executor_job(self.device.getStatus)
+        await self._hass.async_add_executor_job(self.device.update)
         dispatcher_send(self._hass, f"{UPDATE_SIGNAL}_{self.index}")
 
     async def async_update(self):
