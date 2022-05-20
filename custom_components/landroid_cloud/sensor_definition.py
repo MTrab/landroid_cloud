@@ -1,0 +1,58 @@
+"""Constants used by Landroid Cloud integration."""
+from __future__ import annotations
+
+API_WORX_SENSORS = {
+    "battery": {
+        "state": {
+            "battery_percent": "state",
+            "battery_voltage": "battery_voltage",
+            "battery_temperature": "battery_temperature",
+            "battery_charge_cycle": "total_charge_cycles",
+            "battery_charge_cycle_current": "current_charge_cycles",
+            "battery_charge_cycles_reset_at": "charge_cycles_reset",
+            "battery_charging": "charging",
+        },
+        "icon": "mdi:battery",
+        "unit": "%",
+        "device_class": "battery",
+    },
+    "error": {
+        "state": {"error_description": "state", "error": "error_id"},
+        "icon": "mdi:alert",
+        "unit": None,
+        "device_class": None,
+    },
+    "status": {
+        "state": {
+            "id": "id",
+            "status_description": "state",
+            "blade_time": "total_blade_time",
+            "blade_time_current": "current_blade_time",
+            "blade_work_time_reset_at": "blade_time_reset",
+            "work_time": "work_time",
+            "distance": "distance",
+            "status": "status_id",
+            "updated": "last_update",
+            "rssi": "rssi",
+            "yaw": "yaw",
+            "roll": "roll",
+            "pitch": "pitch",
+            "gps_latitude": "latitude",
+            "gps_longitude": "longitude",
+            "rain_delay": "raindelay",
+            "schedule_variation": "timeextension",
+            "firmware": "firmware_version",
+            "serial": "serial",
+            "mac": "mac",
+            "schedule_mower_active": "schedule_enabled",
+            "partymode_enabled": "partymode_enabled",
+            "mowing_zone": "mowing_zone",
+            "accessories": "accessories",
+            "islocked": "locked",
+            "online": "online",
+        },
+        "icon": None,
+        "unit": None,
+        "device_class": None,
+    },
+}

@@ -13,9 +13,9 @@
                 "data": {
                     "email": "Email",
                     "password": "Password",
-                    "type": "Type"
+                    "type": "Vendor"
                 },
-                "title": "Connect to your Worx Landroid Cloud account"
+                "title": "Connect to your Landroid compatible Cloud account"
             }
         }
     }
