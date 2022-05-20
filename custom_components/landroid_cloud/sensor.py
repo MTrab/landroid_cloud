@@ -2,16 +2,29 @@
 from __future__ import annotations
 
 import logging
+import voluptuous as vol
 
+from functools import partial
+from typing import Any
 from homeassistant.components import sensor
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_TYPE, STATE_UNKNOWN
 from homeassistant.core import callback
+from homeassistant.helpers import entity_platform
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.icon import icon_for_battery_level
 
-from .const import DOMAIN, STATE_INITIALIZING, STATE_OFFLINE, UPDATE_SIGNAL
+from .const import (
+    ATTR_ZONE,
+    DOMAIN,
+    SERVICE_SETZONE,
+    SERVICE_START,
+    SERVICE_HOME,
+    STATE_INITIALIZING,
+    STATE_OFFLINE,
+    UPDATE_SIGNAL,
+)
 from .sensor_definition import API_WORX_SENSORS
 
 _LOGGER = logging.getLogger(__name__)
@@ -30,6 +43,26 @@ async def async_setup_entry(hass, config_entry: ConfigEntry, async_add_devices):
         entities.append(entity)
 
     async_add_devices(entities, True)
+
+    platform = entity_platform.current_platform.get()
+    platform.async_register_entity_service(
+        SERVICE_START,
+        {},
+        "async_start",
+    )
+
+    platform.async_register_entity_service(
+        SERVICE_HOME,
+        {},
+        "async_home",
+    )
+
+    platform.async_register_entity_service(
+        SERVICE_SETZONE,
+        {vol.Required(ATTR_ZONE): vol.All(vol.Coerce(int), vol.Range(0, 3))},
+        "async_setzone",
+    )
+
     return True
 
 
@@ -156,3 +189,27 @@ class LandroidSensor(Entity):
                     self._state = STATE_UNKNOWN
                 else:
                     self._state = STATE_OFFLINE
+
+    async def async_start(self, **kwargs: Any) -> None:
+        """Start grass cutting routine."""
+        if self._sensor_type == "status":
+            _LOGGER.debug("Starting %s", self._name)
+            await self.hass.async_add_executor_job(
+                partial(self.api.device.start, **kwargs)
+            )
+
+    async def async_home(self, **kwargs: Any) -> None:
+        """Stop and return to base."""
+        if self._sensor_type == "status":
+            _LOGGER.debug("Stopping %s", self._name)
+            await self.hass.async_add_executor_job(
+                partial(self.api.device.stop, **kwargs)
+            )
+
+    async def async_setzone(self, zone: int) -> None:
+        """Set next zone to cut."""
+        if self._sensor_type == "status":
+            _LOGGER.debug("Setting zone for %s to %s", self._name, zone)
+            await self.hass.async_add_executor_job(
+                partial(self.api.device.setzone, zone)
+            )

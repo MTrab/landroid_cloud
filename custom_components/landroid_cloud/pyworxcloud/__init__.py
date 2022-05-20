@@ -1,66 +1,16 @@
 """pyWorxCloud definition."""
+from __future__ import annotations
+
+import json
+import base64
+import tempfile
 import contextlib
-import logging
 import time
+import paho.mqtt.client as mqtt
+import OpenSSL.crypto
 
-from ratelimit import RateLimitException, limits
-
-from .const import MAX_WAIT
-from .worxlandroidapi import *
-
-_LOGGER = logging.getLogger(__name__)
-
-# Valid states - some are missing as these haven't been identified yet
-StateDict = {
-    0: "Idle",
-    1: "Home",
-    2: "Start sequence",
-    3: "Leaving home",
-    4: "Follow wire",
-    5: "Searching home",
-    6: "Searching wire",
-    7: "Mowing",
-    8: "Lifted",
-    9: "Trapped",
-    10: "Blade blocked",
-    11: "Debug",
-    12: "Remote control",
-    30: "Going home",
-    31: "Zoning",
-    32: "Cutting edge",
-    33: "Searching area",
-    34: "Pause",
-}
-
-# Valid error states
-ErrorDict = {
-    0: "No error",
-    1: "Trapped",
-    2: "Lifted",
-    3: "Wire missing",
-    4: "Outside wire",
-    5: "Rain delay",
-    6: "Close door to mow",
-    7: "Close door to go home",
-    8: "Blade motor blocked",
-    9: "Wheel motor blocked",
-    10: "Trapped timeout",
-    11: "Upside down",
-    12: "Battery low",
-    13: "Reverse wire",
-    14: "Charge error",
-    15: "Timeout finding home",
-    16: "Locked",
-    17: "Battery temperature error",
-    18: "dummy model",
-    19: "Battery trunk open timeout",
-    20: "wire sync",
-    21: "msg num",
-}
-
-UNKNOWN_ERROR = "Unknown error (%s)"
-POLL_LIMIT_PERIOD = 30  # s
-POLL_CALLS_LIMIT = 1  # polls per timeframe
+from .states import ErrorDict, StateDict
+from .landroidapi import LandroidAPI
 
 
 class WorxCloud:
@@ -68,12 +18,12 @@ class WorxCloud:
 
     wait = True
 
-    def __init__(self, username: str, password: str, cloud_type: str = "worx"):
+    def __init__(self, username: str, password: str, cloud_type: str = "worx") -> None:
         """Define WorxCloud object."""
-        self._worx_mqtt_client_id = ""
-        self._worx_mqtt_endpoint = ""
+        self._worx_mqtt_client_id = None
+        self._worx_mqtt_endpoint = None
 
-        self._api = WorxLandroidAPI()
+        self._api = LandroidAPI()
 
         self._api.username = username
         self._api.password = password
@@ -81,8 +31,97 @@ class WorxCloud:
             cloud_type  # Usable cloud_types are: worx, kress and landxcape.
         )
 
-        self._raw = ""
+        self._auth_result = False
+        self._dev_id = None
+        self._mqtt = None
+        self._raw = None
         self._callback = None  # Callback used when data arrives from cloud
+
+        self.rain_delay_time_remaining = None
+        self.rain_sensor_triggered = None
+        self.gps_latitude = None
+        self.gps_longitude = None
+        self.distance = 0
+        self.work_time = 0
+        self.roll = 0
+        self.pitch = 0
+        self.yaw = 0
+        self.blade_time_current = 0
+        self.blade_time = 0
+        self.battery_charge_cycle_current = None
+        self.battery_temperature = 0
+        self.battery_voltage = 0
+        self.battery_percent = 0
+        self.battery_charging = None
+        self.battery_charge_cycle = None
+        self.current_zone = 0
+        self.locked = False
+        self.mowing_zone = 0
+        self.firmware = None
+        self.rssi = None
+        self.status = None
+        self.status_description = None
+        self.error = None
+        self.error_description = None
+        self.blade_work_time_reset = None
+        self.mqtt_topics = {}
+        self.mqtt_out = None
+        self.mqtt_in = None
+        self.mac = None
+        self.mac_address = None
+        self.updated = None
+        self.rain_delay = None
+        self.serial = None
+        self.ots_enabled = False
+        self.schedule_mower_active = False
+        self.partymode_enabled = False
+        self.partymode = False
+        self.schedule_variation = None
+        self.schedule_day_sunday_start = None
+        self.schedule_day_sunday_duration = None
+        self.schedule_day_sunday_boundary = None
+        self.schedule_day_monday_start = None
+        self.schedule_day_monday_duration = None
+        self.schedule_day_monday_boundary = None
+        self.schedule_day_tuesday_start = None
+        self.schedule_day_tuesday_duration = None
+        self.schedule_day_tuesday_boundary = None
+        self.schedule_day_wednesday_start = None
+        self.schedule_day_wednesday_duration = None
+        self.schedule_day_wednesday_boundary = None
+        self.schedule_day_thursday_start = None
+        self.schedule_day_thursday_duration = None
+        self.schedule_day_thursday_boundary = None
+        self.schedule_day_friday_start = None
+        self.schedule_day_friday_duration = None
+        self.schedule_day_friday_boundary = None
+        self.schedule_day_saturday_start = None
+        self.schedule_day_saturday_duration = None
+        self.schedule_day_saturday_boundary = None
+        self.schedule_day_sunday_2_start = None
+        self.schedule_day_sunday_2_duration = None
+        self.schedule_day_sunday_2_boundary = None
+        self.schedule_day_monday_2_start = None
+        self.schedule_day_monday_2_duration = None
+        self.schedule_day_monday_2_boundary = None
+        self.schedule_day_tuesday_2_start = None
+        self.schedule_day_tuesday_2_duration = None
+        self.schedule_day_tuesday_2_boundary = None
+        self.schedule_day_wednesday_2_start = None
+        self.schedule_day_wednesday_2_duration = None
+        self.schedule_day_wednesday_2_boundary = None
+        self.schedule_day_thursday_2_start = None
+        self.schedule_day_thursday_2_duration = None
+        self.schedule_day_thursday_2_boundary = None
+        self.schedule_day_friday_2_start = None
+        self.schedule_day_friday_2_duration = None
+        self.schedule_day_friday_2_boundary = None
+        self.schedule_day_saturday_2_start = None
+        self.schedule_day_saturday_2_duration = None
+        self.schedule_day_saturday_2_boundary = None
+        self.serial_number = None
+        self.battery_charge_cycles_reset = None
+        self.online = False
 
     def initialize(self) -> bool:
         """Initialize current object."""
@@ -101,7 +140,6 @@ class WorxCloud:
 
     def connect(self, dev_id: int, verify_ssl: bool = True) -> bool:
         """Connect to cloud services."""
-        import paho.mqtt.client as mqtt
 
         self._dev_id = dev_id
         self._get_mac_address()
@@ -156,16 +194,14 @@ class WorxCloud:
             self._worx_mqtt_endpoint = profile["mqtt_endpoint"]
 
             self._worx_mqtt_client_id = "android-" + self._api.uuid
-        except:
+        except:  # pylint: disable=bare-except
             return False
 
     @contextlib.contextmanager
     def _get_cert(self):
         """Cet current certificate."""
-        import base64
 
         certresp = self._api.get_cert()
-        cert = base64.b64decode(certresp["pkcs12"])
 
         with pfx_to_pem(certresp["pkcs12"]) as pem_cert:
             yield pem_cert
@@ -177,12 +213,12 @@ class WorxCloud:
         self.mqtt_in = self.mqtt_topics["command_in"]
         self.mac = self.mac_address
 
-    def _forward_on_message(self, client, userdata, message):
+    def _forward_on_message(
+        self, client, userdata, message
+    ):  # pylint: disable=unused-argument
         """MQTT callback method definition."""
-        import json
-
         json_message = message.payload.decode("utf-8")
-        self._decodeData(json_message)
+        self._decode_data(json_message)
 
         if self._callback is not None:
             self._callback()
@@ -193,12 +229,10 @@ class WorxCloud:
         status = str(status).replace("'", '"')
         self._raw = status
 
-        self._decodeData(status)
+        self._decode_data(status)
 
-    def _decodeData(self, indata) -> None:
+    def _decode_data(self, indata) -> None:
         """Decode incoming JSON data."""
-        import json
-
         data = json.loads(indata)
         if "dat" in data:
             self.firmware = data["dat"]["fw"]
@@ -212,10 +246,10 @@ class WorxCloud:
             if data["dat"]["le"] in ErrorDict:
                 self.error_description = ErrorDict[data["dat"]["le"]]
             else:
-                self.error_description = f"Unknown error"
+                self.error_description = "Unknown error"
 
             self.current_zone = data["dat"]["lz"]
-            self.locked = data["dat"]["lk"]
+            self.locked = bool(data["dat"]["lk"])
 
             # Get battery info if available
             if "bt" in data["dat"]:
@@ -224,7 +258,7 @@ class WorxCloud:
                 self.battery_percent = data["dat"]["bt"]["p"]
                 self.battery_charging = data["dat"]["bt"]["c"]
                 self.battery_charge_cycle = data["dat"]["bt"]["nr"]
-                if self.battery_charge_cycles_reset != None:
+                if self.battery_charge_cycles_reset is not None:
                     self.battery_charge_cycle_current = (
                         self.battery_charge_cycle - self.battery_charge_cycles_reset
                     )
@@ -236,7 +270,7 @@ class WorxCloud:
             # Get blade data if available
             if "st" in data["dat"]:
                 self.blade_time = data["dat"]["st"]["b"]
-                if self.blade_work_time_reset != None:
+                if self.blade_work_time_reset is not None:
                     self.blade_time_current = (
                         self.blade_time - self.blade_work_time_reset
                     )
@@ -255,8 +289,6 @@ class WorxCloud:
 
             # Check for extra module availability
             if "modules" in data["dat"]:
-                self.gps_latitude = None
-                self.gps_longitude = None
                 if "4G" in data["dat"]["modules"]:
                     self.gps_latitude = data["dat"]["modules"]["4G"]["gps"]["coo"][0]
                     self.gps_longitude = data["dat"]["modules"]["4G"]["gps"]["coo"][1]
@@ -330,25 +362,13 @@ class WorxCloud:
                 self.schedule_day_saturday_2_duration = data["cfg"]["sc"]["dd"][6][1]
                 self.schedule_day_saturday_2_boundary = data["cfg"]["sc"]["dd"][6][2]
 
-        self.islocked = True if self.locked == 1 else False
         self.wait = False
 
-    def _on_connect(self, client, userdata, flags, rc):
+    def _on_connect(
+        self, client, userdata, flags, rc
+    ):  # pylint: disable=unused-argument,invalid-name
         """MQTT callback method."""
         client.subscribe(self.mqtt_out)
-
-    @limits(calls=POLL_CALLS_LIMIT, period=POLL_LIMIT_PERIOD)
-    def _poll(self) -> None:
-        """Force poll."""
-        # DO NOT CALL TOO OFTEN AS YOU WILL GET BANNED!
-        self._mqtt.publish(self.mqtt_in, '{"cmd":0}', qos=0, retain=False)
-
-    def tryToPoll(self) -> None:
-        """Try to issue a forced poll."""
-        try:
-            self._poll()
-        except RateLimitException as exception:
-            return f"The rate limit of {POLL_CALLS_LIMIT} status polls per {POLL_LIMIT_PERIOD} seconds has been exceeded. Please wait {round(exception.period_remaining)} seconds before polling again."
 
     def start(self) -> None:
         """Start mowing."""
@@ -377,12 +397,12 @@ class WorxCloud:
         """Reboot device."""
         self._mqtt.publish(self.mqtt_in, '{"cmd":7}', qos=0, retain=False)
 
-    def setRainDelay(self, rainDelay) -> None:
+    def raindelay(self, rain_delay) -> None:
         """Set new rain delay."""
-        msg = '{"rd": %s}' % (rainDelay)
+        msg = f'"rd": {rain_delay}'
         self._mqtt.publish(self.mqtt_in, msg, qos=0, retain=False)
 
-    def enableSchedule(self, enable: bool) -> None:
+    def schedule(self, enable: bool) -> None:
         """Enable or disable schedule."""
         if enable:
             msg = '{"sc": {"m": 1}}'
@@ -405,12 +425,12 @@ class WorxCloud:
         products = self._api.data
         return len(products)
 
-    def sendData(self, data) -> None:
+    def send(self, data) -> None:
         """Publish data to the device."""
         if self.online:
             self._mqtt.publish(self.mqtt_in, data, qos=0, retain=False)
 
-    def partyMode(self, enabled: bool) -> None:
+    def enable_partymode(self, enabled: bool) -> None:
         """Enable or disable Party Mode."""
         if self.online:
             if enabled:
@@ -420,13 +440,15 @@ class WorxCloud:
                 msg = '{"sc": {"m": 1, "distm": 0}}'
                 self._mqtt.publish(self.mqtt_in, msg, qos=0, retain=False)
 
-    def setZone(self, zone) -> None:
+    def setzone(self, zone) -> None:
         """Set next zone to mow."""
         if self.online:
-            msg = '{"lz":' + zone + "}"
+            if not isinstance(zone, str):
+                zone = str(zone)
+            msg = '{"mz":' + zone + "}"
             self._mqtt.publish(self.mqtt_in, msg, qos=0, retain=False)
 
-    def startEdgecut(self) -> None:
+    def edgecut(self) -> None:
         """Start edgecut routine."""
         if self.online:
             msg = '{"sc":{"ots":{"bc":1,"wtm":0}}}'
@@ -436,12 +458,6 @@ class WorxCloud:
 @contextlib.contextmanager
 def pfx_to_pem(pfx_data):
     """Decrypts the .pfx file to be used with requests."""
-    """ Based on https://gist.github.com/erikbern/756b1d8df2d1487497d29b90e81f8068 """
-    import base64
-    import tempfile
-
-    import OpenSSL.crypto
-
     with tempfile.NamedTemporaryFile(suffix=".pem", delete=False) as t_pem:
         f_pem = open(t_pem.name, "wb")
         p12 = OpenSSL.crypto.load_pkcs12(base64.b64decode(pfx_data), "")
@@ -455,9 +471,9 @@ def pfx_to_pem(pfx_data):
                 OpenSSL.crypto.FILETYPE_PEM, p12.get_certificate()
             )
         )
-        ca = p12.get_ca_certificates()
-        if ca is not None:
-            for cert in ca:
+        certauth = p12.get_ca_certificates()
+        if certauth is not None:
+            for cert in certauth:
                 f_pem.write(
                     OpenSSL.crypto.dump_certificate(OpenSSL.crypto.FILETYPE_PEM, cert)
                 )

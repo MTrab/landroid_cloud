@@ -1,8 +1,8 @@
 """Constants used by Landroid Cloud integration."""
 from __future__ import annotations
 
-# from pyworxcloud.worxlandroidapi import clouds as api_clouds
-from .pyworxcloud.worxlandroidapi import clouds as api_clouds
+# from pyworxcloud.clouds import CLOUDS as api_clouds
+from .pyworxcloud.clouds import CLOUDS as api_clouds
 
 # Startup banner
 STARTUP = """
@@ -19,7 +19,6 @@ https://github.com/mtrab/landroid_cloud/issues
 # Some defaults
 DEFAULT_NAME = "landroid"
 DOMAIN = "landroid_cloud"
-LANDROID_API = "landroid_cloud_api"
 UPDATE_SIGNAL = "landroid_cloud_update"
 
 # Service consts
@@ -37,6 +36,9 @@ SERVICE_EDGECUT = "edgecut"
 # Extra states
 STATE_INITIALIZING = "Initializing"
 STATE_OFFLINE = "Offline"
+
+# Attributes
+ATTR_ZONE = "zone"
 
 # Available cloud vendors
 CLOUDS = []

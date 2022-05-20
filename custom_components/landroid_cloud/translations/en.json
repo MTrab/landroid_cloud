@@ -1,7 +1,7 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Device is already configured"
+            "already_exists": "This user account have already been configured"
         },
         "error": {
             "cannot_connect": "Failed to connect",

@@ -1,12 +1,12 @@
 """Adds support for Landroid Cloud compatible devices."""
 from __future__ import annotations
 
-import asyncio
 import logging
+import voluptuous as vol
 
 from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
-from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
-from homeassistant.core import HomeAssistant
+from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE, CONF_ENTITY_ID
+from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.helpers.dispatcher import dispatcher_send
 from homeassistant.loader import async_get_integration
 from homeassistant.util import slugify as util_slugify
@@ -14,7 +14,7 @@ from homeassistant.util import slugify as util_slugify
 # from pyworxcloud import WorxCloud
 from .pyworxcloud import WorxCloud
 
-from .const import DOMAIN, LANDROID_API, STARTUP, UPDATE_SIGNAL
+from .const import DOMAIN, STARTUP, UPDATE_SIGNAL
 from .sensor_definition import API_WORX_SENSORS
 
 _LOGGER = logging.getLogger(__name__)
@@ -58,7 +58,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     unload_ok = await hass.config_entries.async_forward_entry_unload(entry, "sensor")
 
     if unload_ok:
-        for unsub in hass.data[DOMAIN][entry.entry_id].listeners:
+        for unsub in hass.data[DOMAIN][entry.entry_id]["api"].listeners:
             unsub()
         hass.data[DOMAIN].pop(entry.entry_id)
 
@@ -82,11 +82,14 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     cloud_password = entry.data.get(CONF_PASSWORD)
     cloud_type = entry.data.get(CONF_TYPE)
 
+    if cloud_type is None:
+        cloud_type = "worx"
+
     master = WorxCloud(cloud_email, cloud_password, cloud_type.lower())
     auth = await hass.async_add_executor_job(master.initialize)
 
     if not auth:
-        _LOGGER.warning("Error in authentication!")
+        _LOGGER.warning("Error in authentication! (%s)", cloud_email)
         return False
 
     try:
@@ -110,7 +113,7 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         await hass.async_add_executor_job(
             hass.data[DOMAIN][entry.entry_id]["clients"][device].connect, device, False
         )
-        api = WorxLandroidAPI(
+        api = LandroidAPI(
             hass, device, hass.data[DOMAIN][entry.entry_id]["clients"][device], entry
         )
         hass.data[DOMAIN][entry.entry_id]["api"] = api
@@ -118,7 +121,7 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     return True
 
 
-class WorxLandroidAPI:
+class LandroidAPI:
     """Handle the API calls."""
 
     def __init__(self, hass: HomeAssistant, index: int, device, entry: ConfigEntry):
@@ -150,7 +153,9 @@ class WorxLandroidAPI:
 
     def receive_data(self):
         """Used as callback from API when data is received."""
-        _LOGGER.debug("Update signal received from API on %s", self.data.get(CONF_EMAIL))
+        _LOGGER.debug(
+            "Update signal received from API on %s", self.data.get(CONF_EMAIL)
+        )
         dispatcher_send(self._hass, f"{UPDATE_SIGNAL}_{self.index}")
 
     async def async_refresh(self):

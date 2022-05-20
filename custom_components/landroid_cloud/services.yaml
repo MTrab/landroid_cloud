@@ -1,37 +1,27 @@
-poll:
-  description: Poll mower status info
-  fields:
-    id:
-      description: Landroid ID. Found as attribute on the Landroid status sensor
-      example: 123435
-
 start:
   description: Start mowing
-  fields:
-    id:
-      description: Landroid ID. Found as attribute on the Landroid status sensor
-      example: 123435
+  target:
+    entity:
+      domain: sensor
 
 pause:
   description: Pause mowing
-  fields:
-    id:
-      description: Landroid ID. Found as attribute on the Landroid status sensor
-      example: 123435
+  target:
+    entity:
+      domain: sensor
 
 home:
   description: Send Landroid home
-  fields:
-    id:
-      description: Landroid ID. Found as attribute on the Landroid status sensor
-      example: 123435
+  target:
+    entity:
+      domain: sensor
 
 lock:
   description: Lock Landroid
+  target:
+    entity:
+      domain: sensor
   fields:
-    id:
-      description: Landroid ID. Found as attribute on the Landroid status sensor
-      example: 123435
     enable:
       description: Set true for enabling of lock and false for disabling
       example: true
@@ -41,24 +31,22 @@ lock:
 
 restart:
   description: Restart Landroid
-  fields:
-    id:
-      description: Landroid ID. Found as attribute on the Landroid status sensor
-      example: 123435
+  target:
+    entity:
+      domain: sensor
 
 edgecut:
   description: Start Edgecut routine
-  fields:
-    id:
-      description: Landroid ID. Found as attribute on the Landroid status sensor
-      example: 123435
+  target:
+    entity:
+      domain: sensor
 
 partymode:
   description: Enable or disable partymode
+  target:
+    entity:
+      domain: sensor
   fields:
-    id:
-      description: Landroid ID. Found as attribute on the Landroid status sensor
-      example: 123435
     enable:
       description: Set true for enabling of PartyMode and false for disabling
       example: true
@@ -68,10 +56,10 @@ partymode:
 
 setzone:
   description: Set which zone to be mowed next
+  target:
+    entity:
+      domain: sensor
   fields:
-    id:
-      description: Landroid ID. Found as attribute on the Landroid status sensor
-      example: 123435
     zone:
       description: Sets the zone number, ranging from 0 to 3, to be mowed next
       example: 1
@@ -87,10 +75,10 @@ setzone:
 
 config:
   description: Set config parameters
+  target:
+    entity:
+      domain: sensor
   fields:
-    id:
-      description: Landroid ID. Found as attribute on the Landroid status sensor
-      example: 123435
     raindelay:
       description: Set rain delay. Time in minutes ranging from 0 to 300. 0 = Disabled
       example: 30
