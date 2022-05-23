@@ -1,7 +1,7 @@
-"""Constants used by Landroid Cloud integration."""
+"""Attribute map used by Landroid Cloud integration."""
 from __future__ import annotations
 
-API_WORX_SENSORS = {
+ATTR_MAP = {
     "battery": {
         "state": {
             "battery_percent": "state",
@@ -16,16 +16,12 @@ API_WORX_SENSORS = {
         "unit": "%",
         "device_class": "battery",
     },
-    "error": {
-        "state": {"error_description": "state", "error": "error_id"},
-        "icon": "mdi:alert",
-        "unit": None,
-        "device_class": None,
-    },
-    "status": {
+    "default": {
         "state": {
             "id": "id",
             "status_description": "state",
+            "error": "error_id",
+            "error_description": "error_description",
             "blade_time": "total_blade_time",
             "blade_time_current": "current_blade_time",
             "blade_work_time_reset_at": "blade_time_reset",
@@ -51,7 +47,7 @@ API_WORX_SENSORS = {
             "islocked": "locked",
             "online": "online",
         },
-        "icon": None,
+        "icon": "mdi:robot-mower",
         "unit": None,
         "device_class": None,
     },

@@ -5,8 +5,8 @@ import logging
 import voluptuous as vol
 
 from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
-from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE, CONF_ENTITY_ID
-from homeassistant.core import HomeAssistant, ServiceCall
+from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers.dispatcher import dispatcher_send
 from homeassistant.loader import async_get_integration
 from homeassistant.util import slugify as util_slugify
@@ -15,7 +15,7 @@ from homeassistant.util import slugify as util_slugify
 from .pyworxcloud import WorxCloud
 
 from .const import DOMAIN, STARTUP, UPDATE_SIGNAL
-from .sensor_definition import API_WORX_SENSORS
+# from .attribute_map import API_WORX_SENSORS
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -47,7 +47,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     result = await _setup(hass, entry)
 
     hass.async_create_task(
-        hass.config_entries.async_forward_entry_setup(entry, "sensor")
+        hass.config_entries.async_forward_entry_setup(entry, "vacuum")
     )
 
     return result
@@ -55,7 +55,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
-    unload_ok = await hass.config_entries.async_forward_entry_unload(entry, "sensor")
+    unload_ok = await hass.config_entries.async_forward_entry_unload(entry, "vacuum")
 
     if unload_ok:
         for unsub in hass.data[DOMAIN][entry.entry_id]["api"].listeners:
@@ -140,16 +140,24 @@ class LandroidAPI:
 
         self.device.set_callback(self.receive_data)
 
-    def get_data(self, sensor_type):
-        """Get data from state cache."""
-        methods = API_WORX_SENSORS[sensor_type]
-        data = {}
+    # def get_data(self, sensor_type = "status"):
+    #     """Get data from state cache."""
+    #     methods = API_WORX_SENSORS[sensor_type]
+    #     data = {}
 
-        for prop, attr in methods["state"].items():
-            if hasattr(self.device, prop):
-                prop_data = getattr(self.device, prop)
-                data[attr] = prop_data
-        return data
+    #     for prop, attr in methods["state"].items():
+    #         if hasattr(self.device, prop):
+    #             prop_data = getattr(self.device, prop)
+    #             data[attr] = prop_data
+
+    #     if sensor_type == "status":
+    #         error_id = 0
+    #         error_description = data.pop("error_description")
+
+    #         if error_id > 0:
+    #             data.update({"state": error_description})
+
+    #     return data
 
     def receive_data(self):
         """Used as callback from API when data is received."""

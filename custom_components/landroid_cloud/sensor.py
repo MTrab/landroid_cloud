@@ -2,10 +2,11 @@
 from __future__ import annotations
 
 import logging
-import voluptuous as vol
 
 from functools import partial
 from typing import Any
+import voluptuous as vol
+
 from homeassistant.components import sensor
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_TYPE, STATE_UNKNOWN
@@ -25,7 +26,7 @@ from .const import (
     STATE_OFFLINE,
     UPDATE_SIGNAL,
 )
-from .sensor_definition import API_WORX_SENSORS
+from .attribute_map import API_WORX_SENSORS
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -164,7 +165,9 @@ class LandroidSensor(Entity):
         data = self._get_data()
         if "state" in data:
             _LOGGER.debug(data)
+
             state = data.pop("state")
+
             self._attributes.update(data)
 
             # Set state to offline if mower is not online
