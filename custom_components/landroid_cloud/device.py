@@ -133,7 +133,6 @@ class LandroidCloudBase(Entity):
     async def async_update(self):
         """Update the sensor."""
         _LOGGER.debug("Updating %s", self.entity_id)
-        # data = self._get_data()
         master: WorxCloud = self.api.device
 
         methods = ATTR_MAP["default"]
