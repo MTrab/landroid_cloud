@@ -37,6 +37,7 @@ class WorxCloud:
         self._raw = None
         self._callback = None  # Callback used when data arrives from cloud
 
+        self.board = None
         self.rain_delay_time_remaining = None
         self.rain_sensor_triggered = None
         self.gps_latitude = None
@@ -72,10 +73,10 @@ class WorxCloud:
         self.updated = None
         self.rain_delay = None
         self.serial = None
-        self.ots_enabled = False
+        self.ots_capable = False
         self.schedule_mower_active = False
         self.partymode_enabled = False
-        self.partymode = False
+        self.partymode_capable = False
         self.schedule_variation = None
         self.schedule_day_sunday_start = None
         self.schedule_day_sunday_duration = None
@@ -212,6 +213,7 @@ class WorxCloud:
         self.mqtt_out = self.mqtt_topics["command_out"]
         self.mqtt_in = self.mqtt_topics["command_in"]
         self.mac = self.mac_address
+        self.board = self.mqtt_out.split('/')[0]
 
     def _forward_on_message(
         self, client, userdata, message
@@ -307,14 +309,14 @@ class WorxCloud:
 
             # Fetch main schedule
             if "sc" in data["cfg"]:
-                self.ots_enabled = True if "ots" in data["cfg"]["sc"] else False
+                self.ots_capable = bool("ots" in data["cfg"]["sc"])
                 self.schedule_mower_active = (
                     True if str(data["cfg"]["sc"]["m"]) == "1" else False
                 )
                 self.partymode_enabled = (
                     True if str(data["cfg"]["sc"]["m"]) == "2" else False
                 )
-                self.partymode = True if "distm" in data["cfg"]["sc"] else False
+                self.partymode_capable = bool("distm" in data["cfg"]["sc"])
                 self.schedule_variation = data["cfg"]["sc"]["p"]
                 self.schedule_day_sunday_start = data["cfg"]["sc"]["d"][0][0]
                 self.schedule_day_sunday_duration = data["cfg"]["sc"]["d"][0][1]
@@ -378,7 +380,7 @@ class WorxCloud:
         """Pause mowing."""
         self._mqtt.publish(self.mqtt_in, '{"cmd":2}', qos=0, retain=False)
 
-    def stop(self) -> None:
+    def home(self) -> None:
         """Stop (and go home)."""
         self._mqtt.publish(self.mqtt_in, '{"cmd":3}', qos=0, retain=False)
 

@@ -3,9 +3,17 @@ from __future__ import annotations
 
 import logging
 
-from homeassistant.components.vacuum import ENTITY_ID_FORMAT, VacuumEntityFeature
+from homeassistant.components.vacuum import (
+    ENTITY_ID_FORMAT,
+    STATE_DOCKED,
+    STATE_ERROR,
+    STATE_RETURNING,
+    StateVacuumEntity,
+    VacuumEntityFeature,
+)
 from homeassistant.const import CONF_TYPE
 from homeassistant.core import callback
+from homeassistant.helpers.dispatcher import async_dispatcher_connect
 import homeassistant.helpers.device_registry as dr
 from homeassistant.helpers.entity import Entity
 
@@ -13,8 +21,10 @@ from .attribute_map import ATTR_MAP
 
 from .const import (
     DOMAIN,
+    LANDROID_TO_HA_STATEMAP,
     STATE_INITIALIZING,
     STATE_OFFLINE,
+    UPDATE_SIGNAL,
 )
 
 from .pyworxcloud import WorxCloud
@@ -24,11 +34,9 @@ SUPPORT_LANDROID = (
     VacuumEntityFeature.BATTERY
     | VacuumEntityFeature.PAUSE
     | VacuumEntityFeature.RETURN_HOME
-    | VacuumEntityFeature.SEND_COMMAND
     | VacuumEntityFeature.START
     | VacuumEntityFeature.STATE
     | VacuumEntityFeature.STATUS
-    | VacuumEntityFeature.STOP
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -69,7 +77,7 @@ class LandroidCloudBase(Entity):
             "name": str(self.name),
             "sw_version": self.api.device.firmware_version,
             "manufacturer": self.api.data.get(CONF_TYPE),
-            "model": None,
+            "model": self.api.device.board,
         }
 
     @property
@@ -89,14 +97,7 @@ class LandroidCloudBase(Entity):
 
     @property
     def _robot_state(self):
-        """Return the state of the deevice."""
-        # try:
-        #     state = STATE_MAP[phase]
-        # except KeyError:
-        #     return STATE_ERROR
-        # if cycle != "none" and state in (STATE_IDLE, STATE_DOCKED):
-        #     state = STATE_PAUSED
-        # return state
+        """Return the state of the device."""
         return self._state
 
     @property
@@ -119,16 +120,21 @@ class LandroidCloudBase(Entity):
         """Return sensor state."""
         return self._state
 
-    # def _get_data(self):
-    #     """Return new data from the api cache."""
-    #     data = self.api.get_data()
-    #     self._available = True
-    #     return data
-
     @callback
     def update_callback(self):
         """Get new data and update state."""
         self.async_schedule_update_ha_state(True)
+
+    async def async_added_to_hass(self):
+        """Connect update callbacks."""
+        await super().async_added_to_hass()
+        _LOGGER.debug("Added sensor %s", self.entity_id)
+        await self.api.async_refresh()
+        async_dispatcher_connect(
+            self.hass,
+            f"{UPDATE_SIGNAL}_{self.api.device.name}",
+            self.update_callback,
+        )
 
     async def async_update(self):
         """Update the sensor."""
@@ -144,14 +150,20 @@ class LandroidCloudBase(Entity):
                 data[attr] = prop_data
         _LOGGER.debug(data)
 
-        # if "state" in data:
         state = master.status_description
         self._attributes.update(data)
 
-        # Set state to offline if mower is not online
         _LOGGER.debug("Mower %s online: %s", self._name, master.online)
+        self._available = master.online
         if not master.online:
             state = STATE_OFFLINE
+
+        if state in LANDROID_TO_HA_STATEMAP:
+            state = LANDROID_TO_HA_STATEMAP[state]
+
+        if master.error is not None:
+            if master.error > 0:
+                state = STATE_ERROR
 
         _LOGGER.debug("Mower %s State %s", self._name, state)
         self._state = state
@@ -163,22 +175,38 @@ class LandroidCloudBase(Entity):
         self._mac = master.mac
         self._serialnumber = master.serial
         self._connections = {(dr.CONNECTION_NETWORK_MAC, self._mac)}
-        # else:
-        #     _LOGGER.debug("No data received for %s", self.entity_id)
-        #     reachable = self.api.device.online
-        #     if not reachable:
-        #         if "_battery" in self.entity_id:
-        #             self._state = STATE_UNKNOWN
-        #         else:
-        #             self._state = STATE_OFFLINE
+        self._battery_level = master.battery_percent
 
+    async def async_start(self):
+        """Start or resume the task."""
+        device: WorxCloud = self.api.device
+        device.start()
 
-class WorxDevice(LandroidCloudBase):
+    async def async_pause(self):
+        """Pause the cleaning cycle."""
+        device: WorxCloud = self.api.device
+        device.pause()
+
+    async def async_return_to_base(self):
+        """Set the vacuum cleaner to return to the dock."""
+        if self.state != STATE_DOCKED and self.state != STATE_RETURNING:
+            device: WorxCloud = self.api.device
+            device.home()
+
+    async def async_toggle_lock(self):
+        """Toggle locked state."""
+        device: WorxCloud = self.api.device
+        set_lock = not bool(device.locked)
+        device.lock(set_lock)
+
+    async def async_toggle_partymode(self):
+        """Toggle partymode state."""
+        device: WorxCloud = self.api.device
+        set_partymode = not bool(device.partymode_enabled)
+        device.enable_partymode(set_partymode)
+
+class WorxDevice(LandroidCloudBase, StateVacuumEntity):
     """Definition of Worx Landroid device."""
-
-    # def __init__(self, hass, api):
-    #     """Init new base device."""
-    #     super().__init__(hass, api)
 
     @property
     def supported_features(self):
@@ -186,9 +214,9 @@ class WorxDevice(LandroidCloudBase):
         return SUPPORT_LANDROID
 
 
-class KressDevice(LandroidCloudBase):
+class KressDevice(LandroidCloudBase, StateVacuumEntity):
     """Definition of Kress device."""
 
 
-class LandxcapeDevice(LandroidCloudBase):
+class LandxcapeDevice(LandroidCloudBase, StateVacuumEntity):
     """Definition of Landxcape device."""

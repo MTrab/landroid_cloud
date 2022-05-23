@@ -112,9 +112,6 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         await hass.async_add_executor_job(
             hass.data[DOMAIN][entry.entry_id]["clients"][device].connect, device, False
         )
-        await hass.async_add_executor_job(
-            hass.data[DOMAIN][entry.entry_id]["clients"][device].update
-        )
         api = LandroidAPI(
             hass, device, hass.data[DOMAIN][entry.entry_id]["clients"][device], entry
         )
@@ -126,7 +123,7 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 class LandroidAPI:
     """Handle the API calls."""
 
-    def __init__(self, hass: HomeAssistant, index: int, device, entry: ConfigEntry):
+    def __init__(self, hass: HomeAssistant, index: int, device: WorxCloud, entry: ConfigEntry):
         """Set up device."""
         self._hass = hass
         self.entry_id = entry.entry_id

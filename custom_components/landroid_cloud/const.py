@@ -1,6 +1,10 @@
 """Constants used by Landroid Cloud integration."""
 from __future__ import annotations
 
+from homeassistant.components.vacuum import (
+    STATE_DOCKED,
+    STATE_RETURNING,
+)
 # from pyworxcloud.clouds import CLOUDS as api_clouds
 from .pyworxcloud.clouds import CLOUDS as api_clouds
 
@@ -44,3 +48,8 @@ ATTR_ZONE = "zone"
 CLOUDS = []
 for cloud in api_clouds:
     CLOUDS.append(cloud.capitalize())
+
+LANDROID_TO_HA_STATEMAP = {
+    "home": STATE_DOCKED,
+    "going home": STATE_RETURNING,
+}

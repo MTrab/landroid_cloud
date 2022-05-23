@@ -2,32 +2,20 @@
 from __future__ import annotations
 
 ATTR_MAP = {
-    "battery": {
+    "default": {
         "state": {
-            "battery_percent": "state",
+            "id": "id",
+            "error_description": "error_description",
+            "blade_time": "total_blade_time",
+            "blade_time_current": "current_blade_time",
+            "blade_work_time_reset_at": "blade_time_reset",
             "battery_voltage": "battery_voltage",
             "battery_temperature": "battery_temperature",
             "battery_charge_cycle": "total_charge_cycles",
             "battery_charge_cycle_current": "current_charge_cycles",
             "battery_charge_cycles_reset_at": "charge_cycles_reset",
-            "battery_charging": "charging",
-        },
-        "icon": "mdi:battery",
-        "unit": "%",
-        "device_class": "battery",
-    },
-    "default": {
-        "state": {
-            "id": "id",
-            "status_description": "state",
-            "error": "error_id",
-            "error_description": "error_description",
-            "blade_time": "total_blade_time",
-            "blade_time_current": "current_blade_time",
-            "blade_work_time_reset_at": "blade_time_reset",
             "work_time": "work_time",
             "distance": "distance",
-            "status": "status_id",
             "updated": "last_update",
             "rssi": "rssi",
             "yaw": "yaw",
@@ -43,9 +31,9 @@ ATTR_MAP = {
             "schedule_mower_active": "schedule_enabled",
             "partymode_enabled": "partymode_enabled",
             "mowing_zone": "mowing_zone",
-            "accessories": "accessories",
             "islocked": "locked",
             "online": "online",
+            "accessories": "accessories",
         },
         "icon": "mdi:robot-mower",
         "unit": None,
