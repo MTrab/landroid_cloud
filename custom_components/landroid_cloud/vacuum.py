@@ -1,18 +1,29 @@
 """Support for Landroid cloud compatible mowers."""
 from __future__ import annotations
+from datetime import timedelta
 
 import logging
+import voluptuous as vol
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_TYPE
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import entity_platform
+from homeassistant.helpers.entity_component import EntityComponent
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN
+from .const import (
+    ATTR_ZONE,
+    DOMAIN,
+    SERVICE_EDGECUT,
+    SERVICE_LOCK,
+    SERVICE_PARTYMODE,
+    SERVICE_SETZONE,
+)
 from .device import LandroidCloudBase, WorxDevice, KressDevice, LandxcapeDevice
 
 _LOGGER = logging.getLogger(__name__)
-
+SCAN_INTERVAL = timedelta(seconds=20)
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -32,4 +43,29 @@ async def async_setup_entry(
         constructor = LandxcapeDevice
 
     landroid_mower = constructor(hass, api)
+
+    # Register custom services
+    platform = entity_platform.async_get_current_platform()
+
+    platform.async_register_entity_service(
+        SERVICE_EDGECUT,
+        {},
+        WorxDevice.async_edgecut.__name__,
+    )
+    platform.async_register_entity_service(
+        SERVICE_LOCK,
+        {},
+        WorxDevice.async_toggle_lock.__name__,
+    )
+    platform.async_register_entity_service(
+        SERVICE_PARTYMODE,
+        {},
+        WorxDevice.async_toggle_partymode.__name__,
+    )
+    platform.async_register_entity_service(
+        SERVICE_SETZONE,
+        {vol.Required(ATTR_ZONE): vol.All(vol.Coerce(int), vol.Range(0, 3))},
+        WorxDevice.async_setzone.__name__,
+    )
+    
     async_add_entities([landroid_mower], True)

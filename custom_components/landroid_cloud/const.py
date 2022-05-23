@@ -27,9 +27,6 @@ UPDATE_SIGNAL = "landroid_cloud_update"
 
 # Service consts
 SERVICE_POLL = "poll"
-SERVICE_START = "start"
-SERVICE_PAUSE = "pause"
-SERVICE_HOME = "home"
 SERVICE_CONFIG = "config"
 SERVICE_PARTYMODE = "partymode"
 SERVICE_SETZONE = "setzone"
@@ -40,6 +37,7 @@ SERVICE_EDGECUT = "edgecut"
 # Extra states
 STATE_INITIALIZING = "Initializing"
 STATE_OFFLINE = "Offline"
+STATE_RAINDELAY = "Rain delay"
 
 # Attributes
 ATTR_ZONE = "zone"

@@ -434,13 +434,15 @@ class WorxCloud:
 
     def enable_partymode(self, enabled: bool) -> None:
         """Enable or disable Party Mode."""
-        if self.online:
+        if self.online and self.partymode_capable:
             if enabled:
                 msg = '{"sc": {"m": 2, "distm": 0}}'
                 self._mqtt.publish(self.mqtt_in, msg, qos=0, retain=False)
             else:
                 msg = '{"sc": {"m": 1, "distm": 0}}'
                 self._mqtt.publish(self.mqtt_in, msg, qos=0, retain=False)
+        elif not self.partymode_capable:
+            raise NoPartymodeError("This device does not support Partymode")
 
     def setzone(self, zone) -> None:
         """Set next zone to mow."""
@@ -452,10 +454,17 @@ class WorxCloud:
 
     def edgecut(self) -> None:
         """Start edgecut routine."""
-        if self.online:
+        if self.online and self.ots_capable:
             msg = '{"sc":{"ots":{"bc":1,"wtm":0}}}'
             self._mqtt.publish(self.mqtt_in, msg, qos=0, retain=False)
+        elif not self.ots_capable:
+            raise NoOneTimeScheduleError("This device does not support Edgecut-on-demand")
 
+class NoPartymodeError(Exception):
+    """Define and error when partymode is not supported."""
+
+class NoOneTimeScheduleError(Exception):
+    """Define and error when OTS is not supported."""
 
 @contextlib.contextmanager
 def pfx_to_pem(pfx_data):

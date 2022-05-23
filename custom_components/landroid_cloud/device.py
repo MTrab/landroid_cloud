@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import logging
 
+from functools import partial
+
 from homeassistant.components.vacuum import (
     ENTITY_ID_FORMAT,
     STATE_DOCKED,
@@ -24,6 +26,7 @@ from .const import (
     LANDROID_TO_HA_STATEMAP,
     STATE_INITIALIZING,
     STATE_OFFLINE,
+    STATE_RAINDELAY,
     UPDATE_SIGNAL,
 )
 
@@ -162,8 +165,10 @@ class LandroidCloudBase(Entity):
             state = LANDROID_TO_HA_STATEMAP[state]
 
         if master.error is not None:
-            if master.error > 0:
+            if master.error > 0 and master.error != 5:
                 state = STATE_ERROR
+            elif master.error == 5:
+                state = STATE_RAINDELAY
 
         _LOGGER.debug("Mower %s State %s", self._name, state)
         self._state = state
@@ -180,30 +185,22 @@ class LandroidCloudBase(Entity):
     async def async_start(self):
         """Start or resume the task."""
         device: WorxCloud = self.api.device
-        device.start()
+        _LOGGER.debug("Starting %s", self._name)
+        await self.hass.async_add_executor_job(device.start)
 
     async def async_pause(self):
         """Pause the cleaning cycle."""
         device: WorxCloud = self.api.device
-        device.pause()
+        _LOGGER.debug("Pausing %s", self._name)
+        await self.hass.async_add_executor_job(device.pause)
 
     async def async_return_to_base(self):
         """Set the vacuum cleaner to return to the dock."""
         if self.state != STATE_DOCKED and self.state != STATE_RETURNING:
             device: WorxCloud = self.api.device
-            device.home()
+            _LOGGER.debug("Sending %s back to dock", self._name)
+            await self.hass.async_add_executor_job(device.home)
 
-    async def async_toggle_lock(self):
-        """Toggle locked state."""
-        device: WorxCloud = self.api.device
-        set_lock = not bool(device.locked)
-        device.lock(set_lock)
-
-    async def async_toggle_partymode(self):
-        """Toggle partymode state."""
-        device: WorxCloud = self.api.device
-        set_partymode = not bool(device.partymode_enabled)
-        device.enable_partymode(set_partymode)
 
 class WorxDevice(LandroidCloudBase, StateVacuumEntity):
     """Definition of Worx Landroid device."""
@@ -212,6 +209,35 @@ class WorxDevice(LandroidCloudBase, StateVacuumEntity):
     def supported_features(self):
         """Flag which mower robot features that are supported."""
         return SUPPORT_LANDROID
+
+    async def async_toggle_lock(self):
+        """Toggle locked state."""
+        device: WorxCloud = self.api.device
+        set_lock = not bool(device.locked)
+        _LOGGER.debug("Setting locked state for %s to %s", self._name, set_lock)
+        await self.hass.async_add_executor_job(partial(device.lock, set_lock))
+
+    async def async_toggle_partymode(self):
+        """Toggle partymode state."""
+        device: WorxCloud = self.api.device
+        set_partymode = not bool(device.partymode_enabled)
+        _LOGGER.debug("Setting PartyMode to %s on %s", set_partymode, self._name)
+        await self.hass.async_add_executor_job(
+            partial(device.enable_partymode, set_partymode)
+        )
+
+    async def async_edgecut(self):
+        """Start edgecut routine."""
+        device: WorxCloud = self.api.device
+        _LOGGER.debug("Starting edgecut routine for %s", self._name)
+        await self.hass.async_add_executor_job(device.edgecut)
+
+    async def async_setzone(self, **kwargs):
+        """Set next zone to cut."""
+        device: WorxCloud = self.api.device
+        zone = kwargs["zone"]
+        _LOGGER.debug("Setting zone for %s to %s", self._name, zone)
+        await self.hass.async_add_executor_job(partial(device.setzone, zone))
 
 
 class KressDevice(LandroidCloudBase, StateVacuumEntity):
