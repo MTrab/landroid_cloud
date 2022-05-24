@@ -20,14 +20,16 @@ Credit for inspiring to this component goes to [virtualzone](https://github.com/
 - Ensure that HACS is installed.
 - Search for and install the "Landroid Cloud" integration.
 - Restart Home Assistant.
+- Go to Integrations and add the Landroid Cloud integration
 
 #### Manual installation
 
 - Download the latest release.
 - Unpack the release and copy the custom_components/landroid_cloud directory into the custom_components directory of your Home Assistant installation.
 - Restart Home Assistant.
+- Go to Integrations and add the Landroid Cloud integration
 
-### Example entry for configuration.yaml
+### Example entry for configuration.yaml (legacy)
 
 ```
 landroid_cloud:
@@ -59,17 +61,12 @@ landroid_cloud:
 Once installed, the following entities are created in Home Assistant:
 
 ```
-sensor.landroid_[NAME_FROM_APP]_battery
-sensor.landroid_[NAME_FROM_APP]_error
-sensor.landroid_[NAME_FROM_APP]_status
+vacuum.[NAME_FROM_APP]
 ```
 
 In addition, the following services are created:
 
 ```
-landroid_cloud.start
-landroid_cloud.home
-landroid_cloud.pause
 landroid_cloud.configure (can be used to set rain delay and time extension)
 landroid_cloud.partymode (if a partymode capable device was found)
 landroid_cloud.setzone
@@ -96,7 +93,5 @@ Follow this simple guide to make it work again:
 
 ### To-do
 
-* Add proper integration flow
 * Code optimization
 * Make this an official integration
-* Make this vacuum compatible - might make this easier to move to a mower "domain" if/when this is made available in Home Assistant
