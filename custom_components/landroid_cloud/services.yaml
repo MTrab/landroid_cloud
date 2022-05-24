@@ -2,63 +2,49 @@ start:
   description: Start mowing
   target:
     entity:
-      domain: sensor
+      domain: vacuum
 
 pause:
   description: Pause mowing
   target:
     entity:
-      domain: sensor
+      domain: vacuum
 
 home:
-  description: Send Landroid home
+  description: Send device to dock
   target:
     entity:
-      domain: sensor
+      domain: vacuum
 
 lock:
-  description: Lock Landroid
+  description: Toggle device lock
   target:
     entity:
-      domain: sensor
-  fields:
-    enable:
-      description: Set true for enabling of lock and false for disabling
-      example: true
-      required: true
-      selector:
-        boolean:
+      domain: vacuum
 
 restart:
-  description: Restart Landroid
+  description: Restart device
   target:
     entity:
-      domain: sensor
+      domain: vacuum
 
 edgecut:
-  description: Start Edgecut routine
+  description: Start edgecut (if supported)
   target:
     entity:
-      domain: sensor
+      domain: vacuum
 
 partymode:
-  description: Enable or disable partymode
+  description: Toggle PartyMode (if supported)
   target:
     entity:
-      domain: sensor
-  fields:
-    enable:
-      description: Set true for enabling of PartyMode and false for disabling
-      example: true
-      required: true
-      selector:
-        boolean:
+      domain: vacuum
 
 setzone:
   description: Set which zone to be mowed next
   target:
     entity:
-      domain: sensor
+      domain: vacuum
   fields:
     zone:
       description: Sets the zone number, ranging from 0 to 3, to be mowed next
@@ -74,10 +60,10 @@ setzone:
             - "3"
 
 config:
-  description: Set config parameters
+  description: Set device config parameters
   target:
     entity:
-      domain: sensor
+      domain: vacuum
   fields:
     raindelay:
       description: Set rain delay. Time in minutes ranging from 0 to 300. 0 = Disabled
