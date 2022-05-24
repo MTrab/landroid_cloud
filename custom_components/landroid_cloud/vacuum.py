@@ -9,7 +9,6 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_TYPE
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_platform
-from homeassistant.helpers.entity_component import EntityComponent
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import (
@@ -20,7 +19,10 @@ from .const import (
     SERVICE_PARTYMODE,
     SERVICE_SETZONE,
 )
-from .device import LandroidCloudBase, WorxDevice, KressDevice, LandxcapeDevice
+from .device_base import LandroidCloudBase
+from .devices.worx import WorxDevice
+from .devices.kress import KressDevice
+from .devices.landxcape import LandxcapeDevice
 
 _LOGGER = logging.getLogger(__name__)
 SCAN_INTERVAL = timedelta(seconds=20)
@@ -67,5 +69,5 @@ async def async_setup_entry(
         {vol.Required(ATTR_ZONE): vol.All(vol.Coerce(int), vol.Range(0, 3))},
         WorxDevice.async_setzone.__name__,
     )
-    
+
     async_add_entities([landroid_mower], True)

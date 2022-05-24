@@ -31,7 +31,7 @@ ATTR_MAP = {
             "schedule_mower_active": "schedule_enabled",
             "partymode_enabled": "partymode_enabled",
             "mowing_zone": "mowing_zone",
-            "islocked": "locked",
+            "locked": "locked",
             "online": "online",
             "accessories": "accessories",
         },

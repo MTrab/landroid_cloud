@@ -123,7 +123,9 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 class LandroidAPI:
     """Handle the API calls."""
 
-    def __init__(self, hass: HomeAssistant, index: int, device: WorxCloud, entry: ConfigEntry):
+    def __init__(
+        self, hass: HomeAssistant, index: int, device: WorxCloud, entry: ConfigEntry
+    ):
         """Set up device."""
         self._hass = hass
         self.entry_id = entry.entry_id
@@ -133,7 +135,6 @@ class LandroidAPI:
         self.index = index
         self.listeners = []
 
-        _LOGGER.debug(self.device.name)
         self.name = util_slugify(f"{self.device.name}")
         self.friendly_name = self.device.name
 
@@ -142,7 +143,9 @@ class LandroidAPI:
     def receive_data(self):
         """Used as callback from API when data is received."""
         _LOGGER.debug(
-            "Update signal received from API on %s", self.data.get(CONF_EMAIL)
+            "Update signal received from API on %s for device %s",
+            self.data.get(CONF_EMAIL),
+            self.device.name,
         )
         dispatcher_send(self._hass, f"{UPDATE_SIGNAL}_{self.device.name}")
 
