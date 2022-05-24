@@ -17,6 +17,7 @@ from .const import (
     SERVICE_EDGECUT,
     SERVICE_LOCK,
     SERVICE_PARTYMODE,
+    SERVICE_RESTART,
     SERVICE_SETZONE,
 )
 from .device_base import LandroidCloudBase
@@ -69,6 +70,11 @@ async def async_setup_entry(
         SERVICE_SETZONE,
         {vol.Required(ATTR_ZONE): vol.All(str, vol.Range(0, 3))},
         WorxDevice.async_setzone.__name__,
+    )
+    platform.async_register_entity_service(
+        SERVICE_RESTART,
+        {},
+        WorxDevice.async_restart.__name__,
     )
 
     async_add_entities([landroid_mower], True)

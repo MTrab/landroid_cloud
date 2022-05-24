@@ -53,3 +53,9 @@ class WorxDevice(LandroidCloudBase, StateVacuumEntity):
         device: WorxCloud = self.api.device
         _LOGGER.debug("Starting edgecut routine for %s", self._name)
         await self.hass.async_add_executor_job(device.edgecut)
+
+    async def async_restart(self):
+        """Restart mower baseboard OS."""
+        device: WorxCloud = self.api.device
+        _LOGGER.debug("Restarting %s", self._name)
+        await self.hass.async_add_executor_job(device.restart)
