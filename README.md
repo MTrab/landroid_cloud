@@ -69,15 +69,14 @@ vacuum.[NAME_FROM_APP]
 ```
 
 In addition, the following services are created:
-
-```
-landroid_cloud.configure (can be used to set rain delay and time extension)
-landroid_cloud.partymode (if a partymode capable device was found)
-landroid_cloud.setzone
-landroid_cloud.lock
-landroid_cloud.restart
-landroid_cloud.edgecut (only for models with the function available in the app)
-```
+Service name | Description
+---|---
+landroid_cloud.configure | Change configuration settings of device
+landroid_cloud.partymode | Toggle PartyMode if supported by device
+landroid_cloud.setzone | Set next zone to be mowed
+landroid_cloud.lock | Toggle device lock
+landroid_cloud.restart | Restart device baseboard OS
+landroid_cloud.edgecut | Start edgecut routine if supported by device
 
 You can simply add these to your Lovelace setup by adding an entity card or using [Barma-lej halandroid package](https://github.com/Barma-lej/halandroid)
 
