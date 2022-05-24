@@ -1,5 +1,6 @@
 """Worx Landroid device definition."""
 from __future__ import annotations
+import json
 
 import logging
 
@@ -8,7 +9,6 @@ import voluptuous as vol
 
 from homeassistant.components.vacuum import StateVacuumEntity
 from homeassistant.core import ServiceCall
-from homeassistant.helpers import config_validation as cv
 
 from ..pyworxcloud import (
     NoOneTimeScheduleError,
@@ -33,16 +33,12 @@ _LOGGER = logging.getLogger(__name__)
 
 SUPPORT_WORX = SUPPORT_LANDROID_BASE
 
-CONFIG_SCHEME = vol.Schema(
-    {
-        vol.Optional(ATTR_RAINDELAY): vol.All(vol.Coerce(int), vol.Range(0, 300)),
-        vol.Optional(ATTR_TIMEEXTENSION): vol.All(
-            vol.Coerce(int), vol.Range(-100, 100)
-        ),
-        vol.Optional(ATTR_MULTIZONE_DISTANCES): str,
-        vol.Optional(ATTR_MULTIZONE_PROBABILITIES): str,
-    }
-)
+CONFIG_SCHEME = {
+    vol.Optional(ATTR_RAINDELAY): vol.All(vol.Coerce(int), vol.Range(0, 300)),
+    vol.Optional(ATTR_TIMEEXTENSION): vol.All(vol.Coerce(int), vol.Range(-100, 100)),
+    vol.Optional(ATTR_MULTIZONE_DISTANCES): str,
+    vol.Optional(ATTR_MULTIZONE_PROBABILITIES): str,
+}
 
 
 class WorxDevice(LandroidCloudBase, StateVacuumEntity):
@@ -94,7 +90,39 @@ class WorxDevice(LandroidCloudBase, StateVacuumEntity):
 
     async def async_config(self, service_call: ServiceCall):
         """Set config parameters."""
+        tmpdata = {}
         device: WorxCloud = self.api.device
-        _LOGGER.debug("Service_call: %s", service_call)
-        _LOGGER.debug("Updating config on %s", self._name)
-        # await self.hass.async_add_executor_job(device.restart)
+        data = service_call.data
+
+        if "raindelay" in data:
+            _LOGGER.debug(
+                "Setting raindelay on %s to %s minutes", self._name, data["raindelay"]
+            )
+            tmpdata["rd"] = int(data["raindelay"])
+
+        if "timeextension" in data:
+            _LOGGER.debug(
+                "Setting timeextension on %s to %s%%", self._name, data["timeextension"]
+            )
+            tmpdata["sc"] = {}
+            tmpdata["sc"]["p"] = int(data["timeextension"])
+
+        if "multizone_distances" in data:
+            _LOGGER.debug(
+                "Setting multizone distances on %s to %s", self._name, data["multizone_distances"]
+            )
+            tmpdata["mz"] = [int(x) for x in data["multizone_distances"]]
+
+        if "multizone_probabilities" in data:
+            _LOGGER.debug(
+                "Setting multizone probabilities on %s to %s", self._name, data["multizone_probability"]
+            )
+            tmpdata["mzv"] = []
+            for idx, val in enumerate(data["multizone_probabilities"]):
+                for _ in range(val):
+                    tmpdata["mzv"].append(idx)
+
+        if tmpdata:
+            data = json.dumps(tmpdata)
+            _LOGGER.debug("%s got new config: %s", self._name, data)
+            await self.hass.async_add_executor_job(partial(device.send, data))

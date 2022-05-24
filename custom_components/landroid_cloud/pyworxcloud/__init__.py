@@ -123,6 +123,28 @@ class WorxCloud:
         self.serial_number = None
         self.battery_charge_cycles_reset = None
         self.online = False
+        self.zone = []
+        self.zone_probability = []
+        self.schedules = {
+            "primary": {
+                "monday": {"start": None, "duration": None, "boundary": False},
+                "tuesday": {"start": None, "duration": None, "boundary": False},
+                "wednesday": {"start": None, "duration": None, "boundary": False},
+                "thursday": {"start": None, "duration": None, "boundary": False},
+                "friday": {"start": None, "duration": None, "boundary": False},
+                "saturday": {"start": None, "duration": None, "boundary": False},
+                "sunday": {"start": None, "duration": None, "boundary": False},
+            },
+            "secondary": {
+                "monday": {"start": None, "duration": None, "boundary": False},
+                "tuesday": {"start": None, "duration": None, "boundary": False},
+                "wednesday": {"start": None, "duration": None, "boundary": False},
+                "thursday": {"start": None, "duration": None, "boundary": False},
+                "friday": {"start": None, "duration": None, "boundary": False},
+                "saturday": {"start": None, "duration": None, "boundary": False},
+                "sunday": {"start": None, "duration": None, "boundary": False},
+            },
+        }
 
     def initialize(self) -> bool:
         """Initialize current object."""
@@ -213,7 +235,7 @@ class WorxCloud:
         self.mqtt_out = self.mqtt_topics["command_out"]
         self.mqtt_in = self.mqtt_topics["command_in"]
         self.mac = self.mac_address
-        self.board = self.mqtt_out.split('/')[0]
+        self.board = self.mqtt_out.split("/")[0]
 
     def _forward_on_message(
         self, client, userdata, message
@@ -307,6 +329,11 @@ class WorxCloud:
             self.rain_delay = data["cfg"]["rd"]
             self.serial = data["cfg"]["sn"]
 
+            # Fetch zone information
+            if "mz" in data["cfg"]:
+                self.zone = data["cfg"]["mz"]
+                self.zone_probability = data["cfg"]["mzv"]
+
             # Fetch main schedule
             if "sc" in data["cfg"]:
                 self.ots_capable = bool("ots" in data["cfg"]["sc"])
@@ -317,7 +344,9 @@ class WorxCloud:
                     True if str(data["cfg"]["sc"]["m"]) == "2" else False
                 )
                 self.partymode_capable = bool("distm" in data["cfg"]["sc"])
+
                 self.schedule_variation = data["cfg"]["sc"]["p"]
+
                 self.schedule_day_sunday_start = data["cfg"]["sc"]["d"][0][0]
                 self.schedule_day_sunday_duration = data["cfg"]["sc"]["d"][0][1]
                 self.schedule_day_sunday_boundary = data["cfg"]["sc"]["d"][0][2]
@@ -458,13 +487,18 @@ class WorxCloud:
             msg = '{"sc":{"ots":{"bc":1,"wtm":0}}}'
             self._mqtt.publish(self.mqtt_in, msg, qos=0, retain=False)
         elif not self.ots_capable:
-            raise NoOneTimeScheduleError("This device does not support Edgecut-on-demand")
+            raise NoOneTimeScheduleError(
+                "This device does not support Edgecut-on-demand"
+            )
+
 
 class NoPartymodeError(Exception):
     """Define and error when partymode is not supported."""
 
+
 class NoOneTimeScheduleError(Exception):
     """Define and error when OTS is not supported."""
+
 
 @contextlib.contextmanager
 def pfx_to_pem(pfx_data):

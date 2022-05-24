@@ -1,5 +1,6 @@
 """Define device classes."""
 from __future__ import annotations
+from functools import partial
 
 import logging
 
@@ -19,7 +20,6 @@ from homeassistant.helpers.entity import Entity
 from .attribute_map import ATTR_MAP
 
 from .const import (
-    ATTR_ZONE,
     DOMAIN,
     LANDROID_TO_HA_STATEMAP,
     STATE_INITIALIZING,
@@ -204,4 +204,4 @@ class LandroidCloudBase(Entity):
         device: WorxCloud = self.api.device
         zone = service_call.data["zone"]
         _LOGGER.debug("Setting zone for %s to %s", self._name, zone)
-        await self.hass.async_add_executor_job(device.setzone, str(zone))
+        await self.hass.async_add_executor_job(partial(device.setzone, str(zone)))

@@ -1,5 +1,6 @@
 """Attribute map used by Landroid Cloud integration."""
 from __future__ import annotations
+from re import M
 
 ATTR_MAP = {
     "default": {
@@ -34,6 +35,9 @@ ATTR_MAP = {
             "locked": "locked",
             "online": "online",
             "accessories": "accessories",
+            "zone": "zone",
+            "zone_probability": "zone_probability",
+            "schedules": "schedules",
         },
         "icon": "mdi:robot-mower",
         "unit": None,

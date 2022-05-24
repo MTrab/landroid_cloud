@@ -1,7 +1,5 @@
 """Support for Landroid cloud compatible mowers."""
 from __future__ import annotations
-from datetime import timedelta
-from functools import partial
 
 import logging
 import voluptuous as vol
@@ -28,7 +26,6 @@ from .devices.kress import KressDevice
 from .devices.landxcape import LandxcapeDevice
 
 _LOGGER = logging.getLogger(__name__)
-SCAN_INTERVAL = timedelta(seconds=20)
 
 
 async def async_setup_entry(
@@ -49,17 +46,17 @@ async def async_setup_entry(
         platform.async_register_entity_service(
             SERVICE_EDGECUT,
             {},
-            constructor.async_edgecut.__name__,
+            constructor.async_edgecut,
         )
         platform.async_register_entity_service(
             SERVICE_LOCK,
             {},
-            constructor.async_toggle_lock.__name__,
+            constructor.async_toggle_lock,
         )
         platform.async_register_entity_service(
             SERVICE_PARTYMODE,
             {},
-            constructor.async_toggle_partymode.__name__,
+            constructor.async_toggle_partymode,
         )
         platform.async_register_entity_service(
             SERVICE_SETZONE,
@@ -69,12 +66,12 @@ async def async_setup_entry(
         platform.async_register_entity_service(
             SERVICE_RESTART,
             {},
-            constructor.async_restart.__name__,
+            constructor.async_restart,
         )
         platform.async_register_entity_service(
             SERVICE_CONFIG,
             WORX_CONFIG,
-            partial(constructor.async_config),
+            constructor.async_config,
         )
     elif vendor == "kress":
         constructor = KressDevice
