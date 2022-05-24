@@ -7,11 +7,16 @@ from functools import partial
 
 from homeassistant.components.vacuum import StateVacuumEntity
 
-from ..device_base import LandroidCloudBase, SUPPORT_LANDROID # pylint: disable=relative-beyond-top-level
-from ..pyworxcloud import WorxCloud # pylint: disable=relative-beyond-top-level
+from ..device_base import (
+    LandroidCloudBase,
+    SUPPORT_LANDROID_BASE,
+)  # pylint: disable=relative-beyond-top-level
+from ..pyworxcloud import WorxCloud  # pylint: disable=relative-beyond-top-level
 
 
 _LOGGER = logging.getLogger(__name__)
+
+SUPPORT_WORX = SUPPORT_LANDROID_BASE
 
 
 class WorxDevice(LandroidCloudBase, StateVacuumEntity):
@@ -25,7 +30,7 @@ class WorxDevice(LandroidCloudBase, StateVacuumEntity):
     @property
     def supported_features(self):
         """Flag which mower robot features that are supported."""
-        return SUPPORT_LANDROID
+        return SUPPORT_WORX
 
     async def async_toggle_lock(self):
         """Toggle locked state."""
@@ -48,4 +53,3 @@ class WorxDevice(LandroidCloudBase, StateVacuumEntity):
         device: WorxCloud = self.api.device
         _LOGGER.debug("Starting edgecut routine for %s", self._name)
         await self.hass.async_add_executor_job(device.edgecut)
-

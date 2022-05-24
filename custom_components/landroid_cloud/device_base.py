@@ -31,7 +31,7 @@ from .const import (
 from .pyworxcloud import WorxCloud
 
 # Commonly supported features
-SUPPORT_LANDROID = (
+SUPPORT_LANDROID_BASE = (
     VacuumEntityFeature.BATTERY
     | VacuumEntityFeature.PAUSE
     | VacuumEntityFeature.RETURN_HOME
