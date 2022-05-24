@@ -15,7 +15,7 @@ Currently these vendors are supported:<br />
 
 ## Credit
 
-Credit for inspiring to this component goes to [virtualzone](https://github.com/virtualzone).
+Credit for inspiring to this component goes to [virtualzone](https://github.com/virtualzone) and [Eisha DeskApp](https://drive.google.com/drive/folders/0B63Mhn1k_KcbdXB5ZjdUUHNCWWc?resourcekey=0-DGwWcHl_QU2d_0clj8Xm3A&usp=sharing).
 
 ### Installation:
 
