@@ -1,5 +1,6 @@
 """Define device classes."""
 from __future__ import annotations
+from functools import partial
 
 import logging
 
@@ -197,3 +198,10 @@ class LandroidCloudBase(Entity):
             device: WorxCloud = self.api.device
             _LOGGER.debug("Sending %s back to dock", self._name)
             await self.hass.async_add_executor_job(device.home)
+
+    async def async_setzone(self, **kwargs):
+        """Set next zone to cut."""
+        device: WorxCloud = self.api.device
+        zone = kwargs["zone"]
+        _LOGGER.debug("Setting zone for %s to %s", self._name, zone)
+        await self.hass.async_add_executor_job(partial(device.setzone, zone))

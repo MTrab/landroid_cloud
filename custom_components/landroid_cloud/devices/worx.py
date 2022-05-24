@@ -49,9 +49,3 @@ class WorxDevice(LandroidCloudBase, StateVacuumEntity):
         _LOGGER.debug("Starting edgecut routine for %s", self._name)
         await self.hass.async_add_executor_job(device.edgecut)
 
-    async def async_setzone(self, **kwargs):
-        """Set next zone to cut."""
-        device: WorxCloud = self.api.device
-        zone = kwargs["zone"]
-        _LOGGER.debug("Setting zone for %s to %s", self._name, zone)
-        await self.hass.async_add_executor_job(partial(device.setzone, zone))

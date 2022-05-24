@@ -27,6 +27,7 @@ from .devices.landxcape import LandxcapeDevice
 _LOGGER = logging.getLogger(__name__)
 SCAN_INTERVAL = timedelta(seconds=20)
 
+
 async def async_setup_entry(
     hass: HomeAssistant,
     config: ConfigEntry,
@@ -66,7 +67,7 @@ async def async_setup_entry(
     )
     platform.async_register_entity_service(
         SERVICE_SETZONE,
-        {vol.Required(ATTR_ZONE): vol.All(vol.Coerce(int), vol.Range(0, 3))},
+        {vol.Required(ATTR_ZONE): vol.All(str, vol.Range(0, 3))},
         WorxDevice.async_setzone.__name__,
     )
 
