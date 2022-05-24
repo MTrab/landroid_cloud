@@ -7,7 +7,11 @@
 
 This component has been created to be used with Home Assistant.
 
-Landroid Cloud presents a possibility to connect your cloud connected Worx Landroid mowers to Home Assistant.
+Landroid Cloud presents a possibility to connect your Landroid Cloud compatible mowers to Home Assistant.<br />
+Currently these vendors are supported:<br />
+- Worx Landroid
+- Kress
+- LandXcape
 
 ## Credit
 
