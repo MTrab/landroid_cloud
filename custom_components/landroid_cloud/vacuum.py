@@ -1,6 +1,7 @@
 """Support for Landroid cloud compatible mowers."""
 from __future__ import annotations
 from datetime import timedelta
+from functools import partial
 
 import logging
 import voluptuous as vol
@@ -14,6 +15,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from .const import (
     ATTR_ZONE,
     DOMAIN,
+    SERVICE_CONFIG,
     SERVICE_EDGECUT,
     SERVICE_LOCK,
     SERVICE_PARTYMODE,
@@ -21,7 +23,7 @@ from .const import (
     SERVICE_SETZONE,
 )
 from .device_base import LandroidCloudBase
-from .devices.worx import WorxDevice
+from .devices.worx import WorxDevice, CONFIG_SCHEME as WORX_CONFIG
 from .devices.kress import KressDevice
 from .devices.landxcape import LandxcapeDevice
 
@@ -41,40 +43,44 @@ async def async_setup_entry(
     vendor = api.data.get(CONF_TYPE).lower()
     if vendor == "worx":
         constructor = WorxDevice
+        # Register custom services
+        platform = entity_platform.async_get_current_platform()
+
+        platform.async_register_entity_service(
+            SERVICE_EDGECUT,
+            {},
+            constructor.async_edgecut.__name__,
+        )
+        platform.async_register_entity_service(
+            SERVICE_LOCK,
+            {},
+            constructor.async_toggle_lock.__name__,
+        )
+        platform.async_register_entity_service(
+            SERVICE_PARTYMODE,
+            {},
+            constructor.async_toggle_partymode.__name__,
+        )
+        platform.async_register_entity_service(
+            SERVICE_SETZONE,
+            {vol.Required(ATTR_ZONE): vol.All(vol.Coerce(int), vol.Range(0, 3))},
+            constructor.async_setzone,
+        )
+        platform.async_register_entity_service(
+            SERVICE_RESTART,
+            {},
+            constructor.async_restart.__name__,
+        )
+        platform.async_register_entity_service(
+            SERVICE_CONFIG,
+            WORX_CONFIG,
+            partial(constructor.async_config),
+        )
     elif vendor == "kress":
         constructor = KressDevice
     else:
         constructor = LandxcapeDevice
 
     landroid_mower = constructor(hass, api)
-
-    # Register custom services
-    platform = entity_platform.async_get_current_platform()
-
-    platform.async_register_entity_service(
-        SERVICE_EDGECUT,
-        {},
-        WorxDevice.async_edgecut.__name__,
-    )
-    platform.async_register_entity_service(
-        SERVICE_LOCK,
-        {},
-        WorxDevice.async_toggle_lock.__name__,
-    )
-    platform.async_register_entity_service(
-        SERVICE_PARTYMODE,
-        {},
-        WorxDevice.async_toggle_partymode.__name__,
-    )
-    platform.async_register_entity_service(
-        SERVICE_SETZONE,
-        {vol.Required(ATTR_ZONE): vol.All(str, vol.Range(0, 3))},
-        WorxDevice.async_setzone.__name__,
-    )
-    platform.async_register_entity_service(
-        SERVICE_RESTART,
-        {},
-        WorxDevice.async_restart.__name__,
-    )
 
     async_add_entities([landroid_mower], True)

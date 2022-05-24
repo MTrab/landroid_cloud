@@ -2,48 +2,56 @@ start:
   description: Start mowing
   target:
     entity:
+      integration: landroid_cloud
       domain: vacuum
 
 pause:
   description: Pause mowing
   target:
     entity:
+      integration: landroid_cloud
       domain: vacuum
 
 home:
   description: Send device to dock
   target:
     entity:
+      integration: landroid_cloud
       domain: vacuum
 
 lock:
   description: Toggle device lock
   target:
     entity:
+      integration: landroid_cloud
       domain: vacuum
 
 restart:
   description: Restart device
   target:
     entity:
+      integration: landroid_cloud
       domain: vacuum
 
 edgecut:
   description: Start edgecut (if supported)
   target:
     entity:
+      integration: landroid_cloud
       domain: vacuum
 
 partymode:
   description: Toggle PartyMode (if supported)
   target:
     entity:
+      integration: landroid_cloud
       domain: vacuum
 
 setzone:
   description: Set which zone to be mowed next
   target:
     entity:
+      integration: landroid_cloud
       domain: vacuum
   fields:
     zone:
@@ -54,20 +62,28 @@ setzone:
       selector:
         select:
           options:
-            - "0"
-            - "1"
-            - "2"
-            - "3"
+            - 0
+            - 1
+            - 2
+            - 3
 
 config:
   description: Set device config parameters
   target:
     entity:
+      integration: landroid_cloud
       domain: vacuum
   fields:
     raindelay:
       description: Set rain delay. Time in minutes ranging from 0 to 300. 0 = Disabled
       example: 30
+      selector:
+        number:
+          min: 0
+          max: 300
+          step: 1
+          unit_of_measurement: "minutes"
+          mode: slider
     timeextension:
       description: Set time extension. Extension in % ranging from -100 to 100
       example: -23
@@ -79,8 +95,12 @@ config:
           unit_of_measurement: "%"
           mode: slider
     multizone_distances:
-      description: Set multizone distances. Distances in meter. 0 = Disabled
+      description: 'Set multizone distance array in meters. 0 = Disabled. Format: [15, 80, 120, 155]'
       example: '[15, 80, 120, 155]'
+      selector:
+        text:
     multizone_probabilities:
-      description: Set multizone probabilities. Probabilities in parts-of-ten. 1 = 10%, 2 = 20%, ...
+      description: 'Set multizone probabilities array. Probabilities in parts-of-ten. 1 = 10%, 2 = 20%, ... Format: [5, 1, 2, 2]'
       example: '[5, 1, 2, 2]'
+      selector:
+        text:

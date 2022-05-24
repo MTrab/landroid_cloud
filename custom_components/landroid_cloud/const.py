@@ -5,6 +5,7 @@ from homeassistant.components.vacuum import (
     STATE_DOCKED,
     STATE_RETURNING,
 )
+
 # from pyworxcloud.clouds import CLOUDS as api_clouds
 from .pyworxcloud.clouds import CLOUDS as api_clouds
 
@@ -40,6 +41,10 @@ STATE_OFFLINE = "Offline"
 STATE_RAINDELAY = "Rain delay"
 
 # Attributes
+ATTR_MULTIZONE_DISTANCES = "multizone_distances"
+ATTR_MULTIZONE_PROBABILITIES = "multizone_probabilities"
+ATTR_RAINDELAY = "raindelay"
+ATTR_TIMEEXTENSION = "timeextension"
 ATTR_ZONE = "zone"
 
 # Available cloud vendors

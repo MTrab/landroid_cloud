@@ -1,6 +1,5 @@
 """Define device classes."""
 from __future__ import annotations
-from functools import partial
 
 import logging
 
@@ -12,7 +11,7 @@ from homeassistant.components.vacuum import (
     VacuumEntityFeature,
 )
 from homeassistant.const import CONF_TYPE
-from homeassistant.core import callback
+from homeassistant.core import callback, ServiceCall
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 import homeassistant.helpers.device_registry as dr
 from homeassistant.helpers.entity import Entity
@@ -20,6 +19,7 @@ from homeassistant.helpers.entity import Entity
 from .attribute_map import ATTR_MAP
 
 from .const import (
+    ATTR_ZONE,
     DOMAIN,
     LANDROID_TO_HA_STATEMAP,
     STATE_INITIALIZING,
@@ -199,9 +199,9 @@ class LandroidCloudBase(Entity):
             _LOGGER.debug("Sending %s back to dock", self._name)
             await self.hass.async_add_executor_job(device.home)
 
-    async def async_setzone(self, **kwargs):
+    async def async_setzone(self, service_call: ServiceCall):
         """Set next zone to cut."""
         device: WorxCloud = self.api.device
-        zone = kwargs["zone"]
+        zone = service_call.data["zone"]
         _LOGGER.debug("Setting zone for %s to %s", self._name, zone)
-        await self.hass.async_add_executor_job(partial(device.setzone, zone))
+        await self.hass.async_add_executor_job(device.setzone, str(zone))

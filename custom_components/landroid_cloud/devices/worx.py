@@ -7,8 +7,14 @@ from functools import partial
 import voluptuous as vol
 
 from homeassistant.components.vacuum import StateVacuumEntity
+from homeassistant.core import ServiceCall
+from homeassistant.helpers import config_validation as cv
 
-from ..pyworxcloud import NoOneTimeScheduleError, NoPartymodeError, WorxCloud  # pylint: disable=relative-beyond-top-level
+from ..pyworxcloud import (
+    NoOneTimeScheduleError,
+    NoPartymodeError,
+    WorxCloud,
+)  # pylint: disable=relative-beyond-top-level
 
 from ..const import (
     ATTR_MULTIZONE_DISTANCES,
@@ -29,8 +35,10 @@ SUPPORT_WORX = SUPPORT_LANDROID_BASE
 
 CONFIG_SCHEME = vol.Schema(
     {
-        vol.Optional(ATTR_RAINDELAY): vol.All(str, vol.Range(0, 300)),
-        vol.Optional(ATTR_TIMEEXTENSION): vol.All(str, vol.Range(-100, 100)),
+        vol.Optional(ATTR_RAINDELAY): vol.All(vol.Coerce(int), vol.Range(0, 300)),
+        vol.Optional(ATTR_TIMEEXTENSION): vol.All(
+            vol.Coerce(int), vol.Range(-100, 100)
+        ),
         vol.Optional(ATTR_MULTIZONE_DISTANCES): str,
         vol.Optional(ATTR_MULTIZONE_PROBABILITIES): str,
     }
@@ -84,8 +92,9 @@ class WorxDevice(LandroidCloudBase, StateVacuumEntity):
         _LOGGER.debug("Restarting %s", self._name)
         await self.hass.async_add_executor_job(device.restart)
 
-    async def async_config(self, **kwargs):
+    async def async_config(self, service_call: ServiceCall):
         """Set config parameters."""
         device: WorxCloud = self.api.device
+        _LOGGER.debug("Service_call: %s", service_call)
         _LOGGER.debug("Updating config on %s", self._name)
         # await self.hass.async_add_executor_job(device.restart)
