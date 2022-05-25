@@ -27,26 +27,6 @@ class Weekday:
         self._boundary = False
 
     @property
-    def tojson(self) -> str:
-        """Return json string."""
-        jsonobj = {
-            "name": self._name,
-            "start": self._start,
-            "duration": self._duration,
-            "boundary": self._duration,
-        }
-        return jsonobj
-
-    @property
-    def totuple(self) -> namedtuple:
-        """Return tuple object."""
-        weekday = namedtuple("Weekday", "name settings")
-        settings = namedtuple("Settings", "start duration boundary")
-        return weekday(
-            self._name, settings(self._start, self._duration, self._boundary)
-        )
-
-    @property
     def todict(self) -> dict:
         """Return list object."""
         day = {
@@ -91,17 +71,6 @@ class Schedule:
         for day in list(calendar.day_name):
             newday = Weekday(day).todict
             self.weekdays[newday["name"]] = newday["settings"]
-
-    @property
-    def tojson(self):
-        """Return JSON object."""
-        return json.dumps(self, default=lambda o: o.__dict__)
-
-    @property
-    def totuple(self) -> namedtuple:
-        """Return tuple object."""
-        schedule = namedtuple("Schedule", "type weekdays")
-        return schedule(self.type, self.weekdays)
 
     @property
     def todict(self) -> dict:

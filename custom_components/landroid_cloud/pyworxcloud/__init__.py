@@ -1,5 +1,6 @@
 """pyWorxCloud definition."""
 from __future__ import annotations
+from collections import namedtuple
 
 import json
 import base64
