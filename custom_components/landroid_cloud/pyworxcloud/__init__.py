@@ -14,8 +14,6 @@ from .exceptions import NoOneTimeScheduleError, NoPartymodeError, OfflineError
 from .landroidapi import LandroidAPI
 from .schedules import Schedule, ScheduleType, TYPE_MAP
 
-# from .states import ErrorDict, StateDict
-
 
 class WorxCloud:
     """Worx by Landroid Cloud connector."""
