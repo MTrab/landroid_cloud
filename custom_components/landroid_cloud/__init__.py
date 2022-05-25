@@ -11,7 +11,6 @@ from homeassistant.helpers.dispatcher import dispatcher_send
 from homeassistant.loader import async_get_integration
 from homeassistant.util import slugify as util_slugify
 
-# from pyworxcloud import WorxCloud
 from .pyworxcloud import WorxCloud
 
 from .const import DOMAIN, PLATFORM, STARTUP, UPDATE_SIGNAL
