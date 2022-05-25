@@ -17,6 +17,9 @@ from homeassistant.helpers.dispatcher import async_dispatcher_connect
 import homeassistant.helpers.device_registry as dr
 from homeassistant.helpers.entity import Entity
 
+from pyworxcloud import WorxCloud
+from pyworxcloud.states import STATE_TO_DESCRIPTION, ERROR_TO_DESCRIPTION
+
 from .attribute_map import ATTR_MAP
 
 from .const import (
@@ -28,8 +31,6 @@ from .const import (
     UPDATE_SIGNAL,
 )
 
-from pyworxcloud import WorxCloud
-from pyworxcloud.states import STATE_TO_DESCRIPTION, ERROR_TO_DESCRIPTION
 
 # Commonly supported features
 SUPPORT_LANDROID_BASE = (
