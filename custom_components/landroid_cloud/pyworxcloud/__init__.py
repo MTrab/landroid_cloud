@@ -3,14 +3,19 @@ from __future__ import annotations
 
 import json
 import base64
+import logging
 import tempfile
 import contextlib
 import time
 import paho.mqtt.client as mqtt
 import OpenSSL.crypto
 
-from .states import ErrorDict, StateDict
+from .day_map import DAY_MAP
 from .landroidapi import LandroidAPI
+from .schedules import Schedule, ScheduleType, TYPE_MAP
+from .states import ErrorDict, StateDict
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class WorxCloud:
@@ -78,73 +83,12 @@ class WorxCloud:
         self.partymode_enabled = False
         self.partymode_capable = False
         self.schedule_variation = None
-        self.schedule_day_sunday_start = None
-        self.schedule_day_sunday_duration = None
-        self.schedule_day_sunday_boundary = None
-        self.schedule_day_monday_start = None
-        self.schedule_day_monday_duration = None
-        self.schedule_day_monday_boundary = None
-        self.schedule_day_tuesday_start = None
-        self.schedule_day_tuesday_duration = None
-        self.schedule_day_tuesday_boundary = None
-        self.schedule_day_wednesday_start = None
-        self.schedule_day_wednesday_duration = None
-        self.schedule_day_wednesday_boundary = None
-        self.schedule_day_thursday_start = None
-        self.schedule_day_thursday_duration = None
-        self.schedule_day_thursday_boundary = None
-        self.schedule_day_friday_start = None
-        self.schedule_day_friday_duration = None
-        self.schedule_day_friday_boundary = None
-        self.schedule_day_saturday_start = None
-        self.schedule_day_saturday_duration = None
-        self.schedule_day_saturday_boundary = None
-        self.schedule_day_sunday_2_start = None
-        self.schedule_day_sunday_2_duration = None
-        self.schedule_day_sunday_2_boundary = None
-        self.schedule_day_monday_2_start = None
-        self.schedule_day_monday_2_duration = None
-        self.schedule_day_monday_2_boundary = None
-        self.schedule_day_tuesday_2_start = None
-        self.schedule_day_tuesday_2_duration = None
-        self.schedule_day_tuesday_2_boundary = None
-        self.schedule_day_wednesday_2_start = None
-        self.schedule_day_wednesday_2_duration = None
-        self.schedule_day_wednesday_2_boundary = None
-        self.schedule_day_thursday_2_start = None
-        self.schedule_day_thursday_2_duration = None
-        self.schedule_day_thursday_2_boundary = None
-        self.schedule_day_friday_2_start = None
-        self.schedule_day_friday_2_duration = None
-        self.schedule_day_friday_2_boundary = None
-        self.schedule_day_saturday_2_start = None
-        self.schedule_day_saturday_2_duration = None
-        self.schedule_day_saturday_2_boundary = None
         self.serial_number = None
         self.battery_charge_cycles_reset = None
         self.online = False
         self.zone = []
         self.zone_probability = []
-        self.schedules = {
-            "primary": {
-                "monday": {"start": None, "duration": None, "boundary": False},
-                "tuesday": {"start": None, "duration": None, "boundary": False},
-                "wednesday": {"start": None, "duration": None, "boundary": False},
-                "thursday": {"start": None, "duration": None, "boundary": False},
-                "friday": {"start": None, "duration": None, "boundary": False},
-                "saturday": {"start": None, "duration": None, "boundary": False},
-                "sunday": {"start": None, "duration": None, "boundary": False},
-            },
-            "secondary": {
-                "monday": {"start": None, "duration": None, "boundary": False},
-                "tuesday": {"start": None, "duration": None, "boundary": False},
-                "wednesday": {"start": None, "duration": None, "boundary": False},
-                "thursday": {"start": None, "duration": None, "boundary": False},
-                "friday": {"start": None, "duration": None, "boundary": False},
-                "saturday": {"start": None, "duration": None, "boundary": False},
-                "sunday": {"start": None, "duration": None, "boundary": False},
-            },
-        }
+        self.schedules = {}
 
     def initialize(self) -> bool:
         """Initialize current object."""
@@ -347,51 +291,37 @@ class WorxCloud:
 
                 self.schedule_variation = data["cfg"]["sc"]["p"]
 
-                self.schedule_day_sunday_start = data["cfg"]["sc"]["d"][0][0]
-                self.schedule_day_sunday_duration = data["cfg"]["sc"]["d"][0][1]
-                self.schedule_day_sunday_boundary = data["cfg"]["sc"]["d"][0][2]
-                self.schedule_day_monday_start = data["cfg"]["sc"]["d"][1][0]
-                self.schedule_day_monday_duration = data["cfg"]["sc"]["d"][1][1]
-                self.schedule_day_monday_boundary = data["cfg"]["sc"]["d"][1][2]
-                self.schedule_day_tuesday_start = data["cfg"]["sc"]["d"][2][0]
-                self.schedule_day_tuesday_duration = data["cfg"]["sc"]["d"][2][1]
-                self.schedule_day_tuesday_boundary = data["cfg"]["sc"]["d"][2][2]
-                self.schedule_day_wednesday_start = data["cfg"]["sc"]["d"][3][0]
-                self.schedule_day_wednesday_duration = data["cfg"]["sc"]["d"][3][1]
-                self.schedule_day_wednesday_boundary = data["cfg"]["sc"]["d"][3][2]
-                self.schedule_day_thursday_start = data["cfg"]["sc"]["d"][4][0]
-                self.schedule_day_thursday_duration = data["cfg"]["sc"]["d"][4][1]
-                self.schedule_day_thursday_boundary = data["cfg"]["sc"]["d"][4][2]
-                self.schedule_day_friday_start = data["cfg"]["sc"]["d"][5][0]
-                self.schedule_day_friday_duration = data["cfg"]["sc"]["d"][5][1]
-                self.schedule_day_friday_boundary = data["cfg"]["sc"]["d"][5][2]
-                self.schedule_day_saturday_start = data["cfg"]["sc"]["d"][6][0]
-                self.schedule_day_saturday_duration = data["cfg"]["sc"]["d"][6][1]
-                self.schedule_day_saturday_boundary = data["cfg"]["sc"]["d"][6][2]
+                sch_type = ScheduleType.PRIMARY
+                schedule = Schedule(sch_type).todict
+                self.schedules[TYPE_MAP[sch_type]] = schedule["days"]
+
+                for day in range(0, len(data["cfg"]["sc"]["d"])):
+                    self.schedules[TYPE_MAP[sch_type]][DAY_MAP[day]]["start"] = data[
+                        "cfg"
+                    ]["sc"]["d"][day][0]
+                    self.schedules[TYPE_MAP[sch_type]][DAY_MAP[day]]["duration"] = data[
+                        "cfg"
+                    ]["sc"]["d"][day][1]
+                    self.schedules[TYPE_MAP[sch_type]][DAY_MAP[day]]["boundary"] = bool(
+                        data["cfg"]["sc"]["d"][day][2]
+                    )
 
             # Fetch secondary schedule
             if "dd" in data["cfg"]["sc"]:
-                self.schedule_day_sunday_2_start = data["cfg"]["sc"]["dd"][0][0]
-                self.schedule_day_sunday_2_duration = data["cfg"]["sc"]["dd"][0][1]
-                self.schedule_day_sunday_2_boundary = data["cfg"]["sc"]["dd"][0][2]
-                self.schedule_day_monday_2_start = data["cfg"]["sc"]["dd"][1][0]
-                self.schedule_day_monday_2_duration = data["cfg"]["sc"]["dd"][1][1]
-                self.schedule_day_monday_2_boundary = data["cfg"]["sc"]["dd"][1][2]
-                self.schedule_day_tuesday_2_start = data["cfg"]["sc"]["dd"][2][0]
-                self.schedule_day_tuesday_2_duration = data["cfg"]["sc"]["dd"][2][1]
-                self.schedule_day_tuesday_2_boundary = data["cfg"]["sc"]["dd"][2][2]
-                self.schedule_day_wednesday_2_start = data["cfg"]["sc"]["dd"][3][0]
-                self.schedule_day_wednesday_2_duration = data["cfg"]["sc"]["dd"][3][1]
-                self.schedule_day_wednesday_2_boundary = data["cfg"]["sc"]["dd"][3][2]
-                self.schedule_day_thursday_2_start = data["cfg"]["sc"]["dd"][4][0]
-                self.schedule_day_thursday_2_duration = data["cfg"]["sc"]["dd"][4][1]
-                self.schedule_day_thursday_2_boundary = data["cfg"]["sc"]["dd"][4][2]
-                self.schedule_day_friday_2_start = data["cfg"]["sc"]["dd"][5][0]
-                self.schedule_day_friday_2_duration = data["cfg"]["sc"]["dd"][5][1]
-                self.schedule_day_friday_2_boundary = data["cfg"]["sc"]["dd"][5][2]
-                self.schedule_day_saturday_2_start = data["cfg"]["sc"]["dd"][6][0]
-                self.schedule_day_saturday_2_duration = data["cfg"]["sc"]["dd"][6][1]
-                self.schedule_day_saturday_2_boundary = data["cfg"]["sc"]["dd"][6][2]
+                sch_type = ScheduleType.SECONDARY
+                schedule = Schedule(sch_type).todict
+                self.schedules[TYPE_MAP[sch_type]] = schedule["days"]
+
+                for day in range(0, len(data["cfg"]["sc"]["d"])):
+                    self.schedules[TYPE_MAP[sch_type]][DAY_MAP[day]]["start"] = data[
+                        "cfg"
+                    ]["sc"]["dd"][day][0]
+                    self.schedules[TYPE_MAP[sch_type]][DAY_MAP[day]]["duration"] = data[
+                        "cfg"
+                    ]["sc"]["dd"][day][1]
+                    self.schedules[TYPE_MAP[sch_type]][DAY_MAP[day]]["boundary"] = bool(
+                        data["cfg"]["sc"]["dd"][day][2]
+                    )
 
         self.wait = False
 

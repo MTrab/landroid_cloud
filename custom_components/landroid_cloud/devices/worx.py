@@ -109,13 +109,17 @@ class WorxDevice(LandroidCloudBase, StateVacuumEntity):
 
         if "multizone_distances" in data:
             _LOGGER.debug(
-                "Setting multizone distances on %s to %s", self._name, data["multizone_distances"]
+                "Setting multizone distances on %s to %s",
+                self._name,
+                data["multizone_distances"],
             )
             tmpdata["mz"] = [int(x) for x in data["multizone_distances"]]
 
         if "multizone_probabilities" in data:
             _LOGGER.debug(
-                "Setting multizone probabilities on %s to %s", self._name, data["multizone_probability"]
+                "Setting multizone probabilities on %s to %s",
+                self._name,
+                data["multizone_probability"],
             )
             tmpdata["mzv"] = []
             for idx, val in enumerate(data["multizone_probabilities"]):
