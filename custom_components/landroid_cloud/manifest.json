@@ -3,8 +3,10 @@
   "documentation": "https://github.com/MTrab/landroid_cloud/blob/master/README.md",
   "issue_tracker": "https://github.com/MTrab/landroid_cloud/issues",
   "domain": "landroid_cloud",
-  "iot_class": "cloud_polling",
-  "requirements": [],
+  "iot_class": "cloud_push",
+  "requirements": [
+    "pyworxcloud==1.4.20"
+  ],
   "after_dependencies": [
     "http"
   ],
