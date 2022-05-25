@@ -30,65 +30,65 @@ class WorxCloud:
 
         self._api = LandroidAPI()
 
-        self._api.username = username
         self._api.password = password
         self._api.type = (
             cloud_type  # Usable cloud_types are: worx, kress and landxcape.
         )
+        self._api.username = username
 
         self._auth_result = False
+        self._callback = None  # Callback used when data arrives from cloud
         self._dev_id = None
         self._mqtt = None
         self._raw = None
-        self._callback = None  # Callback used when data arrives from cloud
 
-        self.board = None
-        self.rain_delay_time_remaining = None
-        self.rain_sensor_triggered = None
-        self.gps_latitude = None
-        self.gps_longitude = None
-        self.distance = 0
-        self.work_time = 0
-        self.roll = 0
-        self.pitch = 0
-        self.yaw = 0
-        self.blade_time_current = 0
-        self.blade_time = 0
+        self.battery_charge_cycle = None
         self.battery_charge_cycle_current = None
+        self.battery_charge_cycles_reset = None
+        self.battery_charging = None
+        self.battery_percent = 0
         self.battery_temperature = 0
         self.battery_voltage = 0
-        self.battery_percent = 0
-        self.battery_charging = None
-        self.battery_charge_cycle = None
+        self.blade_time = 0
+        self.blade_time_current = 0
+        self.blade_work_time_reset = None
+        self.board = None
         self.current_zone = 0
-        self.locked = False
-        self.mowing_zone = 0
-        self.firmware = None
-        self.rssi = None
-        self.status = None
-        self.status_description = None
+        self.distance = 0
         self.error = None
         self.error_description = None
-        self.blade_work_time_reset = None
-        self.mqtt_topics = {}
-        self.mqtt_out = None
-        self.mqtt_in = None
+        self.firmware = None
+        self.gps_latitude = None
+        self.gps_longitude = None
+        self.locked = False
         self.mac = None
         self.mac_address = None
-        self.updated = None
-        self.rain_delay = None
-        self.serial = None
-        self.ots_capable = False
-        self.schedule_mower_active = False
-        self.partymode_enabled = False
-        self.partymode_capable = False
-        self.schedule_variation = None
-        self.serial_number = None
-        self.battery_charge_cycles_reset = None
+        self.mowing_zone = 0
+        self.mqtt_in = None
+        self.mqtt_out = None
+        self.mqtt_topics = {}
         self.online = False
+        self.ots_capable = False
+        self.partymode_capable = False
+        self.partymode_enabled = False
+        self.pitch = 0
+        self.rain_delay = None
+        self.rain_delay_time_remaining = None
+        self.rain_sensor_triggered = None
+        self.roll = 0
+        self.rssi = None
+        self.schedule_mower_active = False
+        self.schedule_variation = None
+        self.schedules = {}
+        self.serial = None
+        self.serial_number = None
+        self.status = None
+        self.status_description = None
+        self.updated = None
+        self.work_time = 0
+        self.yaw = 0
         self.zone = []
         self.zone_probability = []
-        self.schedules = {}
 
     def initialize(self) -> bool:
         """Initialize current object."""
