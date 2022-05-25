@@ -428,9 +428,8 @@ class WorxCloud:
         elif not self.online:
             raise OfflineError("The device is currently offline, no action was sent.")
 
-    def ots(self, boundary: bool, runtime) -> None:
+    def ots(self, boundary: bool, runtime: str | int) -> None:
         """Start OTS routine."""
-
         if self.online and self.ots_capable:
             if not isinstance(runtime, int):
                 runtime = int(runtime)
@@ -445,7 +444,7 @@ class WorxCloud:
         else:
             raise OfflineError("The device is currently offline, no action was sent.")
 
-    def setzone(self, zone) -> None:
+    def setzone(self, zone: str | int) -> None:
         """Set next zone to mow."""
         if self.online:
             if not isinstance(zone, int):
@@ -465,17 +464,17 @@ class WorxCloud:
         else:
             raise OfflineError("The device is currently offline, no action was sent.")
 
-    def edgecut(self) -> None:
-        """Start edgecut routine."""
-        if self.online and self.ots_capable:
-            msg = '{"sc":{"ots":{"bc":1,"wtm":0}}}'
-            self._mqtt.publish(self.mqtt_in, msg, qos=0, retain=False)
-        elif not self.ots_capable:
-            raise NoOneTimeScheduleError(
-                "This device does not support Edgecut-on-demand"
-            )
-        elif not self.online:
-            raise OfflineError("The device is currently offline, no action was sent.")
+    # def edgecut(self) -> None:
+    #     """Start edgecut routine."""
+    #     if self.online and self.ots_capable:
+    #         msg = '{"sc":{"ots":{"bc":1,"wtm":0}}}'
+    #         self._mqtt.publish(self.mqtt_in, msg, qos=0, retain=False)
+    #     elif not self.ots_capable:
+    #         raise NoOneTimeScheduleError(
+    #             "This device does not support Edgecut-on-demand"
+    #         )
+    #     elif not self.online:
+    #         raise OfflineError("The device is currently offline, no action was sent.")
 
 
 @contextlib.contextmanager

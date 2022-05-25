@@ -1,4 +1,5 @@
 """Worx Landroid device definition."""
+# pylint: disable=unused-argument,relative-beyond-top-level
 from __future__ import annotations
 import json
 
@@ -14,7 +15,7 @@ from ..pyworxcloud import (
     NoOneTimeScheduleError,
     NoPartymodeError,
     WorxCloud,
-)  # pylint: disable=relative-beyond-top-level
+)
 
 from ..const import (
     ATTR_BOUNDARY,
@@ -23,12 +24,12 @@ from ..const import (
     ATTR_RAINDELAY,
     ATTR_RUNTIME,
     ATTR_TIMEEXTENSION,
-)  # pylint: disable=relative-beyond-top-level
+)
 
 from ..device_base import (
     LandroidCloudBase,
     SUPPORT_LANDROID_BASE,
-)  # pylint: disable=relative-beyond-top-level
+)
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -61,14 +62,14 @@ class WorxDevice(LandroidCloudBase, StateVacuumEntity):
         """Flag which mower robot features that are supported."""
         return SUPPORT_WORX
 
-    async def async_toggle_lock(self):
+    async def async_toggle_lock(self, service_call: ServiceCall = None):
         """Toggle locked state."""
         device: WorxCloud = self.api.device
         set_lock = not bool(device.locked)
         _LOGGER.debug("Setting locked state for %s to %s", self._name, set_lock)
         await self.hass.async_add_executor_job(partial(device.lock, set_lock))
 
-    async def async_toggle_partymode(self):
+    async def async_toggle_partymode(self, service_call: ServiceCall = None):
         """Toggle partymode state."""
         device: WorxCloud = self.api.device
         set_partymode = not bool(device.partymode_enabled)
@@ -80,16 +81,18 @@ class WorxDevice(LandroidCloudBase, StateVacuumEntity):
         except NoPartymodeError as ex:
             _LOGGER.error("(%s) %s", self._name, ex.args[0])
 
-    async def async_edgecut(self):
+    async def async_edgecut(self, service_call: ServiceCall = None):
         """Start edgecut routine."""
         device: WorxCloud = self.api.device
         _LOGGER.debug("Starting edgecut routine for %s", self._name)
         try:
-            await self.hass.async_add_executor_job(device.edgecut)
+            await self.hass.async_add_executor_job(
+                partial(device.ots, True, 0)
+            )
         except NoOneTimeScheduleError as ex:
             _LOGGER.error("(%s) %s", self._name, ex.args[0])
 
-    async def async_restart(self):
+    async def async_restart(self, service_call: ServiceCall = None):
         """Restart mower baseboard OS."""
         device: WorxCloud = self.api.device
         _LOGGER.debug("Restarting %s", self._name)

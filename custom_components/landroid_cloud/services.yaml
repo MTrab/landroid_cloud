@@ -106,7 +106,7 @@ config:
         text:
 
 ots:
-  description: Start One-Time-Schedule
+  description: Start One-Time-Schedule (if supported)
   target:
     entity:
       integration: landroid_cloud
