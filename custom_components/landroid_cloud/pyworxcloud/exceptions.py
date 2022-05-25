@@ -11,3 +11,19 @@ class NoOneTimeScheduleError(Exception):
 
 class OfflineError(Exception):
     """Define an offline error."""
+
+
+class TokenError(Exception):
+    """Define an token error."""
+
+
+class RequestException(Exception):
+    """Define a request exception."""
+
+
+class APIException(Exception):
+    """Define an error when communicating with the API."""
+
+
+class TimeoutException(Exception):
+    """Define a timeout error."""

@@ -1,11 +1,9 @@
 """pyWorxCloud definition."""
 from __future__ import annotations
-from collections import namedtuple
 
 import json
 import base64
 import logging
-from os import access
 import tempfile
 import contextlib
 import time
@@ -111,7 +109,6 @@ class WorxCloud:
 
     def connect(self, dev_id: int, verify_ssl: bool = True) -> bool:
         """Connect to cloud services."""
-
         self._dev_id = dev_id
         self._get_mac_address()
 

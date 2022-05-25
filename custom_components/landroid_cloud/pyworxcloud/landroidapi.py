@@ -1,7 +1,7 @@
 """API implementation"""
+# pylint: disable=unnecessary-lambda
 from __future__ import annotations
 
-import logging
 import time
 import re
 import functools
@@ -12,8 +12,7 @@ import requests
 
 from .clouds import CLOUDS
 from .const import API_BASE
-
-_LOGGER = logging.getLogger(__name__)
+from .exceptions import APIException, RequestException, TimeoutException, TokenError
 
 
 class LandroidAPI:
@@ -55,7 +54,9 @@ class LandroidAPI:
             map(
                 (
                     lambda foo: functools.reduce(
-                        (lambda x, y: operator.xor(x, y)), text_to_char, foo # pylint: disable=unnecessary-lambda
+                        (lambda x, y: operator.xor(x, y)),
+                        text_to_char,
+                        foo,
                     )
                 ),
                 step_two,
@@ -74,7 +75,7 @@ class LandroidAPI:
 
         return header_data
 
-    def auth(self):
+    def auth(self) -> str:
         """Authenticate."""
         self.uuid = str(uuid.uuid1())
         self.cloud = CLOUDS[self.type]
@@ -97,36 +98,35 @@ class LandroidAPI:
 
         return calldata
 
-    def get_profile(self):
+    def get_profile(self) -> str:
         """Get user profile."""
         calldata = self._call("/users/me")
         self._data = calldata
         return calldata
 
-    def get_cert(self):
+    def get_cert(self) -> str:
         """Get user certificate."""
         calldata = self._call("/users/certificate")
         self._data = calldata
         return calldata
 
-    def get_products(self):
+    def get_products(self) -> str:
         """Get devices associated with this user."""
         calldata = self._call("/product-items")
         self._data = calldata
         return calldata
 
-    def get_status(self, serial):
+    def get_status(self, serial) -> str:
         """Get device status."""
         callstr = f"/product-items/{serial}/status"
         calldata = self._call(callstr)
         return calldata
 
-    def _call(self, path: str, payload: str = None, checktoken: bool = True):
+    def _call(self, path: str, payload: str = None, checktoken: bool = True) -> str:
         """Do the actual call to the device."""
         # Check if token needs refreshing
         now = int(time.time())  # Current time in unix timestamp format
         if checktoken and ((self._tokenrefresh + 3000) < now):
-            _LOGGER.debug("Refreshing token for %s", self.username)
             try:
                 auth_data = self.auth()
 
@@ -135,8 +135,8 @@ class LandroidAPI:
 
                 self.set_token(auth_data["access_token"], now)
                 self.set_token_type(auth_data["token_type"])
-            except: # pylint: disable=bare-except
-                _LOGGER.debug("Error occured when refreshing token")
+            except Exception as ex:  # pylint: disable=bare-except
+                raise TokenError("Error refreshing authentication token") from ex
 
         try:
             if payload:
@@ -151,46 +151,17 @@ class LandroidAPI:
                     self._api_host + path, headers=self._get_headers(), timeout=10
                 )
 
-            if not req.ok:
-                response = {}
-                response["return_code"] = req.status_code
-                response["original_response"] = req.json()
-                if req.status_code == 400:
-                    response["error"] = "Bad request"
-                    _LOGGER.error("Error: Bad request")
-                elif req.status_code == 401:
-                    response["error"] = "Unauthorized"
-                    _LOGGER.error("Error: Unauthorized")
-                elif req.status_code == 404:
-                    response["error"] = "API endpoint doesn't exist"
-                    _LOGGER.error("Error: API endpoint doesn't exist")
-                elif req.status_code == 500:
-                    response["error"] = "Internal server error"
-                    _LOGGER.error("Error: Internal server error")
-                elif req.status_code == 503:
-                    response["error"] = "Service unavailable"
-                    _LOGGER.error("Error: Service unavailable")
-                else:
-                    response["error"] = "Unknown error"
-                    _LOGGER.error(
-                        "Error: Return code %s was received - unknown error",
-                        req.status_code,
-                    )
-                return json.dumps(response)
-        except TimeoutError:
-            response = {"error": "timeout"}
-            _LOGGER.warning("Error: Timeout in communication with API service")
-            return json.dumps(response)
-        except: # pylint: disable=bare-except
-            response = {"error": "unexpected error"}
-            _LOGGER.warning(
-                "Error: Unexpected error occured in communication with API service"
-            )
-            return json.dumps(response)
+            req.raise_for_status()
+        except requests.exceptions.HTTPError as err:
+            raise APIException(err) from err
+        except requests.exceptions.Timeout as err:
+            raise TimeoutException(err) from err
+        except requests.exceptions.RequestException as err:
+            raise RequestException(err) from err
 
         return req.json()
 
     @property
-    def data(self):
+    def data(self) -> str:
         """Return data for device."""
         return self._data
