@@ -6,8 +6,7 @@ from homeassistant.components.vacuum import (
     STATE_RETURNING,
 )
 
-# from pyworxcloud.clouds import CLOUDS as api_clouds
-from .pyworxcloud.clouds import CLOUDS as api_clouds
+from pyworxcloud.clouds import CLOUDS as api_clouds
 
 # Startup banner
 STARTUP = """

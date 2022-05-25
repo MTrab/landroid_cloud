@@ -1,7 +1,6 @@
 """Support for Landroid cloud compatible mowers."""
 from __future__ import annotations
 
-import logging
 import voluptuous as vol
 
 from homeassistant.config_entries import ConfigEntry
@@ -22,11 +21,13 @@ from .const import (
     SERVICE_SETZONE,
 )
 from .device_base import LandroidCloudBase
-from .devices.worx import WorxDevice, CONFIG_SCHEME as WORX_CONFIG, OTS_SCHEME as WORX_OTS
+from .devices.worx import (
+    WorxDevice,
+    CONFIG_SCHEME as WORX_CONFIG,
+    OTS_SCHEME as WORX_OTS,
+)
 from .devices.kress import KressDevice
 from .devices.landxcape import LandxcapeDevice
-
-_LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(

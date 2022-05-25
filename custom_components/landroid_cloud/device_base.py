@@ -28,8 +28,8 @@ from .const import (
     UPDATE_SIGNAL,
 )
 
-from .pyworxcloud import WorxCloud
-from .pyworxcloud.states import STATE_TO_DESCRIPTION, ERROR_TO_DESCRIPTION
+from pyworxcloud import WorxCloud
+from pyworxcloud.states import STATE_TO_DESCRIPTION, ERROR_TO_DESCRIPTION
 
 # Commonly supported features
 SUPPORT_LANDROID_BASE = (

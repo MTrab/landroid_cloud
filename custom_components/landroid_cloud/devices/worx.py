@@ -11,7 +11,7 @@ import voluptuous as vol
 from homeassistant.components.vacuum import StateVacuumEntity
 from homeassistant.core import ServiceCall
 
-from ..pyworxcloud import (
+from pyworxcloud import (
     NoOneTimeScheduleError,
     NoPartymodeError,
     WorxCloud,
@@ -76,7 +76,7 @@ class WorxDevice(LandroidCloudBase, StateVacuumEntity):
         _LOGGER.debug("Setting PartyMode to %s on %s", set_partymode, self._name)
         try:
             await self.hass.async_add_executor_job(
-                partial(device.enable_partymode, set_partymode)
+                partial(device.toggle_partymode, set_partymode)
             )
         except NoPartymodeError as ex:
             _LOGGER.error("(%s) %s", self._name, ex.args[0])

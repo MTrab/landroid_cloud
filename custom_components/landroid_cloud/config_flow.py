@@ -5,10 +5,8 @@ import logging
 
 from homeassistant import config_entries, core, exceptions
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
-from sqlalchemy import true
 
-# from pyworxcloud import WorxCloud
-from .pyworxcloud import WorxCloud
+from pyworxcloud import WorxCloud
 
 from .const import DOMAIN
 from .scheme import DATA_SCHEMA

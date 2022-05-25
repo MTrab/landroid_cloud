@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import logging
-import voluptuous as vol
 
 from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
@@ -11,7 +10,7 @@ from homeassistant.helpers.dispatcher import dispatcher_send
 from homeassistant.loader import async_get_integration
 from homeassistant.util import slugify as util_slugify
 
-from .pyworxcloud import WorxCloud
+from pyworxcloud import WorxCloud
 
 from .const import DOMAIN, PLATFORM, STARTUP, UPDATE_SIGNAL
 

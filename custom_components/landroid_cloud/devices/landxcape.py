@@ -11,7 +11,7 @@ from ..device_base import (
     SUPPORT_LANDROID_BASE,
 )
 
-# from ..pyworxcloud import WorxCloud
+# from pyworxcloud import WorxCloud
 
 
 _LOGGER = logging.getLogger(__name__)
