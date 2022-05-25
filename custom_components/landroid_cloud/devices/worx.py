@@ -17,9 +17,11 @@ from ..pyworxcloud import (
 )  # pylint: disable=relative-beyond-top-level
 
 from ..const import (
+    ATTR_BOUNDARY,
     ATTR_MULTIZONE_DISTANCES,
     ATTR_MULTIZONE_PROBABILITIES,
     ATTR_RAINDELAY,
+    ATTR_RUNTIME,
     ATTR_TIMEEXTENSION,
 )  # pylint: disable=relative-beyond-top-level
 
@@ -38,6 +40,11 @@ CONFIG_SCHEME = {
     vol.Optional(ATTR_TIMEEXTENSION): vol.All(vol.Coerce(int), vol.Range(-100, 100)),
     vol.Optional(ATTR_MULTIZONE_DISTANCES): str,
     vol.Optional(ATTR_MULTIZONE_PROBABILITIES): str,
+}
+
+OTS_SCHEME = {
+    vol.Required(ATTR_BOUNDARY, default=False): bool,
+    vol.Required(ATTR_RUNTIME, default=30): vol.Coerce(int),
 }
 
 
@@ -87,6 +94,20 @@ class WorxDevice(LandroidCloudBase, StateVacuumEntity):
         device: WorxCloud = self.api.device
         _LOGGER.debug("Restarting %s", self._name)
         await self.hass.async_add_executor_job(device.restart)
+
+    async def async_ots(self, service_call: ServiceCall):
+        """Begin OTS routine."""
+        device: WorxCloud = self.api.device
+        data = service_call.data
+        _LOGGER.debug(
+            "Starting OTS on %s, doing boundary (%s) running for %s minutes",
+            self._name,
+            data["boundary"],
+            data["runtime"],
+        )
+        await self.hass.async_add_executor_job(
+            partial(device.ots, data["boundary"], data["runtime"])
+        )
 
     async def async_config(self, service_call: ServiceCall):
         """Set config parameters."""

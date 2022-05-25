@@ -16,12 +16,13 @@ from .const import (
     SERVICE_CONFIG,
     SERVICE_EDGECUT,
     SERVICE_LOCK,
+    SERVICE_OTS,
     SERVICE_PARTYMODE,
     SERVICE_RESTART,
     SERVICE_SETZONE,
 )
 from .device_base import LandroidCloudBase
-from .devices.worx import WorxDevice, CONFIG_SCHEME as WORX_CONFIG
+from .devices.worx import WorxDevice, CONFIG_SCHEME as WORX_CONFIG, OTS_SCHEME as WORX_OTS
 from .devices.kress import KressDevice
 from .devices.landxcape import LandxcapeDevice
 
@@ -72,6 +73,11 @@ async def async_setup_entry(
             SERVICE_CONFIG,
             WORX_CONFIG,
             constructor.async_config,
+        )
+        platform.async_register_entity_service(
+            SERVICE_OTS,
+            WORX_OTS,
+            constructor.async_ots,
         )
     elif vendor == "kress":
         constructor = KressDevice

@@ -43,6 +43,7 @@ class WorxCloud:
         self._dev_id = None
         self._mqtt = None
         self._raw = None
+        self._save_zones = None
 
         self.accessories = None
         self.battery_charge_cycle = None
@@ -204,7 +205,7 @@ class WorxCloud:
         data = json.loads(indata)
         if "dat" in data:
             self.firmware = data["dat"]["fw"]
-            self.mowing_zone = 0 if data["dat"]["lz"] == 8 else data["dat"]["lz"]
+            self.mowing_zone = data["dat"]["lz"]
             self.rssi = data["dat"]["rsi"]
             self.status = data["dat"]["ls"]
             self.error = data["dat"]["le"]
@@ -427,13 +428,40 @@ class WorxCloud:
         elif not self.online:
             raise OfflineError("The device is currently offline, no action was sent.")
 
+    def ots(self, boundary: bool, runtime) -> None:
+        """Start OTS routine."""
+
+        if self.online and self.ots_capable:
+            if not isinstance(runtime, int):
+                runtime = int(runtime)
+
+            raw = {"sc": {"ots": {"bc": int(boundary), "wtm": runtime}}}
+            _LOGGER.debug(json.dumps(raw))
+            self._mqtt.publish(self.mqtt_in, json.dumps(raw), qos=0, retain=False)
+        elif not self.ots_capable:
+            raise NoOneTimeScheduleError(
+                "This device does not support Edgecut-on-demand"
+            )
+        else:
+            raise OfflineError("The device is currently offline, no action was sent.")
+
     def setzone(self, zone) -> None:
         """Set next zone to mow."""
         if self.online:
-            if not isinstance(zone, str):
-                zone = str(zone)
-            msg = '{"mz":' + zone + "}"
-            self._mqtt.publish(self.mqtt_in, msg, qos=0, retain=False)
+            if not isinstance(zone, int):
+                zone = int(zone)
+            current = self.zone_probability
+
+            new_zones = current
+            while not new_zones[self.mowing_zone] == zone:
+                tmp = []
+                tmp.append(new_zones[9])
+                for i in range(0, 9):
+                    tmp.append(new_zones[i])
+                new_zones = tmp
+
+            raw = {"mzv": new_zones}
+            self._mqtt.publish(self.mqtt_in, json.dumps(raw), qos=0, retain=False)
         else:
             raise OfflineError("The device is currently offline, no action was sent.")
 

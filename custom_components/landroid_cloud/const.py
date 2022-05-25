@@ -35,6 +35,7 @@ SERVICE_SETZONE = "setzone"
 SERVICE_LOCK = "lock"
 SERVICE_RESTART = "restart"
 SERVICE_EDGECUT = "edgecut"
+SERVICE_OTS = "ots"
 
 # Extra states
 STATE_INITIALIZING = "Initializing"
@@ -47,6 +48,8 @@ ATTR_MULTIZONE_PROBABILITIES = "multizone_probabilities"
 ATTR_RAINDELAY = "raindelay"
 ATTR_TIMEEXTENSION = "timeextension"
 ATTR_ZONE = "zone"
+ATTR_BOUNDARY = "boundary"
+ATTR_RUNTIME = "runtime"
 
 # Available cloud vendors
 CLOUDS = []

@@ -104,3 +104,30 @@ config:
       example: '[5, 1, 2, 2]'
       selector:
         text:
+
+ots:
+  description: Start One-Time-Schedule
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: vacuum
+  fields:
+    boundary:
+      description: Do boundary cut
+      example: true
+      required: true
+      default: false
+      selector:
+        boolean:
+    runtime:
+      description: Runtime in minutes
+      example: 60
+      required: true
+      default: 30
+      selector:
+        number:
+          min: 1
+          max: 120
+          step: 1
+          unit_of_measurement: "minutes"
+          mode: slider
