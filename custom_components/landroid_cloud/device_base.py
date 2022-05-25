@@ -149,7 +149,8 @@ class LandroidCloudBase(Entity):
         for prop, attr in methods["state"].items():
             if hasattr(master, prop):
                 prop_data = getattr(master, prop)
-                data[attr] = prop_data
+                if not isinstance(prop_data, type(None)):
+                    data[attr] = prop_data
         data["error"] = ERROR_TO_DESCRIPTION[master.error or 0]
         _LOGGER.debug(data)
 
@@ -157,7 +158,7 @@ class LandroidCloudBase(Entity):
             state = STATE_TO_DESCRIPTION[master.status]
         except KeyError:
             state = STATE_INITIALIZING
-            
+
         self._attributes.update(data)
 
         _LOGGER.debug("Mower %s online: %s", self._name, master.online)
@@ -176,10 +177,6 @@ class LandroidCloudBase(Entity):
 
         _LOGGER.debug("Mower %s State %s", self._name, state)
         self._state = state
-        if "latitude" in self._attributes:
-            if self._attributes["latitude"] is None:
-                del self._attributes["latitude"]
-                del self._attributes["longitude"]
 
         self._mac = master.mac
         self._serialnumber = master.serial
