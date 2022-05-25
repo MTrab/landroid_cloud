@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import json
 import base64
-import logging
 import tempfile
 import contextlib
 import time
@@ -13,9 +12,7 @@ import OpenSSL.crypto
 from .day_map import DAY_MAP
 from .landroidapi import LandroidAPI
 from .schedules import Schedule, ScheduleType, TYPE_MAP
-from .states import ErrorDict, StateDict
-
-_LOGGER = logging.getLogger(__name__)
+# from .states import ErrorDict, StateDict
 
 
 class WorxCloud:
@@ -207,14 +204,14 @@ class WorxCloud:
             self.mowing_zone = 0 if data["dat"]["lz"] == 8 else data["dat"]["lz"]
             self.rssi = data["dat"]["rsi"]
             self.status = data["dat"]["ls"]
-            self.status_description = StateDict[data["dat"]["ls"]]
+            # self.status_description = StateDict[data["dat"]["ls"]]
             self.error = data["dat"]["le"]
 
             # Translate error code to text
-            if data["dat"]["le"] in ErrorDict:
-                self.error_description = ErrorDict[data["dat"]["le"]]
-            else:
-                self.error_description = "Unknown error"
+            # if data["dat"]["le"] in ErrorDict:
+            #     self.error_description = ErrorDict[data["dat"]["le"]]
+            # else:
+            #     self.error_description = "Unknown error"
 
             self.current_zone = data["dat"]["lz"]
             self.locked = bool(data["dat"]["lk"])

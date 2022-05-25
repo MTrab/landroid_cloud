@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 # Valid states - some are missing as these haven't been identified yet
-StateDict = {
+STATE_TO_DESCRIPTION = {
     0: "idle",
     1: "home",
     2: "start sequence",
@@ -24,7 +24,7 @@ StateDict = {
 }
 
 # Valid error states
-ErrorDict = {
+ERROR_TO_DESCRIPTION = {
     0: "no error",
     1: "trapped",
     2: "lifted",

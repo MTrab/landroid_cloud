@@ -4,8 +4,7 @@ from __future__ import annotations
 ATTR_MAP = {
     "default": {
         "state": {
-            "id": "id",
-            "error_description": "error_description",
+            "id": "cloud_id",
             "blade_time": "total_blade_time",
             "blade_time_current": "current_blade_time",
             "blade_work_time_reset_at": "blade_time_reset",

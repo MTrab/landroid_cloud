@@ -24,6 +24,7 @@ https://github.com/mtrab/landroid_cloud/issues
 # Some defaults
 DEFAULT_NAME = "landroid"
 DOMAIN = "landroid_cloud"
+PLATFORM = "vacuum"
 UPDATE_SIGNAL = "landroid_cloud_update"
 
 # Service consts

@@ -29,6 +29,7 @@ from .const import (
 )
 
 from .pyworxcloud import WorxCloud
+from .pyworxcloud.states import STATE_TO_DESCRIPTION, ERROR_TO_DESCRIPTION
 
 # Commonly supported features
 SUPPORT_LANDROID_BASE = (
@@ -96,10 +97,10 @@ class LandroidCloudBase(Entity):
         """Return the battery level of the vacuum cleaner."""
         return self._battery_level
 
-    @property
-    def _robot_state(self):
-        """Return the state of the device."""
-        return self._state
+    # @property
+    # def _robot_state(self):
+    #     """Return the state of the device."""
+    #     return self._state
 
     @property
     def available(self) -> bool:
@@ -149,9 +150,14 @@ class LandroidCloudBase(Entity):
             if hasattr(master, prop):
                 prop_data = getattr(master, prop)
                 data[attr] = prop_data
+        data["error"] = ERROR_TO_DESCRIPTION[master.error or 0]
         _LOGGER.debug(data)
 
-        state = master.status_description
+        try:
+            state = STATE_TO_DESCRIPTION[master.status]
+        except KeyError:
+            state = STATE_INITIALIZING
+            
         self._attributes.update(data)
 
         _LOGGER.debug("Mower %s online: %s", self._name, master.online)

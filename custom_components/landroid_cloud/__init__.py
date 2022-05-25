@@ -14,7 +14,7 @@ from homeassistant.util import slugify as util_slugify
 # from pyworxcloud import WorxCloud
 from .pyworxcloud import WorxCloud
 
-from .const import DOMAIN, STARTUP, UPDATE_SIGNAL
+from .const import DOMAIN, PLATFORM, STARTUP, UPDATE_SIGNAL
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -46,7 +46,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     result = await _setup(hass, entry)
 
     hass.async_create_task(
-        hass.config_entries.async_forward_entry_setup(entry, "vacuum")
+        hass.config_entries.async_forward_entry_setup(entry, PLATFORM)
     )
 
     return result
@@ -54,7 +54,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
-    unload_ok = await hass.config_entries.async_forward_entry_unload(entry, "vacuum")
+    unload_ok = await hass.config_entries.async_forward_entry_unload(entry, PLATFORM)
 
     if unload_ok:
         for unsub in hass.data[DOMAIN][entry.entry_id]["api"].listeners:
