@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import json
 import base64
+import logging
+from os import access
 import tempfile
 import contextlib
 import time
@@ -13,6 +15,8 @@ from .day_map import DAY_MAP
 from .exceptions import NoOneTimeScheduleError, NoPartymodeError, OfflineError
 from .landroidapi import LandroidAPI
 from .schedules import Schedule, ScheduleType, TYPE_MAP
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class WorxCloud:
@@ -39,6 +43,7 @@ class WorxCloud:
         self._mqtt = None
         self._raw = None
 
+        self.accessories = None
         self.battery_charge_cycle = None
         self.battery_charge_cycle_current = None
         self.battery_charge_cycles_reset = None
@@ -143,9 +148,6 @@ class WorxCloud:
     def _authenticate(self):
         """Authenticate the user."""
         auth_data = self._api.auth()
-
-        # if 'return_code' in auth_data:
-        #     return False
 
         try:
             self._api.set_token(auth_data["access_token"])
@@ -385,8 +387,17 @@ class WorxCloud:
         self._api.get_products()
         products = self._api.data
 
+        accessories = None
         for attr, val in products[self._dev_id].items():
-            setattr(self, str(attr), val)
+            if attr == "accessories":
+                accessories = val
+            else:
+                setattr(self, str(attr), val)
+
+        if not accessories is None:
+            self.accessories = []
+            for key in accessories:
+                self.accessories.append(key)
 
     def enumerate(self) -> int:
         """Enumerate amount of devices attached to account."""
