@@ -10,8 +10,10 @@ import paho.mqtt.client as mqtt
 import OpenSSL.crypto
 
 from .day_map import DAY_MAP
+from .exceptions import NoOneTimeScheduleError, NoPartymodeError, OfflineError
 from .landroidapi import LandroidAPI
 from .schedules import Schedule, ScheduleType, TYPE_MAP
+
 # from .states import ErrorDict, StateDict
 
 
@@ -204,14 +206,7 @@ class WorxCloud:
             self.mowing_zone = 0 if data["dat"]["lz"] == 8 else data["dat"]["lz"]
             self.rssi = data["dat"]["rsi"]
             self.status = data["dat"]["ls"]
-            # self.status_description = StateDict[data["dat"]["ls"]]
             self.error = data["dat"]["le"]
-
-            # Translate error code to text
-            # if data["dat"]["le"] in ErrorDict:
-            #     self.error_description = ErrorDict[data["dat"]["le"]]
-            # else:
-            #     self.error_description = "Unknown error"
 
             self.current_zone = data["dat"]["lz"]
             self.locked = bool(data["dat"]["lk"])
@@ -261,9 +256,7 @@ class WorxCloud:
             # Get remaining rain delay if available
             if "rain" in data["dat"]:
                 self.rain_delay_time_remaining = data["dat"]["rain"]["cnt"]
-                self.rain_sensor_triggered = (
-                    True if str(data["dat"]["rain"]["s"]) == "1" else False
-                )
+                self.rain_sensor_triggered = bool(str(data["dat"]["rain"]["s"]) == "1")
 
         if "cfg" in data:
             self.updated = data["cfg"]["tm"] + " " + data["cfg"]["dt"]
@@ -278,12 +271,8 @@ class WorxCloud:
             # Fetch main schedule
             if "sc" in data["cfg"]:
                 self.ots_capable = bool("ots" in data["cfg"]["sc"])
-                self.schedule_mower_active = (
-                    True if str(data["cfg"]["sc"]["m"]) == "1" else False
-                )
-                self.partymode_enabled = (
-                    True if str(data["cfg"]["sc"]["m"]) == "2" else False
-                )
+                self.schedule_mower_active = bool(str(data["cfg"]["sc"]["m"]) == "1")
+                self.partymode_enabled = bool(str(data["cfg"]["sc"]["m"]) == "2")
                 self.partymode_capable = bool("distm" in data["cfg"]["sc"])
 
                 self.schedule_variation = data["cfg"]["sc"]["p"]
@@ -330,44 +319,68 @@ class WorxCloud:
 
     def start(self) -> None:
         """Start mowing."""
-        self._mqtt.publish(self.mqtt_in, '{"cmd":1}', qos=0, retain=False)
+        if self.online:
+            self._mqtt.publish(self.mqtt_in, '{"cmd":1}', qos=0, retain=False)
+        else:
+            raise OfflineError("The device is currently offline, no action was sent.")
 
     def pause(self) -> None:
         """Pause mowing."""
-        self._mqtt.publish(self.mqtt_in, '{"cmd":2}', qos=0, retain=False)
+        if self.online:
+            self._mqtt.publish(self.mqtt_in, '{"cmd":2}', qos=0, retain=False)
+        else:
+            raise OfflineError("The device is currently offline, no action was sent.")
 
     def home(self) -> None:
         """Stop (and go home)."""
-        self._mqtt.publish(self.mqtt_in, '{"cmd":3}', qos=0, retain=False)
+        if self.online:
+            self._mqtt.publish(self.mqtt_in, '{"cmd":3}', qos=0, retain=False)
+        else:
+            raise OfflineError("The device is currently offline, no action was sent.")
 
     def zonetraining(self) -> None:
         """Start zonetraining."""
-        self._mqtt.publish(self.mqtt_in, '{"cmd":4}', qos=0, retain=False)
+        if self.online:
+            self._mqtt.publish(self.mqtt_in, '{"cmd":4}', qos=0, retain=False)
+        else:
+            raise OfflineError("The device is currently offline, no action was sent.")
 
     def lock(self, enabled: bool) -> None:
         """Lock or Unlock device."""
-        if enabled:
-            self._mqtt.publish(self.mqtt_in, '{"cmd":5}', qos=0, retain=False)
+        if self.online:
+            if enabled:
+                self._mqtt.publish(self.mqtt_in, '{"cmd":5}', qos=0, retain=False)
+            else:
+                self._mqtt.publish(self.mqtt_in, '{"cmd":6}', qos=0, retain=False)
         else:
-            self._mqtt.publish(self.mqtt_in, '{"cmd":6}', qos=0, retain=False)
+            raise OfflineError("The device is currently offline, no action was sent.")
 
     def restart(self):
         """Reboot device."""
-        self._mqtt.publish(self.mqtt_in, '{"cmd":7}', qos=0, retain=False)
+        if self.online:
+            self._mqtt.publish(self.mqtt_in, '{"cmd":7}', qos=0, retain=False)
+        else:
+            raise OfflineError("The device is currently offline, no action was sent.")
 
     def raindelay(self, rain_delay) -> None:
         """Set new rain delay."""
-        msg = f'"rd": {rain_delay}'
-        self._mqtt.publish(self.mqtt_in, msg, qos=0, retain=False)
+        if self.online:
+            msg = f'"rd": {rain_delay}'
+            self._mqtt.publish(self.mqtt_in, msg, qos=0, retain=False)
+        else:
+            raise OfflineError("The device is currently offline, no action was sent.")
 
     def schedule(self, enable: bool) -> None:
         """Enable or disable schedule."""
-        if enable:
-            msg = '{"sc": {"m": 1}}'
-            self._mqtt.publish(self.mqtt_in, msg, qos=0, retain=False)
+        if self.online:
+            if enable:
+                msg = '{"sc": {"m": 1}}'
+                self._mqtt.publish(self.mqtt_in, msg, qos=0, retain=False)
+            else:
+                msg = '{"sc": {"m": 0}}'
+                self._mqtt.publish(self.mqtt_in, msg, qos=0, retain=False)
         else:
-            msg = '{"sc": {"m": 0}}'
-            self._mqtt.publish(self.mqtt_in, msg, qos=0, retain=False)
+            raise OfflineError("The device is currently offline, no action was sent.")
 
     def _fetch(self) -> None:
         """Fetch devices."""
@@ -387,6 +400,8 @@ class WorxCloud:
         """Publish data to the device."""
         if self.online:
             self._mqtt.publish(self.mqtt_in, data, qos=0, retain=False)
+        else:
+            raise OfflineError("The device is currently offline, no action was sent.")
 
     def enable_partymode(self, enabled: bool) -> None:
         """Enable or disable Party Mode."""
@@ -399,6 +414,8 @@ class WorxCloud:
                 self._mqtt.publish(self.mqtt_in, msg, qos=0, retain=False)
         elif not self.partymode_capable:
             raise NoPartymodeError("This device does not support Partymode")
+        elif not self.online:
+            raise OfflineError("The device is currently offline, no action was sent.")
 
     def setzone(self, zone) -> None:
         """Set next zone to mow."""
@@ -407,6 +424,8 @@ class WorxCloud:
                 zone = str(zone)
             msg = '{"mz":' + zone + "}"
             self._mqtt.publish(self.mqtt_in, msg, qos=0, retain=False)
+        else:
+            raise OfflineError("The device is currently offline, no action was sent.")
 
     def edgecut(self) -> None:
         """Start edgecut routine."""
@@ -417,14 +436,8 @@ class WorxCloud:
             raise NoOneTimeScheduleError(
                 "This device does not support Edgecut-on-demand"
             )
-
-
-class NoPartymodeError(Exception):
-    """Define and error when partymode is not supported."""
-
-
-class NoOneTimeScheduleError(Exception):
-    """Define and error when OTS is not supported."""
+        elif not self.online:
+            raise OfflineError("The device is currently offline, no action was sent.")
 
 
 @contextlib.contextmanager
