@@ -4,9 +4,7 @@
   "issue_tracker": "https://github.com/MTrab/landroid_cloud/issues",
   "domain": "landroid_cloud",
   "iot_class": "cloud_polling",
-  "requirements": [
-    "pyworxcloud==1.4.20"
-  ],
+  "requirements": [],
   "after_dependencies": [
     "http"
   ],
