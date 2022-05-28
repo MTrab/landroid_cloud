@@ -3,6 +3,7 @@ from __future__ import annotations
 from functools import partial
 
 import logging
+from typing import Any
 
 from homeassistant.components.vacuum import (
     ENTITY_ID_FORMAT,
@@ -16,10 +17,9 @@ from homeassistant.const import CONF_TYPE
 from homeassistant.core import callback, ServiceCall
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 import homeassistant.helpers.device_registry as dr
-from homeassistant.helpers.entity import Entity
 
 from pyworxcloud import WorxCloud
-from pyworxcloud.states import STATE_TO_DESCRIPTION, ERROR_TO_DESCRIPTION
+from pyworxcloud.states import ERROR_TO_DESCRIPTION
 
 from .attribute_map import ATTR_MAP
 
@@ -27,7 +27,6 @@ from .const import (
     DOMAIN,
     STATE_INITIALIZING,
     STATE_MAP,
-    STATE_MOWING,
     STATE_OFFLINE,
     STATE_RAINDELAY,
     UPDATE_SIGNAL,
@@ -46,7 +45,7 @@ SUPPORT_LANDROID_BASE = (
 _LOGGER = logging.getLogger(__name__)
 
 
-class LandroidCloudBase(StateVacuumEntity, Entity):
+class LandroidCloudBase(StateVacuumEntity):
     """Define a base class."""
 
     _battery_level: int | None = None
@@ -196,7 +195,7 @@ class LandroidCloudBase(StateVacuumEntity, Entity):
         _LOGGER.debug("Pausing %s", self._name)
         await self.hass.async_add_executor_job(device.pause)
 
-    async def async_return_to_base(self):
+    async def async_return_to_base(self, **kwargs: Any):
         """Set the vacuum cleaner to return to the dock."""
         if self.state != STATE_DOCKED and self.state != STATE_RETURNING:
             device: WorxCloud = self.api.device
