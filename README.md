@@ -109,5 +109,4 @@ Follow this simple guide to make it work again:
 
 ### To-do
 
-* Code optimization
 * Make this an official integration
