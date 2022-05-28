@@ -80,9 +80,22 @@ landroid_cloud.edgecut | Start edgecut routine if supported by device
 
 You can simply add these to your Lovelace setup by adding an entity card or using [Barma-lej halandroid package](https://github.com/Barma-lej/halandroid)
 
-### Known bugs
+### Translation
 
-If upgrading from version lower than 1.4, please comment out the landroid_cloud section from configuration.yaml, restart Home Assistant, reinsert the landroid_cloud section and restart again.
+To handle submissions of translated strings I'm using [Lokalise](https://lokalise.com/).<br/>
+They provide an amazing platform that is easy to use and maintain.<br/>
+<br/>
+To help out with the translation of this custom_component you need an account on Lokalise.<br/>
+The easiest way to get one is to [click here](https://lokalise.com/login/) then select "Log in with GitHub".<br/>
+<br/>
+When you have created your account, [clich here](https://app.lokalise.com/public/97921736629219cb0306a3.84106577/) to join the project on Lokalise.<br/>
+<br/>
+Chect Lokalise documentation [here](https://docs.lokalise.com/en/) - it's really good.<br/>
+<br/>
+Can't find the language you want to translate to? [Open a new language request](https://github.com/MTrab/landroid_cloud/issues/new?assignees=&labels=translation&template=translation_request.md&title=%5BLR%5D%3A+New%20language%20request)<br/>
+<br/>
+Contributions to the translations will be updated on every release of this component.
+
 
 ### Other useful information
 #### Services and app stopped working
