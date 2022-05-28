@@ -1,10 +1,13 @@
 {
     "state": {
-        "landroid_cloud__": {
+        "landroid_cloud__mower": {
             "initializing": "Initializing",
-            "offline": "offline",
+            "offline": "Offline",
             "rain_delay": "Rain delay",
-            "mowing": "Mowing"
+            "mowing": "Mowing",
+            "starting": "Starting",
+            "zoning": "Zone training",
+            "edgecut": "Cutting edge"
         }
     }
 }

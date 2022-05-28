@@ -85,6 +85,11 @@ class LandroidCloudBase(StateVacuumEntity):
         }
 
     @property
+    def device_class(self) -> str:
+        """Return the ID of the capability, to identify the entity for translations."""
+        return f"{DOMAIN}__mower"
+
+    @property
     def robot_unique_id(self):
         """Return the unique id."""
         return f"landroid_{self._serialnumber}"
