@@ -1,8 +1,10 @@
 {
     "state": {
-        "initializing": "Initializing",
-        "offline": "offline",
-        "rain_delay": "Rain delay",
-        "mowing": "Mowing"
+        "landroid_cloud__": {
+            "initializing": "Initializing",
+            "offline": "offline",
+            "rain_delay": "Rain delay",
+            "mowing": "Mowing"
+        }
     }
 }

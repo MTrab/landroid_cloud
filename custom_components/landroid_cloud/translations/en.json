@@ -18,13 +18,5 @@
                 "title": "Connect to your Landroid Cloud account"
             }
         }
-    },
-    "state": {
-        "_": {
-            "initializing": "Initializing",
-            "offline": "offline",
-            "rain_delay": "Rain delay",
-            "mowing": "Mowing"
-        }
     }
 }

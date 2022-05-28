@@ -1,8 +1,10 @@
 {
     "state": {
-        "initializing": "Initialiserer",
-        "offline": "Afbrudt",
-        "rain_delay": "Regn forsinkelse",
-        "mowing": "Sl\u00e5r græs"
+        "landroid_cloud__": {
+            "initializing": "Initialiserer",
+            "offline": "Afbrudt",
+            "rain_delay": "Regn forsinkelse",
+            "mowing": "Sl\u00e5r græs"
+        }
     }
 }
