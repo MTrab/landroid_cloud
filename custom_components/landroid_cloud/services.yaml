@@ -1,82 +1,64 @@
-poll:
-  description: Poll mower status info
-  fields:
-    id:
-      description: Landroid ID. Found as attribute on the Landroid status sensor
-      example: 123435
-
 start:
   description: Start mowing
-  fields:
-    id:
-      description: Landroid ID. Found as attribute on the Landroid status sensor
-      example: 123435
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: vacuum
 
 pause:
   description: Pause mowing
-  fields:
-    id:
-      description: Landroid ID. Found as attribute on the Landroid status sensor
-      example: 123435
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: vacuum
 
 home:
-  description: Send Landroid home
-  fields:
-    id:
-      description: Landroid ID. Found as attribute on the Landroid status sensor
-      example: 123435
+  description: Send device to dock
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: vacuum
 
 lock:
-  description: Lock Landroid
-  fields:
-    id:
-      description: Landroid ID. Found as attribute on the Landroid status sensor
-      example: 123435
-    enable:
-      description: Set true for enabling of lock and false for disabling
-      example: true
-      required: true
-      selector:
-        boolean:
+  description: Toggle device lock
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: vacuum
 
 restart:
-  description: Restart Landroid
-  fields:
-    id:
-      description: Landroid ID. Found as attribute on the Landroid status sensor
-      example: 123435
+  description: Restart device
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: vacuum
 
 edgecut:
-  description: Start Edgecut routine
-  fields:
-    id:
-      description: Landroid ID. Found as attribute on the Landroid status sensor
-      example: 123435
+  description: Start edgecut (if supported)
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: vacuum
 
 partymode:
-  description: Enable or disable partymode
-  fields:
-    id:
-      description: Landroid ID. Found as attribute on the Landroid status sensor
-      example: 123435
-    enable:
-      description: Set true for enabling of PartyMode and false for disabling
-      example: true
-      required: true
-      selector:
-        boolean:
+  description: Toggle PartyMode (if supported)
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: vacuum
 
 setzone:
   description: Set which zone to be mowed next
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: vacuum
   fields:
-    id:
-      description: Landroid ID. Found as attribute on the Landroid status sensor
-      example: 123435
     zone:
       description: Sets the zone number, ranging from 0 to 3, to be mowed next
       example: 1
       required: true
-      default: 0
+      default: "0"
       selector:
         select:
           options:
@@ -86,14 +68,22 @@ setzone:
             - "3"
 
 config:
-  description: Set config parameters
+  description: Set device config parameters
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: vacuum
   fields:
-    id:
-      description: Landroid ID. Found as attribute on the Landroid status sensor
-      example: 123435
     raindelay:
       description: Set rain delay. Time in minutes ranging from 0 to 300. 0 = Disabled
       example: 30
+      selector:
+        number:
+          min: 0
+          max: 300
+          step: 1
+          unit_of_measurement: "minutes"
+          mode: slider
     timeextension:
       description: Set time extension. Extension in % ranging from -100 to 100
       example: -23
@@ -105,8 +95,39 @@ config:
           unit_of_measurement: "%"
           mode: slider
     multizone_distances:
-      description: Set multizone distances. Distances in meter. 0 = Disabled
+      description: 'Set multizone distance array in meters. 0 = Disabled. Format: [15, 80, 120, 155]'
       example: '[15, 80, 120, 155]'
+      selector:
+        text:
     multizone_probabilities:
-      description: Set multizone probabilities. Probabilities in parts-of-ten. 1 = 10%, 2 = 20%, ...
+      description: 'Set multizone probabilities array. Probabilities in parts-of-ten. 1 = 10%, 2 = 20%, ... Format: [5, 1, 2, 2]'
       example: '[5, 1, 2, 2]'
+      selector:
+        text:
+
+ots:
+  description: Start One-Time-Schedule (if supported)
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: vacuum
+  fields:
+    boundary:
+      description: Do boundary cut
+      example: true
+      required: true
+      default: false
+      selector:
+        boolean:
+    runtime:
+      description: Runtime in minutes
+      example: 60
+      required: true
+      default: 30
+      selector:
+        number:
+          min: 1
+          max: 120
+          step: 1
+          unit_of_measurement: "minutes"
+          mode: slider

@@ -1,0 +1,22 @@
+{
+    "config": {
+        "abort": {
+            "already_exists": "Denne konto er allere konfigureret"
+        },
+        "error": {
+            "cannot_connect": "Kunne ikke forbinde",
+            "invalid_auth": "Fejl i brugernavn og/eller password",
+            "unknown": "Ukendt fejl"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "email": "Email",
+                    "password": "Kodeord",
+                    "type": "M\u00e6rke"
+                },
+                "title": "Forbind til din Landroid Cloud konto"
+            }
+        }
+    }
+}
