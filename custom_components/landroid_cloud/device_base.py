@@ -104,11 +104,6 @@ class LandroidCloudBase(StateVacuumEntity):
         """Return the battery level of the vacuum cleaner."""
         return self._battery_level
 
-    # @property
-    # def _robot_state(self):
-    #     """Return the state of the device."""
-    #     return self._attr_state
-
     @property
     def available(self) -> bool:
         """Return True if entity is available."""
