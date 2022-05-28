@@ -1,6 +1,6 @@
 {
     "state": {
-        "landroid_cloud__mower": {
+        "landroid_cloud__state": {
             "initializing": "Initialiserer",
             "offline": "Afbrudt",
             "rain_delay": "Regn forsinkelse",
@@ -8,11 +8,6 @@
             "starting": "Starter",
             "zoning": "Zone tr\u00e6ning",
             "edgecut": "Klipper kant"
-        }
-    },
-    "attribute": {
-        "landroid_cloud__mower": {
-            "total_blade_time": "Total blad tid"
         }
     }
 }
