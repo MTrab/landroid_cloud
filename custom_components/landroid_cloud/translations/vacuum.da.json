@@ -1,0 +1,8 @@
+{
+    "state": {
+        "initializing": "Initialiserer",
+        "offline": "Afbrudt",
+        "rain_delay": "Regn forsinkelse",
+        "mowing": "Sl\u00e5r græs"
+    }
+}

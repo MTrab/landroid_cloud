@@ -9,6 +9,7 @@ from homeassistant.components.vacuum import (
     STATE_DOCKED,
     STATE_ERROR,
     STATE_RETURNING,
+    StateVacuumEntity,
     VacuumEntityFeature,
 )
 from homeassistant.const import CONF_TYPE
@@ -24,13 +25,13 @@ from .attribute_map import ATTR_MAP
 
 from .const import (
     DOMAIN,
-    LANDROID_TO_HA_STATEMAP,
     STATE_INITIALIZING,
+    STATE_MAP,
+    STATE_MOWING,
     STATE_OFFLINE,
     STATE_RAINDELAY,
     UPDATE_SIGNAL,
 )
-
 
 # Commonly supported features
 SUPPORT_LANDROID_BASE = (
@@ -45,8 +46,11 @@ SUPPORT_LANDROID_BASE = (
 _LOGGER = logging.getLogger(__name__)
 
 
-class LandroidCloudBase(Entity):
+class LandroidCloudBase(StateVacuumEntity, Entity):
     """Define a base class."""
+
+    _battery_level: int | None = None
+    _attr_state = STATE_INITIALIZING
 
     def __init__(self, hass, api):
         """Init new base device."""
@@ -58,10 +62,8 @@ class LandroidCloudBase(Entity):
 
         self._attributes = {}
         self._available = False
-        self._battery_level = None
         self._name = f"{api.friendly_name}"
         self._unique_id = f"{api.device.serial_number}_{api.name}"
-        self._state = STATE_INITIALIZING
         self._serialnumber = None
         self._mac = None
         self._connections = {}
@@ -101,7 +103,7 @@ class LandroidCloudBase(Entity):
     # @property
     # def _robot_state(self):
     #     """Return the state of the device."""
-    #     return self._state
+    #     return self._attr_state
 
     @property
     def available(self) -> bool:
@@ -121,7 +123,7 @@ class LandroidCloudBase(Entity):
     @property
     def state(self):
         """Return sensor state."""
-        return self._state
+        return self._attr_state
 
     @callback
     def update_callback(self):
@@ -156,7 +158,7 @@ class LandroidCloudBase(Entity):
         _LOGGER.debug(data)
 
         try:
-            state = STATE_TO_DESCRIPTION[master.status]
+            state = STATE_MAP[master.status]
         except KeyError:
             state = STATE_INITIALIZING
 
@@ -167,17 +169,15 @@ class LandroidCloudBase(Entity):
         if not master.online:
             state = STATE_OFFLINE
 
-        if state in LANDROID_TO_HA_STATEMAP:
-            state = LANDROID_TO_HA_STATEMAP[state]
-
         if master.error is not None:
             if master.error > 0 and master.error != 5:
                 state = STATE_ERROR
             elif master.error == 5:
                 state = STATE_RAINDELAY
 
-        _LOGGER.debug("Mower %s State %s", self._name, state)
-        self._state = state
+        _LOGGER.debug("Mower %s state '%s'", self._name, state)
+        # self._state = state
+        self._attr_state = state
 
         self._mac = master.mac
         self._serialnumber = master.serial

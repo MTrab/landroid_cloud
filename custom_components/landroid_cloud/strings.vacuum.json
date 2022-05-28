@@ -1,0 +1,8 @@
+{
+    "state": {
+        "initializing": "Initializing",
+        "offline": "offline",
+        "rain_delay": "Rain delay",
+        "mowing": "Mowing"
+    }
+}
