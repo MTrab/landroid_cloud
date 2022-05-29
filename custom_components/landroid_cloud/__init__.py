@@ -5,7 +5,8 @@ import logging
 
 from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
-from homeassistant.core import HomeAssistant
+from homeassistant.core import callback, HomeAssistant
+import homeassistant.helpers.entity_registry as er
 from homeassistant.helpers.dispatcher import dispatcher_send
 from homeassistant.loader import async_get_integration
 from homeassistant.util import slugify as util_slugify
