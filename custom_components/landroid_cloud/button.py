@@ -1,44 +1,20 @@
-"""Support for Landroid cloud compatible mowers."""
+"""Representation of a button."""
 from __future__ import annotations
 
-import voluptuous as vol
-
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import CONF_TYPE
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers import entity_platform
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import (
-    ATTR_ZONE,
-    DOMAIN,
-    SERVICE_CONFIG,
-    SERVICE_EDGECUT,
-    SERVICE_LOCK,
-    SERVICE_OTS,
-    SERVICE_PARTYMODE,
-    SERVICE_RESTART,
-    SERVICE_SETZONE,
-)
-from .device_base import LandroidCloudVacuumBase
-from .devices.worx import (
-    WorxDevice,
-    CONFIG_SCHEME as WORX_CONFIG,
-    OTS_SCHEME as WORX_OTS,
-)
-from .devices.kress import KressDevice
-from .devices.landxcape import LandxcapeDevice
+from .const import DOMAIN
 
-
-async def async_setup_entry(
-    hass: HomeAssistant,
+async def async_setup_entry(    hass: HomeAssistant,
     config: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Set up the iRobot Roomba vacuum cleaner."""
+    """Set up Landroid buttons for specific service."""
     api = hass.data[DOMAIN][config.entry_id]["api"]
 
-    constructor: type[LandroidCloudVacuumBase]
+    constructor: type[LandroidCloudBase]
     vendor = api.data.get(CONF_TYPE).lower()
     if vendor == "worx":
         constructor = WorxDevice

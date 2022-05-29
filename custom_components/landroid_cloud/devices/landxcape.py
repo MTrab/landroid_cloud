@@ -7,7 +7,7 @@ import logging
 from homeassistant.components.vacuum import StateVacuumEntity
 
 from ..device_base import (
-    LandroidCloudBase,
+    LandroidCloudVacuumBase,
     SUPPORT_LANDROID_BASE,
 )
 
@@ -19,7 +19,7 @@ _LOGGER = logging.getLogger(__name__)
 SUPPORT_LANDXCAPE = SUPPORT_LANDROID_BASE
 
 
-class LandxcapeDevice(LandroidCloudBase, StateVacuumEntity):
+class LandxcapeDevice(LandroidCloudVacuumBase, StateVacuumEntity):
     """Definition of Landxcape device."""
 
     @property

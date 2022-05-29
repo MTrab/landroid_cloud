@@ -7,7 +7,7 @@ import logging
 from homeassistant.components.vacuum import StateVacuumEntity
 
 from ..device_base import (
-    LandroidCloudBase,
+    LandroidCloudVacuumBase,
     SUPPORT_LANDROID_BASE,
 )
 
@@ -18,7 +18,7 @@ _LOGGER = logging.getLogger(__name__)
 SUPPORT_KRESS = SUPPORT_LANDROID_BASE
 
 
-class KressDevice(LandroidCloudBase, StateVacuumEntity):
+class KressDevice(LandroidCloudVacuumBase, StateVacuumEntity):
     """Definition of Kress device."""
 
     @property

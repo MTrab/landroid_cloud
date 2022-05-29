@@ -1,6 +1,7 @@
 """Constants used by Landroid Cloud integration."""
 from __future__ import annotations
 
+from homeassistant.backports.enum import StrEnum
 from homeassistant.components.vacuum import (
     STATE_DOCKED,
     STATE_RETURNING,
@@ -26,7 +27,7 @@ https://github.com/mtrab/landroid_cloud/issues
 # Some defaults
 DEFAULT_NAME = "landroid"
 DOMAIN = "landroid_cloud"
-PLATFORM = "vacuum"
+PLATFORMS = ["vacuum", "button"]
 UPDATE_SIGNAL = "landroid_cloud_update"
 
 # Service consts
@@ -83,3 +84,9 @@ STATE_MAP = {
     33: STATE_STARTING,
     34: STATE_PAUSED,
 }
+
+class LandroidButtonTypes(StrEnum):
+    """Defines different button types for Landroid Cloud integration."""
+
+    RESTART = "device_restart"
+    EDGECUT = "start_edgecut"

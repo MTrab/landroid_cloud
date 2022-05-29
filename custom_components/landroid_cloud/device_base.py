@@ -5,6 +5,7 @@ from functools import partial
 import logging
 from typing import Any
 
+from homeassistant.components.button import ButtonEntity, ButtonEntityDescription
 from homeassistant.components.vacuum import (
     ENTITY_ID_FORMAT,
     STATE_DOCKED,
@@ -17,6 +18,7 @@ from homeassistant.const import CONF_TYPE
 from homeassistant.core import callback, ServiceCall
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 import homeassistant.helpers.device_registry as dr
+from homeassistant.helpers.entity import EntityCategory
 
 from pyworxcloud import WorxCloud
 from pyworxcloud.states import ERROR_TO_DESCRIPTION
@@ -25,6 +27,7 @@ from .attribute_map import ATTR_MAP
 
 from .const import (
     DOMAIN,
+    LandroidButtonTypes,
     STATE_INITIALIZING,
     STATE_MAP,
     STATE_OFFLINE,
@@ -42,11 +45,44 @@ SUPPORT_LANDROID_BASE = (
     | VacuumEntityFeature.STATUS
 )
 
+# Tuple containing buttons to create
+BUTTONS: tuple[ButtonEntityDescription, ...] = {
+    ButtonEntityDescription(
+        key=LandroidButtonTypes.RESTART,
+        name="Restart",
+        icon="mdi:restart",
+        entity_category=EntityCategory.DIAGNOSTIC,
+    ),
+    ButtonEntityDescription(
+        key=LandroidButtonTypes.EDGECUT,
+        name="Start cutting edge",
+        icon="mdi:",
+        entity_category=EntityCategory.CONFIG,
+    ),
+}
+
 _LOGGER = logging.getLogger(__name__)
 
 
-class LandroidCloudBase(StateVacuumEntity):
-    """Define a base class."""
+class LandroidCloudButtonBase(ButtonEntity):
+    """Define a base vacuum class."""
+
+    def __init__(self, description: ButtonEntityDescription, hass, api) -> None:
+        """Init Tuya button."""
+        super().__init__(hass, api)
+        self.api = api
+        self.hass = hass
+        self.entity_description = description
+        self._attr_unique_id = f"{super().unique_id}{description.key}"
+        _LOGGER.debug("Button unique ID: %s", self._attr_unique_id)
+
+    def press(self, **kwargs: Any) -> None:
+        """Press the button."""
+        self._send_command([{"code": self.entity_description.key, "value": True}])
+
+
+class LandroidCloudVacuumBase(StateVacuumEntity):
+    """Define a base vacuum class."""
 
     _battery_level: int | None = None
     _attr_state = STATE_INITIALIZING

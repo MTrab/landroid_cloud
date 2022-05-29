@@ -27,7 +27,7 @@ from ..const import (
 )
 
 from ..device_base import (
-    LandroidCloudBase,
+    LandroidCloudVacuumBase,
     SUPPORT_LANDROID_BASE,
 )
 
@@ -49,7 +49,7 @@ OTS_SCHEME = {
 }
 
 
-class WorxDevice(LandroidCloudBase, StateVacuumEntity):
+class WorxDevice(LandroidCloudVacuumBase, StateVacuumEntity):
     """Definition of Worx Landroid device."""
 
     # def __init__(self, hass, api):
