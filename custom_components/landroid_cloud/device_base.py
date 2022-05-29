@@ -65,7 +65,7 @@ BUTTONS = [
         key=LandroidButtonTypes.EDGECUT,
         name="Start cutting edge",
         icon="mdi:map-marker-path",
-        entity_category=EntityCategory.CONFIG,
+        entity_category=None,
     ),
 ]
 
@@ -121,7 +121,9 @@ class LandroidCloudButtonBase(LandroidEntity, ButtonEntity):
         self.api = api
         self.hass = hass
         self.entity_description = description
-        self.entity_description.name = f"{api.friendly_name} {description.key.capitalize()}"
+        self.entity_description.name = (
+            f"{api.friendly_name} {description.key.capitalize()}"
+        )
 
         self._attr_unique_id = f"{api.name}_button_{description.key}"
         _LOGGER.debug("Button unique ID: %s", self._attr_unique_id)
