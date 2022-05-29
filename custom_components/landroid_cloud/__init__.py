@@ -6,7 +6,6 @@ import logging
 from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
 from homeassistant.core import callback, HomeAssistant
-import homeassistant.helpers.entity_registry as er
 from homeassistant.helpers.dispatcher import dispatcher_send
 from homeassistant.loader import async_get_integration
 from homeassistant.util import slugify as util_slugify
@@ -135,18 +134,17 @@ async def check_unique_id(hass: HomeAssistant, entry: ConfigEntry) -> None:
 
     new_unique_id = f"{entry.data.get(CONF_EMAIL)}_{entry.data.get(CONF_TYPE)}"
 
-    @callback
-    def update_unique_id(entity_entry: er.RegistryEntry) -> dict[str, str] | None:
-        """Update unique ID of entity entry."""
-        return {"new_unique_id": entity_entry.unique_id.replace("", new_unique_id)}
+    _LOGGER.debug("New unique id: %s", new_unique_id)
 
-    await er.async_migrate_entries(hass, entry.entry_id, update_unique_id)
     data = {
         CONF_EMAIL: entry.data[CONF_EMAIL],
         CONF_PASSWORD: entry.data[CONF_PASSWORD],
         CONF_TYPE: entry.data[CONF_TYPE],
     }
-    hass.config_entries.async_update_entry(entry, data=data)
+    result = hass.config_entries.async_update_entry(
+        entry, data=data, unique_id=new_unique_id
+    )
+    _LOGGER.debug("Update successful? %s", result)
 
 
 class LandroidAPI:
