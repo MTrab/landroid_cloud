@@ -122,6 +122,27 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     return True
 
 
+async def check_unique_id(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Check if a device unique ID is set."""
+    if not isinstance(entry.unique_id, type(None)):
+        return
+
+    new_unique_id = f"{entry.data.get(CONF_EMAIL)}_{entry.data.get(CONF_TYPE)}"
+
+    @callback
+    def update_unique_id(entity_entry: er.RegistryEntry) -> dict[str, str] | None:
+        """Update unique ID of entity entry."""
+        return {"new_unique_id": entity_entry.unique_id.replace("", new_unique_id)}
+
+    await er.async_migrate_entries(hass, entry.entry_id, update_unique_id)
+    data = {
+        CONF_EMAIL: entry.data[CONF_EMAIL],
+        CONF_PASSWORD: entry.data[CONF_PASSWORD],
+        CONF_TYPE: entry.data[CONF_TYPE],
+    }
+    hass.config_entries.async_update_entry(entry, data=data)
+
+
 class LandroidAPI:
     """Handle the API calls."""
 
