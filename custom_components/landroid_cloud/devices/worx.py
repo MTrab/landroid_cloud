@@ -25,6 +25,13 @@ from ..const import (
     ATTR_RAINDELAY,
     ATTR_RUNTIME,
     ATTR_TIMEEXTENSION,
+    SERVICE_CONFIG,
+    SERVICE_EDGECUT,
+    SERVICE_LOCK,
+    SERVICE_OTS,
+    SERVICE_PARTYMODE,
+    SERVICE_RESTART,
+    SERVICE_SETZONE,
 )
 
 from ..device_base import (
@@ -49,6 +56,16 @@ OTS_SCHEME = {
     vol.Required(ATTR_BOUNDARY, default=False): bool,
     vol.Required(ATTR_RUNTIME, default=30): vol.Coerce(int),
 }
+
+SUPPORTED_SERVICES = (
+    SERVICE_CONFIG,
+    SERVICE_PARTYMODE,
+    SERVICE_SETZONE,
+    SERVICE_LOCK,
+    SERVICE_RESTART,
+    SERVICE_EDGECUT,
+    SERVICE_OTS,
+)
 
 
 class WorxButton(LandroidCloudButtonBase, ButtonEntity):

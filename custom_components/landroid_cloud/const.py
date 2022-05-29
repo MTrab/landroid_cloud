@@ -30,7 +30,6 @@ PLATFORMS = ["vacuum", "button"]
 UPDATE_SIGNAL = "landroid_cloud_update"
 
 # Service consts
-SERVICE_POLL = "poll"
 SERVICE_CONFIG = "config"
 SERVICE_PARTYMODE = "partymode"
 SERVICE_SETZONE = "setzone"
