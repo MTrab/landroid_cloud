@@ -1,0 +1,22 @@
+{
+    "config": {
+        "abort": {
+            "already_exists": "Эта учетная запись пользователя уже настроена"
+        },
+        "error": {
+            "cannot_connect": "Не удалось подключиться",
+            "invalid_auth": "Ошибка аутентификации",
+            "unknown": "Неожиданная ошибка"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "email": "Email",
+                    "password": "Пароль",
+                    "type": "Марка"
+                },
+                "title": "Подключиться к учетной записи Landroid Cloud"
+            }
+        }
+    }
+}
