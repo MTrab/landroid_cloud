@@ -8,6 +8,7 @@ import logging
 from functools import partial
 import voluptuous as vol
 
+from homeassistant.components.button import ButtonEntity
 from homeassistant.components.vacuum import StateVacuumEntity
 from homeassistant.core import ServiceCall
 
@@ -27,7 +28,8 @@ from ..const import (
 )
 
 from ..device_base import (
-    LandroidCloudVacuumBase,
+    LandroidCloudButtonBase,
+    LandroidCloudMowerBase,
     SUPPORT_LANDROID_BASE,
 )
 
@@ -49,7 +51,11 @@ OTS_SCHEME = {
 }
 
 
-class WorxDevice(LandroidCloudVacuumBase, StateVacuumEntity):
+class WorxButton(LandroidCloudButtonBase, ButtonEntity):
+    """Definition of Worx Landroid button."""
+
+
+class WorxMowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
     """Definition of Worx Landroid device."""
 
     # def __init__(self, hass, api):
@@ -86,9 +92,7 @@ class WorxDevice(LandroidCloudVacuumBase, StateVacuumEntity):
         device: WorxCloud = self.api.device
         _LOGGER.debug("Starting edgecut routine for %s", self._name)
         try:
-            await self.hass.async_add_executor_job(
-                partial(device.ots, True, 0)
-            )
+            await self.hass.async_add_executor_job(partial(device.ots, True, 0))
         except NoOneTimeScheduleError as ex:
             _LOGGER.error("(%s) %s", self._name, ex.args[0])
 

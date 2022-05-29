@@ -1,7 +1,6 @@
 """Constants used by Landroid Cloud integration."""
 from __future__ import annotations
 
-from homeassistant.backports.enum import StrEnum
 from homeassistant.components.vacuum import (
     STATE_DOCKED,
     STATE_RETURNING,
@@ -84,9 +83,3 @@ STATE_MAP = {
     33: STATE_STARTING,
     34: STATE_PAUSED,
 }
-
-class LandroidButtonTypes(StrEnum):
-    """Defines different button types for Landroid Cloud integration."""
-
-    RESTART = "device_restart"
-    EDGECUT = "start_edgecut"

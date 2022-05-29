@@ -5,7 +5,11 @@ from functools import partial
 import logging
 from typing import Any
 
-from homeassistant.components.button import ButtonEntity, ButtonEntityDescription
+from homeassistant.components.button import (
+    ButtonDeviceClass,
+    ButtonEntity,
+    ButtonEntityDescription,
+)
 from homeassistant.components.vacuum import (
     ENTITY_ID_FORMAT,
     STATE_DOCKED,
@@ -15,7 +19,7 @@ from homeassistant.components.vacuum import (
     VacuumEntityFeature,
 )
 from homeassistant.const import CONF_TYPE
-from homeassistant.core import callback, ServiceCall
+from homeassistant.core import callback, HomeAssistant, ServiceCall
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 import homeassistant.helpers.device_registry as dr
 from homeassistant.helpers.entity import EntityCategory
@@ -23,17 +27,20 @@ from homeassistant.helpers.entity import EntityCategory
 from pyworxcloud import WorxCloud
 from pyworxcloud.states import ERROR_TO_DESCRIPTION
 
+from . import LandroidAPI
+
 from .attribute_map import ATTR_MAP
 
 from .const import (
     DOMAIN,
-    LandroidButtonTypes,
     STATE_INITIALIZING,
     STATE_MAP,
     STATE_OFFLINE,
     STATE_RAINDELAY,
     UPDATE_SIGNAL,
 )
+
+from .helpers import LandroidButtonTypes
 
 # Commonly supported features
 SUPPORT_LANDROID_BASE = (
@@ -46,79 +53,103 @@ SUPPORT_LANDROID_BASE = (
 )
 
 # Tuple containing buttons to create
-BUTTONS: tuple[ButtonEntityDescription, ...] = {
+BUTTONS = [
     ButtonEntityDescription(
         key=LandroidButtonTypes.RESTART,
         name="Restart",
         icon="mdi:restart",
         entity_category=EntityCategory.DIAGNOSTIC,
+        device_class=ButtonDeviceClass.RESTART,
     ),
     ButtonEntityDescription(
         key=LandroidButtonTypes.EDGECUT,
         name="Start cutting edge",
-        icon="mdi:",
+        icon="mdi:map-marker-path",
         entity_category=EntityCategory.CONFIG,
     ),
-}
+]
 
 _LOGGER = logging.getLogger(__name__)
 
 
-class LandroidCloudButtonBase(ButtonEntity):
+class LandroidEntity:
+    """Base definition of a Landroid Cloud entity"""
+
+    def __init__(self, hass, api):
+        """Init new base device."""
+        _LOGGER.debug("Initializing LandroidEntity for %s", api.name)
+        self.api = api
+        self.hass = hass
+        self.entity_id = ENTITY_ID_FORMAT.format(f"{api.name}")
+
+        self._attributes = {}
+        self._available = False
+        self._unique_id = f"{api.device.serial_number}_{api.name}"
+        self._serialnumber = None
+        self._icon = None
+        self._name = f"{api.friendly_name}"
+        self._mac = api.device.mac
+        self._connections = {(dr.CONNECTION_NETWORK_MAC, self._mac)}
+
+    @property
+    def device_info(self):
+        """Return device info"""
+        return {
+            "connections": self._connections,
+            "identifiers": {
+                (DOMAIN, self.api.unique_id, self.api.entry_id, self.api.friendly_name)
+            },
+            "name": str(self._name),
+            "sw_version": self.api.device.firmware_version,
+            "manufacturer": self.api.data.get(CONF_TYPE),
+            "model": self.api.device.board,
+        }
+
+
+class LandroidCloudButtonBase(LandroidEntity, ButtonEntity):
     """Define a base vacuum class."""
 
-    def __init__(self, description: ButtonEntityDescription, hass, api) -> None:
-        """Init Tuya button."""
+    def __init__(
+        self,
+        description: ButtonEntityDescription,
+        hass: HomeAssistant,
+        api: LandroidAPI,
+    ) -> None:
+        """Init Landroid Cloud button."""
         super().__init__(hass, api)
+        _LOGGER.debug("Initializing LandroidCloudButtonEntity for %s", api.name)
         self.api = api
         self.hass = hass
         self.entity_description = description
-        self._attr_unique_id = f"{super().unique_id}{description.key}"
+        self.entity_description.name = f"{api.friendly_name} {description.key.capitalize()}"
+
+        self._attr_unique_id = f"{api.name}_button_{description.key}"
         _LOGGER.debug("Button unique ID: %s", self._attr_unique_id)
 
-    def press(self, **kwargs: Any) -> None:
+    def press(self, **kwargs: Any) -> None:  # pylint: disable=unused-argument
         """Press the button."""
-        self._send_command([{"code": self.entity_description.key, "value": True}])
+        self.hass.services.async_call(
+            DOMAIN, self.api.services[self.entity_description.key]
+        )
 
 
-class LandroidCloudVacuumBase(StateVacuumEntity):
-    """Define a base vacuum class."""
+class LandroidCloudMowerBase(LandroidEntity, StateVacuumEntity):
+    """Define a base Landroid Cloud mower class."""
 
     _battery_level: int | None = None
     _attr_state = STATE_INITIALIZING
 
     def __init__(self, hass, api):
         """Init new base device."""
-
+        super().__init__(hass, api)
+        _LOGGER.debug("Initializing LandroidCloudMowerEntity for %s", api.name)
         self.api = api
         self.hass = hass
-
-        self.entity_id = ENTITY_ID_FORMAT.format(f"{api.name}")
-
-        self._attributes = {}
-        self._available = False
-        self._name = f"{api.friendly_name}"
-        self._unique_id = f"{api.device.serial_number}_{api.name}"
-        self._serialnumber = None
-        self._mac = None
-        self._connections = {}
-        self._icon = None
 
     @property
     def extra_state_attributes(self):
         """Return sensor attributes."""
         return self._attributes
-
-    @property
-    def device_info(self):
-        return {
-            "connections": self._connections,
-            "identifiers": {(DOMAIN, self.api.entry_id, self.api.friendly_name)},
-            "name": str(self.name),
-            "sw_version": self.api.device.firmware_version,
-            "manufacturer": self.api.data.get(CONF_TYPE),
-            "model": self.api.device.board,
-        }
 
     @property
     def device_class(self) -> str:
@@ -214,9 +245,7 @@ class LandroidCloudVacuumBase(StateVacuumEntity):
         # self._state = state
         self._attr_state = state
 
-        self._mac = master.mac
         self._serialnumber = master.serial
-        self._connections = {(dr.CONNECTION_NETWORK_MAC, self._mac)}
         self._battery_level = master.battery_percent
 
     async def async_start(self):

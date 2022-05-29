@@ -5,7 +5,8 @@ import logging
 
 from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
-from homeassistant.core import HomeAssistant
+from homeassistant.core import callback, HomeAssistant
+import homeassistant.helpers.entity_registry as er
 from homeassistant.helpers.dispatcher import dispatcher_send
 from homeassistant.loader import async_get_integration
 from homeassistant.util import slugify as util_slugify
@@ -41,6 +42,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up cloud API connector from a config entry."""
     _LOGGER.debug("Entry data: %s", entry.data)
     _LOGGER.debug("Entry options: %s", entry.options)
+    _LOGGER.debug("Entry unique ID: %s", entry.unique_id)
+    hass.data.setdefault(DOMAIN, {})
+
+    await check_unique_id(hass, entry)
     result = await _setup(hass, entry)
 
     # for platform in PLATFORMS:
@@ -86,6 +91,7 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     if cloud_type is None:
         cloud_type = "worx"
 
+    _LOGGER.debug("Opening connection to account for %s as %s", cloud_email, cloud_type)
     master = WorxCloud(cloud_email, cloud_password, cloud_type.lower())
     auth = await hass.async_add_executor_job(master.initialize)
 
@@ -122,6 +128,27 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     return True
 
 
+async def check_unique_id(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Check if a device unique ID is set."""
+    if not isinstance(entry.unique_id, type(None)):
+        return
+
+    new_unique_id = f"{entry.data.get(CONF_EMAIL)}_{entry.data.get(CONF_TYPE)}"
+
+    @callback
+    def update_unique_id(entity_entry: er.RegistryEntry) -> dict[str, str] | None:
+        """Update unique ID of entity entry."""
+        return {"new_unique_id": entity_entry.unique_id.replace("", new_unique_id)}
+
+    await er.async_migrate_entries(hass, entry.entry_id, update_unique_id)
+    data = {
+        CONF_EMAIL: entry.data[CONF_EMAIL],
+        CONF_PASSWORD: entry.data[CONF_PASSWORD],
+        CONF_TYPE: entry.data[CONF_TYPE],
+    }
+    hass.config_entries.async_update_entry(entry, data=data)
+
+
 class LandroidAPI:
     """Handle the API calls."""
 
@@ -136,6 +163,8 @@ class LandroidAPI:
         self.device = device
         self.index = index
         self.listeners = []
+        self.services = []
+        self.unique_id = entry.unique_id
 
         self.name = util_slugify(f"{self.device.name}")
         self.friendly_name = self.device.name

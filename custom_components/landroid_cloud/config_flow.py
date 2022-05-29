@@ -74,6 +74,8 @@ class LandroidCloudConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 self._errors["base"] = "unknown"
 
             if "base" not in self._errors:
+                await self.async_set_unique_id(f"{user_input[CONF_EMAIL]}_{user_input[CONF_TYPE]}")
+
                 return self.async_create_entry(
                     title=validated["title"],
                     data=user_input,
@@ -106,6 +108,6 @@ class LandroidCloudConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
             if "base" not in self._errors:
                 return self.async_create_entry(
-                    title=f"configuration.yaml - {import_config.get(CONF_EMAIL)}",
+                    title=f"Import - {import_config.get(CONF_EMAIL)}",
                     data=import_config,
                 )

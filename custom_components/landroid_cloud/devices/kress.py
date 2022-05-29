@@ -4,10 +4,12 @@ from __future__ import annotations
 
 import logging
 
+from homeassistant.components.button import ButtonEntity
 from homeassistant.components.vacuum import StateVacuumEntity
 
 from ..device_base import (
-    LandroidCloudVacuumBase,
+    LandroidCloudButtonBase,
+    LandroidCloudMowerBase,
     SUPPORT_LANDROID_BASE,
 )
 
@@ -17,8 +19,11 @@ _LOGGER = logging.getLogger(__name__)
 
 SUPPORT_KRESS = SUPPORT_LANDROID_BASE
 
+class KressButton(LandroidCloudButtonBase, ButtonEntity):
+    """Definition of Kress button."""
 
-class KressDevice(LandroidCloudVacuumBase, StateVacuumEntity):
+
+class KressMowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
     """Definition of Kress device."""
 
     @property

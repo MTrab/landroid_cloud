@@ -20,14 +20,14 @@ from .const import (
     SERVICE_RESTART,
     SERVICE_SETZONE,
 )
-from .device_base import LandroidCloudVacuumBase
+from .device_base import LandroidCloudMowerBase
 from .devices.worx import (
-    WorxDevice,
+    WorxMowerDevice,
     CONFIG_SCHEME as WORX_CONFIG,
     OTS_SCHEME as WORX_OTS,
 )
-from .devices.kress import KressDevice
-from .devices.landxcape import LandxcapeDevice
+from .devices.kress import KressMowerDevice
+from .devices.landxcape import LandxcapeMowerDevice
 
 
 async def async_setup_entry(
@@ -38,10 +38,10 @@ async def async_setup_entry(
     """Set up the iRobot Roomba vacuum cleaner."""
     api = hass.data[DOMAIN][config.entry_id]["api"]
 
-    constructor: type[LandroidCloudVacuumBase]
+    constructor: type[LandroidCloudMowerBase]
     vendor = api.data.get(CONF_TYPE).lower()
     if vendor == "worx":
-        constructor = WorxDevice
+        constructor = WorxMowerDevice
         # Register custom services
         platform = entity_platform.async_get_current_platform()
 
@@ -50,40 +50,47 @@ async def async_setup_entry(
             {},
             constructor.async_edgecut,
         )
+        api.services.append(SERVICE_EDGECUT)
         platform.async_register_entity_service(
             SERVICE_LOCK,
             {},
             constructor.async_toggle_lock,
         )
+        api.services.append(SERVICE_LOCK)
         platform.async_register_entity_service(
             SERVICE_PARTYMODE,
             {},
             constructor.async_toggle_partymode,
         )
+        api.services.append(SERVICE_PARTYMODE)
         platform.async_register_entity_service(
             SERVICE_SETZONE,
             {vol.Required(ATTR_ZONE): vol.All(vol.Coerce(int), vol.Range(0, 3))},
             constructor.async_setzone,
         )
+        api.services.append(SERVICE_SETZONE)
         platform.async_register_entity_service(
             SERVICE_RESTART,
             {},
             constructor.async_restart,
         )
+        api.services.append(SERVICE_RESTART)
         platform.async_register_entity_service(
             SERVICE_CONFIG,
             WORX_CONFIG,
             constructor.async_config,
         )
+        api.services.append(SERVICE_CONFIG)
         platform.async_register_entity_service(
             SERVICE_OTS,
             WORX_OTS,
             constructor.async_ots,
         )
+        api.services.append(SERVICE_OTS)
     elif vendor == "kress":
-        constructor = KressDevice
+        constructor = KressMowerDevice
     else:
-        constructor = LandxcapeDevice
+        constructor = LandxcapeMowerDevice
 
     landroid_mower = constructor(hass, api)
 
