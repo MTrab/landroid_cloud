@@ -41,6 +41,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up cloud API connector from a config entry."""
     _LOGGER.debug("Entry data: %s", entry.data)
     _LOGGER.debug("Entry options: %s", entry.options)
+    _LOGGER.debug("Entry unique ID: %s", entry.unique_id)
+    hass.data.setdefault(DOMAIN, {})
+
+    await check_unique_id(hass, entry)
     result = await _setup(hass, entry)
 
     hass.async_create_task(
