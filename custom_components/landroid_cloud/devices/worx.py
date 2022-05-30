@@ -10,6 +10,7 @@ import voluptuous as vol
 
 from homeassistant.components.vacuum import StateVacuumEntity
 from homeassistant.core import ServiceCall
+from homeassistant.exceptions import HomeAssistantError
 
 from pyworxcloud import (
     NoOneTimeScheduleError,
@@ -30,7 +31,6 @@ from ..device_base import (
     LandroidCloudBase,
     SUPPORT_LANDROID_BASE,
 )
-
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -86,9 +86,7 @@ class WorxDevice(LandroidCloudBase, StateVacuumEntity):
         device: WorxCloud = self.api.device
         _LOGGER.debug("Starting edgecut routine for %s", self._name)
         try:
-            await self.hass.async_add_executor_job(
-                partial(device.ots, True, 0)
-            )
+            await self.hass.async_add_executor_job(partial(device.ots, True, 0))
         except NoOneTimeScheduleError as ex:
             _LOGGER.error("(%s) %s", self._name, ex.args[0])
 
@@ -137,17 +135,45 @@ class WorxDevice(LandroidCloudBase, StateVacuumEntity):
                 self._name,
                 data["multizone_distances"],
             )
-            tmpdata["mz"] = [int(x) for x in data["multizone_distances"]]
+            sections = [
+                int(x)
+                for x in data["multizone_distances"]
+                .replace("[", "")
+                .replace("]", "")
+                .split(",")
+            ]
+            if len(sections) != 4:
+                raise HomeAssistantError(
+                    "Incorrect format for multizone distances array"
+                )
+
+            tmpdata["mz"] = sections
 
         if "multizone_probabilities" in data:
             _LOGGER.debug(
                 "Setting multizone probabilities on %s to %s",
                 self._name,
-                data["multizone_probability"],
+                data["multizone_probabilities"],
             )
             tmpdata["mzv"] = []
-            for idx, val in enumerate(data["multizone_probabilities"]):
-                for _ in range(val):
+            sections = [
+                int(x)
+                for x in data["multizone_probabilities"]
+                .replace("[", "")
+                .replace("]", "")
+                .split(",")
+            ]
+            if len(sections) != 4:
+                raise HomeAssistantError(
+                    "Incorrect format for multizone probabilities array"
+                )
+            if sum(sections) != 100:
+                raise HomeAssistantError("Sum of zone probabilities array MUST be 100")
+
+            for idx, val in enumerate(sections):
+                share = int(int(val) / 10)
+                _LOGGER.debug("%s: %s (%s)", idx, val, share)
+                for _ in range(share):
                     tmpdata["mzv"].append(idx)
 
         if tmpdata:
