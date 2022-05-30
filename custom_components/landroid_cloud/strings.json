@@ -13,7 +13,7 @@
                 "data": {
                     "email": "Email",
                     "password": "Password",
-                    "type": "Vendor"
+                    "type": "Make"
                 },
                 "title": "Connect to your Landroid Cloud account"
             }

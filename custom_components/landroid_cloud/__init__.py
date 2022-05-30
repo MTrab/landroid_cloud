@@ -5,7 +5,7 @@ import logging
 
 from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
-from homeassistant.core import HomeAssistant
+from homeassistant.core import callback, HomeAssistant
 from homeassistant.helpers.dispatcher import dispatcher_send
 from homeassistant.loader import async_get_integration
 from homeassistant.util import slugify as util_slugify
@@ -41,6 +41,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up cloud API connector from a config entry."""
     _LOGGER.debug("Entry data: %s", entry.data)
     _LOGGER.debug("Entry options: %s", entry.options)
+    _LOGGER.debug("Entry unique ID: %s", entry.unique_id)
+    hass.data.setdefault(DOMAIN, {})
+
+    # await check_unique_id(hass, entry)
     result = await _setup(hass, entry)
 
     hass.async_create_task(
@@ -116,6 +120,26 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.data[DOMAIN][entry.entry_id]["api"] = api
 
     return True
+
+
+async def check_unique_id(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Check if a device unique ID is set."""
+    if not isinstance(entry.unique_id, type(None)):
+        return
+
+    new_unique_id = f"{entry.data.get(CONF_EMAIL)}_{entry.data.get(CONF_TYPE)}"
+
+    _LOGGER.debug("New unique id: %s", new_unique_id)
+
+    data = {
+        CONF_EMAIL: entry.data[CONF_EMAIL],
+        CONF_PASSWORD: entry.data[CONF_PASSWORD],
+        CONF_TYPE: entry.data[CONF_TYPE],
+    }
+    result = hass.config_entries.async_update_entry(
+        entry, data=data, unique_id=new_unique_id
+    )
+    _LOGGER.debug("Update successful? %s", result)
 
 
 class LandroidAPI:
