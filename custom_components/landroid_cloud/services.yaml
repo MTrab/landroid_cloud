@@ -95,13 +95,13 @@ config:
           unit_of_measurement: "%"
           mode: slider
     multizone_distances:
-      description: 'Set multizone distance array in meters. 0 = Disabled. Format: [15, 80, 120, 155]'
-      example: '[15, 80, 120, 155]'
+      description: 'Set multizone distance array in meters. 0 = Disabled. Format: 15, 80, 120, 155'
+      example: '15, 80, 120, 155'
       selector:
         text:
     multizone_probabilities:
-      description: 'Set multizone probabilities array. Probabilities in parts-of-ten. 1 = 10%, 2 = 20%, ... Format: [5, 1, 2, 2]'
-      example: '[5, 1, 2, 2]'
+      description: 'Set multizone probabilities array. Format: 50, 10, 20, 20'
+      example: '50, 10, 20, 20'
       selector:
         text:
 
