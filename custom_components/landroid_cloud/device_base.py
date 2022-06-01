@@ -27,6 +27,7 @@ from .const import (
     DOMAIN,
     STATE_INITIALIZING,
     STATE_MAP,
+    STATE_MOWING,
     STATE_OFFLINE,
     STATE_RAINDELAY,
     UPDATE_SIGNAL,
@@ -190,10 +191,18 @@ class LandroidCloudBase(StateVacuumEntity):
         await self.hass.async_add_executor_job(device.start)
 
     async def async_pause(self):
-        """Pause the cleaning cycle."""
+        """Pause the mowing cycle."""
         device: WorxCloud = self.api.device
         _LOGGER.debug("Pausing %s", self._name)
         await self.hass.async_add_executor_job(device.pause)
+
+    async def async_start_pause(self):
+        """Toggle the state of the mower."""
+        _LOGGER.debug("Toggeling state of %s", self._name)
+        if STATE_MOWING in self.state:
+            await self.async_pause()
+        else:
+            await self.async_start()
 
     async def async_return_to_base(self, **kwargs: Any):
         """Set the vacuum cleaner to return to the dock."""
@@ -201,6 +210,10 @@ class LandroidCloudBase(StateVacuumEntity):
             device: WorxCloud = self.api.device
             _LOGGER.debug("Sending %s back to dock", self._name)
             await self.hass.async_add_executor_job(device.home)
+
+    async def async_stop(self, **kwargs: Any):
+        """Alias for return to base function."""
+        await self.async_return_to_base()
 
     async def async_setzone(self, service_call: ServiceCall):
         """Set next zone to cut."""

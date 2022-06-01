@@ -1,24 +1,3 @@
-start:
-  description: Start mowing
-  target:
-    entity:
-      integration: landroid_cloud
-      domain: vacuum
-
-pause:
-  description: Pause mowing
-  target:
-    entity:
-      integration: landroid_cloud
-      domain: vacuum
-
-home:
-  description: Send device to dock
-  target:
-    entity:
-      integration: landroid_cloud
-      domain: vacuum
-
 lock:
   description: Toggle device lock
   target:
