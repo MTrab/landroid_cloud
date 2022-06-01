@@ -211,6 +211,10 @@ class LandroidCloudBase(StateVacuumEntity):
             _LOGGER.debug("Sending %s back to dock", self._name)
             await self.hass.async_add_executor_job(device.home)
 
+    async def async_stop(self, **kwargs: Any):
+        """Alias for return to base function."""
+        await self.async_return_to_base()
+
     async def async_setzone(self, service_call: ServiceCall):
         """Set next zone to cut."""
         device: WorxCloud = self.api.device
