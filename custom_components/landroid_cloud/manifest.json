@@ -13,6 +13,9 @@
   "codeowners": [
     "@MTrab"
   ],
+  "loggers": [
+    "pyworxcloud"
+  ],
   "config_flow": true,
   "version": "2.0.2"
 }
