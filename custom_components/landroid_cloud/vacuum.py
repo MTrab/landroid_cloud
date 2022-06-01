@@ -18,6 +18,7 @@ from .const import (
     SERVICE_OTS,
     SERVICE_PARTYMODE,
     SERVICE_RESTART,
+    SERVICE_SCHEDULE,
     SERVICE_SETZONE,
 )
 from .device_base import LandroidCloudMowerBase
@@ -28,6 +29,7 @@ from .devices.worx import (
 )
 from .devices.kress import KressMowerDevice
 from .devices.landxcape import LandxcapeMowerDevice
+from .scheme import SCHEDULE_SCHEME as SCHEME_SCHEDULE
 
 
 async def async_setup_entry(
@@ -38,13 +40,13 @@ async def async_setup_entry(
     """Set up the iRobot Roomba vacuum cleaner."""
     api = hass.data[DOMAIN][config.entry_id]["api"]
 
+    platform = entity_platform.async_get_current_platform()
     constructor: type[LandroidCloudMowerBase]
     vendor = api.data.get(CONF_TYPE).lower()
+
     if vendor == "worx":
         constructor = WorxMowerDevice
         # Register custom services
-        platform = entity_platform.async_get_current_platform()
-
         platform.async_register_entity_service(
             SERVICE_EDGECUT,
             {},
@@ -91,6 +93,12 @@ async def async_setup_entry(
         constructor = KressMowerDevice
     else:
         constructor = LandxcapeMowerDevice
+
+    platform.async_register_entity_service(
+        SERVICE_SCHEDULE,
+        SCHEME_SCHEDULE,
+        constructor.async_set_schedule,
+    )
 
     landroid_mower = constructor(hass, api)
 

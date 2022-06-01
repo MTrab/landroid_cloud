@@ -4,7 +4,31 @@ from __future__ import annotations
 import voluptuous as vol
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
 
-from .const import CLOUDS
+from .const import (
+    ATTR_FRIDAY_BOUNDARY,
+    ATTR_FRIDAY_END,
+    ATTR_FRIDAY_START,
+    ATTR_MONDAY_BOUNDARY,
+    ATTR_MONDAY_END,
+    ATTR_MONDAY_START,
+    ATTR_SATURDAY_BOUNDARY,
+    ATTR_SATURDAY_END,
+    ATTR_SATURDAY_START,
+    ATTR_SUNDAY_BOUNDARY,
+    ATTR_SUNDAY_END,
+    ATTR_SUNDAY_START,
+    ATTR_THURSDAY_BOUNDARY,
+    ATTR_THURSDAY_END,
+    ATTR_THURSDAY_START,
+    ATTR_TUESDAY_BOUNDARY,
+    ATTR_TUESDAY_END,
+    ATTR_TUESDAY_START,
+    ATTR_TYPE,
+    ATTR_WEDNESDAY_BOUNDARY,
+    ATTR_WEDNESDAY_END,
+    ATTR_WEDNESDAY_START,
+    CLOUDS,
+)
 
 DATA_SCHEMA = vol.Schema(
     {
@@ -13,3 +37,28 @@ DATA_SCHEMA = vol.Schema(
         vol.Optional(CONF_TYPE, default=CLOUDS[0]): vol.In(CLOUDS),
     }
 )
+
+SCHEDULE_SCHEME = {
+    vol.Required(ATTR_TYPE, default="primary"): vol.In(["primary", "secondary"]),
+    vol.Optional(ATTR_MONDAY_START): str,
+    vol.Optional(ATTR_MONDAY_END): str,
+    vol.Optional(ATTR_MONDAY_BOUNDARY): bool,
+    vol.Optional(ATTR_TUESDAY_START): str,
+    vol.Optional(ATTR_TUESDAY_END): str,
+    vol.Optional(ATTR_TUESDAY_BOUNDARY): bool,
+    vol.Optional(ATTR_WEDNESDAY_START): str,
+    vol.Optional(ATTR_WEDNESDAY_END): str,
+    vol.Optional(ATTR_WEDNESDAY_BOUNDARY): bool,
+    vol.Optional(ATTR_THURSDAY_START): str,
+    vol.Optional(ATTR_THURSDAY_END): str,
+    vol.Optional(ATTR_THURSDAY_BOUNDARY): bool,
+    vol.Optional(ATTR_FRIDAY_START): str,
+    vol.Optional(ATTR_FRIDAY_END): str,
+    vol.Optional(ATTR_FRIDAY_BOUNDARY): bool,
+    vol.Optional(ATTR_SATURDAY_START): str,
+    vol.Optional(ATTR_SATURDAY_END): str,
+    vol.Optional(ATTR_SATURDAY_BOUNDARY): bool,
+    vol.Optional(ATTR_SUNDAY_START): str,
+    vol.Optional(ATTR_SUNDAY_END): str,
+    vol.Optional(ATTR_SUNDAY_BOUNDARY): bool,
+}

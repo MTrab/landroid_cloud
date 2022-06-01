@@ -1,24 +1,3 @@
-start:
-  description: Start mowing
-  target:
-    entity:
-      integration: landroid_cloud
-      domain: vacuum
-
-pause:
-  description: Pause mowing
-  target:
-    entity:
-      integration: landroid_cloud
-      domain: vacuum
-
-home:
-  description: Send device to dock
-  target:
-    entity:
-      integration: landroid_cloud
-      domain: vacuum
-
 lock:
   description: Toggle device lock
   target:
@@ -55,6 +34,7 @@ setzone:
       domain: vacuum
   fields:
     zone:
+      name: Zone
       description: Sets the zone number, ranging from 0 to 3, to be mowed next
       example: 1
       required: true
@@ -75,6 +55,7 @@ config:
       domain: vacuum
   fields:
     raindelay:
+      name: Rain delay
       description: Set rain delay. Time in minutes ranging from 0 to 300. 0 = Disabled
       example: 30
       selector:
@@ -85,6 +66,7 @@ config:
           unit_of_measurement: "minutes"
           mode: slider
     timeextension:
+      name: Time extension
       description: Set time extension. Extension in % ranging from -100 to 100
       example: -23
       selector:
@@ -95,11 +77,13 @@ config:
           unit_of_measurement: "%"
           mode: slider
     multizone_distances:
+      name: Multi zone distances
       description: 'Set multizone distance array in meters. 0 = Disabled. Format: 15, 80, 120, 155'
       example: '15, 80, 120, 155'
       selector:
         text:
     multizone_probabilities:
+      name: Multi zone probabilities
       description: 'Set multizone probabilities array. Format: 50, 10, 20, 20'
       example: '50, 10, 20, 20'
       selector:
@@ -113,14 +97,16 @@ ots:
       domain: vacuum
   fields:
     boundary:
-      description: Do boundary cut
+      name: Boundary
+      description: Do boundary (Edge cut)
       example: true
       required: true
       default: false
       selector:
         boolean:
     runtime:
-      description: Runtime in minutes
+      name: Run time
+      description: Run time in minutes
       example: 60
       required: true
       default: 30
@@ -131,3 +117,148 @@ ots:
           step: 1
           unit_of_measurement: "minutes"
           mode: slider
+
+schedule:
+  description: Set or change the schedule of the mower
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: vacuum
+  fields:
+    type:
+      name: Schedule type
+      description: Change primary or secondary schedule?
+      example: primary
+      required: true
+      default: "primary"
+      selector:
+        select:
+          options:
+            - "primary"
+            - "secondary"
+    monday_start:
+      name: Monday, Start
+      description: Starting time for monday
+      example: "11:00"
+      selector:
+        time:
+    monday_end:
+      name: Monday, End
+      description: When should the schedule stop on mondays?
+      example: "16:00"
+      selector:
+        time:
+    monday_boundary:
+      name: Monday, Boundary
+      description: Should we start this schedule by cutting the boundary (edge cut)?
+      example: false
+      selector:
+        boolean:
+    tuesday_start:
+      name: Tuesday, Start
+      description: When should the device start the task?
+      example: "11:00"
+      selector:
+        time:
+    tuesday_end:
+      name: Tuesday, End
+      description: When should the task stop?
+      example: "16:00"
+      selector:
+        time:
+    tuesday_boundary:
+      name: Tuesday, Boundary
+      description: Should we start this task by cutting the boundary (edge cut)?
+      example: false
+      selector:
+        boolean:
+    wednesday_start:
+      name: Wednesday, Start
+      description: Starting time for monday
+      example: "11:00"
+      selector:
+        time:
+    wednesday_end:
+      name: Wednesday, End
+      description: When should the schedule stop on mondays?
+      example: "16:00"
+      selector:
+        time:
+    wednesday_boundary:
+      name: Wednesday, Boundary
+      description: Should we start this schedule by cutting the boundary (edge cut)?
+      example: false
+      selector:
+        boolean:
+    thursday_start:
+      name: Thursday, Start
+      description: When should the device start the task?
+      example: "11:00"
+      selector:
+        time:
+    thursday_end:
+      name: Thursday, End
+      description: When should the task stop?
+      example: "16:00"
+      selector:
+        time:
+    thursday_boundary:
+      name: Thursday, Boundary
+      description: Should we start this task by cutting the boundary (edge cut)?
+      example: false
+      selector:
+        boolean:
+    friday_start:
+      name: Friday, Start
+      description: When should the device start the task?
+      example: "11:00"
+      selector:
+        time:
+    friday_end:
+      name: Friday, End
+      description: When should the task stop?
+      example: "16:00"
+      selector:
+        time:
+    friday_boundary:
+      name: Friday, Boundary
+      description: Should we start this task by cutting the boundary (edge cut)?
+      example: false
+      selector:
+        boolean:
+    saturday_start:
+      name: Saturday, Start
+      description: Starting time for monday
+      example: "11:00"
+      selector:
+        time:
+    saturday_end:
+      name: Saturday, End
+      description: When should the schedule stop on mondays?
+      example: "16:00"
+      selector:
+        time:
+    saturday_boundary:
+      name: Saturday, Boundary
+      description: Should we start this schedule by cutting the boundary (edge cut)?
+      example: false
+      selector:
+        boolean:
+    sunday_start:
+      name: Sunday, Start
+      description: When should the device start the task?
+      example: "11:00"
+      selector:
+        time:
+    sunday_end:
+      name: Sunday, End
+      description: When should the task stop?
+      example: "16:00"
+      selector:
+        time:
+    sunday_boundary:
+      name: Sunday, Boundary
+      description: Should we start this task by cutting the boundary (edge cut)?
+      example: false
+      selector:
+        boolean:

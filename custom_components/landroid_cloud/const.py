@@ -1,5 +1,7 @@
 """Constants used by Landroid Cloud integration."""
 from __future__ import annotations
+from dataclasses import dataclass
+from enum import IntEnum
 
 from homeassistant.components.vacuum import (
     STATE_DOCKED,
@@ -37,6 +39,7 @@ SERVICE_LOCK = "lock"
 SERVICE_RESTART = "restart"
 SERVICE_EDGECUT = "edgecut"
 SERVICE_OTS = "ots"
+SERVICE_SCHEDULE = "schedule"
 
 # Extra states
 STATE_INITIALIZING = "initializing"
@@ -47,7 +50,7 @@ STATE_STARTING = "starting"
 STATE_ZONING = "zoning"
 STATE_EDGECUT = "edgecut"
 
-# Attributes
+# Service attributes
 ATTR_MULTIZONE_DISTANCES = "multizone_distances"
 ATTR_MULTIZONE_PROBABILITIES = "multizone_probabilities"
 ATTR_RAINDELAY = "raindelay"
@@ -55,6 +58,30 @@ ATTR_TIMEEXTENSION = "timeextension"
 ATTR_ZONE = "zone"
 ATTR_BOUNDARY = "boundary"
 ATTR_RUNTIME = "runtime"
+
+# Attributes used for managing schedules
+ATTR_TYPE = "type"
+ATTR_MONDAY_START = "monday_start"
+ATTR_MONDAY_END = "monday_end"
+ATTR_MONDAY_BOUNDARY = "monday_boundary"
+ATTR_TUESDAY_START = "tuesday_start"
+ATTR_TUESDAY_END = "tuesday_end"
+ATTR_TUESDAY_BOUNDARY = "tuesday_boundary"
+ATTR_WEDNESDAY_START = "wednesday_start"
+ATTR_WEDNESDAY_END = "wednesday_end"
+ATTR_WEDNESDAY_BOUNDARY = "wednesday_boundary"
+ATTR_THURSDAY_START = "thursday_start"
+ATTR_THURSDAY_END = "thursday_end"
+ATTR_THURSDAY_BOUNDARY = "thursday_boundary"
+ATTR_FRIDAY_START = "friday_start"
+ATTR_FRIDAY_END = "friday_end"
+ATTR_FRIDAY_BOUNDARY = "friday_boundary"
+ATTR_SATURDAY_START = "saturday_start"
+ATTR_SATURDAY_END = "saturday_end"
+ATTR_SATURDAY_BOUNDARY = "saturday_boundary"
+ATTR_SUNDAY_START = "sunday_start"
+ATTR_SUNDAY_END = "sunday_end"
+ATTR_SUNDAY_BOUNDARY = "sunday_boundary"
 
 # Available cloud vendors
 CLOUDS = []
@@ -81,4 +108,75 @@ STATE_MAP = {
     32: STATE_EDGECUT,
     33: STATE_STARTING,
     34: STATE_PAUSED,
+}
+
+
+@dataclass
+class ScheduleDays(IntEnum):
+    """Schedule types."""
+
+    SUNDAY = 0
+    MONDAY = 1
+    TUESDAY = 2
+    WEDNESDAY = 3
+    THURSDAY = 4
+    FRIDAY = 5
+    SATURDAY = 6
+
+
+SCHEDULE_TYPE_MAP = {
+    "primary": "d",
+    "secondary": "dd",
+}
+
+SCHEDULE_TO_DAY = {
+    "sunday": {
+        "day": ScheduleDays.SUNDAY,
+        "start": ATTR_SUNDAY_START,
+        "end": ATTR_SUNDAY_END,
+        "boundary": ATTR_SUNDAY_BOUNDARY,
+        "clear": "sunday",
+    },
+    "monday": {
+        "day": ScheduleDays.MONDAY,
+        "start": ATTR_MONDAY_START,
+        "end": ATTR_MONDAY_END,
+        "boundary": ATTR_MONDAY_BOUNDARY,
+        "clear": "monday",
+    },
+    "tuesday": {
+        "day": ScheduleDays.TUESDAY,
+        "start": ATTR_TUESDAY_START,
+        "end": ATTR_TUESDAY_END,
+        "boundary": ATTR_TUESDAY_BOUNDARY,
+        "clear": "tuesday",
+    },
+    "wednesday": {
+        "day": ScheduleDays.WEDNESDAY,
+        "start": ATTR_WEDNESDAY_START,
+        "end": ATTR_WEDNESDAY_END,
+        "boundary": ATTR_WEDNESDAY_BOUNDARY,
+        "clear": "wednesday",
+    },
+    "thursday": {
+        "day": ScheduleDays.THURSDAY,
+        "start": ATTR_THURSDAY_START,
+        "end": ATTR_THURSDAY_END,
+        "boundary": ATTR_THURSDAY_BOUNDARY,
+        "clear": "thursday",
+    },
+    "friday": {
+        "day": ScheduleDays.FRIDAY,
+        "start": ATTR_FRIDAY_START,
+        "end": ATTR_FRIDAY_END,
+        "boundary": ATTR_FRIDAY_BOUNDARY,
+        "clear": "friday",
+    },
+    "saturday": {
+        "day": ScheduleDays.SATURDAY,
+        "start": ATTR_SATURDAY_START,
+        "end": ATTR_SATURDAY_END,
+        "boundary": ATTR_SATURDAY_BOUNDARY,
+        "clear": "saturday",
+    },
 }
