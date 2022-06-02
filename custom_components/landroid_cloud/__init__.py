@@ -13,7 +13,7 @@ from homeassistant.util import slugify as util_slugify
 from pyworxcloud import WorxCloud
 
 from .const import DOMAIN, PLATFORMS, STARTUP, UPDATE_SIGNAL
-from .scheme import CONFIG_SCHEMA # Used for validating YAML config - DO NOT DELETE!
+from .scheme import CONFIG_SCHEMA  # Used for validating YAML config - DO NOT DELETE!
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -49,11 +49,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     await check_unique_id(hass, entry)
     result = await _setup(hass, entry)
 
-    # for platform in PLATFORMS:
-    #     hass.async_create_task(
-    #         hass.config_entries.async_forward_entry_setup(entry, platform)
-    #     )
-
     hass.config_entries.async_setup_platforms(entry, PLATFORMS)
 
     return result
@@ -65,9 +60,10 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
 
     if unload_ok:
-        for unsub in hass.data[DOMAIN][entry.entry_id]["api"].listeners:
-            unsub()
-        hass.data[DOMAIN].pop(entry.entry_id)
+        for idx in range(hass.data[DOMAIN][entry.entry_id]["count"]):
+            for unsub in hass.data[DOMAIN][entry.entry_id][idx]["api"].listeners:
+                unsub()
+            hass.data[DOMAIN].pop(entry.entry_id)
 
         return True
 
@@ -106,25 +102,29 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         _LOGGER.warning(err)
         return False
 
-    hass.data[DOMAIN][entry.entry_id] = {}
-    hass.data[DOMAIN][entry.entry_id]["clients"] = []
+    hass.data[DOMAIN][entry.entry_id] = {
+        "count": num_dev,
+        CONF_EMAIL: cloud_email,
+        CONF_PASSWORD: cloud_password,
+        CONF_TYPE: cloud_type,
+    }
 
     for device in range(num_dev):
-        hass.data[DOMAIN][entry.entry_id]["clients"].append(device)
+        hass.data[DOMAIN][entry.entry_id][device] = {}
         _LOGGER.debug("Setting up device %s (%s)", device, cloud_email)
-        hass.data[DOMAIN][entry.entry_id]["clients"][device] = WorxCloud(
+        hass.data[DOMAIN][entry.entry_id][device]["device"] = WorxCloud(
             cloud_email, cloud_password, cloud_type.lower()
         )
         await hass.async_add_executor_job(
-            hass.data[DOMAIN][entry.entry_id]["clients"][device].initialize
+            hass.data[DOMAIN][entry.entry_id][device]["device"].initialize
         )
         await hass.async_add_executor_job(
-            hass.data[DOMAIN][entry.entry_id]["clients"][device].connect, device, False
+            hass.data[DOMAIN][entry.entry_id][device]["device"].connect, device, False
         )
         api = LandroidAPI(
-            hass, device, hass.data[DOMAIN][entry.entry_id]["clients"][device], entry
+            hass, device, hass.data[DOMAIN][entry.entry_id][device]["device"], entry
         )
-        hass.data[DOMAIN][entry.entry_id]["api"] = api
+        hass.data[DOMAIN][entry.entry_id][device]["api"] = api
 
     return True
 
@@ -136,17 +136,12 @@ async def check_unique_id(hass: HomeAssistant, entry: ConfigEntry) -> None:
 
     new_unique_id = f"{entry.data.get(CONF_EMAIL)}_{entry.data.get(CONF_TYPE)}"
 
-    _LOGGER.debug("New unique id: %s", new_unique_id)
-
     data = {
         CONF_EMAIL: entry.data[CONF_EMAIL],
         CONF_PASSWORD: entry.data[CONF_PASSWORD],
         CONF_TYPE: entry.data[CONF_TYPE],
     }
-    result = hass.config_entries.async_update_entry(
-        entry, data=data, unique_id=new_unique_id
-    )
-    _LOGGER.debug("Update successful? %s", result)
+    hass.config_entries.async_update_entry(entry, data=data, unique_id=new_unique_id)
 
 
 class LandroidAPI:
@@ -175,11 +170,6 @@ class LandroidAPI:
 
     def receive_data(self):
         """Used as callback from API when data is received."""
-        _LOGGER.debug(
-            "Update signal received from API on %s for device %s",
-            self.data.get(CONF_EMAIL),
-            self.device.name,
-        )
         dispatcher_send(self._hass, f"{UPDATE_SIGNAL}_{self.device.name}")
 
     async def async_refresh(self):

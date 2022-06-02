@@ -65,7 +65,6 @@ def pass_thru(schedule, sunday_first: bool = True) -> list:
         )
 
     for day in schedule.items():
-        _LOGGER.debug(day)
         if sunday_first and day[0] != "sunday":
             result.append(
                 [day[1]["start"], int(day[1]["duration"]), int(day[1]["boundary"])]
