@@ -4,7 +4,6 @@ from __future__ import annotations
 import logging
 
 from homeassistant import config_entries, core, exceptions
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
 
 from pyworxcloud import WorxCloud
