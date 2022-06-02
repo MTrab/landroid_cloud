@@ -44,7 +44,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     _LOGGER.debug("Entry unique ID: %s", entry.unique_id)
     hass.data.setdefault(DOMAIN, {})
 
-    # await check_unique_id(hass, entry)
+    await check_unique_id(hass, entry)
     result = await _setup(hass, entry)
 
     hass.async_create_task(
