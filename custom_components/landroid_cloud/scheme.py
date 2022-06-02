@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import voluptuous as vol
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
+from homeassistant.helpers import config_validation as cv
+
 
 from .const import (
     ATTR_FRIDAY_BOUNDARY,
@@ -28,6 +30,7 @@ from .const import (
     ATTR_WEDNESDAY_END,
     ATTR_WEDNESDAY_START,
     CLOUDS,
+    DOMAIN,
 )
 
 DATA_SCHEMA = vol.Schema(
@@ -36,6 +39,16 @@ DATA_SCHEMA = vol.Schema(
         vol.Required(CONF_PASSWORD): str,
         vol.Optional(CONF_TYPE, default=CLOUDS[0]): vol.In(CLOUDS),
     }
+)
+
+CONFIG_SCHEMA = vol.Schema(
+    {
+        DOMAIN: vol.All(
+            cv.ensure_list,
+            [DATA_SCHEMA],
+        )
+    },
+    extra=vol.ALLOW_EXTRA,
 )
 
 SCHEDULE_SCHEME = {

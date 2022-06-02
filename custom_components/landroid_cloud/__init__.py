@@ -5,7 +5,7 @@ import logging
 
 from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
-from homeassistant.core import callback, HomeAssistant
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers.dispatcher import dispatcher_send
 from homeassistant.loader import async_get_integration
 from homeassistant.util import slugify as util_slugify
@@ -13,6 +13,7 @@ from homeassistant.util import slugify as util_slugify
 from pyworxcloud import WorxCloud
 
 from .const import DOMAIN, PLATFORMS, STARTUP, UPDATE_SIGNAL
+from .scheme import CONFIG_SCHEMA
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -26,6 +27,7 @@ async def async_setup(hass: HomeAssistant, config: dict):
         return True
 
     for conf in config[DOMAIN]:
+        _LOGGER.debug("Importing %s from configuration.yaml", conf["email"])
         hass.async_create_task(
             hass.config_entries.flow.async_init(
                 DOMAIN,

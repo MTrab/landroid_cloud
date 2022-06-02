@@ -202,10 +202,15 @@ class LandroidCloudMowerBase(LandroidCloudBase, StateVacuumEntity):
         """Return sensor state."""
         return self._attr_state
 
+    def zone_mapping(self):
+        """Map zones correct."""
+        return False
+
     @callback
     def update_callback(self):
         """Get new data and update state."""
         _LOGGER.debug("Updating state in Home Assistant")
+        self.zone_mapping()
         self.schedule_update_ha_state(True)
         # self.async_schedule_update_ha_state(True)
 
