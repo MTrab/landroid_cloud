@@ -4,6 +4,7 @@ from __future__ import annotations
 import logging
 
 from homeassistant import config_entries, core, exceptions
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
 
 from pyworxcloud import WorxCloud
@@ -48,7 +49,12 @@ class LandroidCloudConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         """Check whether an existing entry is using the same URLs."""
         return any(
             entry.data.get(CONF_EMAIL) == data.get(CONF_EMAIL)
-            and entry.data.get(CONF_TYPE).lower() == data.get(CONF_TYPE).lower()
+            and entry.data.get(CONF_TYPE).lower()
+            == (
+                data.get(CONF_TYPE).lower()
+                if not isinstance(data.get(CONF_TYPE), type(None))
+                else "worx"
+            )
             for entry in self._async_current_entries()
         )
 
