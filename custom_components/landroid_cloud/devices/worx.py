@@ -62,6 +62,15 @@ class WorxDevice(LandroidCloudBase, StateVacuumEntity):
         """Flag which mower robot features that are supported."""
         return SUPPORT_WORX
 
+    def zone_mapping(self) -> None:
+        """Map current zone correct."""
+        device: WorxCloud = self.api.device
+        current_zone = device.mowing_zone
+        virtual_zones = device.zone_probability
+        _LOGGER.debug("Zone reported by API: %s", current_zone)
+        _LOGGER.debug("Corrected zone: %s", virtual_zones[current_zone])
+        self._attributes.update({"current_zone": virtual_zones[current_zone]})
+
     async def async_toggle_lock(self, service_call: ServiceCall = None):
         """Toggle locked state."""
         device: WorxCloud = self.api.device
@@ -172,7 +181,6 @@ class WorxDevice(LandroidCloudBase, StateVacuumEntity):
 
             for idx, val in enumerate(sections):
                 share = int(int(val) / 10)
-                _LOGGER.debug("%s: %s (%s)", idx, val, share)
                 for _ in range(share):
                     tmpdata["mzv"].append(idx)
 

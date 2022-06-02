@@ -6,6 +6,8 @@ import json
 import logging
 from typing import Any
 
+#from abc import ABC, abstractmethod
+
 from homeassistant.components.vacuum import (
     ENTITY_ID_FORMAT,
     STATE_DOCKED,
@@ -131,10 +133,15 @@ class LandroidCloudBase(StateVacuumEntity):
         """Return sensor state."""
         return self._attr_state
 
+    def zone_mapping(self):
+        """Map zones correct."""
+        return False
+
     @callback
     def update_callback(self):
         """Get new data and update state."""
         _LOGGER.debug("Updating state in Home Assistant")
+        self.zone_mapping()
         self.schedule_update_ha_state(True)
         # self.async_schedule_update_ha_state(True)
 
