@@ -6,8 +6,6 @@ from homeassistant.const import CONF_TYPE
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .helpers import LandroidSelectTypes
-
 from .devices.worx import WorxSelect, WorxZoneSelect
 
 # from .devices.landxcape import LandxcapeButton
@@ -15,7 +13,7 @@ from .devices.worx import WorxSelect, WorxZoneSelect
 
 from .device_base import SELECT, LandroidCloudSelectEntity
 
-from .const import DOMAIN
+from .const import DOMAIN, LandroidSelectTypes
 
 
 async def async_setup_entry(

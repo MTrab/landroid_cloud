@@ -2,6 +2,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from enum import IntEnum
+from homeassistant.backports.enum import StrEnum
 
 from homeassistant.components.vacuum import (
     STATE_DOCKED,
@@ -10,8 +11,8 @@ from homeassistant.components.vacuum import (
     STATE_PAUSED,
     STATE_IDLE,
 )
-
 from pyworxcloud.clouds import CLOUDS as api_clouds
+
 
 # Startup banner
 STARTUP = """
@@ -28,7 +29,7 @@ https://github.com/mtrab/landroid_cloud/issues
 # Some defaults
 DEFAULT_NAME = "landroid"
 DOMAIN = "landroid_cloud"
-PLATFORMS = ["vacuum", "select"]
+PLATFORMS = ["vacuum", "select", "button"]
 UPDATE_SIGNAL = "landroid_cloud_update"
 UPDATE_SIGNAL_ZONES = "landroid_cloud_update_zones"
 
@@ -122,6 +123,19 @@ ZONE_MAP = {
 }
 
 
+class LandroidButtonTypes(StrEnum):
+    """Defines different button types for Landroid Cloud integration."""
+
+    RESTART = SERVICE_RESTART
+    EDGECUT = SERVICE_EDGECUT
+
+
+class LandroidSelectTypes(StrEnum):
+    """Defines different button types for Landroid Cloud integration."""
+
+    NEXT_ZONE = ATTR_NEXT_ZONE
+
+
 @dataclass
 class ScheduleDays(IntEnum):
     """Schedule types."""
@@ -138,6 +152,11 @@ class ScheduleDays(IntEnum):
 SCHEDULE_TYPE_MAP = {
     "primary": "d",
     "secondary": "dd",
+}
+
+BUTTONTYPE_TO_SERVICE = {
+    LandroidButtonTypes.RESTART: SERVICE_RESTART,
+    LandroidButtonTypes.EDGECUT: SERVICE_EDGECUT,
 }
 
 SCHEDULE_TO_DAY = {

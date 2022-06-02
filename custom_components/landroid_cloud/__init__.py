@@ -13,7 +13,7 @@ from homeassistant.util import slugify as util_slugify
 from pyworxcloud import WorxCloud
 
 from .const import DOMAIN, PLATFORMS, STARTUP, UPDATE_SIGNAL
-from .scheme import CONFIG_SCHEMA
+from .scheme import CONFIG_SCHEMA # Used for validating YAML config - DO NOT DELETE!
 
 _LOGGER = logging.getLogger(__name__)
 

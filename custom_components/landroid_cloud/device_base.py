@@ -43,6 +43,7 @@ from .attribute_map import ATTR_MAP
 
 from .const import (
     ATTR_ZONE,
+    BUTTONTYPE_TO_SERVICE,
     DOMAIN,
     SCHEDULE_TO_DAY,
     SCHEDULE_TYPE_MAP,
@@ -54,9 +55,10 @@ from .const import (
     STATE_RAINDELAY,
     UPDATE_SIGNAL,
     UPDATE_SIGNAL_ZONES,
+    LandroidButtonTypes,
+    LandroidSelectTypes,
 )
 
-from .helpers import LandroidButtonTypes, LandroidSelectTypes
 
 # Commonly supported features
 SUPPORT_LANDROID_BASE = (
@@ -183,7 +185,7 @@ class LandroidCloudBaseEntity:
         _LOGGER.debug("Mower %s online: %s", self._name, master.online)
         self._available = master.online
         state = STATE_INITIALIZING
-        
+
         if not master.online:
             state = STATE_OFFLINE
         elif master.error is not None and master.error > 0:
@@ -313,10 +315,15 @@ class LandroidCloudButtonBase(LandroidCloudBaseEntity, ButtonEntity):
         self._attr_unique_id = f"{api.name}_button_{description.key}"
         self.entity_id = ENTITY_ID_FORMAT.format(self.entity_description.name)
 
-    def press(self, **kwargs: Any) -> None:  # pylint: disable=unused-argument
+    async def async_press(
+        self, **kwargs: Any
+    ) -> None:  # pylint: disable=unused-argument
         """Press the button."""
-        self.hass.services.async_call(
-            DOMAIN, self.api.services[self.entity_description.key]
+        target = {"device_id": self.api.device_id}
+        await self.hass.services.async_call(
+            DOMAIN,
+            BUTTONTYPE_TO_SERVICE[self.entity_description.key],
+            target=target,
         )
 
 
