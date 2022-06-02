@@ -11,6 +11,12 @@ from homeassistant.components.button import (
     ButtonEntity,
     ButtonEntityDescription,
 )
+
+from homeassistant.components.select import (
+    SelectEntity,
+    SelectEntityDescription,
+)
+
 from homeassistant.components.vacuum import (
     ENTITY_ID_FORMAT,
     STATE_DOCKED,
@@ -19,11 +25,12 @@ from homeassistant.components.vacuum import (
     StateVacuumEntity,
     VacuumEntityFeature,
 )
+
 from homeassistant.const import CONF_TYPE
 from homeassistant.core import callback, HomeAssistant, ServiceCall
 from homeassistant.exceptions import HomeAssistantError
+from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
-import homeassistant.helpers.device_registry as dr
 from homeassistant.helpers.entity import EntityCategory
 
 from pyworxcloud import WorxCloud
@@ -35,18 +42,21 @@ from .utils import pass_thru, parseday
 from .attribute_map import ATTR_MAP
 
 from .const import (
+    ATTR_ZONE,
     DOMAIN,
     SCHEDULE_TO_DAY,
     SCHEDULE_TYPE_MAP,
+    SERVICE_SETZONE,
     STATE_INITIALIZING,
     STATE_MAP,
     STATE_MOWING,
     STATE_OFFLINE,
     STATE_RAINDELAY,
     UPDATE_SIGNAL,
+    UPDATE_SIGNAL_ZONES,
 )
 
-from .helpers import LandroidButtonTypes
+from .helpers import LandroidButtonTypes, LandroidSelectTypes
 
 # Commonly supported features
 SUPPORT_LANDROID_BASE = (
@@ -75,10 +85,20 @@ BUTTONS = [
     ),
 ]
 
+# Tuple containing select entities to create
+SELECT = [
+    SelectEntityDescription(
+        key=LandroidSelectTypes.NEXT_ZONE,
+        name="Select Next Zone",
+        icon="mdi:map-clock",
+        entity_category=EntityCategory.CONFIG,
+    ),
+]
+
 _LOGGER = logging.getLogger(__name__)
 
 
-class LandroidCloudBase(StateVacuumEntity):
+class LandroidCloudBaseEntity:
     """Define a base Landroid class."""
 
     _battery_level: int | None = None
@@ -114,9 +134,168 @@ class LandroidCloudBase(StateVacuumEntity):
             "model": self.api.device.board,
         }
 
+    async def async_added_to_hass(self):
+        """Connect update callbacks."""
+        _LOGGER.debug("Added sensor %s", self.entity_id)
+        await self.api.async_refresh()
+        async_dispatcher_connect(
+            self.hass,
+            f"{UPDATE_SIGNAL}_{self.api.device.name}",
+            self.update_callback,
+        )
+        async_dispatcher_connect(
+            self.hass,
+            f"{UPDATE_SIGNAL_ZONES}_{self.api.device.name}",
+            self.update_selected_zone,
+        )
 
-class LandroidCloudButtonBase(LandroidCloudBase, ButtonEntity):
-    """Define a base vacuum class."""
+    @callback
+    def update_callback(self):
+        """Base update callback function"""
+        return False
+
+    @callback
+    def update_selected_zone(self):
+        """Update zone selections in select entity"""
+        return False
+
+    def zone_mapping(self):
+        """Map zones correct."""
+        return False
+
+    async def async_update(self):
+        """Update the device."""
+        _LOGGER.debug("Updating %s", self.entity_id)
+        master: WorxCloud = self.api.device
+
+        methods = ATTR_MAP["default"]
+        data = {}
+        self._icon = methods["icon"]
+        for prop, attr in methods["state"].items():
+            if hasattr(master, prop):
+                prop_data = getattr(master, prop)
+                if not isinstance(prop_data, type(None)):
+                    data[attr] = prop_data
+        data["error"] = ERROR_TO_DESCRIPTION[master.error or 0]
+
+        self._attributes.update(data)
+
+        _LOGGER.debug("Mower %s online: %s", self._name, master.online)
+        self._available = master.online
+        state = STATE_INITIALIZING
+        
+        if not master.online:
+            state = STATE_OFFLINE
+        elif master.error is not None and master.error > 0:
+            if master.error > 0 and master.error != 5:
+                state = STATE_ERROR
+            elif master.error == 5:
+                state = STATE_RAINDELAY
+        else:
+            try:
+                state = STATE_MAP[master.status]
+            except KeyError:
+                state = STATE_INITIALIZING
+
+        if "zone_probability" in self._attributes:
+            if len(self._attributes["zone_probability"]) == 10:
+                self.zone_mapping()
+
+        _LOGGER.debug("\nAttributes:\n%s", self._attributes)
+        _LOGGER.debug("Mower %s state '%s'", self._name, state)
+        # self._state = state
+        self._attr_state = state
+
+        self._serialnumber = master.serial
+        self._battery_level = master.battery_percent
+
+
+class LandroidCloudSelectEntity(LandroidCloudBaseEntity, SelectEntity):
+    """Define a select entity."""
+
+    def __init__(
+        self,
+        description: SelectEntityDescription,
+        hass: HomeAssistant,
+        api: LandroidAPI,
+    ):
+        """Initialize select entity."""
+        super().__init__(hass, api)
+        _LOGGER.debug("Initializing LandroidCloudSelectEntity for %s", api.name)
+        self.entity_description = description
+        self.entity_description.name = (
+            f"{api.friendly_name} {description.key.capitalize()}"
+        )
+        self._attr_unique_id = f"{api.name}_select_{description.key}"
+        self._attr_options = []
+        self._attr_current_option = None
+        self.entity_id = ENTITY_ID_FORMAT.format(self.entity_description.name)
+
+
+class LandroidCloudSelectZoneEntity(LandroidCloudSelectEntity):
+    """Select zone entity definition."""
+
+    @callback
+    def update_selected_zone(self):
+        """Get new data and update state."""
+        if not isinstance(self._attr_options, type(None)):
+            if len(self._attr_options) > 1:
+                self._update_zone()
+
+            try:
+                self._attr_current_option = str(self.api.shared_options["current_zone"])
+            except:  # pylint: disable=bare-except
+                self._attr_current_option = None
+            finally:
+                _LOGGER.debug(
+                    "Zone selector for %s was set to %s",
+                    self._name,
+                    self._attr_current_option,
+                )
+
+        self.schedule_update_ha_state(True)
+
+    def _update_zone(self) -> None:
+        """Update zone selector options."""
+        try:
+            zones = self.api.device.zone
+        except:  # pylint: disable=bare-except
+            zones = []
+
+        if len(zones) == 4:
+            _LOGGER.debug("Updating select entity for %s", self._name)
+            options = []
+            options.append("0")
+            for idx in range(1, 4):
+                if zones[idx] != 0:
+                    options.append(str(idx))
+
+            self._attr_options = options
+            _LOGGER.debug(
+                "Options for %s was set to %s", self._name, self._attr_options
+            )
+
+    @callback
+    def update_callback(self):
+        """Get new data and update state."""
+        self._update_zone()
+        self.update_selected_zone()
+
+    async def async_select_option(self, option: str) -> None:
+        """Set next zone to be mowed."""
+        _LOGGER.debug("Setting id %s to zone %s", self.api.device_id, option)
+        data = {ATTR_ZONE: int(option)}
+        target = {"device_id": self.api.device_id}
+        await self.hass.services.async_call(
+            DOMAIN,
+            SERVICE_SETZONE,
+            service_data=data,
+            target=target,
+        )
+
+
+class LandroidCloudButtonBase(LandroidCloudBaseEntity, ButtonEntity):
+    """Define a Landroid Cloud button class."""
 
     def __init__(
         self,
@@ -127,15 +306,12 @@ class LandroidCloudButtonBase(LandroidCloudBase, ButtonEntity):
         """Init Landroid Cloud button."""
         super().__init__(hass, api)
         _LOGGER.debug("Initializing LandroidCloudButtonEntity for %s", api.name)
-        self.api = api
-        self.hass = hass
         self.entity_description = description
         self.entity_description.name = (
             f"{api.friendly_name} {description.key.capitalize()}"
         )
-
         self._attr_unique_id = f"{api.name}_button_{description.key}"
-        _LOGGER.debug("Button unique ID: %s", self._attr_unique_id)
+        self.entity_id = ENTITY_ID_FORMAT.format(self.entity_description.name)
 
     def press(self, **kwargs: Any) -> None:  # pylint: disable=unused-argument
         """Press the button."""
@@ -144,7 +320,7 @@ class LandroidCloudButtonBase(LandroidCloudBase, ButtonEntity):
         )
 
 
-class LandroidCloudMowerBase(LandroidCloudBase, StateVacuumEntity):
+class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
     """Define a base Landroid Cloud mower class."""
 
     _battery_level: int | None = None
@@ -202,69 +378,11 @@ class LandroidCloudMowerBase(LandroidCloudBase, StateVacuumEntity):
         """Return sensor state."""
         return self._attr_state
 
-    def zone_mapping(self):
-        """Map zones correct."""
-        return False
-
     @callback
     def update_callback(self):
         """Get new data and update state."""
-        _LOGGER.debug("Updating state in Home Assistant")
-        self.zone_mapping()
+        _LOGGER.debug("Updating mower in Home Assistant")
         self.schedule_update_ha_state(True)
-        # self.async_schedule_update_ha_state(True)
-
-    async def async_added_to_hass(self):
-        """Connect update callbacks."""
-        await super().async_added_to_hass()
-        _LOGGER.debug("Added sensor %s", self.entity_id)
-        await self.api.async_refresh()
-        async_dispatcher_connect(
-            self.hass,
-            f"{UPDATE_SIGNAL}_{self.api.device.name}",
-            self.update_callback,
-        )
-
-    async def async_update(self):
-        """Update the sensor."""
-        _LOGGER.debug("Updating %s", self.entity_id)
-        master: WorxCloud = self.api.device
-
-        methods = ATTR_MAP["default"]
-        data = {}
-        self._icon = methods["icon"]
-        for prop, attr in methods["state"].items():
-            if hasattr(master, prop):
-                prop_data = getattr(master, prop)
-                if not isinstance(prop_data, type(None)):
-                    data[attr] = prop_data
-        data["error"] = ERROR_TO_DESCRIPTION[master.error or 0]
-        _LOGGER.debug(data)
-
-        try:
-            state = STATE_MAP[master.status]
-        except KeyError:
-            state = STATE_INITIALIZING
-
-        self._attributes.update(data)
-
-        _LOGGER.debug("Mower %s online: %s", self._name, master.online)
-        self._available = master.online
-        if not master.online:
-            state = STATE_OFFLINE
-
-        if master.error is not None:
-            if master.error > 0 and master.error != 5:
-                state = STATE_ERROR
-            elif master.error == 5:
-                state = STATE_RAINDELAY
-
-        _LOGGER.debug("Mower %s state '%s'", self._name, state)
-        # self._state = state
-        self._attr_state = state
-
-        self._serialnumber = master.serial
-        self._battery_level = master.battery_percent
 
     async def async_start(self):
         """Start or resume the task."""

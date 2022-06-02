@@ -28,8 +28,9 @@ https://github.com/mtrab/landroid_cloud/issues
 # Some defaults
 DEFAULT_NAME = "landroid"
 DOMAIN = "landroid_cloud"
-PLATFORMS = ["vacuum", "button"]
+PLATFORMS = ["vacuum", "select"]
 UPDATE_SIGNAL = "landroid_cloud_update"
+UPDATE_SIGNAL_ZONES = "landroid_cloud_update_zones"
 
 # Service consts
 SERVICE_CONFIG = "config"
@@ -83,6 +84,9 @@ ATTR_SUNDAY_START = "sunday_start"
 ATTR_SUNDAY_END = "sunday_end"
 ATTR_SUNDAY_BOUNDARY = "sunday_boundary"
 
+# Misc. attributes
+ATTR_NEXT_ZONE = "next_zone"
+
 # Available cloud vendors
 CLOUDS = []
 for cloud in api_clouds:
@@ -108,6 +112,13 @@ STATE_MAP = {
     32: STATE_EDGECUT,
     33: STATE_STARTING,
     34: STATE_PAUSED,
+}
+
+ZONE_MAP = {
+    1: 0,
+    2: 1,
+    3: 2,
+    4: 3,
 }
 
 

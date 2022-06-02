@@ -9,15 +9,19 @@ from functools import partial
 import voluptuous as vol
 
 from homeassistant.components.button import ButtonEntity
+from homeassistant.components.select import SelectEntityDescription
 from homeassistant.components.vacuum import StateVacuumEntity
-from homeassistant.core import ServiceCall
+from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.exceptions import HomeAssistantError
+from homeassistant.helpers.dispatcher import dispatcher_send
 
 from pyworxcloud import (
     NoOneTimeScheduleError,
     NoPartymodeError,
     WorxCloud,
 )
+
+from .. import LandroidAPI
 
 from ..const import (
     ATTR_BOUNDARY,
@@ -33,12 +37,15 @@ from ..const import (
     SERVICE_PARTYMODE,
     SERVICE_RESTART,
     SERVICE_SETZONE,
+    UPDATE_SIGNAL_ZONES,
 )
 
 from ..device_base import (
     LandroidCloudButtonBase,
     LandroidCloudMowerBase,
     SUPPORT_LANDROID_BASE,
+    LandroidCloudSelectEntity,
+    LandroidCloudSelectZoneEntity,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -72,13 +79,36 @@ class WorxButton(LandroidCloudButtonBase, ButtonEntity):
     """Definition of Worx Landroid button."""
 
 
+class WorxSelect(LandroidCloudSelectEntity):
+    """Definition of Worx Landroid button."""
+
+    def __init__(
+        self,
+        description: SelectEntityDescription,
+        hass: HomeAssistant,
+        api: LandroidAPI,
+    ):
+        """Init new Worx Select entity."""
+        super().__init__(description, hass, api)
+        self.device: WorxCloud = self.api.device
+
+
+class WorxZoneSelect(WorxSelect, LandroidCloudSelectZoneEntity):
+    """Definition of a zone selector."""
+
+    def __init__(
+        self,
+        description: SelectEntityDescription,
+        hass: HomeAssistant,
+        api: LandroidAPI,
+    ):
+        """Init new Worx Zone Select entity."""
+        super().__init__(description, hass, api)
+        self.device: WorxCloud = self.api.device
+
+
 class WorxMowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
     """Definition of Worx Landroid device."""
-
-    # def __init__(self, hass, api):
-    #     """Init new base device."""
-    #     super().__init__(hass, api)
-    #     device: WorxCloud = self.api.device
 
     @property
     def supported_features(self):
@@ -93,6 +123,8 @@ class WorxMowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
         _LOGGER.debug("Zone reported by API: %s", current_zone)
         _LOGGER.debug("Corrected zone: %s", virtual_zones[current_zone])
         self._attributes.update({"current_zone": virtual_zones[current_zone]})
+        self.api.shared_options.update({"current_zone": virtual_zones[current_zone]})
+        dispatcher_send(self.hass, f"{UPDATE_SIGNAL_ZONES}_{self.api.device.name}")
 
     async def async_toggle_lock(self, service_call: ServiceCall = None):
         """Toggle locked state."""
@@ -199,13 +231,19 @@ class WorxMowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
                 raise HomeAssistantError(
                     "Incorrect format for multizone probabilities array"
                 )
-            if sum(sections) != 100:
-                raise HomeAssistantError("Sum of zone probabilities array MUST be 100")
+            if not sum(sections) in [100, 0]:
+                raise HomeAssistantError(
+                    f"Sum of zone probabilities array MUST be 100 or 0 (disabled), request was: {sum(sections)}"
+                )
 
-            for idx, val in enumerate(sections):
-                share = int(int(val) / 10)
-                for _ in range(share):
-                    tmpdata["mzv"].append(idx)
+            if sum(sections) == 0:
+                for _ in range(10):
+                    tmpdata["mzv"].append(0)
+            else:
+                for idx, val in enumerate(sections):
+                    share = int(int(val) / 10)
+                    for _ in range(share):
+                        tmpdata["mzv"].append(idx)
 
         if tmpdata:
             data = json.dumps(tmpdata)

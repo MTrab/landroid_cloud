@@ -6,7 +6,7 @@ import voluptuous as vol
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_TYPE
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers import entity_platform
+from homeassistant.helpers import entity_platform, device_registry as dr
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import (
@@ -103,3 +103,9 @@ async def async_setup_entry(
     landroid_mower = constructor(hass, api)
 
     async_add_entities([landroid_mower], True)
+
+    api.device_id = (
+        dr.async_get(hass)
+        .async_get_device(landroid_mower.device_info["identifiers"])
+        .id
+    )

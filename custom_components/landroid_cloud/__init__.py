@@ -162,9 +162,11 @@ class LandroidAPI:
         self.options = entry.options
         self.device = device
         self.index = index
+        self.unique_id = entry.unique_id
         self.listeners = []
         self.services = []
-        self.unique_id = entry.unique_id
+        self.shared_options = {}
+        self.device_id = None
 
         self.name = util_slugify(f"{self.device.name}")
         self.friendly_name = self.device.name

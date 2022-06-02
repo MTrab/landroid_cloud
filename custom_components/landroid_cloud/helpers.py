@@ -2,7 +2,7 @@
 
 from homeassistant.backports.enum import StrEnum
 
-from .const import SERVICE_EDGECUT, SERVICE_RESTART
+from .const import ATTR_NEXT_ZONE, SERVICE_EDGECUT, SERVICE_RESTART
 
 
 class LandroidButtonTypes(StrEnum):
@@ -10,3 +10,8 @@ class LandroidButtonTypes(StrEnum):
 
     RESTART = SERVICE_RESTART
     EDGECUT = SERVICE_EDGECUT
+
+class LandroidSelectTypes(StrEnum):
+    """Defines different button types for Landroid Cloud integration."""
+
+    NEXT_ZONE = ATTR_NEXT_ZONE
