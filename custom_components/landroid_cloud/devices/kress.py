@@ -17,16 +17,16 @@ from ..device_base import (
 
 _LOGGER = logging.getLogger(__name__)
 
-SUPPORT_KRESS = SUPPORT_LANDROID_BASE
+SUPPORTED_FEATURES = SUPPORT_LANDROID_BASE
 
-class KressButton(LandroidCloudButtonBase, ButtonEntity):
+class Button(LandroidCloudButtonBase, ButtonEntity):
     """Definition of Kress button."""
 
 
-class KressMowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
+class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
     """Definition of Kress device."""
 
     @property
     def supported_features(self):
         """Flag which mower robot features that are supported."""
-        return SUPPORT_KRESS
+        return SUPPORTED_FEATURES

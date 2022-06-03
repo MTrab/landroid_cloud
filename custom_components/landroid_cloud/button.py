@@ -10,14 +10,12 @@ from homeassistant.components.button import (
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import entity_platform
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .devices import WorxButton, LandxcapeButton, KressButton
-
-from .device_base import LandroidCloudButtonBase
-
-from .const import DOMAIN, LandroidButtonTypes
+from .const import DOMAIN, LandroidButtonTypes, LandroidFeatureSupport
+from .utils.entity_setup import async_register_services, vendor_to_device
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -45,20 +43,28 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Landroid buttons for specific service."""
-    entities: list[LandroidCloudButtonBase] = []
+    entities = []
     for idx in range(hass.data[DOMAIN][config.entry_id]["count"]):
         api = hass.data[DOMAIN][config.entry_id][idx]["api"]
 
-        for landroidbutton in BUTTONS:
-            constructor: type[LandroidCloudButtonBase]
+        platform = entity_platform.async_get_current_platform()
+        for button in BUTTONS:
             vendor = api.config["type"]
-            if vendor == "worx":
-                constructor = WorxButton
-            elif vendor == "kress":
-                constructor = KressButton
-            else:
-                constructor = LandxcapeButton
+            device = vendor_to_device(vendor)
+            constructor = None
+            if (
+                button.key == LandroidButtonTypes.RESTART
+                and device.DEVICE_FEATURES & LandroidFeatureSupport.RESTART
+            ) or (
+                button.key == LandroidButtonTypes.EDGECUT
+                and device.DEVICE_FEATURES & LandroidFeatureSupport.EDGECUT
+            ):
+                constructor = device.Button
 
-            entities.append(constructor(landroidbutton, hass, api))
+            if not isinstance(constructor, type(None)):
+                entities.append(constructor(button, hass, api))
+                await async_register_services(
+                    api, platform, constructor, device, constructor.features
+                )
 
     async_add_entities(entities, True)

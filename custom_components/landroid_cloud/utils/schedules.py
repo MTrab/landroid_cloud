@@ -1,10 +1,10 @@
 """Utilities used by this module."""
+# pylint: disable=relative-beyond-top-level
 from __future__ import annotations
-
 import logging
+from datetime import datetime
 import re
 
-from datetime import datetime
 from homeassistant.exceptions import HomeAssistantError
 
 TIME_REGEX = "(([0-9]){1,2}:([0-9]){2})"

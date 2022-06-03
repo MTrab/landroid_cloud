@@ -210,3 +210,19 @@ SCHEDULE_TO_DAY = {
         "clear": "saturday",
     },
 }
+
+
+class LandroidFeatureSupport(IntEnum):
+    """Supported features of the Landroid integration."""
+
+    MOWER = 1
+    BUTTON = 2
+    SELECT = 4
+    SETZONE = 8
+    RESTART = 16
+    LOCK = 32
+    OTS = 64
+    EDGECUT = 128
+    PARTYMODE = 256
+    CONFIG = 512
+    SCHEDULES = 1024

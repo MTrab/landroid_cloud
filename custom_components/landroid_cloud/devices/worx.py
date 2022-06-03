@@ -11,7 +11,7 @@ import voluptuous as vol
 from homeassistant.components.button import ButtonEntity
 from homeassistant.components.select import SelectEntityDescription
 from homeassistant.components.vacuum import StateVacuumEntity
-from homeassistant.core import HomeAssistant, ServiceCall
+from homeassistant.core import ServiceCall
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.dispatcher import dispatcher_send
 
@@ -21,8 +21,6 @@ from pyworxcloud import (
     WorxCloud,
 )
 
-from .. import LandroidAPI
-
 from ..const import (
     ATTR_BOUNDARY,
     ATTR_MULTIZONE_DISTANCES,
@@ -30,14 +28,8 @@ from ..const import (
     ATTR_RAINDELAY,
     ATTR_RUNTIME,
     ATTR_TIMEEXTENSION,
-    SERVICE_CONFIG,
-    SERVICE_EDGECUT,
-    SERVICE_LOCK,
-    SERVICE_OTS,
-    SERVICE_PARTYMODE,
-    SERVICE_RESTART,
-    SERVICE_SETZONE,
     UPDATE_SIGNAL_ZONES,
+    LandroidFeatureSupport,
 )
 
 from ..device_base import (
@@ -50,7 +42,7 @@ from ..device_base import (
 
 _LOGGER = logging.getLogger(__name__)
 
-SUPPORT_WORX = SUPPORT_LANDROID_BASE
+SUPPORTED_FEATURES = SUPPORT_LANDROID_BASE
 
 CONFIG_SCHEME = {
     vol.Optional(ATTR_RAINDELAY): vol.All(vol.Coerce(int), vol.Range(0, 300)),
@@ -64,56 +56,87 @@ OTS_SCHEME = {
     vol.Required(ATTR_RUNTIME, default=30): vol.Coerce(int),
 }
 
-SUPPORTED_SERVICES = (
-    SERVICE_CONFIG,
-    SERVICE_PARTYMODE,
-    SERVICE_SETZONE,
-    SERVICE_LOCK,
-    SERVICE_RESTART,
-    SERVICE_EDGECUT,
-    SERVICE_OTS,
+DEVICE_FEATURES = (
+    LandroidFeatureSupport.MOWER
+    | LandroidFeatureSupport.BUTTON
+    | LandroidFeatureSupport.SELECT
+    | LandroidFeatureSupport.SETZONE
 )
 
 
-class WorxButton(LandroidCloudButtonBase, ButtonEntity):
+class Button(LandroidCloudButtonBase, ButtonEntity):
     """Definition of Worx Landroid button."""
 
+    def __init__(self, description, hass, api) -> None:
+        """Initialize a button."""
+        super().__init__(description, hass, api)
+        self.device: WorxCloud = self.api.device
+        self._attr_landroid_features = DEVICE_FEATURES
 
-class WorxSelect(LandroidCloudSelectEntity):
+
+class Select(LandroidCloudSelectEntity):
     """Definition of Worx Landroid button."""
 
     def __init__(
         self,
         description: SelectEntityDescription,
-        hass: HomeAssistant,
-        api: LandroidAPI,
+        hass,
+        api,
     ):
         """Init new Worx Select entity."""
         super().__init__(description, hass, api)
         self.device: WorxCloud = self.api.device
+        self._attr_landroid_features = DEVICE_FEATURES
 
 
-class WorxZoneSelect(WorxSelect, LandroidCloudSelectZoneEntity):
+class ZoneSelect(Select, LandroidCloudSelectZoneEntity):
     """Definition of a zone selector."""
 
     def __init__(
         self,
         description: SelectEntityDescription,
-        hass: HomeAssistant,
-        api: LandroidAPI,
+        hass,
+        api,
     ):
         """Init new Worx Zone Select entity."""
         super().__init__(description, hass, api)
         self.device: WorxCloud = self.api.device
 
 
-class WorxMowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
+class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
     """Definition of Worx Landroid device."""
+
+    def __init__(self, hass, api):
+        """Initialize mower entity."""
+        super().__init__(hass, api)
+
+        self._attr_landroid_features = (
+            DEVICE_FEATURES
+            | LandroidFeatureSupport.LOCK
+            | LandroidFeatureSupport.CONFIG
+            | LandroidFeatureSupport.RESTART
+            | LandroidFeatureSupport.SELECT
+            | LandroidFeatureSupport.SETZONE
+        )
+
+        if api.device.partymode_capable:
+            self._attr_landroid_features = (
+                self._attr_landroid_features | LandroidFeatureSupport.PARTYMODE
+            )
+
+        if api.device.ots_capable:
+            self._attr_landroid_features = (
+                self._attr_landroid_features
+                | LandroidFeatureSupport.PARTYMODE
+                | LandroidFeatureSupport.EDGECUT
+            )
+
+        self.register_services()
 
     @property
     def supported_features(self):
         """Flag which mower robot features that are supported."""
-        return SUPPORT_WORX
+        return SUPPORTED_FEATURES
 
     def zone_mapping(self) -> None:
         """Map current zone correct."""
@@ -233,7 +256,8 @@ class WorxMowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
                 )
             if not sum(sections) in [100, 0]:
                 raise HomeAssistantError(
-                    f"Sum of zone probabilities array MUST be 100 or 0 (disabled), request was: {sum(sections)}"
+                    "Sum of zone probabilities array MUST be 100"
+                    f"or 0 (disabled), request was: {sum(sections)}"
                 )
 
             if sum(sections) == 0:

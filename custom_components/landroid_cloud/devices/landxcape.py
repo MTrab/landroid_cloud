@@ -18,17 +18,17 @@ from ..device_base import (
 
 _LOGGER = logging.getLogger(__name__)
 
-SUPPORT_LANDXCAPE = SUPPORT_LANDROID_BASE
+SUPPORTED_FEATURES = SUPPORT_LANDROID_BASE
 
 
-class LandxcapeButton(LandroidCloudButtonBase, ButtonEntity):
+class Button(LandroidCloudButtonBase, ButtonEntity):
     """Definition of Landxcape button."""
 
 
-class LandxcapeMowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
+class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
     """Definition of Landxcape device."""
 
     @property
     def supported_features(self):
         """Flag which mower robot features that are supported."""
-        return SUPPORT_LANDXCAPE
+        return SUPPORTED_FEATURES

@@ -2,9 +2,9 @@
 from __future__ import annotations
 from functools import partial
 import json
-
 import logging
 from typing import Any
+import voluptuous as vol
 
 from homeassistant.components.button import (
     ButtonEntity,
@@ -27,14 +27,13 @@ from homeassistant.components.vacuum import (
 
 from homeassistant.core import callback, HomeAssistant, ServiceCall
 from homeassistant.exceptions import HomeAssistantError
-from homeassistant.helpers import device_registry as dr
+from homeassistant.helpers import device_registry as dr, entity_platform
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 
 from pyworxcloud import WorxCloud
 from pyworxcloud.states import ERROR_TO_DESCRIPTION
 
 from . import LandroidAPI
-from .utils import pass_thru, parseday
 
 from .attribute_map import ATTR_MAP
 
@@ -44,6 +43,13 @@ from .const import (
     DOMAIN,
     SCHEDULE_TO_DAY,
     SCHEDULE_TYPE_MAP,
+    SERVICE_CONFIG,
+    SERVICE_EDGECUT,
+    SERVICE_LOCK,
+    SERVICE_OTS,
+    SERVICE_PARTYMODE,
+    SERVICE_RESTART,
+    SERVICE_SCHEDULE,
     SERVICE_SETZONE,
     STATE_INITIALIZING,
     STATE_MAP,
@@ -52,8 +58,12 @@ from .const import (
     STATE_RAINDELAY,
     UPDATE_SIGNAL,
     UPDATE_SIGNAL_ZONES,
+    LandroidFeatureSupport,
 )
 
+from .scheme import SCHEDULE_SCHEME as SCHEME_SCHEDULE
+
+from .utils.schedules import pass_thru, parseday
 
 # Commonly supported features
 SUPPORT_LANDROID_BASE = (
@@ -74,9 +84,10 @@ class LandroidCloudBaseEntity:
 
     _battery_level: int | None = None
     _attr_state = STATE_INITIALIZING
+    _attr_landroid_features: int
 
-    def __init__(self, hass, api):
-        """Init new base device."""
+    def __init__(self, hass: HomeAssistant, api: LandroidAPI):
+        """Init new base for a Landroid Cloud entity."""
         self.api = api
         self.hass = hass
         self.entity_id = ENTITY_ID_FORMAT.format(f"{api.name}")
@@ -89,6 +100,81 @@ class LandroidCloudBaseEntity:
         self._name = f"{api.friendly_name}"
         self._mac = api.device.mac
         self._connections = {(dr.CONNECTION_NETWORK_MAC, self._mac)}
+
+    def register_services(self) -> None:
+        """Register services."""
+        platform = entity_platform.async_get_current_platform()
+
+        _LOGGER.debug(self.features)
+        _LOGGER.debug(self.features & LandroidFeatureSupport.EDGECUT)
+        if self.features & LandroidFeatureSupport.EDGECUT == 0:
+            platform.async_register_entity_service(
+                SERVICE_EDGECUT,
+                {},
+                self.async_edgecut,
+            )
+            self.api.services.append(SERVICE_EDGECUT)
+
+        if self.features & LandroidFeatureSupport.LOCK == 0:
+            platform.async_register_entity_service(
+                SERVICE_LOCK,
+                {},
+                self.async_toggle_lock,
+            )
+            self.api.services.append(SERVICE_LOCK)
+
+        if self.features & LandroidFeatureSupport.PARTYMODE:
+            platform.async_register_entity_service(
+                SERVICE_PARTYMODE,
+                {},
+                self.async_toggle_partymode,
+            )
+            self.api.services.append(SERVICE_PARTYMODE)
+
+        if self.features & LandroidFeatureSupport.SETZONE:
+            platform.async_register_entity_service(
+                SERVICE_SETZONE,
+                {vol.Required(ATTR_ZONE): vol.All(vol.Coerce(int), vol.Range(0, 3))},
+                self.async_setzone,
+            )
+            self.api.services.append(SERVICE_SETZONE)
+
+        if self.features & LandroidFeatureSupport.RESTART:
+            platform.async_register_entity_service(
+                SERVICE_RESTART,
+                {},
+                self.async_restart,
+            )
+            self.api.services.append(SERVICE_RESTART)
+
+        if self.features & LandroidFeatureSupport.CONFIG:
+            platform.async_register_entity_service(
+                SERVICE_CONFIG,
+                self.CONFIG_SCHEME,
+                self.async_config,
+            )
+            self.api.services.append(SERVICE_CONFIG)
+
+        if self.features & LandroidFeatureSupport.OTS:
+            platform.async_register_entity_service(
+                SERVICE_OTS,
+                self.OTS_SCHEME,
+                self.async_ots,
+            )
+            self.api.services.append(SERVICE_OTS)
+
+        if self.features & LandroidFeatureSupport.SCHEDULES:
+            platform.async_register_entity_service(
+                SERVICE_SCHEDULE,
+                SCHEME_SCHEDULE,
+                self.async_set_schedule,
+            )
+            self.api.services.append(SERVICE_SCHEDULE)
+
+    @property
+    def features(self) -> int:
+        """Flag which Landroid specifics are supported."""
+        return self._attr_landroid_features
 
     @property
     def device_info(self):
@@ -269,8 +355,8 @@ class LandroidCloudButtonBase(LandroidCloudBaseEntity, ButtonEntity):
         self.entity_id = ENTITY_ID_FORMAT.format(self.entity_description.name)
 
     async def async_press(
-        self, **kwargs: Any
-    ) -> None:  # pylint: disable=unused-argument
+        self, **kwargs: Any  # pylint: disable=unused-argument
+    ) -> None:
         """Press the button."""
         target = {"device_id": self.api.device_id}
         await self.hass.services.async_call(

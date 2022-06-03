@@ -2,36 +2,13 @@
 from __future__ import annotations
 
 import logging
-import voluptuous as vol
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers import entity_platform
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import (
-    ATTR_ZONE,
-    DOMAIN,
-    SERVICE_CONFIG,
-    SERVICE_EDGECUT,
-    SERVICE_LOCK,
-    SERVICE_OTS,
-    SERVICE_PARTYMODE,
-    SERVICE_RESTART,
-    SERVICE_SCHEDULE,
-    SERVICE_SETZONE,
-)
-from .device_base import LandroidCloudMowerBase
-
-from .devices import (
-    KressMowerDevice,
-    LandxcapeMowerDevice,
-    WorxMowerDevice,
-    WORX_CONFIG,
-    WORX_OTS,
-)
-
-from .scheme import SCHEDULE_SCHEME as SCHEME_SCHEDULE
+from .const import DOMAIN
+from .utils.entity_setup import vendor_to_device
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -46,72 +23,9 @@ async def async_setup_entry(
     for idx in range(hass.data[DOMAIN][config.entry_id]["count"]):
         api = hass.data[DOMAIN][config.entry_id][idx]["api"]
 
-        platform = entity_platform.async_get_current_platform()
-        constructor: type[LandroidCloudMowerBase]
-        vendor = api.config["type"]
-
-        if vendor == "worx":
-            constructor = WorxMowerDevice
-            # Register custom services
-            platform.async_register_entity_service(
-                SERVICE_EDGECUT,
-                {},
-                constructor.async_edgecut,
-            )
-            api.services.append(SERVICE_EDGECUT)
-            platform.async_register_entity_service(
-                SERVICE_LOCK,
-                {},
-                constructor.async_toggle_lock,
-            )
-            api.services.append(SERVICE_LOCK)
-            platform.async_register_entity_service(
-                SERVICE_PARTYMODE,
-                {},
-                constructor.async_toggle_partymode,
-            )
-            api.services.append(SERVICE_PARTYMODE)
-            platform.async_register_entity_service(
-                SERVICE_SETZONE,
-                {vol.Required(ATTR_ZONE): vol.All(vol.Coerce(int), vol.Range(0, 3))},
-                constructor.async_setzone,
-            )
-            api.services.append(SERVICE_SETZONE)
-            platform.async_register_entity_service(
-                SERVICE_RESTART,
-                {},
-                constructor.async_restart,
-            )
-            api.services.append(SERVICE_RESTART)
-            platform.async_register_entity_service(
-                SERVICE_CONFIG,
-                WORX_CONFIG,
-                constructor.async_config,
-            )
-            api.services.append(SERVICE_CONFIG)
-            platform.async_register_entity_service(
-                SERVICE_OTS,
-                WORX_OTS,
-                constructor.async_ots,
-            )
-            api.services.append(SERVICE_OTS)
-        elif vendor == "kress":
-            constructor = KressMowerDevice
-        else:
-            constructor = LandxcapeMowerDevice
-
-        platform.async_register_entity_service(
-            SERVICE_SCHEDULE,
-            SCHEME_SCHEDULE,
-            constructor.async_set_schedule,
-        )
+        device = vendor_to_device(api.config["type"])
+        constructor = device.MowerDevice
 
         mowers.append(constructor(hass, api))
 
     async_add_entities(mowers, True)
-
-    # api.device_id = (
-    #     dr.async_get(hass)
-    #     .async_get_device(landroid_mower.device_info["identifiers"])
-    #     .id
-    # )
