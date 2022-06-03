@@ -25,7 +25,6 @@ from homeassistant.components.vacuum import (
     VacuumEntityFeature,
 )
 
-from homeassistant.const import CONF_TYPE
 from homeassistant.core import callback, HomeAssistant, ServiceCall
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import device_registry as dr
@@ -106,7 +105,7 @@ class LandroidCloudBaseEntity:
             },
             "name": str(self._name),
             "sw_version": self.api.device.firmware_version,
-            "manufacturer": self.api.data.get(CONF_TYPE),
+            "manufacturer": self.api.config["type"],
             "model": self.api.device.board,
         }
 

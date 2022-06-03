@@ -5,7 +5,6 @@ import logging
 import voluptuous as vol
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import CONF_TYPE
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_platform
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -23,13 +22,15 @@ from .const import (
     SERVICE_SETZONE,
 )
 from .device_base import LandroidCloudMowerBase
-from .devices.worx import (
+
+from .devices import (
+    KressMowerDevice,
+    LandxcapeMowerDevice,
     WorxMowerDevice,
-    CONFIG_SCHEME as WORX_CONFIG,
-    OTS_SCHEME as WORX_OTS,
+    WORX_CONFIG,
+    WORX_OTS,
 )
-from .devices.kress import KressMowerDevice
-from .devices.landxcape import LandxcapeMowerDevice
+
 from .scheme import SCHEDULE_SCHEME as SCHEME_SCHEDULE
 
 _LOGGER = logging.getLogger(__name__)
@@ -40,14 +41,14 @@ async def async_setup_entry(
     config: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Set up the iRobot Roomba vacuum cleaner."""
+    """Set up the mower device."""
     mowers = []
     for idx in range(hass.data[DOMAIN][config.entry_id]["count"]):
         api = hass.data[DOMAIN][config.entry_id][idx]["api"]
 
         platform = entity_platform.async_get_current_platform()
         constructor: type[LandroidCloudMowerBase]
-        vendor = hass.data[DOMAIN][config.entry_id][CONF_TYPE].lower()
+        vendor = api.config["type"]
 
         if vendor == "worx":
             constructor = WorxMowerDevice

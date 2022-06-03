@@ -9,14 +9,11 @@ from homeassistant.components.button import (
 )
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .devices.worx import WorxButton
-from .devices.landxcape import LandxcapeButton
-from .devices.kress import KressButton
+from .devices import WorxButton, LandxcapeButton, KressButton
 
 from .device_base import LandroidCloudButtonBase
 
@@ -54,7 +51,7 @@ async def async_setup_entry(
 
         for landroidbutton in BUTTONS:
             constructor: type[LandroidCloudButtonBase]
-            vendor = hass.data[DOMAIN][config.entry_id][CONF_TYPE].lower()
+            vendor = api.config["type"]
             if vendor == "worx":
                 constructor = WorxButton
             elif vendor == "kress":

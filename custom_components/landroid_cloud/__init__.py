@@ -166,6 +166,12 @@ class LandroidAPI:
         self.name = util_slugify(f"{self.device.name}")
         self.friendly_name = self.device.name
 
+        self.config = {
+            "email": hass.data[DOMAIN][entry.entry_id][CONF_EMAIL].lower(),
+            "password": hass.data[DOMAIN][entry.entry_id][CONF_PASSWORD],
+            "type": hass.data[DOMAIN][entry.entry_id][CONF_TYPE].lower(),
+        }
+
         self.device.set_callback(self.receive_data)
 
     def receive_data(self):

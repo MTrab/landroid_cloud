@@ -5,12 +5,11 @@ from homeassistant.components.select import (
     SelectEntityDescription,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import CONF_TYPE
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .devices.worx import WorxSelect, WorxZoneSelect
+from .devices import WorxSelect, WorxZoneSelect
 
 # from .devices.landxcape import LandxcapeButton
 # from .devices.kress import KressButton
@@ -42,7 +41,7 @@ async def async_setup_entry(
 
         for select in SELECTS:
             constructor: type[LandroidCloudSelectEntity]
-            vendor = hass.data[DOMAIN][config.entry_id][CONF_TYPE].lower()
+            vendor = api.config["type"]
             if vendor == "worx":
                 if select.key == LandroidSelectTypes.NEXT_ZONE:
                     constructor = WorxZoneSelect
