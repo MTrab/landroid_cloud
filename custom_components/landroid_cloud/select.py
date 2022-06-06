@@ -1,6 +1,8 @@
 """Representation of a select entity."""
 from __future__ import annotations
 
+import logging
+
 from homeassistant.components.select import (
     SelectEntityDescription,
 )
@@ -9,8 +11,14 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN, LandroidFeatureSupport, LandroidSelectTypes
+from .const import (
+    DOMAIN,
+    LandroidFeatureSupport,
+    LandroidSelectTypes,
+)
 from .utils.entity_setup import vendor_to_device
+
+_LOGGER = logging.getLogger(__name__)
 
 # Tuple containing select entities to create
 SELECTS = [
@@ -32,10 +40,10 @@ async def async_setup_entry(
     entities = []
     for idx in range(hass.data[DOMAIN][config.entry_id]["count"]):
         api = hass.data[DOMAIN][config.entry_id][idx]["api"]
+        vendor = api.config["type"]
+        device = vendor_to_device(vendor)
 
         for select in SELECTS:
-            vendor = api.config["type"]
-            device = vendor_to_device(vendor)
             constructor = None
             if (
                 select.key == LandroidSelectTypes.NEXT_ZONE

@@ -1,6 +1,7 @@
 """Define device classes."""
 # pylint: disable=unused-argument
 from __future__ import annotations
+from abc import abstractmethod
 from functools import partial
 import json
 import logging
@@ -28,7 +29,12 @@ from homeassistant.components.vacuum import (
 
 from homeassistant.core import callback, HomeAssistant, ServiceCall
 from homeassistant.exceptions import HomeAssistantError
-from homeassistant.helpers import device_registry as dr, entity_platform
+from homeassistant.helpers import (
+    entity_registry as er,
+    device_registry as dr,
+    entity_platform,
+)
+from homeassistant.helpers.entity_registry import EntityRegistry
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 
 from pyworxcloud import WorxCloud
@@ -58,6 +64,7 @@ from .const import (
     STATE_OFFLINE,
     STATE_RAINDELAY,
     UPDATE_SIGNAL,
+    UPDATE_SIGNAL_REACHABILITY,
     UPDATE_SIGNAL_ZONES,
     LandroidFeatureSupport,
 )
@@ -102,19 +109,19 @@ class LandroidCloudBaseEntity:
         self._mac = api.device.mac
         self._connections = {(dr.CONNECTION_NETWORK_MAC, self._mac)}
 
-    async def async_edgecut(self, service_call: ServiceCall = None) -> None:
+    async def async_edgecut(self, service_call: ServiceCall) -> None:
         """Called to start edge cut task."""
         return None
 
-    async def async_toggle_lock(self, service_call: ServiceCall = None) -> None:
+    async def async_toggle_lock(self, service_call: ServiceCall) -> None:
         """Toggle lock state."""
         return None
 
-    async def async_toggle_partymode(self, service_call: ServiceCall = None) -> None:
+    async def async_toggle_partymode(self, service_call: ServiceCall) -> None:
         """Toggle partymode."""
         return None
 
-    async def async_restart(self, service_call: ServiceCall = None) -> None:
+    async def async_restart(self, service_call: ServiceCall) -> None:
         """Restart baseboard OS."""
         return None
 
@@ -189,6 +196,7 @@ class LandroidCloudBaseEntity:
             self.api.services.append(SERVICE_RESTART)
 
         if self.features & LandroidFeatureSupport.CONFIG != 0:
+            _LOGGER.debug(self.get_config_scheme())
             platform.async_register_entity_service(
                 SERVICE_CONFIG,
                 self.get_config_scheme,
@@ -239,15 +247,28 @@ class LandroidCloudBaseEntity:
     async def async_added_to_hass(self):
         """Connect update callbacks."""
         await self.api.async_refresh()
+
+        if isinstance(self.api.device_id, type(None)):
+            entity_reg: EntityRegistry = er.async_get(self.hass)
+            entry = entity_reg.async_get(self.entity_id)
+            self.api.device_id = entry.device_id
+
         async_dispatcher_connect(
             self.hass,
             f"{UPDATE_SIGNAL}_{self.api.device.name}",
             self.update_callback,
         )
+
         async_dispatcher_connect(
             self.hass,
             f"{UPDATE_SIGNAL_ZONES}_{self.api.device.name}",
             self.update_selected_zone,
+        )
+
+        async_dispatcher_connect(
+            self.hass,
+            f"{UPDATE_SIGNAL_REACHABILITY}_{self.api.device.name}",
+            self.register_services,
         )
 
     @callback

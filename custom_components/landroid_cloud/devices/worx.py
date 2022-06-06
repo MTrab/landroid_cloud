@@ -1,6 +1,7 @@
 """Worx Landroid device definition."""
 # pylint: disable=unused-argument,relative-beyond-top-level
 from __future__ import annotations
+from abc import abstractmethod
 import json
 
 import logging
@@ -161,14 +162,14 @@ class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
         self.api.shared_options.update({"current_zone": virtual_zones[current_zone]})
         dispatcher_send(self.hass, f"{UPDATE_SIGNAL_ZONES}_{self.api.device.name}")
 
-    async def async_toggle_lock(self, _: ServiceCall = None):
+    async def async_toggle_lock(self, service_call: ServiceCall) -> None:
         """Toggle locked state."""
         device: WorxCloud = self.api.device
         set_lock = not bool(device.locked)
         _LOGGER.debug("Setting locked state for %s to %s", self._name, set_lock)
         await self.hass.async_add_executor_job(partial(device.lock, set_lock))
 
-    async def async_toggle_partymode(self, _: ServiceCall = None):
+    async def async_toggle_partymode(self, service_call: ServiceCall) -> None:
         """Toggle partymode state."""
         device: WorxCloud = self.api.device
         set_partymode = not bool(device.partymode_enabled)
@@ -180,7 +181,7 @@ class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
         except NoPartymodeError as ex:
             _LOGGER.error("(%s) %s", self._name, ex.args[0])
 
-    async def async_edgecut(self, _: ServiceCall = None):
+    async def async_edgecut(self, service_call: ServiceCall) -> None:
         """Start edgecut routine."""
         device: WorxCloud = self.api.device
         _LOGGER.debug("Starting edgecut routine for %s", self._name)
@@ -189,7 +190,7 @@ class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
         except NoOneTimeScheduleError as ex:
             _LOGGER.error("(%s) %s", self._name, ex.args[0])
 
-    async def async_restart(self, _: ServiceCall = None):
+    async def async_restart(self, service_call: ServiceCall):
         """Restart mower baseboard OS."""
         device: WorxCloud = self.api.device
         _LOGGER.debug("Restarting %s", self._name)

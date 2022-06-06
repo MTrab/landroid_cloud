@@ -1,7 +1,9 @@
 """Adds support for Landroid Cloud compatible devices."""
 from __future__ import annotations
-from asyncio import Task
 import asyncio
+
+# from asyncio import Task
+# import asyncio
 
 import logging
 
@@ -15,7 +17,13 @@ from homeassistant.util import slugify as util_slugify
 
 from pyworxcloud import WorxCloud, exceptions
 
-from .const import DOMAIN, PLATFORMS, STARTUP, UPDATE_SIGNAL
+from .const import (
+    DOMAIN,
+    PLATFORMS,
+    STARTUP,
+    UPDATE_SIGNAL,
+    UPDATE_SIGNAL_REACHABILITY,
+)
 from .scheme import CONFIG_SCHEMA  # Used for validating YAML config - DO NOT DELETE!
 
 _LOGGER = logging.getLogger(__name__)
@@ -104,7 +112,13 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                 cloud_email,
             )
             return False
-            # raise HomeAssistantError("Landroid Cloud - Unauthorized")
+        elif "Forbidden" in str(ex):
+            _LOGGER.error(
+                "Server rejected connection for account %s - Access forbidden",
+                cloud_email,
+            )
+            raise HomeAssistantError("Server rejected connection") from None
+            # return False
         else:
             _LOGGER.warning(ex)
             return False
@@ -154,9 +168,7 @@ async def async_init_device(
     await hass.async_add_executor_job(
         hass.data[DOMAIN][entry.entry_id][device]["device"].connect, device, False
     )
-    api = LandroidAPI(
-        hass, device, hass.data[DOMAIN][entry.entry_id][device]["device"], entry
-    )
+    api = LandroidAPI(hass, device, hass.data[DOMAIN][entry.entry_id][device], entry)
     hass.data[DOMAIN][entry.entry_id][device]["api"] = api
 
 
@@ -182,17 +194,19 @@ class LandroidAPI:
         self, hass: HomeAssistant, index: int, device: WorxCloud, entry: ConfigEntry
     ):
         """Set up device."""
-        self._hass = hass
+        self.hass = hass
         self.entry_id = entry.entry_id
         self.data = entry.data
         self.options = entry.options
-        self.device = device
+        self.device: WorxCloud = device["device"]
         self.index = index
         self.unique_id = entry.unique_id
         self.listeners = []
         self.services = []
         self.shared_options = {}
         self.device_id = None
+
+        self._last_state = self.device.online
 
         self.name = util_slugify(f"{self.device.name}")
         self.friendly_name = self.device.name
@@ -207,13 +221,23 @@ class LandroidAPI:
 
     def receive_data(self):
         """Used as callback from API when data is received."""
-        dispatcher_send(self._hass, f"{UPDATE_SIGNAL}_{self.device.name}")
+        if not self._last_state and self.device.online:
+            self.hass.config_entries.async_reload(self.entry_id)
+            # device_reg = dr.async_get(self.hass)
+            # device_reg.async_update_device(self.device_id)
+
+            # self._last_state = True
+        # # dispatcher_send(
+        #     self._hass, f"{UPDATE_SIGNAL_REACHABILITY}_{self.device.name}"
+        # )
+
+        dispatcher_send(self.hass, f"{UPDATE_SIGNAL}_{self.device.name}")
 
     async def async_refresh(self):
         """Try fetching data from cloud."""
-        await self._hass.async_add_executor_job(self.device.update)
-        dispatcher_send(self._hass, f"{UPDATE_SIGNAL}_{self.device.name}")
+        await self.hass.async_add_executor_job(self.device.update)
+        dispatcher_send(self.hass, f"{UPDATE_SIGNAL}_{self.device.name}")
 
     async def async_update(self):
         """Update the state cache from cloud API."""
-        dispatcher_send(self._hass, f"{UPDATE_SIGNAL}_{self.device.name}")
+        dispatcher_send(self.hass, f"{UPDATE_SIGNAL}_{self.device.name}")
