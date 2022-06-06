@@ -14,7 +14,6 @@ from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN, LandroidButtonTypes, LandroidFeatureSupport
-from .device_base import LandroidCloudMowerBase
 from .utils.entity_setup import vendor_to_device
 
 _LOGGER = logging.getLogger(__name__)

@@ -1,4 +1,5 @@
 """Define device classes."""
+# pylint: disable=unused-argument
 from __future__ import annotations
 from functools import partial
 import json
@@ -84,7 +85,7 @@ class LandroidCloudBaseEntity:
 
     _battery_level: int | None = None
     _attr_state = STATE_INITIALIZING
-    _attr_landroid_features: int |None = None
+    _attr_landroid_features: int | None = None
 
     def __init__(self, hass: HomeAssistant, api: LandroidAPI):
         """Init new base for a Landroid Cloud entity."""
@@ -113,23 +114,23 @@ class LandroidCloudBaseEntity:
         """Toggle partymode."""
         return None
 
-    async def async_setzone(self, service_call: ServiceCall = None) -> None:
-        """Set next zone."""
-        return None
-
     async def async_restart(self, service_call: ServiceCall = None) -> None:
         """Restart baseboard OS."""
         return None
 
-    async def async_config(self, service_call: ServiceCall = None) -> None:
+    async def async_setzone(self, service_call: ServiceCall) -> None:
+        """Set next zone."""
+        return None
+
+    async def async_config(self, service_call: ServiceCall) -> None:
         """Configure device."""
         return None
 
-    async def async_ots(self, service_call: ServiceCall = None) -> None:
+    async def async_ots(self, service_call: ServiceCall) -> None:
         """Start one-time-schedule."""
         return None
 
-    async def async_set_schedule(self, service_call: ServiceCall = None) -> None:
+    async def async_set_schedule(self, service_call: ServiceCall) -> None:
         """Set cutting schedule."""
         return None
 

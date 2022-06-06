@@ -69,6 +69,21 @@ DEVICE_FEATURES = (
 )
 
 
+def check_features(api) -> int:
+    """Check supported features."""
+    features = DEVICE_FEATURES
+
+    if api.device.partymode_capable:
+        _LOGGER.debug("Device %s is party mode capable", api.name)
+        features = features | LandroidFeatureSupport.PARTYMODE
+
+    if api.device.ots_capable:
+        _LOGGER.debug("Device %s is OTS capable", api.name)
+        features = features | LandroidFeatureSupport.EDGECUT
+
+    return features
+
+
 class Button(LandroidCloudButtonBase, ButtonEntity):
     """Definition of Worx Landroid button."""
 
@@ -77,19 +92,7 @@ class Button(LandroidCloudButtonBase, ButtonEntity):
         super().__init__(description, hass, api)
         _LOGGER.debug("Adding %s for %s", description.key, self.api.name)
         self.device: WorxCloud = self.api.device
-        self._attr_landroid_features = DEVICE_FEATURES
-
-        if api.device.partymode_capable:
-            _LOGGER.debug("Device %s is party mode capable", self.api.name)
-            self._attr_landroid_features = (
-                self._attr_landroid_features | LandroidFeatureSupport.PARTYMODE
-            )
-
-        if api.device.ots_capable:
-            _LOGGER.debug("Device %s is OTS capable", self.api.name)
-            self._attr_landroid_features = (
-                self._attr_landroid_features | LandroidFeatureSupport.EDGECUT
-            )
+        self._attr_landroid_features = check_features(self.api)
 
 
 class Select(LandroidCloudSelectEntity):
@@ -104,7 +107,7 @@ class Select(LandroidCloudSelectEntity):
         """Init new Worx Select entity."""
         super().__init__(description, hass, api)
         self.device: WorxCloud = self.api.device
-        self._attr_landroid_features = DEVICE_FEATURES
+        self._attr_landroid_features = check_features(self.api)
 
 
 class ZoneSelect(Select, LandroidCloudSelectZoneEntity):
@@ -119,8 +122,7 @@ class ZoneSelect(Select, LandroidCloudSelectZoneEntity):
         """Init new Worx Zone Select entity."""
         super().__init__(description, hass, api)
         self.device: WorxCloud = self.api.device
-        self._attr_landroid_features = DEVICE_FEATURES
-
+        self._attr_landroid_features = check_features(self.api)
 
 
 class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
@@ -129,19 +131,7 @@ class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
     def __init__(self, hass, api):
         """Initialize mower entity."""
         super().__init__(hass, api)
-        self._attr_landroid_features = DEVICE_FEATURES
-
-        if api.device.partymode_capable:
-            _LOGGER.debug("Device %s is party mode capable", self.api.name)
-            self._attr_landroid_features = (
-                self._attr_landroid_features | LandroidFeatureSupport.PARTYMODE
-            )
-
-        if api.device.ots_capable:
-            _LOGGER.debug("Device %s is OTS capable", self.api.name)
-            self._attr_landroid_features = (
-                self._attr_landroid_features | LandroidFeatureSupport.EDGECUT
-            )
+        self._attr_landroid_features = check_features(self.api)
 
         self.register_services()
 
