@@ -1,5 +1,7 @@
 """Adds support for Landroid Cloud compatible devices."""
 from __future__ import annotations
+from asyncio import Task
+import asyncio
 
 import logging
 
@@ -124,24 +126,38 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         CONF_TYPE: cloud_type,
     }
 
-    for device in range(num_dev):
-        hass.data[DOMAIN][entry.entry_id][device] = {}
-        _LOGGER.debug("Setting up device %s (%s)", device, cloud_email)
-        hass.data[DOMAIN][entry.entry_id][device]["device"] = WorxCloud(
-            cloud_email, cloud_password, cloud_type.lower()
-        )
-        await hass.async_add_executor_job(
-            hass.data[DOMAIN][entry.entry_id][device]["device"].initialize
-        )
-        await hass.async_add_executor_job(
-            hass.data[DOMAIN][entry.entry_id][device]["device"].connect, device, False
-        )
-        api = LandroidAPI(
-            hass, device, hass.data[DOMAIN][entry.entry_id][device]["device"], entry
-        )
-        hass.data[DOMAIN][entry.entry_id][device]["api"] = api
+    await asyncio.gather(
+        *[
+            async_init_device(
+                hass, entry, device, cloud_email, cloud_password, cloud_type
+            )
+            for device in range(num_dev)
+        ]
+    )
 
     return True
+
+
+async def async_init_device(
+    hass, entry, device, cloud_email, cloud_password, cloud_type
+) -> None:
+    """Initialize a device."""
+    hass.data[DOMAIN][entry.entry_id][device] = {}
+
+    _LOGGER.debug("Setting up device %s (%s)", device, cloud_email)
+    hass.data[DOMAIN][entry.entry_id][device]["device"] = WorxCloud(
+        cloud_email, cloud_password, cloud_type.lower()
+    )
+    await hass.async_add_executor_job(
+        hass.data[DOMAIN][entry.entry_id][device]["device"].initialize
+    )
+    await hass.async_add_executor_job(
+        hass.data[DOMAIN][entry.entry_id][device]["device"].connect, device, False
+    )
+    api = LandroidAPI(
+        hass, device, hass.data[DOMAIN][entry.entry_id][device]["device"], entry
+    )
+    hass.data[DOMAIN][entry.entry_id][device]["api"] = api
 
 
 async def check_unique_id(hass: HomeAssistant, entry: ConfigEntry) -> None:
