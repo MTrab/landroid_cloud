@@ -25,6 +25,7 @@ from ..const import (
     ATTR_RAINDELAY,
     ATTR_RUNTIME,
     ATTR_TIMEEXTENSION,
+    ATTR_TORQUE,
 )
 
 from ..device_base import (
@@ -39,6 +40,7 @@ SUPPORT_WORX = SUPPORT_LANDROID_BASE
 CONFIG_SCHEME = {
     vol.Optional(ATTR_RAINDELAY): vol.All(vol.Coerce(int), vol.Range(0, 300)),
     vol.Optional(ATTR_TIMEEXTENSION): vol.All(vol.Coerce(int), vol.Range(-100, 100)),
+    vol.Optional(ATTR_TORQUE): vol.All(vol.Coerce(int), vol.Range(-50, 50)),
     vol.Optional(ATTR_MULTIZONE_DISTANCES): str,
     vol.Optional(ATTR_MULTIZONE_PROBABILITIES): str,
 }
@@ -137,6 +139,12 @@ class WorxDevice(LandroidCloudBase, StateVacuumEntity):
             )
             tmpdata["sc"] = {}
             tmpdata["sc"]["p"] = int(data["timeextension"])
+
+        if "torque" in data:
+            _LOGGER.debug(
+                "Setting wheel torque on %s to %s%%", self._name, data["torque"]
+            )
+            tmpdata["tq"] = int(data["torque"])
 
         if "multizone_distances" in data:
             _LOGGER.debug(

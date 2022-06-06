@@ -76,6 +76,17 @@ config:
           step: 1
           unit_of_measurement: "%"
           mode: slider
+    torque:
+      name: Wheel torque
+      description: 'Set wheel torque offset'
+      example: '10'
+      selector:
+        number:
+          min: -50
+          max: 50
+          step: 1
+          unit_of_measurement: "%"
+          mode: slider
     multizone_distances:
       name: Multi zone distances
       description: 'Set multizone distance array in meters. 0 = Disabled. Format: 15, 80, 120, 155'
