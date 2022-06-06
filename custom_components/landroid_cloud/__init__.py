@@ -6,11 +6,12 @@ import logging
 from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.dispatcher import dispatcher_send
 from homeassistant.loader import async_get_integration
 from homeassistant.util import slugify as util_slugify
 
-from pyworxcloud import WorxCloud
+from pyworxcloud import WorxCloud, exceptions
 
 from .const import DOMAIN, PLATFORMS, STARTUP, UPDATE_SIGNAL
 from .scheme import CONFIG_SCHEMA  # Used for validating YAML config - DO NOT DELETE!
@@ -49,21 +50,22 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     await check_unique_id(hass, entry)
     result = await _setup(hass, entry)
 
-    hass.config_entries.async_setup_platforms(entry, PLATFORMS)
+    if result:
+        hass.config_entries.async_setup_platforms(entry, PLATFORMS)
 
     return result
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
-    # unload_ok = await hass.config_entries.async_forward_entry_unload(entry, platform)
     unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
 
     if unload_ok:
         for idx in range(hass.data[DOMAIN][entry.entry_id]["count"]):
             for unsub in hass.data[DOMAIN][entry.entry_id][idx]["api"].listeners:
                 unsub()
-            hass.data[DOMAIN].pop(entry.entry_id)
+
+        hass.data[DOMAIN].pop(entry.entry_id)
 
         return True
 
@@ -90,7 +92,20 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     _LOGGER.debug("Opening connection to account for %s as %s", cloud_email, cloud_type)
     master = WorxCloud(cloud_email, cloud_password, cloud_type.lower())
-    auth = await hass.async_add_executor_job(master.initialize)
+    auth = False
+    try:
+        auth = await hass.async_add_executor_job(master.initialize)
+    except exceptions.APIException as ex:
+        if "Unauthorized" in str(ex):
+            _LOGGER.error(
+                "Unauthorized - please check your credentials for %s at Landroid Cloud",
+                cloud_email,
+            )
+            return False
+            # raise HomeAssistantError("Landroid Cloud - Unauthorized")
+        else:
+            _LOGGER.warning(ex)
+            return False
 
     if not auth:
         _LOGGER.warning("Error in authentication! (%s)", cloud_email)

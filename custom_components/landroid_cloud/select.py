@@ -11,7 +11,7 @@ from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN, LandroidFeatureSupport, LandroidSelectTypes
-from .utils.entity_setup import async_register_services, vendor_to_device
+from .utils.entity_setup import vendor_to_device
 
 # Tuple containing select entities to create
 SELECTS = [
@@ -34,7 +34,6 @@ async def async_setup_entry(
     for idx in range(hass.data[DOMAIN][config.entry_id]["count"]):
         api = hass.data[DOMAIN][config.entry_id][idx]["api"]
 
-        platform = entity_platform.async_get_current_platform()
         for select in SELECTS:
             vendor = api.config["type"]
             device = vendor_to_device(vendor)
@@ -47,8 +46,5 @@ async def async_setup_entry(
 
             if not isinstance(constructor, type(None)):
                 entities.append(constructor(select, hass, api))
-                await async_register_services(
-                    api, platform, constructor, device, constructor.features
-                )
 
     async_add_entities(entities, True)

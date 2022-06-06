@@ -41,7 +41,5 @@ ATTR_MAP = {
             "error": "error_id"
         },
         "icon": "mdi:robot-mower",
-        "unit": None,
-        "device_class": None,
     },
 }

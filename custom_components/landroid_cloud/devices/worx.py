@@ -61,6 +61,11 @@ DEVICE_FEATURES = (
     | LandroidFeatureSupport.BUTTON
     | LandroidFeatureSupport.SELECT
     | LandroidFeatureSupport.SETZONE
+    | LandroidFeatureSupport.LOCK
+    | LandroidFeatureSupport.CONFIG
+    | LandroidFeatureSupport.RESTART
+    | LandroidFeatureSupport.SELECT
+    | LandroidFeatureSupport.SETZONE
 )
 
 
@@ -70,8 +75,21 @@ class Button(LandroidCloudButtonBase, ButtonEntity):
     def __init__(self, description, hass, api) -> None:
         """Initialize a button."""
         super().__init__(description, hass, api)
+        _LOGGER.debug("Adding %s for %s", description.key, self.api.name)
         self.device: WorxCloud = self.api.device
         self._attr_landroid_features = DEVICE_FEATURES
+
+        if api.device.partymode_capable:
+            _LOGGER.debug("Device %s is party mode capable", self.api.name)
+            self._attr_landroid_features = (
+                self._attr_landroid_features | LandroidFeatureSupport.PARTYMODE
+            )
+
+        if api.device.ots_capable:
+            _LOGGER.debug("Device %s is OTS capable", self.api.name)
+            self._attr_landroid_features = (
+                self._attr_landroid_features | LandroidFeatureSupport.EDGECUT
+            )
 
 
 class Select(LandroidCloudSelectEntity):
@@ -101,6 +119,8 @@ class ZoneSelect(Select, LandroidCloudSelectZoneEntity):
         """Init new Worx Zone Select entity."""
         super().__init__(description, hass, api)
         self.device: WorxCloud = self.api.device
+        self._attr_landroid_features = DEVICE_FEATURES
+
 
 
 class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
@@ -109,26 +129,18 @@ class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
     def __init__(self, hass, api):
         """Initialize mower entity."""
         super().__init__(hass, api)
-
-        self._attr_landroid_features = (
-            DEVICE_FEATURES
-            | LandroidFeatureSupport.LOCK
-            | LandroidFeatureSupport.CONFIG
-            | LandroidFeatureSupport.RESTART
-            | LandroidFeatureSupport.SELECT
-            | LandroidFeatureSupport.SETZONE
-        )
+        self._attr_landroid_features = DEVICE_FEATURES
 
         if api.device.partymode_capable:
+            _LOGGER.debug("Device %s is party mode capable", self.api.name)
             self._attr_landroid_features = (
                 self._attr_landroid_features | LandroidFeatureSupport.PARTYMODE
             )
 
         if api.device.ots_capable:
+            _LOGGER.debug("Device %s is OTS capable", self.api.name)
             self._attr_landroid_features = (
-                self._attr_landroid_features
-                | LandroidFeatureSupport.PARTYMODE
-                | LandroidFeatureSupport.EDGECUT
+                self._attr_landroid_features | LandroidFeatureSupport.EDGECUT
             )
 
         self.register_services()
@@ -137,6 +149,16 @@ class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
     def supported_features(self):
         """Flag which mower robot features that are supported."""
         return SUPPORTED_FEATURES
+
+    @staticmethod
+    def get_ots_scheme():
+        """Get device specific OTS_SCHEME."""
+        return OTS_SCHEME
+
+    @staticmethod
+    def get_config_scheme():
+        """Get device specific CONFIG_SCHEME."""
+        return CONFIG_SCHEME
 
     def zone_mapping(self) -> None:
         """Map current zone correct."""
@@ -149,14 +171,14 @@ class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
         self.api.shared_options.update({"current_zone": virtual_zones[current_zone]})
         dispatcher_send(self.hass, f"{UPDATE_SIGNAL_ZONES}_{self.api.device.name}")
 
-    async def async_toggle_lock(self, service_call: ServiceCall = None):
+    async def async_toggle_lock(self, _: ServiceCall = None):
         """Toggle locked state."""
         device: WorxCloud = self.api.device
         set_lock = not bool(device.locked)
         _LOGGER.debug("Setting locked state for %s to %s", self._name, set_lock)
         await self.hass.async_add_executor_job(partial(device.lock, set_lock))
 
-    async def async_toggle_partymode(self, service_call: ServiceCall = None):
+    async def async_toggle_partymode(self, _: ServiceCall = None):
         """Toggle partymode state."""
         device: WorxCloud = self.api.device
         set_partymode = not bool(device.partymode_enabled)
@@ -168,7 +190,7 @@ class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
         except NoPartymodeError as ex:
             _LOGGER.error("(%s) %s", self._name, ex.args[0])
 
-    async def async_edgecut(self, service_call: ServiceCall = None):
+    async def async_edgecut(self, _: ServiceCall = None):
         """Start edgecut routine."""
         device: WorxCloud = self.api.device
         _LOGGER.debug("Starting edgecut routine for %s", self._name)
@@ -177,13 +199,13 @@ class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
         except NoOneTimeScheduleError as ex:
             _LOGGER.error("(%s) %s", self._name, ex.args[0])
 
-    async def async_restart(self, service_call: ServiceCall = None):
+    async def async_restart(self, _: ServiceCall = None):
         """Restart mower baseboard OS."""
         device: WorxCloud = self.api.device
         _LOGGER.debug("Restarting %s", self._name)
         await self.hass.async_add_executor_job(device.restart)
 
-    async def async_ots(self, service_call: ServiceCall):
+    async def async_ots(self, service_call: ServiceCall) -> None:
         """Begin OTS routine."""
         device: WorxCloud = self.api.device
         data = service_call.data
@@ -197,7 +219,7 @@ class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
             partial(device.ots, data["boundary"], data["runtime"])
         )
 
-    async def async_config(self, service_call: ServiceCall):
+    async def async_config(self, service_call: ServiceCall) -> None:
         """Set config parameters."""
         tmpdata = {}
         device: WorxCloud = self.api.device
