@@ -240,7 +240,7 @@ class LandroidCloudBaseEntity:
             },
             "name": str(self._name),
             "sw_version": self.api.device.firmware_version,
-            "manufacturer": self.api.config["type"],
+            "manufacturer": self.api.config["type"].capitalize(),
             "model": self.api.device.board,
         }
 
