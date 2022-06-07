@@ -262,3 +262,22 @@ schedule:
       example: false
       selector:
         boolean:
+
+torque:
+  description: Set wheel torque
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: vacuum
+  fields:
+    torque:
+      name: Wheel torque
+      description: Set wheel torque. Ranging from -50% to 50%
+      example: 22
+      selector:
+        number:
+          min: -50
+          max: 50
+          step: 1
+          unit_of_measurement: "%"
+          mode: slider
