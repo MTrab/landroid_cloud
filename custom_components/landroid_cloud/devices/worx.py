@@ -29,6 +29,7 @@ from ..const import (
     ATTR_RAINDELAY,
     ATTR_RUNTIME,
     ATTR_TIMEEXTENSION,
+    ATTR_TORQUE,
     UPDATE_SIGNAL_ZONES,
     LandroidFeatureSupport,
 )
@@ -81,6 +82,10 @@ def check_features(api) -> int:
     if api.device.ots_capable:
         _LOGGER.debug("Device %s is OTS capable", api.name)
         features = features | LandroidFeatureSupport.EDGECUT
+
+    if api.device.torque_capable:
+        _LOGGER.debug("Device %s is torque capable", api.name)
+        features = features | LandroidFeatureSupport.TORQUE
 
     return features
 
@@ -203,11 +208,25 @@ class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
         _LOGGER.debug(
             "Starting OTS on %s, doing boundary (%s) running for %s minutes",
             self._name,
-            data["boundary"],
-            data["runtime"],
+            data[ATTR_BOUNDARY],
+            data[ATTR_RUNTIME],
         )
         await self.hass.async_add_executor_job(
-            partial(device.ots, data["boundary"], data["runtime"])
+            partial(device.ots, data[ATTR_BOUNDARY], data[ATTR_RUNTIME])
+        )
+
+    async def async_set_torque(self, service_call: ServiceCall) -> None:
+        """Set wheel torque."""
+        device: WorxCloud = self.api.device
+        data = service_call.data
+        _LOGGER.debug(
+            "Setting wheel torque on %s to %s",
+            self._name,
+            data[ATTR_TORQUE],
+        )
+        tmpdata = {"cfg": {"tq": data[ATTR_TORQUE]}}
+        await self.hass.async_add_executor_job(
+            partial(device.send, json.dumps(tmpdata))
         )
 
     async def async_config(self, service_call: ServiceCall) -> None:
