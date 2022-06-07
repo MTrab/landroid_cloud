@@ -1,12 +1,10 @@
 """Define device classes."""
 # pylint: disable=unused-argument
 from __future__ import annotations
-from abc import abstractmethod
 from functools import partial
 import json
 import logging
 from typing import Any
-import voluptuous as vol
 
 from homeassistant.components.button import (
     ButtonEntity,
@@ -94,7 +92,20 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class LandroidCloudBaseEntity:
-    """Define a base Landroid class."""
+    """
+    Define a base Landroid Cloud entity class.
+
+    Override these async service functions as needed by the specific device integration:
+    async def async_edgecut(self, service_call: ServiceCall) -> None:
+    async def async_toggle_lock(self, service_call: ServiceCall) -> None:
+    async def async_toggle_partymode(self, service_call: ServiceCall) -> None:
+    async def async_restart(self, service_call: ServiceCall) -> None:
+    async def async_setzone(self, service_call: ServiceCall) -> None:
+    async def async_config(self, service_call: ServiceCall) -> None:
+    async def async_ots(self, service_call: ServiceCall) -> None:
+    async def async_set_schedule(self, service_call: ServiceCall) -> None:
+    async_set_torque(self, service_call: ServiceCall) -> None:
+    """
 
     _battery_level: int | None = None
     _attr_state = STATE_INITIALIZING
