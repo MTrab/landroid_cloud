@@ -70,7 +70,12 @@ from .const import (
     LandroidFeatureSupport,
 )
 
-from .scheme import SCHEDULE_SCHEME as SCHEME_SCHEDULE, SET_ZONE_SCHEME, TORQUE_SCHEME
+from .scheme import (
+    EMPTY_SCHEME,
+    SCHEDULE_SCHEME as SCHEME_SCHEDULE,
+    SET_ZONE_SCHEME,
+    TORQUE_SCHEME,
+)
 
 from .utils.schedules import pass_thru, parseday
 
@@ -163,7 +168,7 @@ class LandroidCloudBaseEntity:
         if self.features & LandroidFeatureSupport.EDGECUT != 0:
             platform.async_register_entity_service(
                 SERVICE_EDGECUT,
-                {},
+                EMPTY_SCHEME,
                 self.async_edgecut,
             )
             self.api.services.append(SERVICE_EDGECUT)
@@ -171,7 +176,7 @@ class LandroidCloudBaseEntity:
         if self.features & LandroidFeatureSupport.LOCK != 0:
             platform.async_register_entity_service(
                 SERVICE_LOCK,
-                {},
+                EMPTY_SCHEME,
                 self.async_toggle_lock,
             )
             self.api.services.append(SERVICE_LOCK)
@@ -179,7 +184,7 @@ class LandroidCloudBaseEntity:
         if self.features & LandroidFeatureSupport.PARTYMODE != 0:
             platform.async_register_entity_service(
                 SERVICE_PARTYMODE,
-                {},
+                EMPTY_SCHEME,
                 self.async_toggle_partymode,
             )
             self.api.services.append(SERVICE_PARTYMODE)
@@ -195,7 +200,7 @@ class LandroidCloudBaseEntity:
         if self.features & LandroidFeatureSupport.RESTART != 0:
             platform.async_register_entity_service(
                 SERVICE_RESTART,
-                {},
+                EMPTY_SCHEME,
                 self.async_restart,
             )
             self.api.services.append(SERVICE_RESTART)

@@ -35,6 +35,8 @@ from .const import (
     DOMAIN,
 )
 
+EMPTY_SCHEME = {}
+
 DATA_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_EMAIL): str,
@@ -82,4 +84,4 @@ TORQUE_SCHEME = {
     vol.Required(ATTR_TORQUE): vol.All(vol.Coerce(int), vol.Range(-50, 50)),
 }
 
-SET_ZONE_SCHEME = {{vol.Required(ATTR_ZONE): vol.All(vol.Coerce(int), vol.Range(0, 3))}}
+SET_ZONE_SCHEME = {vol.Required(ATTR_ZONE): vol.All(vol.Coerce(int), vol.Range(0, 3))}
