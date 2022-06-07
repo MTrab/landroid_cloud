@@ -165,7 +165,7 @@ class LandroidCloudBaseEntity:
         """Register services."""
         platform = entity_platform.async_get_current_platform()
 
-        if self.features & LandroidFeatureSupport.EDGECUT != 0:
+        if self.features & LandroidFeatureSupport.EDGECUT:
             platform.async_register_entity_service(
                 SERVICE_EDGECUT,
                 EMPTY_SCHEME,
@@ -173,7 +173,7 @@ class LandroidCloudBaseEntity:
             )
             self.api.services.append(SERVICE_EDGECUT)
 
-        if self.features & LandroidFeatureSupport.LOCK != 0:
+        if self.features & LandroidFeatureSupport.LOCK:
             platform.async_register_entity_service(
                 SERVICE_LOCK,
                 EMPTY_SCHEME,
@@ -181,7 +181,7 @@ class LandroidCloudBaseEntity:
             )
             self.api.services.append(SERVICE_LOCK)
 
-        if self.features & LandroidFeatureSupport.PARTYMODE != 0:
+        if self.features & LandroidFeatureSupport.PARTYMODE:
             platform.async_register_entity_service(
                 SERVICE_PARTYMODE,
                 EMPTY_SCHEME,
@@ -189,7 +189,7 @@ class LandroidCloudBaseEntity:
             )
             self.api.services.append(SERVICE_PARTYMODE)
 
-        if self.features & LandroidFeatureSupport.SETZONE != 0:
+        if self.features & LandroidFeatureSupport.SETZONE:
             platform.async_register_entity_service(
                 SERVICE_SETZONE,
                 SET_ZONE_SCHEME,
@@ -197,7 +197,7 @@ class LandroidCloudBaseEntity:
             )
             self.api.services.append(SERVICE_SETZONE)
 
-        if self.features & LandroidFeatureSupport.RESTART != 0:
+        if self.features & LandroidFeatureSupport.RESTART:
             platform.async_register_entity_service(
                 SERVICE_RESTART,
                 EMPTY_SCHEME,
@@ -205,7 +205,7 @@ class LandroidCloudBaseEntity:
             )
             self.api.services.append(SERVICE_RESTART)
 
-        if self.features & LandroidFeatureSupport.CONFIG != 0:
+        if self.features & LandroidFeatureSupport.CONFIG:
             _LOGGER.debug(self.get_config_scheme())
             platform.async_register_entity_service(
                 SERVICE_CONFIG,
@@ -214,7 +214,7 @@ class LandroidCloudBaseEntity:
             )
             self.api.services.append(SERVICE_CONFIG)
 
-        if self.features & LandroidFeatureSupport.OTS != 0:
+        if self.features & LandroidFeatureSupport.OTS:
             platform.async_register_entity_service(
                 SERVICE_OTS,
                 self.get_ots_scheme,
@@ -222,7 +222,7 @@ class LandroidCloudBaseEntity:
             )
             self.api.services.append(SERVICE_OTS)
 
-        if self.features & LandroidFeatureSupport.SCHEDULES != 0:
+        if self.features & LandroidFeatureSupport.SCHEDULES:
             platform.async_register_entity_service(
                 SERVICE_SCHEDULE,
                 SCHEME_SCHEDULE,
@@ -230,7 +230,7 @@ class LandroidCloudBaseEntity:
             )
             self.api.services.append(SERVICE_SCHEDULE)
 
-        if self.features & LandroidFeatureSupport.TORQUE != 0:
+        if self.features & LandroidFeatureSupport.TORQUE:
             platform.async_register_entity_service(
                 SERVICE_TORQUE,
                 TORQUE_SCHEME,

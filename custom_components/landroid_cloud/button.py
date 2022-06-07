@@ -57,10 +57,10 @@ async def async_setup_entry(
             constructor = None
             if (
                 button.key == LandroidButtonTypes.RESTART
-                and device.DEVICE_FEATURES & LandroidFeatureSupport.RESTART != 0
+                and device.DEVICE_FEATURES & LandroidFeatureSupport.RESTART
             ) or (
                 button.key == LandroidButtonTypes.EDGECUT
-                and device.DEVICE_FEATURES & LandroidFeatureSupport.EDGECUT != 0
+                and device.DEVICE_FEATURES & LandroidFeatureSupport.EDGECUT
             ):
                 constructor = device.Button
 
