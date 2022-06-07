@@ -78,5 +78,5 @@ SCHEDULE_SCHEME = {
 }
 
 TORQUE_SCHEME = {
-    vol.Required(ATTR_TORQUE): vol.In(["primary", "secondary"]),
+    vol.Required(ATTR_TORQUE): vol.All(vol.Coerce(int), vol.Range(-50, 50)),
 }

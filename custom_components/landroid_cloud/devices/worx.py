@@ -1,7 +1,6 @@
 """Worx Landroid device definition."""
 # pylint: disable=unused-argument,relative-beyond-top-level
 from __future__ import annotations
-from abc import abstractmethod
 import json
 
 import logging
