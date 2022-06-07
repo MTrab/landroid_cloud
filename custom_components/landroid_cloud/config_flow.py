@@ -93,7 +93,7 @@ class LandroidCloudConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             step_id="user", data_schema=DATA_SCHEMA, errors=self._errors
         )
 
-    async def async_step_import(self, import_config):  # pylint: disable=unused-argument
+    async def async_step_import(self, import_config):
         """Import a config entry."""
         if import_config is not None:
             if self.check_for_existing(import_config):
