@@ -79,7 +79,9 @@ class LandroidCloudConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 self._errors["base"] = "unknown"
 
             if "base" not in self._errors:
-                await self.async_set_unique_id(f"{user_input[CONF_EMAIL]}_{user_input[CONF_TYPE]}")
+                await self.async_set_unique_id(
+                    f"{user_input[CONF_EMAIL]}_{user_input[CONF_TYPE]}"
+                )
 
                 return self.async_create_entry(
                     title=validated["title"],
@@ -96,7 +98,9 @@ class LandroidCloudConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         if import_config is not None:
             if self.check_for_existing(import_config):
                 _LOGGER.warning(
-                    "Landroid_cloud configuration for %s already imported, you can safely remove the entry from your configuration.yaml as this is no longer used",
+                    "Landroid_cloud configuration for %s already imported, you can "
+                    "safely remove the entry from your configuration.yaml as this "
+                    "is no longer used",
                     import_config.get(CONF_EMAIL),
                 )
                 return self.async_abort(reason="already_exists")
