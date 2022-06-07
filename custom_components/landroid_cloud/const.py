@@ -43,6 +43,7 @@ SERVICE_RESTART = "restart"
 SERVICE_EDGECUT = "edgecut"
 SERVICE_OTS = "ots"
 SERVICE_SCHEDULE = "schedule"
+SERVICE_TORQUE = "torque"
 
 # Extra states
 STATE_INITIALIZING = "initializing"
@@ -61,6 +62,7 @@ ATTR_TIMEEXTENSION = "timeextension"
 ATTR_ZONE = "zone"
 ATTR_BOUNDARY = "boundary"
 ATTR_RUNTIME = "runtime"
+ATTR_TORQUE = "torque"
 
 # Attributes used for managing schedules
 ATTR_TYPE = "type"
@@ -227,3 +229,4 @@ class LandroidFeatureSupport(IntEnum):
     PARTYMODE = 256
     CONFIG = 512
     SCHEDULES = 1024
+    TORQUE = 2048

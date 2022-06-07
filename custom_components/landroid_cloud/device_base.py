@@ -58,6 +58,7 @@ from .const import (
     SERVICE_RESTART,
     SERVICE_SCHEDULE,
     SERVICE_SETZONE,
+    SERVICE_TORQUE,
     STATE_INITIALIZING,
     STATE_MAP,
     STATE_MOWING,
@@ -69,7 +70,7 @@ from .const import (
     LandroidFeatureSupport,
 )
 
-from .scheme import SCHEDULE_SCHEME as SCHEME_SCHEDULE
+from .scheme import SCHEDULE_SCHEME as SCHEME_SCHEDULE, TORQUE_SCHEME
 
 from .utils.schedules import pass_thru, parseday
 
@@ -139,6 +140,10 @@ class LandroidCloudBaseEntity:
 
     async def async_set_schedule(self, service_call: ServiceCall) -> None:
         """Set cutting schedule."""
+        return None
+
+    async def async_set_torque(self, service_call: ServiceCall) -> None:
+        """Set wheel torque."""
         return None
 
     @staticmethod
@@ -219,6 +224,14 @@ class LandroidCloudBaseEntity:
                 self.async_set_schedule,
             )
             self.api.services.append(SERVICE_SCHEDULE)
+
+        if self.features & LandroidFeatureSupport.TORQUE != 0:
+            platform.async_register_entity_service(
+                SERVICE_TORQUE,
+                TORQUE_SCHEME,
+                self.async_set_torque,
+            )
+            self.api.services.append(SERVICE_TORQUE)
 
     @property
     def features(self) -> int:

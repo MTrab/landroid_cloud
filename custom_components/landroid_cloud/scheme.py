@@ -22,6 +22,7 @@ from .const import (
     ATTR_THURSDAY_BOUNDARY,
     ATTR_THURSDAY_END,
     ATTR_THURSDAY_START,
+    ATTR_TORQUE,
     ATTR_TUESDAY_BOUNDARY,
     ATTR_TUESDAY_END,
     ATTR_TUESDAY_START,
@@ -74,4 +75,8 @@ SCHEDULE_SCHEME = {
     vol.Optional(ATTR_SUNDAY_START): str,
     vol.Optional(ATTR_SUNDAY_END): str,
     vol.Optional(ATTR_SUNDAY_BOUNDARY): bool,
+}
+
+TORQUE_SCHEME = {
+    vol.Required(ATTR_TORQUE): vol.In(["primary", "secondary"]),
 }
