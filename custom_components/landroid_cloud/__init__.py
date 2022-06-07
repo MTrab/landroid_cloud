@@ -2,9 +2,6 @@
 from __future__ import annotations
 import asyncio
 
-# from asyncio import Task
-# import asyncio
-
 import logging
 
 from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
@@ -223,13 +220,6 @@ class LandroidAPI:
         """Used as callback from API when data is received."""
         if not self._last_state and self.device.online:
             self.hass.config_entries.async_reload(self.entry_id)
-            # device_reg = dr.async_get(self.hass)
-            # device_reg.async_update_device(self.device_id)
-
-            # self._last_state = True
-        # # dispatcher_send(
-        #     self._hass, f"{UPDATE_SIGNAL_REACHABILITY}_{self.device.name}"
-        # )
 
         dispatcher_send(self.hass, f"{UPDATE_SIGNAL}_{self.device.name}")
 
