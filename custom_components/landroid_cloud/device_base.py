@@ -1,5 +1,5 @@
 """Define device classes."""
-# pylint: disable=unused-argument
+# pylint: disable=unused-argument,too-many-instance-attributes,no-self-use
 from __future__ import annotations
 from functools import partial
 import json
@@ -329,6 +329,9 @@ class LandroidCloudBaseEntity:
                     data[attr] = prop_data
         data["error"] = ERROR_TO_DESCRIPTION[master.error or 0]
 
+        if not master.torque_capable and "wheel_torque" in data:
+            data.pop("wheel_torque")
+
         self._attributes.update(data)
 
         _LOGGER.debug("%s online: %s", self._name, master.online)
@@ -472,11 +475,6 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
 
     _battery_level: int | None = None
     _attr_state = STATE_INITIALIZING
-
-    # def __init__(self, hass, api):
-    #     """Init new Landroid Cloud mower."""
-    #     super().__init__(hass, api)
-    #     self._attr_landroid_features = None
 
     @property
     def extra_state_attributes(self):
