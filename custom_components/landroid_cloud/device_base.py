@@ -70,7 +70,7 @@ from .const import (
     LandroidFeatureSupport,
 )
 
-from .scheme import SCHEDULE_SCHEME as SCHEME_SCHEDULE, TORQUE_SCHEME
+from .scheme import SCHEDULE_SCHEME as SCHEME_SCHEDULE, SET_ZONE_SCHEME, TORQUE_SCHEME
 
 from .utils.schedules import pass_thru, parseday
 
@@ -187,7 +187,7 @@ class LandroidCloudBaseEntity:
         if self.features & LandroidFeatureSupport.SETZONE != 0:
             platform.async_register_entity_service(
                 SERVICE_SETZONE,
-                {vol.Required(ATTR_ZONE): vol.All(vol.Coerce(int), vol.Range(0, 3))},
+                SET_ZONE_SCHEME,
                 self.async_setzone,
             )
             self.api.services.append(SERVICE_SETZONE)

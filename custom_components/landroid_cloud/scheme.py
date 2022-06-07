@@ -30,6 +30,7 @@ from .const import (
     ATTR_WEDNESDAY_BOUNDARY,
     ATTR_WEDNESDAY_END,
     ATTR_WEDNESDAY_START,
+    ATTR_ZONE,
     CLOUDS,
     DOMAIN,
 )
@@ -80,3 +81,5 @@ SCHEDULE_SCHEME = {
 TORQUE_SCHEME = {
     vol.Required(ATTR_TORQUE): vol.All(vol.Coerce(int), vol.Range(-50, 50)),
 }
+
+SET_ZONE_SCHEME = {{vol.Required(ATTR_ZONE): vol.All(vol.Coerce(int), vol.Range(0, 3))}}
