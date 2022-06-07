@@ -38,7 +38,8 @@ ATTR_MAP = {
             "schedule_mower_active": "schedule_enabled",
             "schedule_variation": "time_extension",
             "schedules": "schedules",
-            "error": "error_id"
+            "error": "error_id",
+            "torque": "wheel_torque",
         },
         "icon": "mdi:robot-mower",
     },
