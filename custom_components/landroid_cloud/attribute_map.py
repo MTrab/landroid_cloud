@@ -40,6 +40,7 @@ ATTR_MAP = {
             "schedules": "schedules",
             "error": "error_id",
             "torque": "wheel_torque",
+            "battery_charging": "charging",
         },
         "icon": "mdi:robot-mower",
     },
