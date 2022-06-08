@@ -97,18 +97,19 @@ _LOGGER = logging.getLogger(__name__)
 
 class LandroidCloudBaseEntity:
     """
-    Define a base Landroid Cloud entity class.
-
-    Override these async service functions as needed by the specific device integration:
-    async def async_edgecut(self, service_call: ServiceCall) -> None:
-    async def async_toggle_lock(self, service_call: ServiceCall) -> None:
-    async def async_toggle_partymode(self, service_call: ServiceCall) -> None:
-    async def async_restart(self, service_call: ServiceCall) -> None:
-    async def async_set_zone(self, service_call: ServiceCall) -> None:
-    async def async_config(self, service_call: ServiceCall) -> None:
-    async def async_ots(self, service_call: ServiceCall) -> None:
-    async def async_set_schedule(self, service_call: ServiceCall) -> None:
-    async def async_set_torque(self, service_call: ServiceCall) -> None:
+    Define a base Landroid Cloud entity class.\n
+    \n
+    Override these functions as needed by the specific device integration:\n
+    async def async_edgecut(self, service_call: ServiceCall) -> None:\n
+    async def async_toggle_lock(self, service_call: ServiceCall) -> None:\n
+    async def async_toggle_partymode(self, service_call: ServiceCall) -> None:\n
+    async def async_restart(self, service_call: ServiceCall) -> None:\n
+    async def async_set_zone(self, service_call: ServiceCall) -> None:\n
+    async def async_config(self, service_call: ServiceCall) -> None:\n
+    async def async_ots(self, service_call: ServiceCall) -> None:\n
+    async def async_set_schedule(self, service_call: ServiceCall) -> None:\n
+    async def async_set_torque(self, service_call: ServiceCall) -> None:\n
+    def zone_mapping(self) -> None:\n
     """
 
     _battery_level: int | None = None
@@ -204,7 +205,6 @@ class LandroidCloudBaseEntity:
 
     def register_services(self) -> None:
         """Register services."""
-        platform = entity_platform.async_get_current_platform()
 
         if self.api.features & LandroidFeatureSupport.EDGECUT:
             if not self.hass.services.has_service(DOMAIN, SERVICE_EDGECUT):
