@@ -412,7 +412,11 @@ class LandroidCloudBaseEntity:
         self._attributes.update(data)
 
         _LOGGER.debug("(%s) Online: %s", self._name, master.online)
-        self._available = master.online if master.error == 0 else (True if hasattr(master, "error") else False)
+        self._available = (
+            master.online
+            if master.error == 0
+            else (not bool(isinstance(master.error, type(None))))
+        )
         state = STATE_INITIALIZING
 
         if not master.online:
