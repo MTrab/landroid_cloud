@@ -1,5 +1,6 @@
 """Representation of a button."""
 from __future__ import annotations
+import asyncio
 from copy import deepcopy
 
 import logging
@@ -56,6 +57,11 @@ async def async_setup_entry(
         vendor = api.config["type"]
         device = vendor_to_device(vendor)
 
+        while not api.features_loaded:
+            asyncio.sleep(1)
+
+        _LOGGER.debug("Restart %s",api.features & LandroidFeatureSupport.RESTART)
+        _LOGGER.debug("Edge cut %s",api.features & LandroidFeatureSupport.EDGECUT)
         for button in BUTTONS:
             constructor = None
             if (

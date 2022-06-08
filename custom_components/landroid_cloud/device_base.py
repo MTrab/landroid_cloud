@@ -30,7 +30,6 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import (
     entity_registry as er,
     device_registry as dr,
-    entity_platform,
 )
 from homeassistant.helpers.entity_registry import EntityRegistry
 from homeassistant.helpers.dispatcher import async_dispatcher_connect

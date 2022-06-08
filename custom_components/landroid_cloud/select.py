@@ -1,5 +1,6 @@
 """Representation of a select entity."""
 from __future__ import annotations
+import asyncio
 from copy import deepcopy
 
 import logging
@@ -43,6 +44,9 @@ async def async_setup_entry(
         api = hass.data[DOMAIN][config.entry_id][idx]["api"]
         vendor = api.config["type"]
         device = vendor_to_device(vendor)
+
+        while not api.features_loaded:
+            asyncio.sleep(1)
 
         for select in SELECTS:
             constructor = None

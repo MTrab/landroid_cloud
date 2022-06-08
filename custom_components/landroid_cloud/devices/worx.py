@@ -84,7 +84,12 @@ class Button(LandroidCloudButtonBase, ButtonEntity):
     ) -> None:
         """Initialize a button."""
         super().__init__(description, hass, api, DEVICE_FEATURES)
-        _LOGGER.debug("Adding %s for %s", description.key, self.api.name)
+        _LOGGER.debug(
+            "Adding %s for %s with friendly name %s",
+            description.key,
+            self.api.name,
+            description.name,
+        )
         self.device: WorxCloud = self.api.device
 
 
