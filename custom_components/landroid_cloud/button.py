@@ -13,6 +13,8 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
+from . import LandroidAPI
+
 from .const import (
     DOMAIN,
     LandroidButtonTypes,
@@ -47,9 +49,9 @@ async def async_setup_entry(
 ) -> None:
     """Set up Landroid buttons for specific service."""
     entities = []
-    _LOGGER.info("Assessing available buttons")
+    _LOGGER.debug("Assessing available buttons")
     for idx in range(hass.data[DOMAIN][config.entry_id]["count"]):
-        api = hass.data[DOMAIN][config.entry_id][idx]["api"]
+        api: LandroidAPI = hass.data[DOMAIN][config.entry_id][idx]["api"]
         vendor = api.config["type"]
         device = vendor_to_device(vendor)
 
@@ -57,10 +59,10 @@ async def async_setup_entry(
             constructor = None
             if (
                 button.key == LandroidButtonTypes.RESTART
-                and device.DEVICE_FEATURES & LandroidFeatureSupport.RESTART
+                and api.features & LandroidFeatureSupport.RESTART
             ) or (
                 button.key == LandroidButtonTypes.EDGECUT
-                and device.DEVICE_FEATURES & LandroidFeatureSupport.EDGECUT
+                and api.features & LandroidFeatureSupport.EDGECUT
             ):
                 constructor = device.Button
 

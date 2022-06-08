@@ -19,7 +19,6 @@ from .const import (
     PLATFORMS,
     STARTUP,
     UPDATE_SIGNAL,
-    UPDATE_SIGNAL_REACHABILITY,
 )
 from .scheme import CONFIG_SCHEMA  # Used for validating YAML config - DO NOT DELETE!
 
@@ -101,23 +100,22 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     master = WorxCloud(cloud_email, cloud_password, cloud_type.lower())
     auth = False
     try:
-        auth = await hass.async_add_executor_job(master.initialize)
+        auth = await hass.async_add_executor_job(master.authenticate)
+    except exceptions.AuthorizationError:
+        _LOGGER.error(
+            "Unauthorized - please check your credentials for %s at Landroid Cloud",
+            cloud_email,
+        )
+        return False
     except exceptions.APIException as ex:
-        if "Unauthorized" in str(ex):
-            _LOGGER.error(
-                "Unauthorized - please check your credentials for %s at Landroid Cloud",
-                cloud_email,
-            )
-            return False
-        elif "Forbidden" in str(ex):
+        if "Forbidden" in str(ex):
             _LOGGER.error(
                 "Server rejected connection for account %s - Access forbidden",
                 cloud_email,
             )
-            raise HomeAssistantError("Server rejected connection") from None
-            # return False
+            return False
         else:
-            _LOGGER.warning(ex)
+            _LOGGER.error(ex)
             return False
 
     if not auth:
@@ -156,14 +154,21 @@ async def async_init_device(
     hass.data[DOMAIN][entry.entry_id][device] = {}
 
     _LOGGER.debug("Setting up device %s (%s)", device, cloud_email)
+    # Init the object
     hass.data[DOMAIN][entry.entry_id][device]["device"] = WorxCloud(
         cloud_email, cloud_password, cloud_type.lower()
     )
+    # Authenticate
     await hass.async_add_executor_job(
-        hass.data[DOMAIN][entry.entry_id][device]["device"].initialize
+        hass.data[DOMAIN][entry.entry_id][device]["device"].authenticate
     )
+    # Connect
     await hass.async_add_executor_job(
         hass.data[DOMAIN][entry.entry_id][device]["device"].connect, device, False
+    )
+    # Get initial data
+    await hass.async_add_executor_job(
+        hass.data[DOMAIN][entry.entry_id][device]["device"].update
     )
     api = LandroidAPI(hass, device, hass.data[DOMAIN][entry.entry_id][device], entry)
     hass.data[DOMAIN][entry.entry_id][device]["api"] = api
@@ -202,6 +207,8 @@ class LandroidAPI:
         self.services = []
         self.shared_options = {}
         self.device_id = None
+        self.features = 0
+        self.features_loaded = False
 
         self._last_state = self.device.online
 

@@ -35,7 +35,11 @@ from homeassistant.helpers import (
 from homeassistant.helpers.entity_registry import EntityRegistry
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 
-from pyworxcloud import WorxCloud
+from pyworxcloud import (
+    NoOneTimeScheduleError,
+    NoPartymodeError,
+    WorxCloud,
+)
 from pyworxcloud.states import ERROR_TO_DESCRIPTION
 
 from . import LandroidAPI
@@ -43,6 +47,8 @@ from . import LandroidAPI
 from .attribute_map import ATTR_MAP
 
 from .const import (
+    ATTR_BOUNDARY,
+    ATTR_RUNTIME,
     ATTR_ZONE,
     BUTTONTYPE_TO_SERVICE,
     DOMAIN,
@@ -69,7 +75,6 @@ from .const import (
 )
 
 from .scheme import (
-    EMPTY_SCHEME,
     SCHEDULE_SCHEME as SCHEME_SCHEDULE,
     SET_ZONE_SCHEME,
     TORQUE_SCHEME,
@@ -87,7 +92,6 @@ SUPPORT_LANDROID_BASE = (
     | VacuumEntityFeature.STATUS
 )
 
-
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -100,18 +104,38 @@ class LandroidCloudBaseEntity:
     async def async_toggle_lock(self, service_call: ServiceCall) -> None:
     async def async_toggle_partymode(self, service_call: ServiceCall) -> None:
     async def async_restart(self, service_call: ServiceCall) -> None:
-    async def async_setzone(self, service_call: ServiceCall) -> None:
+    async def async_set_zone(self, service_call: ServiceCall) -> None:
     async def async_config(self, service_call: ServiceCall) -> None:
     async def async_ots(self, service_call: ServiceCall) -> None:
     async def async_set_schedule(self, service_call: ServiceCall) -> None:
-    async_set_torque(self, service_call: ServiceCall) -> None:
+    async def async_set_torque(self, service_call: ServiceCall) -> None:
     """
 
     _battery_level: int | None = None
     _attr_state = STATE_INITIALIZING
     _attr_landroid_features: int | None = None
 
-    def __init__(self, hass: HomeAssistant, api: LandroidAPI):
+    def _check_features(self, features: int) -> None:
+        """Check supported features."""
+
+        if self.api.device.partymode_capable:
+            _LOGGER.debug("%s feature assesment - party mode capable", self.api.name)
+            features = features | LandroidFeatureSupport.PARTYMODE
+
+        if self.api.device.ots_capable:
+            _LOGGER.debug("%s feature assesment - OTS capable", self.api.name)
+            features = (
+                features | LandroidFeatureSupport.EDGECUT | LandroidFeatureSupport.OTS
+            )
+
+        if self.api.device.torque_capable:
+            _LOGGER.debug("%s feature assesment - torque capable", self.api.name)
+            features = features | LandroidFeatureSupport.TORQUE
+
+        self.api.features = features
+        self.api.features_loaded = True
+
+    def __init__(self, hass: HomeAssistant, api: LandroidAPI, base_features: int):
         """Init new base for a Landroid Cloud entity."""
         self.api = api
         self.hass = hass
@@ -125,6 +149,12 @@ class LandroidCloudBaseEntity:
         self._name = f"{api.friendly_name}"
         self._mac = api.device.mac
         self._connections = {(dr.CONNECTION_NETWORK_MAC, self._mac)}
+
+        self._check_features(base_features)
+
+    def zone_mapping(self) -> None:
+        """Map current zone correct."""
+        return None
 
     async def async_edgecut(self, service_call: ServiceCall) -> None:
         """Called to start edge cut task."""
@@ -142,7 +172,7 @@ class LandroidCloudBaseEntity:
         """Restart baseboard OS."""
         return None
 
-    async def async_setzone(self, service_call: ServiceCall) -> None:
+    async def async_set_zone(self, service_call: ServiceCall) -> None:
         """Set next zone."""
         return None
 
@@ -176,83 +206,68 @@ class LandroidCloudBaseEntity:
         """Register services."""
         platform = entity_platform.async_get_current_platform()
 
-        if self.features & LandroidFeatureSupport.EDGECUT:
-            platform.async_register_entity_service(
-                SERVICE_EDGECUT,
-                EMPTY_SCHEME,
-                self.async_edgecut,
-            )
+        if self.api.features & LandroidFeatureSupport.EDGECUT:
+            if not self.hass.services.has_service(DOMAIN, SERVICE_EDGECUT):
+                self.hass.services.async_register(
+                    DOMAIN, SERVICE_EDGECUT, self.async_edgecut
+                )
             self.api.services.append(SERVICE_EDGECUT)
 
-        if self.features & LandroidFeatureSupport.LOCK:
-            platform.async_register_entity_service(
-                SERVICE_LOCK,
-                EMPTY_SCHEME,
-                self.async_toggle_lock,
-            )
+        if self.api.features & LandroidFeatureSupport.LOCK:
+            if not self.hass.services.has_service(DOMAIN, SERVICE_LOCK):
+                self.hass.services.async_register(
+                    DOMAIN, SERVICE_LOCK, self.async_toggle_lock
+                )
             self.api.services.append(SERVICE_LOCK)
 
-        if self.features & LandroidFeatureSupport.PARTYMODE:
-            platform.async_register_entity_service(
-                SERVICE_PARTYMODE,
-                EMPTY_SCHEME,
-                self.async_toggle_partymode,
-            )
+        if self.api.features & LandroidFeatureSupport.PARTYMODE:
+            if not self.hass.services.has_service(DOMAIN, SERVICE_PARTYMODE):
+                self.hass.services.async_register(
+                    DOMAIN, SERVICE_PARTYMODE, self.async_toggle_partymode
+                )
             self.api.services.append(SERVICE_PARTYMODE)
 
-        if self.features & LandroidFeatureSupport.SETZONE:
-            platform.async_register_entity_service(
-                SERVICE_SETZONE,
-                SET_ZONE_SCHEME,
-                self.async_setzone,
-            )
+        if self.api.features & LandroidFeatureSupport.SETZONE:
+            if not self.hass.services.has_service(DOMAIN, SERVICE_SETZONE):
+                self.hass.services.async_register(
+                    DOMAIN, SERVICE_SETZONE, self.async_set_zone, SET_ZONE_SCHEME
+                )
             self.api.services.append(SERVICE_SETZONE)
 
-        if self.features & LandroidFeatureSupport.RESTART:
-            platform.async_register_entity_service(
-                SERVICE_RESTART,
-                EMPTY_SCHEME,
-                self.async_restart,
-            )
+        if self.api.features & LandroidFeatureSupport.RESTART:
+            if not self.hass.services.has_service(DOMAIN, SERVICE_RESTART):
+                self.hass.services.async_register(
+                    DOMAIN, SERVICE_RESTART, self.async_restart
+                )
             self.api.services.append(SERVICE_RESTART)
 
-        if self.features & LandroidFeatureSupport.CONFIG:
-            _LOGGER.debug(self.get_config_scheme())
-            platform.async_register_entity_service(
-                SERVICE_CONFIG,
-                self.get_config_scheme,
-                self.async_config,
-            )
+        if self.api.features & LandroidFeatureSupport.CONFIG:
+            if not self.hass.services.has_service(DOMAIN, SERVICE_CONFIG):
+                self.hass.services.async_register(
+                    DOMAIN, SERVICE_CONFIG, self.async_config, self.get_config_scheme
+                )
             self.api.services.append(SERVICE_CONFIG)
 
-        if self.features & LandroidFeatureSupport.OTS:
-            platform.async_register_entity_service(
-                SERVICE_OTS,
-                self.get_ots_scheme,
-                self.async_ots,
-            )
+        if self.api.features & LandroidFeatureSupport.OTS:
+            if not self.hass.services.has_service(DOMAIN, SERVICE_OTS):
+                self.hass.services.async_register(
+                    DOMAIN, SERVICE_OTS, self.async_ots, self.get_ots_scheme
+                )
             self.api.services.append(SERVICE_OTS)
 
-        if self.features & LandroidFeatureSupport.SCHEDULES:
-            platform.async_register_entity_service(
-                SERVICE_SCHEDULE,
-                SCHEME_SCHEDULE,
-                self.async_set_schedule,
-            )
+        if self.api.features & LandroidFeatureSupport.SCHEDULES:
+            if not self.hass.services.has_service(DOMAIN, SERVICE_SCHEDULE):
+                self.hass.services.async_register(
+                    DOMAIN, SERVICE_SCHEDULE, self.async_set_schedule, SCHEME_SCHEDULE
+                )
             self.api.services.append(SERVICE_SCHEDULE)
 
-        if self.features & LandroidFeatureSupport.TORQUE:
-            platform.async_register_entity_service(
-                SERVICE_TORQUE,
-                TORQUE_SCHEME,
-                self.async_set_torque,
-            )
+        if self.api.features & LandroidFeatureSupport.TORQUE:
+            if not self.hass.services.has_service(DOMAIN, SERVICE_TORQUE):
+                self.hass.services.async_register(
+                    DOMAIN, SERVICE_TORQUE, self.async_set_torque, TORQUE_SCHEME
+                )
             self.api.services.append(SERVICE_TORQUE)
-
-    @property
-    def features(self) -> int:
-        """Flag which Landroid specifics are supported."""
-        return self._attr_landroid_features
 
     @property
     def device_info(self):
@@ -310,10 +325,6 @@ class LandroidCloudBaseEntity:
         """Update zone selections in select entity"""
         return False
 
-    def zone_mapping(self):
-        """Map zones correct."""
-        return False
-
     async def async_update(self):
         """Update the device."""
         _LOGGER.debug("Updating %s", self.entity_id)
@@ -328,7 +339,25 @@ class LandroidCloudBaseEntity:
                 if not isinstance(prop_data, type(None)):
                     data[attr] = prop_data
         data["error"] = ERROR_TO_DESCRIPTION[master.error or 0]
+        data["capabilities"] = []
 
+        # Populate capabilities attribute
+        if master.ots_capable:
+            data["capabilities"].append("One-Time-Schedule")
+            data["capabilities"].append("Edge cut")
+        if master.partymode_capable:
+            data["capabilities"].append("Party Mode")
+        if master.torque_capable:
+            data["capabilities"].append("Motor Torque")
+
+        try:
+            # Convert int to bool for charging state
+            data["charging"] = bool(data["charging"])
+        except KeyError:
+            # Charging attribute not available, defaulting to False
+            data["charging"] = False
+
+        # Remove wheel_torque attribute if the device doesn't support this setting
         if not master.torque_capable and "wheel_torque" in data:
             data.pop("wheel_torque")
 
@@ -357,7 +386,6 @@ class LandroidCloudBaseEntity:
 
         _LOGGER.debug("%s state '%s'", self._name, state)
         _LOGGER.debug("\nAttributes:\n%s", self._attributes)
-        # self._state = state
         self._attr_state = state
 
         self._serialnumber = master.serial
@@ -372,9 +400,10 @@ class LandroidCloudSelectEntity(LandroidCloudBaseEntity, SelectEntity):
         description: SelectEntityDescription,
         hass: HomeAssistant,
         api: LandroidAPI,
+        base_features: int,
     ):
         """Initialize a new Landroid Cloud select entity."""
-        super().__init__(hass, api)
+        super().__init__(hass, api, base_features)
         self.entity_description = description
         self._attr_unique_id = f"{api.name}_select_{description.key}"
         self._attr_options = []
@@ -446,9 +475,10 @@ class LandroidCloudButtonBase(LandroidCloudBaseEntity, ButtonEntity):
         description: ButtonEntityDescription,
         hass: HomeAssistant,
         api: LandroidAPI,
+        base_features: int,
     ) -> None:
         """Init a new Landroid Cloud button."""
-        super().__init__(hass, api)
+        super().__init__(hass, api, base_features)
         self.entity_description = description
         self._attr_unique_id = f"{api.name}_button_{description.key}"
         self.entity_id = ENTITY_ID_FORMAT.format(f"{api.name} {description.key}")
@@ -557,7 +587,7 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
         """Alias for return to base function."""
         await self.async_return_to_base()
 
-    async def async_setzone(self, service_call: ServiceCall):
+    async def async_set_zone(self, service_call: ServiceCall):
         """Set next zone to cut."""
         device: WorxCloud = self.api.device
         zone = service_call.data["zone"]
@@ -613,3 +643,128 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
             "New %s schedule, %s, sent to %s", schedule_type, data, self._name
         )
         await self.hass.async_add_executor_job(partial(device.send, data))
+
+    async def async_toggle_lock(self, service_call: ServiceCall) -> None:
+        """Toggle device lock state."""
+        device: WorxCloud = self.api.device
+        set_lock = not bool(device.locked)
+        _LOGGER.debug("(%s) Setting locked state to %s", self._name, set_lock)
+        await self.hass.async_add_executor_job(partial(device.lock, set_lock))
+
+    async def async_toggle_partymode(self, service_call: ServiceCall) -> None:
+        """Toggle partymode state."""
+        device: WorxCloud = self.api.device
+        set_partymode = not bool(device.partymode_enabled)
+        _LOGGER.debug("Setting PartyMode to %s on %s", set_partymode, self._name)
+        try:
+            await self.hass.async_add_executor_job(
+                partial(device.toggle_partymode, set_partymode)
+            )
+        except NoPartymodeError as ex:
+            _LOGGER.error("(%s) %s", self._name, ex.args[0])
+
+    async def async_edgecut(self, service_call: ServiceCall) -> None:
+        """Start edgecut routine."""
+        device: WorxCloud = self.api.device
+        _LOGGER.debug("Starting edgecut routine for %s", self._name)
+        try:
+            await self.hass.async_add_executor_job(partial(device.ots, True, 0))
+        except NoOneTimeScheduleError as ex:
+            _LOGGER.error("(%s) %s", self._name, ex.args[0])
+
+    async def async_restart(self, service_call: ServiceCall):
+        """Restart mower baseboard OS."""
+        device: WorxCloud = self.api.device
+        _LOGGER.debug("Restarting %s", self._name)
+        await self.hass.async_add_executor_job(device.restart)
+
+    async def async_ots(self, service_call: ServiceCall) -> None:
+        """Begin OTS routine."""
+        device: WorxCloud = self.api.device
+        data = service_call.data
+        _LOGGER.debug(
+            "Starting OTS on %s, doing boundary (%s) running for %s minutes",
+            self._name,
+            data[ATTR_BOUNDARY],
+            data[ATTR_RUNTIME],
+        )
+        await self.hass.async_add_executor_job(
+            partial(device.ots, data[ATTR_BOUNDARY], data[ATTR_RUNTIME])
+        )
+
+    async def async_config(self, service_call: ServiceCall) -> None:
+        """Set config parameters."""
+        tmpdata = {}
+        device: WorxCloud = self.api.device
+        data = service_call.data
+
+        if "raindelay" in data:
+            _LOGGER.debug(
+                "Setting raindelay on %s to %s minutes", self._name, data["raindelay"]
+            )
+            tmpdata["rd"] = int(data["raindelay"])
+
+        if "timeextension" in data:
+            _LOGGER.debug(
+                "Setting timeextension on %s to %s%%", self._name, data["timeextension"]
+            )
+            tmpdata["sc"] = {}
+            tmpdata["sc"]["p"] = int(data["timeextension"])
+
+        if "multizone_distances" in data:
+            _LOGGER.debug(
+                "Setting multizone distances on %s to %s",
+                self._name,
+                data["multizone_distances"],
+            )
+            sections = [
+                int(x)
+                for x in data["multizone_distances"]
+                .replace("[", "")
+                .replace("]", "")
+                .split(",")
+            ]
+            if len(sections) != 4:
+                raise HomeAssistantError(
+                    "Incorrect format for multizone distances array"
+                )
+
+            tmpdata["mz"] = sections
+
+        if "multizone_probabilities" in data:
+            _LOGGER.debug(
+                "Setting multizone probabilities on %s to %s",
+                self._name,
+                data["multizone_probabilities"],
+            )
+            tmpdata["mzv"] = []
+            sections = [
+                int(x)
+                for x in data["multizone_probabilities"]
+                .replace("[", "")
+                .replace("]", "")
+                .split(",")
+            ]
+            if len(sections) != 4:
+                raise HomeAssistantError(
+                    "Incorrect format for multizone probabilities array"
+                )
+            if not sum(sections) in [100, 0]:
+                raise HomeAssistantError(
+                    "Sum of zone probabilities array MUST be 100"
+                    f"or 0 (disabled), request was: {sum(sections)}"
+                )
+
+            if sum(sections) == 0:
+                for _ in range(10):
+                    tmpdata["mzv"].append(0)
+            else:
+                for idx, val in enumerate(sections):
+                    share = int(int(val) / 10)
+                    for _ in range(share):
+                        tmpdata["mzv"].append(idx)
+
+        if tmpdata:
+            data = json.dumps(tmpdata)
+            _LOGGER.debug("%s got new config: %s", self._name, data)
+            await self.hass.async_add_executor_job(partial(device.send, data))

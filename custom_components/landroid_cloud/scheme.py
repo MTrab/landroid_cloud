@@ -35,8 +35,6 @@ from .const import (
     DOMAIN,
 )
 
-EMPTY_SCHEME = {}
-
 DATA_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_EMAIL): str,
@@ -55,33 +53,39 @@ CONFIG_SCHEMA = vol.Schema(
     extra=vol.ALLOW_EXTRA,
 )
 
-SCHEDULE_SCHEME = {
-    vol.Required(ATTR_TYPE, default="primary"): vol.In(["primary", "secondary"]),
-    vol.Optional(ATTR_MONDAY_START): str,
-    vol.Optional(ATTR_MONDAY_END): str,
-    vol.Optional(ATTR_MONDAY_BOUNDARY): bool,
-    vol.Optional(ATTR_TUESDAY_START): str,
-    vol.Optional(ATTR_TUESDAY_END): str,
-    vol.Optional(ATTR_TUESDAY_BOUNDARY): bool,
-    vol.Optional(ATTR_WEDNESDAY_START): str,
-    vol.Optional(ATTR_WEDNESDAY_END): str,
-    vol.Optional(ATTR_WEDNESDAY_BOUNDARY): bool,
-    vol.Optional(ATTR_THURSDAY_START): str,
-    vol.Optional(ATTR_THURSDAY_END): str,
-    vol.Optional(ATTR_THURSDAY_BOUNDARY): bool,
-    vol.Optional(ATTR_FRIDAY_START): str,
-    vol.Optional(ATTR_FRIDAY_END): str,
-    vol.Optional(ATTR_FRIDAY_BOUNDARY): bool,
-    vol.Optional(ATTR_SATURDAY_START): str,
-    vol.Optional(ATTR_SATURDAY_END): str,
-    vol.Optional(ATTR_SATURDAY_BOUNDARY): bool,
-    vol.Optional(ATTR_SUNDAY_START): str,
-    vol.Optional(ATTR_SUNDAY_END): str,
-    vol.Optional(ATTR_SUNDAY_BOUNDARY): bool,
-}
+SCHEDULE_SCHEME = vol.Schema(
+    {
+        vol.Required(ATTR_TYPE, default="primary"): vol.In(["primary", "secondary"]),
+        vol.Optional(ATTR_MONDAY_START): str,
+        vol.Optional(ATTR_MONDAY_END): str,
+        vol.Optional(ATTR_MONDAY_BOUNDARY): bool,
+        vol.Optional(ATTR_TUESDAY_START): str,
+        vol.Optional(ATTR_TUESDAY_END): str,
+        vol.Optional(ATTR_TUESDAY_BOUNDARY): bool,
+        vol.Optional(ATTR_WEDNESDAY_START): str,
+        vol.Optional(ATTR_WEDNESDAY_END): str,
+        vol.Optional(ATTR_WEDNESDAY_BOUNDARY): bool,
+        vol.Optional(ATTR_THURSDAY_START): str,
+        vol.Optional(ATTR_THURSDAY_END): str,
+        vol.Optional(ATTR_THURSDAY_BOUNDARY): bool,
+        vol.Optional(ATTR_FRIDAY_START): str,
+        vol.Optional(ATTR_FRIDAY_END): str,
+        vol.Optional(ATTR_FRIDAY_BOUNDARY): bool,
+        vol.Optional(ATTR_SATURDAY_START): str,
+        vol.Optional(ATTR_SATURDAY_END): str,
+        vol.Optional(ATTR_SATURDAY_BOUNDARY): bool,
+        vol.Optional(ATTR_SUNDAY_START): str,
+        vol.Optional(ATTR_SUNDAY_END): str,
+        vol.Optional(ATTR_SUNDAY_BOUNDARY): bool,
+    }
+)
 
-TORQUE_SCHEME = {
-    vol.Required(ATTR_TORQUE): vol.All(vol.Coerce(int), vol.Range(-50, 50)),
-}
+TORQUE_SCHEME = vol.Schema(
+    {
+        vol.Required(ATTR_TORQUE): vol.All(vol.Coerce(int), vol.Range(-50, 50)),
+    }
+)
 
-SET_ZONE_SCHEME = {vol.Required(ATTR_ZONE): vol.All(vol.Coerce(int), vol.Range(0, 3))}
+SET_ZONE_SCHEME = vol.Schema(
+    {vol.Required(ATTR_ZONE): vol.All(vol.Coerce(int), vol.Range(0, 3))}
+)

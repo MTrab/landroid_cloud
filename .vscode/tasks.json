@@ -5,7 +5,11 @@
             "label": "Run Home Assistant on port 9123",
             "type": "shell",
             "command": "container start",
-            "problemMatcher": []
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         },
         {
             "label": "Run Home Assistant configuration against /config",

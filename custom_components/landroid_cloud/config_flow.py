@@ -23,7 +23,7 @@ async def validate_input(hass: core.HomeAssistant, data):
         data[CONF_TYPE] = "worx"
 
     worx = WorxCloud(data[CONF_EMAIL], data[CONF_PASSWORD], data[CONF_TYPE].lower())
-    auth = await hass.async_add_executor_job(worx.initialize)
+    auth = await hass.async_add_executor_job(worx.authenticate())
     if not auth:
         raise InvalidAuth
 
