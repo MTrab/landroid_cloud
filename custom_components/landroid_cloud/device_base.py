@@ -207,6 +207,7 @@ class LandroidCloudBaseEntity:
 
         if self.api.features & LandroidFeatureSupport.EDGECUT:
             if not self.hass.services.has_service(DOMAIN, SERVICE_EDGECUT):
+                _LOGGER.debug("(Service) %s was not found - adding. Trigger by %s", SERVICE_EDGECUT,self._name)
                 self.hass.services.async_register(
                     DOMAIN, SERVICE_EDGECUT, self.async_edgecut
                 )
@@ -214,6 +215,7 @@ class LandroidCloudBaseEntity:
 
         if self.api.features & LandroidFeatureSupport.LOCK:
             if not self.hass.services.has_service(DOMAIN, SERVICE_LOCK):
+                _LOGGER.debug("(Service) %s was not found - adding. Trigger by %s", SERVICE_LOCK,self._name)
                 self.hass.services.async_register(
                     DOMAIN, SERVICE_LOCK, self.async_toggle_lock
                 )
@@ -221,6 +223,7 @@ class LandroidCloudBaseEntity:
 
         if self.api.features & LandroidFeatureSupport.PARTYMODE:
             if not self.hass.services.has_service(DOMAIN, SERVICE_PARTYMODE):
+                _LOGGER.debug("(Service) %s was not found - adding. Trigger by %s", SERVICE_PARTYMODE,self._name)
                 self.hass.services.async_register(
                     DOMAIN, SERVICE_PARTYMODE, self.async_toggle_partymode
                 )
@@ -228,6 +231,7 @@ class LandroidCloudBaseEntity:
 
         if self.api.features & LandroidFeatureSupport.SETZONE:
             if not self.hass.services.has_service(DOMAIN, SERVICE_SETZONE):
+                _LOGGER.debug("(Service) %s was not found - adding. Trigger by %s", SERVICE_SETZONE,self._name)
                 self.hass.services.async_register(
                     DOMAIN, SERVICE_SETZONE, self.async_set_zone, SET_ZONE_SCHEME
                 )
@@ -235,6 +239,7 @@ class LandroidCloudBaseEntity:
 
         if self.api.features & LandroidFeatureSupport.RESTART:
             if not self.hass.services.has_service(DOMAIN, SERVICE_RESTART):
+                _LOGGER.debug("(Service) %s was not found - adding. Trigger by %s", SERVICE_RESTART,self._name)
                 self.hass.services.async_register(
                     DOMAIN, SERVICE_RESTART, self.async_restart
                 )
@@ -242,6 +247,7 @@ class LandroidCloudBaseEntity:
 
         if self.api.features & LandroidFeatureSupport.CONFIG:
             if not self.hass.services.has_service(DOMAIN, SERVICE_CONFIG):
+                _LOGGER.debug("(Service) %s was not found - adding. Trigger by %s", SERVICE_CONFIG,self._name)
                 self.hass.services.async_register(
                     DOMAIN, SERVICE_CONFIG, self.async_config, self.get_config_scheme
                 )
@@ -249,6 +255,7 @@ class LandroidCloudBaseEntity:
 
         if self.api.features & LandroidFeatureSupport.OTS:
             if not self.hass.services.has_service(DOMAIN, SERVICE_OTS):
+                _LOGGER.debug("(Service) %s was not found - adding. Trigger by %s", SERVICE_OTS,self._name)
                 self.hass.services.async_register(
                     DOMAIN, SERVICE_OTS, self.async_ots, self.get_ots_scheme
                 )
@@ -256,6 +263,7 @@ class LandroidCloudBaseEntity:
 
         if self.api.features & LandroidFeatureSupport.SCHEDULES:
             if not self.hass.services.has_service(DOMAIN, SERVICE_SCHEDULE):
+                _LOGGER.debug("(Service) %s was not found - adding. Trigger by %s", SERVICE_SCHEDULE,self._name)
                 self.hass.services.async_register(
                     DOMAIN, SERVICE_SCHEDULE, self.async_set_schedule, SCHEME_SCHEDULE
                 )
@@ -263,6 +271,7 @@ class LandroidCloudBaseEntity:
 
         if self.api.features & LandroidFeatureSupport.TORQUE:
             if not self.hass.services.has_service(DOMAIN, SERVICE_TORQUE):
+                _LOGGER.debug("(Service) %s was not found - adding. Trigger by %s", SERVICE_TORQUE,self._name)
                 self.hass.services.async_register(
                     DOMAIN, SERVICE_TORQUE, self.async_set_torque, TORQUE_SCHEME
                 )

@@ -93,7 +93,7 @@ class Button(LandroidCloudButtonBase, ButtonEntity):
 
 
 class Select(LandroidCloudSelectEntity):
-    """Definition of Worx Landroid button."""
+    """Definition of Worx Landroid select entity."""
 
     def __init__(
         self,
@@ -107,7 +107,7 @@ class Select(LandroidCloudSelectEntity):
 
 
 class ZoneSelect(Select, LandroidCloudSelectZoneEntity):
-    """Definition of a zone selector."""
+    """Definition of a Worx zone selector."""
 
     def __init__(
         self,

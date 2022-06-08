@@ -210,7 +210,6 @@ class LandroidAPI:
         self.device: WorxCloud = device["device"]
         self.index = index
         self.unique_id = entry.unique_id
-        # self.listeners = []
         self.services = []
         self.shared_options = {}
         self.device_id = None
