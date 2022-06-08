@@ -371,7 +371,7 @@ class LandroidCloudBaseEntity:
 
     async def async_update(self):
         """Update the device."""
-        _LOGGER.debug("Updating %s", self.entity_id)
+        _LOGGER.debug("(%s) Updating", self._name)
         master: WorxCloud = self.api.device
 
         methods = ATTR_MAP["default"]
@@ -624,8 +624,8 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
         """Set the vacuum cleaner to return to the dock."""
         if self.state not in [STATE_DOCKED, STATE_RETURNING]:
             device: WorxCloud = self.api.device
-            _LOGGER.debug("(%s) Going back to dock", self._name)
-            await self.hass.async_add_executor_job(device.home)
+            _LOGGER.debug("(%s) Going back to dock with blades off", self._name)
+            await self.hass.async_add_executor_job(device.safehome)
 
     async def async_stop(self, **kwargs: Any):
         """Alias for return to base function."""

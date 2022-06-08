@@ -70,7 +70,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     if unload_ok:
         for device in range(hass.data[DOMAIN][entry.entry_id]["count"]):
             await hass.async_add_executor_job(
-               hass.data[DOMAIN][entry.entry_id][device]["device"].disconnect
+                hass.data[DOMAIN][entry.entry_id][device]["device"].disconnect
             )
             services.extend(hass.data[DOMAIN][entry.entry_id][device]["api"].services)
 
