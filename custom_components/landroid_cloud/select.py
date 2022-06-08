@@ -1,5 +1,6 @@
 """Representation of a select entity."""
 from __future__ import annotations
+from copy import deepcopy
 
 import logging
 
@@ -24,7 +25,7 @@ _LOGGER = logging.getLogger(__name__)
 SELECTS = [
     SelectEntityDescription(
         key=LandroidSelectTypes.NEXT_ZONE,
-        name="Select Next Zone",
+        name="NAME - Select Next Zone",
         icon="mdi:map-clock",
         entity_category=EntityCategory.CONFIG,
     ),
@@ -49,9 +50,11 @@ async def async_setup_entry(
                 select.key == LandroidSelectTypes.NEXT_ZONE
                 and device.DEVICE_FEATURES & LandroidFeatureSupport.SETZONE
             ):
+                out = deepcopy(select)
+                out.name = out.name.replace("NAME", api.friendly_name)
                 constructor = device.ZoneSelect
 
             if not isinstance(constructor, type(None)):
-                entities.append(constructor(select, hass, api))
+                entities.append(constructor(out, hass, api))
 
     async_add_entities(entities, True)

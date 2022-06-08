@@ -1,5 +1,6 @@
 """Representation of a button."""
 from __future__ import annotations
+from copy import deepcopy
 
 import logging
 
@@ -28,14 +29,14 @@ _LOGGER = logging.getLogger(__name__)
 BUTTONS = [
     ButtonEntityDescription(
         key=LandroidButtonTypes.RESTART,
-        name="Restart",
+        name="NAME - Restart",
         icon="mdi:restart",
         entity_category=EntityCategory.DIAGNOSTIC,
         device_class=ButtonDeviceClass.RESTART,
     ),
     ButtonEntityDescription(
         key=LandroidButtonTypes.EDGECUT,
-        name="Start cutting edge",
+        name="NAME - Start cutting edge",
         icon="mdi:map-marker-path",
         entity_category=None,
     ),
@@ -64,9 +65,11 @@ async def async_setup_entry(
                 button.key == LandroidButtonTypes.EDGECUT
                 and api.features & LandroidFeatureSupport.EDGECUT
             ):
+                out = deepcopy(button)
+                out.name = out.name.replace("NAME", api.friendly_name)
                 constructor = device.Button
 
             if not isinstance(constructor, type(None)):
-                entities.append(constructor(button, hass, api))
+                entities.append(constructor(out, hass, api))
 
     async_add_entities(entities, True)
