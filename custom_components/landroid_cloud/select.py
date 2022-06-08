@@ -46,7 +46,7 @@ async def async_setup_entry(
         device = vendor_to_device(vendor)
 
         while not api.features_loaded:
-            asyncio.sleep(1)
+            await asyncio.sleep(1)
 
         for select in SELECTS:
             constructor = None

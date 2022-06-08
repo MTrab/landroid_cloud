@@ -58,7 +58,7 @@ async def async_setup_entry(
         device = vendor_to_device(vendor)
 
         while not api.features_loaded:
-            asyncio.sleep(1)
+            await asyncio.sleep(1)
 
         _LOGGER.debug("Restart %s",api.features & LandroidFeatureSupport.RESTART)
         _LOGGER.debug("Edge cut %s",api.features & LandroidFeatureSupport.EDGECUT)

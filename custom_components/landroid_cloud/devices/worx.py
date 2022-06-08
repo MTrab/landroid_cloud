@@ -85,10 +85,9 @@ class Button(LandroidCloudButtonBase, ButtonEntity):
         """Initialize a button."""
         super().__init__(description, hass, api, DEVICE_FEATURES)
         _LOGGER.debug(
-            "Adding %s for %s with friendly name %s",
-            description.key,
+            "(%s) Adding %s",
             self.api.name,
-            description.name,
+            description.key,
         )
         self.device: WorxCloud = self.api.device
 
@@ -164,7 +163,7 @@ class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
         device: WorxCloud = self.api.device
         data = service_call.data
         _LOGGER.debug(
-            "Setting wheel torque on %s to %s",
+            "(%s) Setting wheel torque to %s",
             self._name,
             data[ATTR_TORQUE],
         )

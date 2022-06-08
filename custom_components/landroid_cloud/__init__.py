@@ -66,12 +66,19 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
     unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
 
+    services = []
     if unload_ok:
-        for idx in range(hass.data[DOMAIN][entry.entry_id]["count"]):
-            for unsub in hass.data[DOMAIN][entry.entry_id][idx]["api"].listeners:
-                unsub()
+        for device in range(hass.data[DOMAIN][entry.entry_id]["count"]):
+            await hass.async_add_executor_job(
+               hass.data[DOMAIN][entry.entry_id][device]["device"].disconnect
+            )
+            services.extend(hass.data[DOMAIN][entry.entry_id][device]["api"].services)
 
         hass.data[DOMAIN].pop(entry.entry_id)
+
+        if not hass.data[DOMAIN]:
+            for service in services:
+                hass.services.async_remove(DOMAIN, service)
 
         return True
 
@@ -203,7 +210,7 @@ class LandroidAPI:
         self.device: WorxCloud = device["device"]
         self.index = index
         self.unique_id = entry.unique_id
-        self.listeners = []
+        # self.listeners = []
         self.services = []
         self.shared_options = {}
         self.device_id = None

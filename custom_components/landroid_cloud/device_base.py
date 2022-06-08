@@ -119,17 +119,17 @@ class LandroidCloudBaseEntity:
         """Check supported features."""
 
         if self.api.device.partymode_capable:
-            _LOGGER.debug("%s feature assesment - party mode capable", self.api.name)
+            _LOGGER.debug("(%s) feature assesment - party mode capable", self.api.name)
             features = features | LandroidFeatureSupport.PARTYMODE
 
         if self.api.device.ots_capable:
-            _LOGGER.debug("%s feature assesment - OTS capable", self.api.name)
+            _LOGGER.debug("(%s) feature assesment - OTS capable", self.api.name)
             features = (
                 features | LandroidFeatureSupport.EDGECUT | LandroidFeatureSupport.OTS
             )
 
         if self.api.device.torque_capable:
-            _LOGGER.debug("%s feature assesment - torque capable", self.api.name)
+            _LOGGER.debug("(%s) feature assesment - torque capable", self.api.name)
             features = features | LandroidFeatureSupport.TORQUE
 
         self.api.features = features
@@ -362,7 +362,7 @@ class LandroidCloudBaseEntity:
 
         self._attributes.update(data)
 
-        _LOGGER.debug("%s online: %s", self._name, master.online)
+        _LOGGER.debug("(%s) Online: %s", self._name, master.online)
         self._available = master.online
         state = STATE_INITIALIZING
 
@@ -383,8 +383,8 @@ class LandroidCloudBaseEntity:
             if len(self._attributes["zone_probability"]) == 10:
                 self.zone_mapping()
 
-        _LOGGER.debug("%s state '%s'", self._name, state)
-        _LOGGER.debug("\nAttributes:\n%s", self._attributes)
+        _LOGGER.debug("(%s) State '%s'", self._name, state)
+        _LOGGER.debug("\n(%s) Attributes:\n%s", self._name, self._attributes)
         self._attr_state = state
 
         self._serialnumber = master.serial
@@ -558,18 +558,18 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
     async def async_start(self):
         """Start or resume the task."""
         device: WorxCloud = self.api.device
-        _LOGGER.debug("Starting %s", self._name)
+        _LOGGER.debug("(%s) Starting", self._name)
         await self.hass.async_add_executor_job(device.start)
 
     async def async_pause(self):
         """Pause the mowing cycle."""
         device: WorxCloud = self.api.device
-        _LOGGER.debug("Pausing %s", self._name)
+        _LOGGER.debug("(%s) Pausing", self._name)
         await self.hass.async_add_executor_job(device.pause)
 
     async def async_start_pause(self):
         """Toggle the state of the mower."""
-        _LOGGER.debug("Toggeling state of %s", self._name)
+        _LOGGER.debug("(%s) Toggeling state", self._name)
         if STATE_MOWING in self.state:
             await self.async_pause()
         else:
@@ -579,7 +579,7 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
         """Set the vacuum cleaner to return to the dock."""
         if self.state not in [STATE_DOCKED, STATE_RETURNING]:
             device: WorxCloud = self.api.device
-            _LOGGER.debug("Sending %s back to dock", self._name)
+            _LOGGER.debug("(%s) Going back to dock", self._name)
             await self.hass.async_add_executor_job(device.home)
 
     async def async_stop(self, **kwargs: Any):
@@ -590,7 +590,7 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
         """Set next zone to cut."""
         device: WorxCloud = self.api.device
         zone = service_call.data["zone"]
-        _LOGGER.debug("Setting zone for %s to %s", self._name, zone)
+        _LOGGER.debug("(%s) Setting zone to %s", self._name, zone)
         await self.hass.async_add_executor_job(partial(device.setzone, str(zone)))
 
     async def async_set_schedule(self, service_call: ServiceCall):
@@ -639,7 +639,7 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
 
         data = json.dumps({"sc": schedule})
         _LOGGER.debug(
-            "New %s schedule, %s, sent to %s", schedule_type, data, self._name
+            "(%s) New %s schedule, %s",self._name, schedule_type, data
         )
         await self.hass.async_add_executor_job(partial(device.send, data))
 
@@ -654,7 +654,7 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
         """Toggle partymode state."""
         device: WorxCloud = self.api.device
         set_partymode = not bool(device.partymode_enabled)
-        _LOGGER.debug("Setting PartyMode to %s on %s", set_partymode, self._name)
+        _LOGGER.debug("(%s) Setting PartyMode to %s", set_partymode, self._name)
         try:
             await self.hass.async_add_executor_job(
                 partial(device.toggle_partymode, set_partymode)
@@ -665,7 +665,7 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
     async def async_edgecut(self, service_call: ServiceCall) -> None:
         """Start edgecut routine."""
         device: WorxCloud = self.api.device
-        _LOGGER.debug("Starting edgecut routine for %s", self._name)
+        _LOGGER.debug("(%s) Starting edge cut task", self._name)
         try:
             await self.hass.async_add_executor_job(partial(device.ots, True, 0))
         except NoOneTimeScheduleError as ex:
@@ -674,7 +674,7 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
     async def async_restart(self, service_call: ServiceCall):
         """Restart mower baseboard OS."""
         device: WorxCloud = self.api.device
-        _LOGGER.debug("Restarting %s", self._name)
+        _LOGGER.debug("(%s) Restarting", self._name)
         await self.hass.async_add_executor_job(device.restart)
 
     async def async_ots(self, service_call: ServiceCall) -> None:
@@ -682,7 +682,7 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
         device: WorxCloud = self.api.device
         data = service_call.data
         _LOGGER.debug(
-            "Starting OTS on %s, doing boundary (%s) running for %s minutes",
+            "(%s) Starting OTS with boundary set to %s and running for %s minutes",
             self._name,
             data[ATTR_BOUNDARY],
             data[ATTR_RUNTIME],
@@ -699,20 +699,20 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
 
         if "raindelay" in data:
             _LOGGER.debug(
-                "Setting raindelay on %s to %s minutes", self._name, data["raindelay"]
+                "(%s) Setting raindelayto %s minutes", self._name, data["raindelay"]
             )
             tmpdata["rd"] = int(data["raindelay"])
 
         if "timeextension" in data:
             _LOGGER.debug(
-                "Setting timeextension on %s to %s%%", self._name, data["timeextension"]
+                "(%s) Setting timeextension to %s%%", self._name, data["timeextension"]
             )
             tmpdata["sc"] = {}
             tmpdata["sc"]["p"] = int(data["timeextension"])
 
         if "multizone_distances" in data:
             _LOGGER.debug(
-                "Setting multizone distances on %s to %s",
+                "(%s) Setting multizone distances to %s",
                 self._name,
                 data["multizone_distances"],
             )
@@ -732,7 +732,7 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
 
         if "multizone_probabilities" in data:
             _LOGGER.debug(
-                "Setting multizone probabilities on %s to %s",
+                "(%s) Setting multizone probabilities to %s",
                 self._name,
                 data["multizone_probabilities"],
             )
@@ -765,5 +765,5 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
 
         if tmpdata:
             data = json.dumps(tmpdata)
-            _LOGGER.debug("%s got new config: %s", self._name, data)
+            _LOGGER.debug("(%s) New config: %s", self._name, data)
             await self.hass.async_add_executor_job(partial(device.send, data))
