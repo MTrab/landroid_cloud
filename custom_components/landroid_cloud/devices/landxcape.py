@@ -17,7 +17,16 @@ from pyworxcloud import (
 
 from .. import LandroidAPI
 
-from ..const import ATTR_BOUNDARY, ATTR_MULTIZONE_DISTANCES, ATTR_MULTIZONE_PROBABILITIES, ATTR_RAINDELAY, ATTR_RUNTIME, ATTR_TIMEEXTENSION, UPDATE_SIGNAL_ZONES, LandroidFeatureSupport
+from ..const import (
+    ATTR_BOUNDARY,
+    ATTR_MULTIZONE_DISTANCES,
+    ATTR_MULTIZONE_PROBABILITIES,
+    ATTR_RAINDELAY,
+    ATTR_RUNTIME,
+    ATTR_TIMEEXTENSION,
+    UPDATE_SIGNAL_ZONES,
+    LandroidFeatureSupport,
+)
 
 from ..device_base import (
     LandroidCloudButtonBase,
@@ -121,6 +130,7 @@ class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
     def supported_features(self):
         """Flag which mower robot features that are supported."""
         return SUPPORTED_FEATURES
+
     def zone_mapping(self) -> None:
         """Map current zone correct."""
         device: WorxCloud = self.api.device
