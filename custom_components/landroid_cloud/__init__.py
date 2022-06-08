@@ -232,8 +232,10 @@ class LandroidAPI:
     def receive_data(self):
         """Used as callback from API when data is received."""
         if not self._last_state and self.device.online:
+            self._last_state = True
             self.hass.config_entries.async_reload(self.entry_id)
 
+        _LOGGER.debug("(%s) Got update signal for new data", self.device.name)
         dispatcher_send(self.hass, f"{UPDATE_SIGNAL}_{self.device.name}")
 
     async def async_refresh(self):
@@ -241,6 +243,6 @@ class LandroidAPI:
         await self.hass.async_add_executor_job(self.device.update)
         dispatcher_send(self.hass, f"{UPDATE_SIGNAL}_{self.device.name}")
 
-    async def async_update(self):
-        """Update the state cache from cloud API."""
-        dispatcher_send(self.hass, f"{UPDATE_SIGNAL}_{self.device.name}")
+    # async def async_update(self):
+    #     """Update the state cache from cloud API."""
+    #     dispatcher_send(self.hass, f"{UPDATE_SIGNAL}_{self.device.name}")

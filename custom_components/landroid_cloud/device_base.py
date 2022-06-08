@@ -370,6 +370,10 @@ class LandroidCloudBaseEntity:
         return False
 
     async def async_update(self):
+        """Default async_update"""
+        return
+
+    def data_update(self):
         """Update the device."""
         _LOGGER.debug("(%s) Updating", self._name)
         master: WorxCloud = self.api.device
@@ -408,7 +412,7 @@ class LandroidCloudBaseEntity:
         self._attributes.update(data)
 
         _LOGGER.debug("(%s) Online: %s", self._name, master.online)
-        self._available = master.online
+        self._available = master.online if master.error == 0 else (True if hasattr(master, "error") else False)
         state = STATE_INITIALIZING
 
         if not master.online:
@@ -598,6 +602,7 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
     @callback
     def update_callback(self):
         """Get new data and update state."""
+        self.data_update()
         self.schedule_update_ha_state(True)
 
     async def async_start(self):
