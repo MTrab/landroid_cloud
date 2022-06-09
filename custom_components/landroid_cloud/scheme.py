@@ -39,7 +39,7 @@ DATA_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_EMAIL): str,
         vol.Required(CONF_PASSWORD): str,
-        vol.Optional(CONF_TYPE, default=CLOUDS[0]): vol.In(CLOUDS),
+        vol.Optional(CONF_TYPE, default=[x for x in CLOUDS if x.lower() == "worx"][0]): vol.In(CLOUDS),
     }
 )
 

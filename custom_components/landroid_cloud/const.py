@@ -2,6 +2,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from enum import IntEnum
+import inspect
 from homeassistant.backports.enum import StrEnum
 
 from homeassistant.components.vacuum import (
@@ -11,7 +12,7 @@ from homeassistant.components.vacuum import (
     STATE_PAUSED,
     STATE_IDLE,
 )
-from pyworxcloud.clouds import CLOUDS as api_clouds
+from pyworxcloud.clouds import CloudType
 
 
 # Startup banner
@@ -93,8 +94,9 @@ ATTR_NEXT_ZONE = "next_zone"
 
 # Available cloud vendors
 CLOUDS = []
-for cloud in api_clouds:
-    CLOUDS.append(cloud.capitalize())
+for name, cloud in inspect.getmembers(CloudType):
+    if inspect.isclass(cloud) and not "__" in name:
+        CLOUDS.append(name.capitalize())
 
 # State mapping
 STATE_MAP = {

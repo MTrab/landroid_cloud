@@ -144,10 +144,10 @@ class LandroidCloudBaseEntity:
         self._attributes = {}
         self._available = False
         self._unique_id = f"{api.device.serial_number}_{api.name}"
-        self._serialnumber = None
+        self._serialnumber = api.device.serial_number
         self._icon = None
         self._name = f"{api.friendly_name}"
-        self._mac = api.device.mac
+        self._mac = api.device.mac_address
         self._connections = {(dr.CONNECTION_NETWORK_MAC, self._mac)}
 
         self._check_features(base_features)
@@ -329,7 +329,7 @@ class LandroidCloudBaseEntity:
             "name": str(self._name),
             "sw_version": self.api.device.firmware_version,
             "manufacturer": self.api.config["type"].capitalize(),
-            "model": self.api.device.board,
+            "model": self.api.device.model,
         }
 
     async def async_added_to_hass(self):
