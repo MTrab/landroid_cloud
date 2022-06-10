@@ -31,6 +31,7 @@ from homeassistant.helpers import (
     entity_registry as er,
     device_registry as dr,
 )
+from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.entity_registry import EntityRegistry
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 
@@ -54,7 +55,6 @@ from .const import (
     SCHEDULE_TO_DAY,
     SCHEDULE_TYPE_MAP,
     SERVICE_CONFIG,
-    SERVICE_EDGECUT,
     SERVICE_LOCK,
     SERVICE_OTS,
     SERVICE_PARTYMODE,
@@ -115,27 +115,7 @@ class LandroidCloudBaseEntity:
     _attr_state = STATE_INITIALIZING
     _attr_landroid_features: int | None = None
 
-    def _check_features(self, features: int) -> None:
-        """Check supported features."""
-
-        if self.api.device.partymode_capable:
-            _LOGGER.debug("(%s) feature assesment - party mode capable", self.api.name)
-            features = features | LandroidFeatureSupport.PARTYMODE
-
-        if self.api.device.ots_capable:
-            _LOGGER.debug("(%s) feature assesment - OTS capable", self.api.name)
-            features = (
-                features | LandroidFeatureSupport.EDGECUT | LandroidFeatureSupport.OTS
-            )
-
-        if self.api.device.torque_capable:
-            _LOGGER.debug("(%s) feature assesment - torque capable", self.api.name)
-            features = features | LandroidFeatureSupport.TORQUE
-
-        self.api.features = features
-        self.api.features_loaded = True
-
-    def __init__(self, hass: HomeAssistant, api: LandroidAPI, base_features: int):
+    def __init__(self, hass: HomeAssistant, api: LandroidAPI):
         """Init new base for a Landroid Cloud entity."""
         self.api = api
         self.hass = hass
@@ -150,13 +130,16 @@ class LandroidCloudBaseEntity:
         self._mac = api.device.mac_address
         self._connections = {(dr.CONNECTION_NETWORK_MAC, self._mac)}
 
-        self._check_features(base_features)
+        # self._check_features(base_features)
 
     def zone_mapping(self) -> None:
         """Map current zone correct."""
         return None
 
-    async def async_edgecut(self, service_call: ServiceCall) -> None:
+    # async def async_edgecut(self, service_call: ServiceCall, other) -> None:
+    async def async_edgecut(
+        self, entity: Entity = None, service_call: ServiceCall = None
+    ) -> None:
         """Called to start edge cut task."""
         return None
 
@@ -204,18 +187,6 @@ class LandroidCloudBaseEntity:
 
     def register_services(self) -> None:
         """Register services."""
-
-        if self.api.features & LandroidFeatureSupport.EDGECUT:
-            if not self.hass.services.has_service(DOMAIN, SERVICE_EDGECUT):
-                _LOGGER.debug(
-                    "(Service) %s was not found - adding. Trigger by %s",
-                    SERVICE_EDGECUT,
-                    self._name,
-                )
-                self.hass.services.async_register(
-                    DOMAIN, SERVICE_EDGECUT, self.async_edgecut
-                )
-            self.api.services.append(SERVICE_EDGECUT)
 
         if self.api.features & LandroidFeatureSupport.LOCK:
             if not self.hass.services.has_service(DOMAIN, SERVICE_LOCK):
@@ -398,6 +369,8 @@ class LandroidCloudBaseEntity:
         if master.torque_capable:
             data["capabilities"].append("Motor Torque")
 
+        data["device_id"] = self.api.device_id
+
         try:
             # Convert int to bool for charging state
             data["charging"] = bool(data["charging"])
@@ -419,7 +392,7 @@ class LandroidCloudBaseEntity:
         )
         state = STATE_INITIALIZING
 
-        if not master.online:
+        if not master.online and master.error == 0:
             state = STATE_OFFLINE
         elif master.error is not None and master.error > 0:
             if master.error > 0 and master.error != 5:
@@ -440,7 +413,7 @@ class LandroidCloudBaseEntity:
         _LOGGER.debug("\n(%s) Attributes:\n%s", self._name, self._attributes)
         self._attr_state = state
 
-        self._serialnumber = master.serial
+        self._serialnumber = master.serial_number
         self._battery_level = master.battery_percent
 
 
@@ -452,10 +425,9 @@ class LandroidCloudSelectEntity(LandroidCloudBaseEntity, SelectEntity):
         description: SelectEntityDescription,
         hass: HomeAssistant,
         api: LandroidAPI,
-        base_features: int,
     ):
         """Initialize a new Landroid Cloud select entity."""
-        super().__init__(hass, api, base_features)
+        super().__init__(hass, api)
         self.entity_description = description
         self._attr_unique_id = f"{api.name}_select_{description.key}"
         self._attr_options = []
@@ -527,10 +499,9 @@ class LandroidCloudButtonBase(LandroidCloudBaseEntity, ButtonEntity):
         description: ButtonEntityDescription,
         hass: HomeAssistant,
         api: LandroidAPI,
-        base_features: int,
     ) -> None:
         """Init a new Landroid Cloud button."""
-        super().__init__(hass, api, base_features)
+        super().__init__(hass, api)
         self.entity_description = description
         self._attr_unique_id = f"{api.name}_button_{description.key}"
         self.entity_id = ENTITY_ID_FORMAT.format(f"{api.name} {description.key}")
@@ -714,14 +685,18 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
         except NoPartymodeError as ex:
             _LOGGER.error("(%s) %s", self._name, ex.args[0])
 
-    async def async_edgecut(self, service_call: ServiceCall) -> None:
+    async def async_edgecut(
+        self, entity: Entity = None, service_call: ServiceCall = None
+    ) -> None:
         """Start edgecut routine."""
+        _LOGGER.debug(entity)
+        _LOGGER.debug(service_call)
         device: WorxCloud = self.api.device
         _LOGGER.debug("(%s) Starting edge cut task", self._name)
-        try:
-            await self.hass.async_add_executor_job(partial(device.ots, True, 0))
-        except NoOneTimeScheduleError as ex:
-            _LOGGER.error("(%s) %s", self._name, ex.args[0])
+        # try:
+        #     await self.hass.async_add_executor_job(partial(device.ots, True, 0))
+        # except NoOneTimeScheduleError as ex:
+        #     _LOGGER.error("(%s) %s", self._name, ex.args[0])
 
     async def async_restart(self, service_call: ServiceCall):
         """Restart mower baseboard OS."""
