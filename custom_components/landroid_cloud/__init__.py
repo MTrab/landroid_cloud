@@ -19,6 +19,7 @@ from .const import (
     PLATFORMS,
     STARTUP,
     UPDATE_SIGNAL,
+    LandroidFeatureSupport,
 )
 from .scheme import CONFIG_SCHEMA  # Used for validating YAML config - DO NOT DELETE!
 
@@ -108,22 +109,50 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     auth = False
     try:
         auth = await hass.async_add_executor_job(master.authenticate)
+    except exceptions.RequestError:
+        _LOGGER.error(
+            "API request for %s was malformed.",
+            cloud_email,
+        )
+        return False
     except exceptions.AuthorizationError:
         _LOGGER.error(
             "Unauthorized - please check your credentials for %s at Landroid Cloud",
             cloud_email,
         )
         return False
+    except exceptions.ForbiddenError:
+        _LOGGER.error(
+            "Server rejected access for %s at Landroid Cloud - this might be temporary due to high numbers of API requests from this IP address.",
+            cloud_email,
+        )
+        return False
+    except exceptions.NotFoundError:
+        _LOGGER.error(
+            "API endpoint for %s was not found.",
+            cloud_email,
+        )
+        return False
+    except exceptions.TooManyRequestsError:
+        _LOGGER.error(
+            "Too many API requests for %s at Landroid Cloud. IP address temporary banned.",
+            cloud_email,
+        )
+        return False
+    except exceptions.InternalServerError:
+        _LOGGER.error(
+            "Internal server error happend for the request to %s at Landroid Cloud.",
+            cloud_email,
+        )
+        return False
+    except exceptions.ServiceUnavailableError:
+        _LOGGER.error(
+            "API service at Landroid Cloud was unavailable.",
+        )
+        return False
     except exceptions.APIException as ex:
-        if "Forbidden" in str(ex):
-            _LOGGER.error(
-                "Server rejected connection for account %s - Access forbidden",
-                cloud_email,
-            )
-            return False
-        else:
-            _LOGGER.error(ex)
-            return False
+        _LOGGER.error(ex)
+        return False
 
     if not auth:
         _LOGGER.warning("Error in authentication! (%s)", cloud_email)
@@ -229,6 +258,26 @@ class LandroidAPI:
 
         self.device.set_callback(self.receive_data)
 
+    def check_features(self, features: int) -> None:
+        """Check supported features."""
+
+        if self.device.partymode_capable:
+            _LOGGER.debug("(%s) feature assesment - party mode capable", self.name)
+            features = features | LandroidFeatureSupport.PARTYMODE
+
+        if self.device.ots_capable:
+            _LOGGER.debug("(%s) feature assesment - OTS capable", self.name)
+            features = (
+                features | LandroidFeatureSupport.EDGECUT | LandroidFeatureSupport.OTS
+            )
+
+        if self.device.torque_capable:
+            _LOGGER.debug("(%s) feature assesment - torque capable", self.name)
+            features = features | LandroidFeatureSupport.TORQUE
+
+        self.features = features
+        self.features_loaded = True
+
     def receive_data(self):
         """Used as callback from API when data is received."""
         if not self._last_state and self.device.online:
@@ -242,7 +291,3 @@ class LandroidAPI:
         """Try fetching data from cloud."""
         await self.hass.async_add_executor_job(self.device.update)
         dispatcher_send(self.hass, f"{UPDATE_SIGNAL}_{self.device.name}")
-
-    # async def async_update(self):
-    #     """Update the state cache from cloud API."""
-    #     dispatcher_send(self.hass, f"{UPDATE_SIGNAL}_{self.device.name}")
