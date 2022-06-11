@@ -6,6 +6,11 @@ import logging
 
 from homeassistant.backports.enum import StrEnum
 
+try:
+    from ..api import LandroidAPI
+except:
+    pass
+
 
 class LoggerType(StrEnum):
     """Defines the available logger types."""
@@ -44,10 +49,14 @@ class LogLevel(StrEnum):
 class LandroidLogger:
     """Define logger."""
 
-    def __init__(self, name: str, log_level: LogLevel = LogLevel.DEBUG, api=None):
+    def __init__(
+        self, name: str, log_level: LogLevel = LogLevel.DEBUG, api: LandroidAPI = None
+    ):
         """Initialize logger."""
         self._api = api
-        self._devicename: str | None = None if isinstance(api, type(None)) else api.name
+        self._devicename: str | None = (
+            None if isinstance(api, type(None)) else api.friendly_name
+        )
         self._logname = name
         self._loglevel = log_level
         self._logger: logging.Logger = logging.getLogger(name)
@@ -58,6 +67,11 @@ class LandroidLogger:
     def set_child(self, name: str):
         """Set child logger."""
         self._logger = self._logger.getChild(name)
+
+    def set_api(self, api: LandroidAPI):
+        """Set integration API."""
+        self._api = api
+        self._devicename = api.friendly_name
 
     def write(
         self,
