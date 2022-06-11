@@ -3,8 +3,6 @@
 from __future__ import annotations
 import json
 
-import logging
-
 from functools import partial
 import voluptuous as vol
 
@@ -13,12 +11,13 @@ from homeassistant.components.select import SelectEntityDescription
 from homeassistant.components.vacuum import StateVacuumEntity
 from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.helpers.dispatcher import dispatcher_send
+from homeassistant.helpers.entity import Entity
 
 from pyworxcloud import (
     WorxCloud,
 )
 
-from .. import LandroidAPI
+from ..api import LandroidAPI
 
 from ..const import (
     ATTR_BOUNDARY,
@@ -28,6 +27,7 @@ from ..const import (
     ATTR_RUNTIME,
     ATTR_TIMEEXTENSION,
     ATTR_TORQUE,
+    LOGLEVEL,
     UPDATE_SIGNAL_ZONES,
     LandroidFeatureSupport,
 )
@@ -40,7 +40,9 @@ from ..device_base import (
     LandroidCloudSelectZoneEntity,
 )
 
-_LOGGER = logging.getLogger(__name__)
+from ..utils.logger import LandroidLogger, LoggerType
+
+LOGGER = LandroidLogger(__name__, LOGLEVEL)
 
 SUPPORTED_FEATURES = SUPPORT_LANDROID_BASE
 
@@ -83,10 +85,10 @@ class Button(LandroidCloudButtonBase, ButtonEntity):
         api: LandroidAPI,
     ) -> None:
         """Initialize a button."""
-        super().__init__(description, hass, api, DEVICE_FEATURES)
-        _LOGGER.debug(
-            "(%s) Adding %s",
-            self.api.name,
+        super().__init__(description, hass, api)
+        LOGGER.write(
+            LoggerType.BUTTON,
+            "Adding %s",
             description.key,
         )
         self.device: WorxCloud = self.api.device
@@ -102,7 +104,12 @@ class Select(LandroidCloudSelectEntity):
         api: LandroidAPI,
     ):
         """Init new Worx Select entity."""
-        super().__init__(description, hass, api, DEVICE_FEATURES)
+        super().__init__(description, hass, api)
+        LOGGER.write(
+            LoggerType.SELECT,
+            "Adding %s",
+            description.key,
+        )
         self.device: WorxCloud = self.api.device
 
 
@@ -125,10 +132,15 @@ class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
 
     def __init__(self, hass, api):
         """Initialize mower entity."""
-        super().__init__(hass, api, DEVICE_FEATURES)
+        super().__init__(hass, api)
         self.device: WorxCloud = self.api.device
 
         self.register_services()
+
+    @property
+    def base_features(self):
+        """Flag which Landroid Cloud specific features that are supported."""
+        return DEVICE_FEATURES
 
     @property
     def supported_features(self):
@@ -140,9 +152,9 @@ class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
         device: WorxCloud = self.api.device
         current_zone = device.mowing_zone
         virtual_zones = device.zone_probability
-        _LOGGER.debug("(%s) Zone reported by API: %s", self.api.name, current_zone)
-        _LOGGER.debug(
-            "(%s) Corrected zone: %s", self.api.name, virtual_zones[current_zone]
+        LOGGER.write(LoggerType.MOWER, "Zone reported by API: %s", current_zone)
+        LOGGER.write(
+            LoggerType.MOWER, "Corrected zone: %s", virtual_zones[current_zone]
         )
         self._attributes.update({"current_zone": virtual_zones[current_zone]})
         self.api.shared_options.update({"current_zone": virtual_zones[current_zone]})
@@ -158,13 +170,15 @@ class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
         """Get device specific CONFIG_SCHEME."""
         return CONFIG_SCHEME
 
-    async def async_set_torque(self, service_call: ServiceCall) -> None:
+    async def async_set_torque(
+        self, entity: Entity = None, service_call: ServiceCall = None
+    ) -> None:
         """Set wheel torque."""
         device: WorxCloud = self.api.device
         data = service_call.data
-        _LOGGER.debug(
-            "(%s) Setting wheel torque to %s",
-            self._name,
+        LOGGER.write(
+            LoggerType.SERVICE_CALL,
+            "Setting wheel torque to %s",
             data[ATTR_TORQUE],
         )
         tmpdata = {"cfg": {"tq": data[ATTR_TORQUE]}}

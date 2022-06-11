@@ -14,6 +14,8 @@ from homeassistant.components.vacuum import (
 )
 from pyworxcloud.clouds import CloudType
 
+from .utils.logger import LogLevel
+
 
 # Startup banner
 STARTUP = """
@@ -34,6 +36,7 @@ PLATFORMS = ["vacuum", "select", "button"]
 UPDATE_SIGNAL = "landroid_cloud_update"
 UPDATE_SIGNAL_ZONES = "landroid_cloud_update_zones"
 UPDATE_SIGNAL_REACHABILITY = "landroid_cloud_update_reachability"
+LOGLEVEL = LogLevel.DEBUG
 
 # Service consts
 SERVICE_CONFIG = "config"

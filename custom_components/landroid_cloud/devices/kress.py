@@ -2,7 +2,6 @@
 # pylint: disable=unused-argument,relative-beyond-top-level
 from __future__ import annotations
 
-import logging
 import voluptuous as vol
 
 from homeassistant.components.button import ButtonEntity, ButtonEntityDescription
@@ -15,7 +14,7 @@ from pyworxcloud import (
     WorxCloud,
 )
 
-from .. import LandroidAPI
+from ..api import LandroidAPI
 
 from ..const import (
     ATTR_BOUNDARY,
@@ -24,6 +23,7 @@ from ..const import (
     ATTR_RAINDELAY,
     ATTR_RUNTIME,
     ATTR_TIMEEXTENSION,
+    LOGLEVEL,
     UPDATE_SIGNAL_ZONES,
     LandroidFeatureSupport,
 )
@@ -36,7 +36,9 @@ from ..device_base import (
     LandroidCloudSelectZoneEntity,
 )
 
-_LOGGER = logging.getLogger(__name__)
+from ..utils.logger import LandroidLogger, LoggerType
+
+LOGGER = LandroidLogger(__name__, LOGLEVEL)
 
 SUPPORTED_FEATURES = SUPPORT_LANDROID_BASE
 
@@ -79,10 +81,10 @@ class Button(LandroidCloudButtonBase, ButtonEntity):
         api: LandroidAPI,
     ) -> None:
         """Initialize a Kress button."""
-        super().__init__(description, hass, api, DEVICE_FEATURES)
-        _LOGGER.debug(
-            "(%s) Adding %s",
-            self.api.name,
+        super().__init__(description, hass, api)
+        LOGGER.write(
+            LoggerType.BUTTON,
+            "Adding %s",
             description.key,
         )
         self.device: WorxCloud = self.api.device
@@ -98,7 +100,12 @@ class Select(LandroidCloudSelectEntity):
         api: LandroidAPI,
     ):
         """Init new Kress Select entity."""
-        super().__init__(description, hass, api, DEVICE_FEATURES)
+        super().__init__(description, hass, api)
+        LOGGER.write(
+            LoggerType.SELECT,
+            "Adding %s",
+            description.key,
+        )
         self.device: WorxCloud = self.api.device
 
 
@@ -121,9 +128,14 @@ class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
 
     def __init__(self, hass: HomeAssistant, api: LandroidAPI):
         """Initialize a Kress mower device."""
-        super().__init__(hass, api, DEVICE_FEATURES)
+        super().__init__(hass, api)
 
         self.register_services()
+
+    @property
+    def base_features(self):
+        """Flag which Landroid Cloud specific features that are supported."""
+        return DEVICE_FEATURES
 
     @property
     def supported_features(self):
@@ -135,9 +147,9 @@ class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
         device: WorxCloud = self.api.device
         current_zone = device.mowing_zone
         virtual_zones = device.zone_probability
-        _LOGGER.debug("(%s) Zone reported by API: %s", self.api.name, current_zone)
-        _LOGGER.debug(
-            "(%s) Corrected zone: %s", self.api.name, virtual_zones[current_zone]
+        LOGGER.write(LoggerType.MOWER, "Zone reported by API: %s", current_zone)
+        LOGGER.write(
+            LoggerType.MOWER, "Corrected zone: %s", virtual_zones[current_zone]
         )
         self._attributes.update({"current_zone": virtual_zones[current_zone]})
         self.api.shared_options.update({"current_zone": virtual_zones[current_zone]})

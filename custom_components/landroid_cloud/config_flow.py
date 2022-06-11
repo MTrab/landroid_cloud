@@ -1,17 +1,18 @@
 """Adds support for Landroid Cloud compatible devices."""
 from __future__ import annotations
 
-import logging
 
 from homeassistant import config_entries, core, exceptions
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
 
 from pyworxcloud import WorxCloud
 
-from .const import DOMAIN
+from .const import DOMAIN, LOGLEVEL
 from .scheme import DATA_SCHEMA
 
-_LOGGER = logging.getLogger(__name__)
+from .utils.logger import LandroidLogger, LoggerType, LogLevel
+
+LOGGER = LandroidLogger(__name__, LOGLEVEL)
 
 
 async def validate_input(hass: core.HomeAssistant, data):
@@ -75,7 +76,9 @@ class LandroidCloudConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             except InvalidAuth:
                 self._errors["base"] = "invalid_auth"
             except Exception:  # pylint: disable=broad-except
-                _LOGGER.exception("Unexpected exception")
+                LOGGER.write(
+                    LoggerType.CONFIG, "Unexpected exception", log_level=LogLevel.ERROR
+                )
                 self._errors["base"] = "unknown"
 
             if "base" not in self._errors:
@@ -97,11 +100,13 @@ class LandroidCloudConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         """Import a config entry."""
         if import_config is not None:
             if self.check_for_existing(import_config):
-                _LOGGER.warning(
+                LOGGER.write(
+                    LoggerType.CONFIG_IMPORT,
                     "Landroid_cloud configuration for %s already imported, you can "
                     "safely remove the entry from your configuration.yaml as this "
                     "is no longer used",
                     import_config.get(CONF_EMAIL),
+                    log_level=LogLevel.WARNING,
                 )
                 return self.async_abort(reason="already_exists")
 
@@ -112,7 +117,11 @@ class LandroidCloudConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             except InvalidAuth:
                 self._errors["base"] = "invalid_auth"
             except Exception:  # pylint: disable=broad-except
-                _LOGGER.exception("Unexpected exception")
+                LOGGER.write(
+                    LoggerType.CONFIG_IMPORT,
+                    "Unexpected exception",
+                    log_level=LogLevel.ERROR,
+                )
                 self._errors["base"] = "unknown"
 
             if "base" not in self._errors:

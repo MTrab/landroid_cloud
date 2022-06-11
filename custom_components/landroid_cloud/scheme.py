@@ -39,9 +39,13 @@ DATA_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_EMAIL): str,
         vol.Required(CONF_PASSWORD): str,
-        vol.Optional(CONF_TYPE, default=[x for x in CLOUDS if x.lower() == "worx"][0]): vol.In(CLOUDS),
+        vol.Optional(
+            CONF_TYPE, default=[x for x in CLOUDS if x.lower() == "worx"][0]
+        ): vol.In(CLOUDS),
     }
 )
+
+EMPTY_SCHEME = vol.All(cv.make_entity_service_schema({}))
 
 CONFIG_SCHEMA = vol.Schema(
     {
@@ -77,15 +81,18 @@ SCHEDULE_SCHEME = vol.Schema(
         vol.Optional(ATTR_SUNDAY_START): str,
         vol.Optional(ATTR_SUNDAY_END): str,
         vol.Optional(ATTR_SUNDAY_BOUNDARY): bool,
-    }
+    },
+    extra=vol.ALLOW_EXTRA,
 )
 
 TORQUE_SCHEME = vol.Schema(
     {
         vol.Required(ATTR_TORQUE): vol.All(vol.Coerce(int), vol.Range(-50, 50)),
-    }
+    },
+    extra=vol.ALLOW_EXTRA,
 )
 
 SET_ZONE_SCHEME = vol.Schema(
-    {vol.Required(ATTR_ZONE): vol.All(vol.Coerce(int), vol.Range(0, 3))}
+    {vol.Required(ATTR_ZONE): vol.All(vol.Coerce(int), vol.Range(0, 3))},
+    extra=vol.ALLOW_EXTRA,
 )
