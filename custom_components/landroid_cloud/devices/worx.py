@@ -135,7 +135,7 @@ class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
         super().__init__(hass, api)
         self.device: WorxCloud = self.api.device
 
-        self.register_services()
+        # self.register_services()
 
     @property
     def base_features(self):

@@ -96,3 +96,5 @@ SET_ZONE_SCHEME = vol.Schema(
     {vol.Required(ATTR_ZONE): vol.All(vol.Coerce(int), vol.Range(0, 3))},
     extra=vol.ALLOW_EXTRA,
 )
+
+OTS_SCHEME = ""

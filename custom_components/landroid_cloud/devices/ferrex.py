@@ -130,7 +130,7 @@ class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
         """Initialize a Aldi Ferrex mower device."""
         super().__init__(hass, api)
 
-        self.register_services()
+        # self.register_services()
 
     @property
     def base_features(self):
