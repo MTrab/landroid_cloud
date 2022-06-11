@@ -1,15 +1,12 @@
 """Utilities used by this module."""
 # pylint: disable=relative-beyond-top-level
 from __future__ import annotations
-import logging
 from datetime import datetime
 import re
 
 from homeassistant.exceptions import HomeAssistantError
 
 TIME_REGEX = "(([0-9]){1,2}:([0-9]){2})"
-
-_LOGGER = logging.getLogger(__name__)
 
 
 def parseday(day: dict, data: dict) -> list:
