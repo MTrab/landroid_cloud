@@ -18,6 +18,8 @@ from .const import (
 
 from .utils.logger import LandroidLogger, LoggerType
 
+LOGGER = LandroidLogger(__name__, LOGLEVEL)
+
 
 class LandroidAPI:
     """Handle the API calls."""
@@ -50,24 +52,24 @@ class LandroidAPI:
             "type": hass.data[DOMAIN][entry.entry_id][CONF_TYPE].lower(),
         }
 
-        self.logger = LandroidLogger(__name__, LOGLEVEL, self)
+        LOGGER.set_api(self)
         self.device.set_callback(self.receive_data)
 
     def check_features(self, features: int) -> None:
         """Check supported features."""
 
         if self.device.partymode_capable:
-            self.logger.write(LoggerType.FEATURE_ASSESSMENT, "Party mode capable")
+            LOGGER.write(LoggerType.FEATURE_ASSESSMENT, "Party mode capable")
             features = features | LandroidFeatureSupport.PARTYMODE
 
         if self.device.ots_capable:
-            self.logger.write(LoggerType.FEATURE_ASSESSMENT, "OTS capable")
+            LOGGER.write(LoggerType.FEATURE_ASSESSMENT, "OTS capable")
             features = (
                 features | LandroidFeatureSupport.EDGECUT | LandroidFeatureSupport.OTS
             )
 
         if self.device.torque_capable:
-            self.logger.write(LoggerType.FEATURE_ASSESSMENT, "Torque capable")
+            LOGGER.write(LoggerType.FEATURE_ASSESSMENT, "Torque capable")
             features = features | LandroidFeatureSupport.TORQUE
 
         self.features = features
@@ -79,7 +81,7 @@ class LandroidAPI:
             self._last_state = True
             self.hass.config_entries.async_reload(self.entry_id)
 
-        self.logger.write(LoggerType.DATA_UPDATE, "Received new data from API")
+        LOGGER.write(LoggerType.DATA_UPDATE, "Received new data from API")
         dispatcher_send(self.hass, f"{UPDATE_SIGNAL}_{self.device.name}")
 
     async def async_refresh(self):

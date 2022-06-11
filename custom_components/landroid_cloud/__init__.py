@@ -2,28 +2,28 @@
 from __future__ import annotations
 import asyncio
 
-import logging
-
 from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.dispatcher import dispatcher_send
 from homeassistant.loader import async_get_integration
 from homeassistant.util import slugify as util_slugify
 
 from pyworxcloud import WorxCloud, exceptions
 
+from .api import LandroidAPI
 from .const import (
     DOMAIN,
+    LOGLEVEL,
     PLATFORMS,
     STARTUP,
     UPDATE_SIGNAL,
     LandroidFeatureSupport,
 )
+from .utils.logger import LandroidLogger, LogLevel, LoggerType
 from .scheme import CONFIG_SCHEMA  # Used for validating YAML config - DO NOT DELETE!
 
-_LOGGER = logging.getLogger(__name__)
+LOGGER = LandroidLogger(__name__, LOGLEVEL)
 
 
 async def async_setup(hass: HomeAssistant, config: dict):
@@ -35,7 +35,11 @@ async def async_setup(hass: HomeAssistant, config: dict):
         return True
 
     for conf in config[DOMAIN]:
-        _LOGGER.debug("Importing %s from configuration.yaml", conf["email"])
+        LOGGER.write(
+            LoggerType.SETUP_IMPORT,
+            "Importing configuration for %s from configuration.yaml",
+            conf["email"],
+        )
         hass.async_create_task(
             hass.config_entries.flow.async_init(
                 DOMAIN,
@@ -49,9 +53,6 @@ async def async_setup(hass: HomeAssistant, config: dict):
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up cloud API connector from a config entry."""
-    _LOGGER.debug("Entry data: %s", entry.data)
-    _LOGGER.debug("Entry options: %s", entry.options)
-    _LOGGER.debug("Entry unique ID: %s", entry.unique_id)
     hass.data.setdefault(DOMAIN, {})
 
     await check_unique_id(hass, entry)
@@ -95,7 +96,12 @@ async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
 async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Setup the integration using a config entry."""
     integration = await async_get_integration(hass, DOMAIN)
-    _LOGGER.info(STARTUP, integration.version)
+    LOGGER.write(
+        None,
+        STARTUP,
+        integration.version,
+        log_level=LogLevel.INFO,
+    )
 
     cloud_email = entry.data.get(CONF_EMAIL)
     cloud_password = entry.data.get(CONF_PASSWORD)
@@ -104,64 +110,94 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     if cloud_type is None:
         cloud_type = "worx"
 
-    _LOGGER.debug("Opening connection to account for %s as %s", cloud_email, cloud_type)
+    LOGGER.write(
+        LoggerType.SETUP,
+        "Opening connection to %s account for %s",
+        cloud_type,
+        cloud_email,
+    )
     master = WorxCloud(cloud_email, cloud_password, cloud_type.lower())
     auth = False
     try:
         auth = await hass.async_add_executor_job(master.authenticate)
     except exceptions.RequestError:
-        _LOGGER.error(
-            "API request for %s was malformed.",
+        LOGGER.write(
+            LoggerType.API,
+            "Request for %s was malformed.",
             cloud_email,
+            log_level=LogLevel.ERROR,
         )
         return False
     except exceptions.AuthorizationError:
-        _LOGGER.error(
+        LOGGER.write(
+            LoggerType.API,
             "Unauthorized - please check your credentials for %s at Landroid Cloud",
             cloud_email,
+            log_level=LogLevel.ERROR,
         )
         return False
     except exceptions.ForbiddenError:
-        _LOGGER.error(
-            "Server rejected access for %s at Landroid Cloud - this might be temporary due to high numbers of API requests from this IP address.",
+        LOGGER.write(
+            LoggerType.API,
+            "Server rejected access for %s at Landroid Cloud - this might be "
+            "temporary due to high numbers of API requests from this IP address.",
             cloud_email,
+            log_level=LogLevel.ERROR,
         )
         return False
     except exceptions.NotFoundError:
-        _LOGGER.error(
-            "API endpoint for %s was not found.",
+        LOGGER.write(
+            LoggerType.API,
+            "Endpoint for %s was not found.",
             cloud_email,
+            log_level=LogLevel.ERROR,
         )
         return False
     except exceptions.TooManyRequestsError:
-        _LOGGER.error(
-            "Too many API requests for %s at Landroid Cloud. IP address temporary banned.",
+        LOGGER.write(
+            LoggerType.API,
+            "Too many requests for %s at Landroid Cloud. IP address temporary banned.",
             cloud_email,
+            log_level=LogLevel.ERROR,
         )
         return False
     except exceptions.InternalServerError:
-        _LOGGER.error(
+        LOGGER.write(
+            LoggerType.API,
             "Internal server error happend for the request to %s at Landroid Cloud.",
             cloud_email,
+            log_level=LogLevel.ERROR,
         )
         return False
     except exceptions.ServiceUnavailableError:
-        _LOGGER.error(
-            "API service at Landroid Cloud was unavailable.",
+        LOGGER.write(
+            LoggerType.API,
+            "Service at Landroid Cloud was unavailable.",
+            log_level=LogLevel.ERROR,
         )
         return False
     except exceptions.APIException as ex:
-        _LOGGER.error(ex)
+        LOGGER.write(
+            LoggerType.API,
+            "%s",
+            ex,
+            log_level=LogLevel.ERROR,
+        )
         return False
 
     if not auth:
-        _LOGGER.warning("Error in authentication! (%s)", cloud_email)
+        LOGGER.write(
+            LoggerType.AUTHENTICATION,
+            "Error in authentication for %s",
+            cloud_email,
+            log_level=LogLevel.WARNING,
+        )
         return False
 
     try:
         num_dev = await hass.async_add_executor_job(master.enumerate)
     except Exception as err:  # pylint: disable=broad-except
-        _LOGGER.warning(err)
+        LOGGER.write(LoggerType.AUTHENTICATION, "%s", err, log_level=LogLevel.WARNING)
         return False
 
     hass.data[DOMAIN][entry.entry_id] = {
@@ -169,6 +205,7 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         CONF_EMAIL: cloud_email,
         CONF_PASSWORD: cloud_password,
         CONF_TYPE: cloud_type,
+        "logger": LOGGER,
     }
 
     await asyncio.gather(
@@ -189,7 +226,9 @@ async def async_init_device(
     """Initialize a device."""
     hass.data[DOMAIN][entry.entry_id][device] = {}
 
-    _LOGGER.debug("Setting up device %s (%s)", device, cloud_email)
+    LOGGER.write(
+        LoggerType.SETUP, "Setting up device no. %s on %s", device, cloud_email
+    )
     # Init the object
     hass.data[DOMAIN][entry.entry_id][device]["device"] = WorxCloud(
         cloud_email, cloud_password, cloud_type.lower()
@@ -223,71 +262,3 @@ async def check_unique_id(hass: HomeAssistant, entry: ConfigEntry) -> None:
         CONF_TYPE: entry.data[CONF_TYPE],
     }
     hass.config_entries.async_update_entry(entry, data=data, unique_id=new_unique_id)
-
-
-class LandroidAPI:
-    """Handle the API calls."""
-
-    def __init__(
-        self, hass: HomeAssistant, index: int, device: WorxCloud, entry: ConfigEntry
-    ):
-        """Set up device."""
-        self.hass = hass
-        self.entry_id = entry.entry_id
-        self.data = entry.data
-        self.options = entry.options
-        self.device: WorxCloud = device["device"]
-        self.index = index
-        self.unique_id = entry.unique_id
-        self.services = []
-        self.shared_options = {}
-        self.device_id = None
-        self.features = 0
-        self.features_loaded = False
-
-        self._last_state = self.device.online
-
-        self.name = util_slugify(f"{self.device.name}")
-        self.friendly_name = self.device.name
-
-        self.config = {
-            "email": hass.data[DOMAIN][entry.entry_id][CONF_EMAIL].lower(),
-            "password": hass.data[DOMAIN][entry.entry_id][CONF_PASSWORD],
-            "type": hass.data[DOMAIN][entry.entry_id][CONF_TYPE].lower(),
-        }
-
-        self.device.set_callback(self.receive_data)
-
-    def check_features(self, features: int) -> None:
-        """Check supported features."""
-
-        if self.device.partymode_capable:
-            _LOGGER.debug("(%s) feature assesment - party mode capable", self.name)
-            features = features | LandroidFeatureSupport.PARTYMODE
-
-        if self.device.ots_capable:
-            _LOGGER.debug("(%s) feature assesment - OTS capable", self.name)
-            features = (
-                features | LandroidFeatureSupport.EDGECUT | LandroidFeatureSupport.OTS
-            )
-
-        if self.device.torque_capable:
-            _LOGGER.debug("(%s) feature assesment - torque capable", self.name)
-            features = features | LandroidFeatureSupport.TORQUE
-
-        self.features = features
-        self.features_loaded = True
-
-    def receive_data(self):
-        """Used as callback from API when data is received."""
-        if not self._last_state and self.device.online:
-            self._last_state = True
-            self.hass.config_entries.async_reload(self.entry_id)
-
-        _LOGGER.debug("(%s) Got update signal for new data", self.device.name)
-        dispatcher_send(self.hass, f"{UPDATE_SIGNAL}_{self.device.name}")
-
-    async def async_refresh(self):
-        """Try fetching data from cloud."""
-        await self.hass.async_add_executor_job(self.device.update)
-        dispatcher_send(self.hass, f"{UPDATE_SIGNAL}_{self.device.name}")

@@ -3,8 +3,6 @@ from __future__ import annotations
 import asyncio
 from copy import deepcopy
 
-import logging
-
 from homeassistant.components.button import (
     ButtonDeviceClass,
     ButtonEntityDescription,
@@ -15,16 +13,18 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from . import LandroidAPI
+from .api import LandroidAPI
 
 from .const import (
     DOMAIN,
+    LOGLEVEL,
     LandroidButtonTypes,
     LandroidFeatureSupport,
 )
 from .utils.entity_setup import vendor_to_device
+from .utils.logger import LandroidLogger, LoggerType
 
-_LOGGER = logging.getLogger(__name__)
+LOGGER = LandroidLogger(__name__, LOGLEVEL)
 
 # Tuple containing buttons to create
 BUTTONS = [
@@ -51,7 +51,6 @@ async def async_setup_entry(
 ) -> None:
     """Set up Landroid buttons for specific service."""
     entities = []
-    _LOGGER.debug("Assessing available buttons")
     for idx in range(hass.data[DOMAIN][config.entry_id]["count"]):
         api: LandroidAPI = hass.data[DOMAIN][config.entry_id][idx]["api"]
         vendor = api.config["type"]
@@ -60,8 +59,9 @@ async def async_setup_entry(
         while not api.features_loaded:
             await asyncio.sleep(1)
 
-        _LOGGER.debug("Restart %s",api.features & LandroidFeatureSupport.RESTART)
-        _LOGGER.debug("Edge cut %s",api.features & LandroidFeatureSupport.EDGECUT)
+        LOGGER.set_api(api)
+
+        LOGGER.write(LoggerType.FEATURE_ASSESSMENT, "Assessing available buttons")
         for button in BUTTONS:
             constructor = None
             if (
@@ -71,6 +71,7 @@ async def async_setup_entry(
                 button.key == LandroidButtonTypes.EDGECUT
                 and api.features & LandroidFeatureSupport.EDGECUT
             ):
+                LOGGER.write(LoggerType.FEATURE, "Adding %s button", button.key)
                 out = deepcopy(button)
                 out.name = out.name.replace("NAME", api.friendly_name)
                 constructor = device.Button

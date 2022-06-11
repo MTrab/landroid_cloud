@@ -3,8 +3,6 @@ from __future__ import annotations
 import asyncio
 from copy import deepcopy
 
-import logging
-
 from homeassistant.components.select import (
     SelectEntityDescription,
 )
@@ -15,12 +13,14 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import (
     DOMAIN,
+    LOGLEVEL,
     LandroidFeatureSupport,
     LandroidSelectTypes,
 )
 from .utils.entity_setup import vendor_to_device
+from .utils.logger import LandroidLogger, LoggerType
 
-_LOGGER = logging.getLogger(__name__)
+LOGGER = LandroidLogger(__name__, LOGLEVEL)
 
 # Tuple containing select entities to create
 SELECTS = [
@@ -48,12 +48,17 @@ async def async_setup_entry(
         while not api.features_loaded:
             await asyncio.sleep(1)
 
+        LOGGER.set_api(api)
+
+        LOGGER.write(LoggerType.FEATURE_ASSESSMENT, "Assessing available selects")
         for select in SELECTS:
             constructor = None
             if (
                 select.key == LandroidSelectTypes.NEXT_ZONE
                 and device.DEVICE_FEATURES & LandroidFeatureSupport.SETZONE
             ):
+                LOGGER.write(LoggerType.FEATURE, "Adding %s select", select.key)
+
                 out = deepcopy(select)
                 out.name = out.name.replace("NAME", api.friendly_name)
                 constructor = device.ZoneSelect
