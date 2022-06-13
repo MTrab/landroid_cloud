@@ -2,19 +2,13 @@
 from __future__ import annotations
 from dataclasses import dataclass
 
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_ENTITY_ID, CONF_DEVICE_ID
 from homeassistant.core import HomeAssistant, ServiceCall, callback
 from homeassistant.helpers import (
     device_registry as dr,
     entity_registry as er,
 )
-from homeassistant.helpers.device_registry import DeviceRegistry
-from homeassistant.helpers.entity_registry import (
-    async_entries_for_config_entry,
-    async_entries_for_device,
-    EntityRegistry,
-)
+from homeassistant.helpers.device_registry import DeviceEntry
 
 from .const import (
     DOMAIN,
@@ -86,26 +80,29 @@ def async_setup_services(hass: HomeAssistant) -> None:
         entity_registry = er.async_get(hass)
         # entity_entries = async_entries_for_config_entry(entity_registry, entry.entry_id)
 
+        devices: DeviceEntry = []
+
         if CONF_DEVICE_ID in service_data:
-            device = []
             for entry in service_data[CONF_DEVICE_ID]:
-                device.append(device_registry.devices.get(entry))
+                devices.append(device_registry.async_get(entry))
         else:
-            device = []
             for entry in service_data[CONF_ENTITY_ID]:
-                device.append(
-                    device_registry.devices.get(
+                devices.append(
+                    device_registry.async_get(
                         entity_registry.entities.get(entry).device_id
                     )
                 )
 
-        LOGGER.write(
-            LoggerType.SERVICE_REGISTER,
-            "Got service %s and service_data %s to device %s",
-            service,
-            service_data,
-            device,
-        )
+        for device in devices:
+            LOGGER.write(
+                LoggerType.SERVICE_REGISTER,
+                "Received %s service call with service_data '%s' "
+                "to device '%s' identified by device_id '%s'",
+                service,
+                service_data,
+                device.name,
+                device.id,
+            )
 
     for service in SUPPORTED_SERVICES:
         if not hass.services.has_service(DOMAIN, service.key):
