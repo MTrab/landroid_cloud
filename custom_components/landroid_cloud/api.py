@@ -35,7 +35,7 @@ class LandroidAPI:
         self.device: WorxCloud = device["device"]
         self.index = index
         self.unique_id = entry.unique_id
-        self.services = []
+        self.services = {}
         self.shared_options = {}
         self.device_id = None
         self.features = 0
@@ -91,7 +91,7 @@ class LandroidAPI:
         """Try fetching data from cloud."""
         try:
             await self.hass.async_add_executor_job(self.device.update)
-            dispatcher_send(self.hass, f"{UPDATE_SIGNAL}_{self.device.name}")
+            # dispatcher_send(self.hass, f"{UPDATE_SIGNAL}_{self.device.name}")
         except exceptions.RequestError:
             LOGGER.write(
                 LoggerType.API,

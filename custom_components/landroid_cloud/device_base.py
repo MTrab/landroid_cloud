@@ -54,7 +54,15 @@ from .const import (
     LOGLEVEL,
     SCHEDULE_TO_DAY,
     SCHEDULE_TYPE_MAP,
+    SERVICE_CONFIG,
+    SERVICE_EDGECUT,
+    SERVICE_LOCK,
+    SERVICE_OTS,
+    SERVICE_PARTYMODE,
+    SERVICE_RESTART,
+    SERVICE_SCHEDULE,
     SERVICE_SETZONE,
+    SERVICE_TORQUE,
     STATE_INITIALIZING,
     STATE_MAP,
     STATE_MOWING,
@@ -194,130 +202,155 @@ class LandroidCloudBaseEntity:
         """Return device specific CONFIG_SCHEME."""
         return None
 
-    # @callback
-    # def register_services(self) -> None:
-    #     """Register services."""
-    #     if self.api.features == 0:
-    #         LOGGER.write(
-    #             LoggerType.SERVICE_REGISTER,
-    #             "No services registred as feature flags is set to %s",
-    #             self.api.features,
-    #         )
-    #         return
+    @callback
+    def register_services(self) -> None:
+        """Register services."""
+        if self.api.features == 0:
+            LOGGER.write(
+                LoggerType.SERVICE_REGISTER,
+                "No services registred as feature flags is set to %s",
+                self.api.features,
+            )
+            return
 
-    #     LOGGER.write(
-    #         LoggerType.SERVICE_REGISTER,
-    #         "Registering services with feature flags set to %s",
-    #         self.api.features,
-    #     )
-    #     if self.api.features & LandroidFeatureSupport.EDGECUT:
-    #         # if not self.hass.services.has_service(DOMAIN, SERVICE_EDGECUT):
-    #         LOGGER.write(
-    #             LoggerType.SERVICE_ADD,
-    #             "%s was not found - adding for %s.",
-    #             SERVICE_EDGECUT,
-    #             self.api.friendly_name,
-    #         )
-    #         self.hass.services.async_register(
-    #             DOMAIN, SERVICE_EDGECUT, self.async_edgecut
-    #         )
-    #         self.api.services.append(SERVICE_EDGECUT)
+        LOGGER.write(
+            LoggerType.SERVICE_REGISTER,
+            "Registering services with feature flags set to %s",
+            self.api.features,
+        )
+        if self.api.features & LandroidFeatureSupport.EDGECUT:
+            #         # if not self.hass.services.has_service(DOMAIN, SERVICE_EDGECUT):
+            #         LOGGER.write(
+            #             LoggerType.SERVICE_ADD,
+            #             "%s was not found - adding for %s.",
+            #             SERVICE_EDGECUT,
+            #             self.api.friendly_name,
+            #         )
+            #         self.hass.services.async_register(
+            #             DOMAIN, SERVICE_EDGECUT, self.async_edgecut
+            #         )
+            self.api.services[SERVICE_EDGECUT] = {
+                "service": self.async_edgecut,
+            }
 
-    #     if self.api.features & LandroidFeatureSupport.LOCK:
-    #         if not self.hass.services.has_service(DOMAIN, SERVICE_LOCK):
-    #             LOGGER.write(
-    #                 LoggerType.SERVICE_ADD,
-    #                 "%s was not found - adding.",
-    #                 SERVICE_LOCK,
-    #             )
-    #             self.hass.services.async_register(
-    #                 DOMAIN, SERVICE_LOCK, self.async_toggle_lock
-    #             )
-    #         self.api.services.append(SERVICE_LOCK)
+        if self.api.features & LandroidFeatureSupport.LOCK:
+            #         if not self.hass.services.has_service(DOMAIN, SERVICE_LOCK):
+            #             LOGGER.write(
+            #                 LoggerType.SERVICE_ADD,
+            #                 "%s was not found - adding.",
+            #                 SERVICE_LOCK,
+            #             )
+            #             self.hass.services.async_register(
+            #                 DOMAIN, SERVICE_LOCK, self.async_toggle_lock
+            #             )
+            #         self.api.services.append(SERVICE_LOCK)
+            self.api.services[SERVICE_LOCK] = {
+                "service": self.async_toggle_lock,
+            }
 
-    #     if self.api.features & LandroidFeatureSupport.PARTYMODE:
-    #         if not self.hass.services.has_service(DOMAIN, SERVICE_PARTYMODE):
-    #             LOGGER.write(
-    #                 LoggerType.SERVICE_ADD,
-    #                 "%s was not found - adding.",
-    #                 SERVICE_PARTYMODE,
-    #             )
-    #             self.hass.services.async_register(
-    #                 DOMAIN, SERVICE_PARTYMODE, self.async_toggle_partymode
-    #             )
-    #         self.api.services.append(SERVICE_PARTYMODE)
+        if self.api.features & LandroidFeatureSupport.PARTYMODE:
+            #         if not self.hass.services.has_service(DOMAIN, SERVICE_PARTYMODE):
+            #             LOGGER.write(
+            #                 LoggerType.SERVICE_ADD,
+            #                 "%s was not found - adding.",
+            #                 SERVICE_PARTYMODE,
+            #             )
+            #             self.hass.services.async_register(
+            #                 DOMAIN, SERVICE_PARTYMODE, self.async_toggle_partymode
+            #             )
+            #         self.api.services.append(SERVICE_PARTYMODE)
+            self.api.services[SERVICE_PARTYMODE] = {
+                "service": self.async_toggle_partymode,
+            }
+        if self.api.features & LandroidFeatureSupport.SETZONE:
+            #         if not self.hass.services.has_service(DOMAIN, SERVICE_SETZONE):
+            #             LOGGER.write(
+            #                 LoggerType.SERVICE_ADD,
+            #                 "%s was not found - adding.",
+            #                 SERVICE_SETZONE,
+            #             )
+            #             self.hass.services.async_register(
+            #                 DOMAIN, SERVICE_SETZONE, self.async_set_zone, SET_ZONE_SCHEME
+            #             )
+            #         self.api.services.append(SERVICE_SETZONE)
+            self.api.services[SERVICE_SETZONE] = {
+                "service": self.async_set_zone,
+            }
 
-    #     if self.api.features & LandroidFeatureSupport.SETZONE:
-    #         if not self.hass.services.has_service(DOMAIN, SERVICE_SETZONE):
-    #             LOGGER.write(
-    #                 LoggerType.SERVICE_ADD,
-    #                 "%s was not found - adding.",
-    #                 SERVICE_SETZONE,
-    #             )
-    #             self.hass.services.async_register(
-    #                 DOMAIN, SERVICE_SETZONE, self.async_set_zone, SET_ZONE_SCHEME
-    #             )
-    #         self.api.services.append(SERVICE_SETZONE)
+        if self.api.features & LandroidFeatureSupport.RESTART:
+            #         if not self.hass.services.has_service(DOMAIN, SERVICE_RESTART):
+            #             LOGGER.write(
+            #                 LoggerType.SERVICE_ADD,
+            #                 "%s was not found - adding.",
+            #                 SERVICE_RESTART,
+            #             )
+            #             self.hass.services.async_register(
+            #                 DOMAIN, SERVICE_RESTART, self.async_restart
+            #             )
+            #         self.api.services.append(SERVICE_RESTART)
+            self.api.services[SERVICE_RESTART] = {
+                "service": self.async_restart,
+            }
 
-    #     if self.api.features & LandroidFeatureSupport.RESTART:
-    #         if not self.hass.services.has_service(DOMAIN, SERVICE_RESTART):
-    #             LOGGER.write(
-    #                 LoggerType.SERVICE_ADD,
-    #                 "%s was not found - adding.",
-    #                 SERVICE_RESTART,
-    #             )
-    #             self.hass.services.async_register(
-    #                 DOMAIN, SERVICE_RESTART, self.async_restart
-    #             )
-    #         self.api.services.append(SERVICE_RESTART)
+        if self.api.features & LandroidFeatureSupport.CONFIG:
+            #         if not self.hass.services.has_service(DOMAIN, SERVICE_CONFIG):
+            #             LOGGER.write(
+            #                 LoggerType.SERVICE_ADD,
+            #                 "%s was not found - adding.",
+            #                 SERVICE_CONFIG,
+            #             )
+            #             self.hass.services.async_register(
+            #                 DOMAIN, SERVICE_CONFIG, self.async_config, self.get_config_scheme
+            #             )
+            #         self.api.services.append(SERVICE_CONFIG)
+            self.api.services[SERVICE_CONFIG] = {
+                "service": self.async_config,
+            }
 
-    #     if self.api.features & LandroidFeatureSupport.CONFIG:
-    #         if not self.hass.services.has_service(DOMAIN, SERVICE_CONFIG):
-    #             LOGGER.write(
-    #                 LoggerType.SERVICE_ADD,
-    #                 "%s was not found - adding.",
-    #                 SERVICE_CONFIG,
-    #             )
-    #             self.hass.services.async_register(
-    #                 DOMAIN, SERVICE_CONFIG, self.async_config, self.get_config_scheme
-    #             )
-    #         self.api.services.append(SERVICE_CONFIG)
+        if self.api.features & LandroidFeatureSupport.OTS:
+            #         if not self.hass.services.has_service(DOMAIN, SERVICE_OTS):
+            #             LOGGER.write(
+            #                 LoggerType.SERVICE_ADD,
+            #                 "%s was not found - adding.",
+            #                 SERVICE_OTS,
+            #             )
+            #             self.hass.services.async_register(
+            #                 DOMAIN, SERVICE_OTS, self.async_ots, self.get_ots_scheme
+            #             )
+            #         self.api.services.append(SERVICE_OTS)
+            self.api.services[SERVICE_OTS] = {
+                "service": self.async_ots,
+            }
 
-    #     if self.api.features & LandroidFeatureSupport.OTS:
-    #         if not self.hass.services.has_service(DOMAIN, SERVICE_OTS):
-    #             LOGGER.write(
-    #                 LoggerType.SERVICE_ADD,
-    #                 "%s was not found - adding.",
-    #                 SERVICE_OTS,
-    #             )
-    #             self.hass.services.async_register(
-    #                 DOMAIN, SERVICE_OTS, self.async_ots, self.get_ots_scheme
-    #             )
-    #         self.api.services.append(SERVICE_OTS)
+        if self.api.features & LandroidFeatureSupport.SCHEDULES:
+            #         if not self.hass.services.has_service(DOMAIN, SERVICE_SCHEDULE):
+            #             LOGGER.write(
+            #                 LoggerType.SERVICE_ADD,
+            #                 "%s was not found - adding.",
+            #                 SERVICE_SCHEDULE,
+            #             )
+            #             self.hass.services.async_register(
+            #                 DOMAIN, SERVICE_SCHEDULE, self.async_set_schedule, SCHEME_SCHEDULE
+            #             )
+            #         self.api.services.append(SERVICE_SCHEDULE)
+            self.api.services[SERVICE_SCHEDULE] = {
+                "service": self.async_set_schedule,
+            }
 
-    #     if self.api.features & LandroidFeatureSupport.SCHEDULES:
-    #         if not self.hass.services.has_service(DOMAIN, SERVICE_SCHEDULE):
-    #             LOGGER.write(
-    #                 LoggerType.SERVICE_ADD,
-    #                 "%s was not found - adding.",
-    #                 SERVICE_SCHEDULE,
-    #             )
-    #             self.hass.services.async_register(
-    #                 DOMAIN, SERVICE_SCHEDULE, self.async_set_schedule, SCHEME_SCHEDULE
-    #             )
-    #         self.api.services.append(SERVICE_SCHEDULE)
-
-    #     if self.api.features & LandroidFeatureSupport.TORQUE:
-    #         if not self.hass.services.has_service(DOMAIN, SERVICE_TORQUE):
-    #             LOGGER.write(
-    #                 LoggerType.SERVICE_ADD,
-    #                 "%s was not found - adding.",
-    #                 SERVICE_TORQUE,
-    #             )
-    #             self.hass.services.async_register(
-    #                 DOMAIN, SERVICE_TORQUE, self.async_set_torque, TORQUE_SCHEME
-    #             )
-    #         self.api.services.append(SERVICE_TORQUE)
+        if self.api.features & LandroidFeatureSupport.TORQUE:
+            #         if not self.hass.services.has_service(DOMAIN, SERVICE_TORQUE):
+            #             LOGGER.write(
+            #                 LoggerType.SERVICE_ADD,
+            #                 "%s was not found - adding.",
+            #                 SERVICE_TORQUE,
+            #             )
+            #             self.hass.services.async_register(
+            #                 DOMAIN, SERVICE_TORQUE, self.async_set_torque, TORQUE_SCHEME
+            #             )
+            #         self.api.services.append(SERVICE_TORQUE)
+            self.api.services[SERVICE_TORQUE] = {
+                "service": self.async_set_torque,
+            }
 
     @property
     def device_info(self):
@@ -340,12 +373,20 @@ class LandroidCloudBaseEntity:
 
     async def async_added_to_hass(self):
         """Connect update callbacks."""
-        await self.api.async_refresh()
+        # await self.api.async_refresh()
+        self.update_callback()
 
         if isinstance(self.api.device_id, type(None)):
             entity_reg: EntityRegistry = er.async_get(self.hass)
             entry = entity_reg.async_get(self.entity_id)
             self.api.device_id = entry.device_id
+            if (
+                not entry.device_id
+                in self.hass.data[DOMAIN][self.api.entry_id]["device_ids"]
+            ):
+                self.hass.data[DOMAIN][self.api.entry_id]["device_ids"].append(
+                    entry.device_id
+                )
 
         async_dispatcher_connect(
             self.hass,
@@ -716,19 +757,18 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
         self, service_call: ServiceCall = None, entity: Entity = None
     ) -> None:
         """Start edgecut routine."""
-        import logging
 
-        _LOGGER = logging.getLogger(__name__)
-        _LOGGER.debug(entity)
-        _LOGGER.debug(service_call)
         device: WorxCloud = self.api.device
-        LOGGER.write(LoggerType.SERVICE_CALL, "Starting edge cut task for %s", device.serial_number)
-        # try:
-        #     await self.hass.async_add_executor_job(partial(device.ots, True, 0))
-        # except NoOneTimeScheduleError as ex:
-        #     LOGGER.write(
-        #         LoggerType.SERVICE_CALL, "%s", ex.args[0], log_level=LogLevel.ERROR
-        #     )
+        LOGGER.write(
+            LoggerType.SERVICE_CALL,
+            "Starting edge cut task",
+        )
+        try:
+            await self.hass.async_add_executor_job(partial(device.ots, True, 0))
+        except NoOneTimeScheduleError as ex:
+            LOGGER.write(
+                LoggerType.SERVICE_CALL, "%s", ex.args[0], log_level=LogLevel.ERROR
+            )
 
     async def async_toggle_partymode(
         self, entity: Entity = None, service_call: ServiceCall = None

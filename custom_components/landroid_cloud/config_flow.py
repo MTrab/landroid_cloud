@@ -75,9 +75,12 @@ class LandroidCloudConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 self._errors["base"] = "cannot_connect"
             except InvalidAuth:
                 self._errors["base"] = "invalid_auth"
-            except Exception:  # pylint: disable=broad-except
+            except Exception as ex:  # pylint: disable=broad-except
                 LOGGER.write(
-                    LoggerType.CONFIG, "Unexpected exception", log_level=LogLevel.ERROR
+                    LoggerType.CONFIG,
+                    "Unexpected exception: %s",
+                    ex,
+                    log_level=LogLevel.ERROR,
                 )
                 self._errors["base"] = "unknown"
 

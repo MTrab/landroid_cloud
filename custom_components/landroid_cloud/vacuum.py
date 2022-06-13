@@ -38,7 +38,7 @@ async def async_setup_entry(
 
         if not api.features_loaded:
             LOGGER.write(LoggerType.SETUP, "Features not assessed, calling assessment")
-            api.check_features(int(constructor.base_features))
+            api.check_features(int(constructor.base_features), constructor.register_services)
 
         mowers.append(constructor)
 
