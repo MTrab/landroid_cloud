@@ -34,6 +34,7 @@ class LoggerType(StrEnum):
     SELECT = "Select"
     MOWER = "Mower"
     SENSOR = "Sensor"
+    DEVELOP = "DEVELOPER INFO"
 
 
 class LogLevel(StrEnum):
@@ -89,7 +90,7 @@ class LandroidLogger:
                 else "(" + self._devicename + ", " + log_type + ") "
             )
 
-        log_string = prefix + message
+        log_string = prefix + str(message)
         level = self._loglevel if isinstance(log_level, type(None)) else log_level
 
         if level == "info":
