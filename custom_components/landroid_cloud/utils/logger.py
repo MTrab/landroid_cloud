@@ -8,7 +8,7 @@ from homeassistant.backports.enum import StrEnum
 
 try:
     from ..api import LandroidAPI
-except:
+except: # pylint: disable=bare-except
     pass
 
 
