@@ -3,6 +3,7 @@
 from __future__ import annotations
 from functools import partial
 import json
+from math import log
 from typing import Any
 
 from homeassistant.components.button import (
@@ -633,7 +634,6 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
 
     async def async_edgecut(self, data: dict | None = None) -> None:
         """Start edgecut routine."""
-
         device: WorxCloud = self.api.device
         LOGGER.write(
             LoggerType.SERVICE_CALL,

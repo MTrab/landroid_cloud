@@ -110,16 +110,6 @@ def async_setup_services(hass: HomeAssistant) -> None:
                 )
 
         for device in devices:
-            LOGGER.write(
-                LoggerType.SERVICE_REGISTER,
-                "Received %s service call with service_data '%s' "
-                "to device '%s' identified by device_id '%s'",
-                service,
-                service_data,
-                device.name,
-                device.id,
-            )
-
             api: LandroidAPI = await async_match_api(hass, device)
 
             if isinstance(api, type(None)):
@@ -136,6 +126,14 @@ def async_setup_services(hass: HomeAssistant) -> None:
                     LoggerType.SERVICE_CALL,
                     "The called service, %s, is not supported by this device!",
                     service,
+                    log_level=LogLevel.ERROR,
+                )
+                return False
+
+            if not api.device.online:
+                LOGGER.write(
+                    LoggerType.SERVICE_CALL,
+                    "Device is offline, can't send command.",
                     log_level=LogLevel.ERROR,
                 )
                 return False
