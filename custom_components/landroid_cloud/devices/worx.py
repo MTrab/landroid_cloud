@@ -9,9 +9,8 @@ import voluptuous as vol
 from homeassistant.components.button import ButtonEntity, ButtonEntityDescription
 from homeassistant.components.select import SelectEntityDescription
 from homeassistant.components.vacuum import StateVacuumEntity
-from homeassistant.core import HomeAssistant, ServiceCall
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers.dispatcher import dispatcher_send
-from homeassistant.helpers.entity import Entity
 
 from pyworxcloud import (
     WorxCloud,
@@ -170,12 +169,9 @@ class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
         """Get device specific CONFIG_SCHEME."""
         return CONFIG_SCHEME
 
-    async def async_set_torque(
-        self, entity: Entity = None, service_call: ServiceCall = None
-    ) -> None:
+    async def async_set_torque(self, data: dict | None = None) -> None:
         """Set wheel torque."""
         device: WorxCloud = self.api.device
-        data = service_call.data
         LOGGER.write(
             LoggerType.SERVICE_CALL,
             "Setting wheel torque to %s",
