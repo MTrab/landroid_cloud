@@ -27,7 +27,14 @@ class LandroidAPI:
     def __init__(
         self, hass: HomeAssistant, index: int, device: WorxCloud, entry: ConfigEntry
     ):
-        """Set up device."""
+        """Initialize API connection for a device.
+
+        Args:
+            hass (HomeAssistant): Home Assistant object
+            index (int): Device number to connect to. 0 is the first device associated.
+            device (WorxCloud): pyWorxlandroid object for the connection.
+            entry (ConfigEntry): Home Assistant configuration entry for the cloud account.
+        """
         self.hass = hass
         self.entry_id = entry.entry_id
         self.data = entry.data
@@ -56,7 +63,14 @@ class LandroidAPI:
         self.device.set_callback(self.receive_data)
 
     def check_features(self, features: int, callback=None) -> None:
-        """Check supported features."""
+        """Check which features the device supports.
+
+        Args:
+            features (int): Current feature set.
+            callback (_type_, optional):
+                Function to be called when the features
+                have been assessed. Defaults to None.
+        """
 
         if self.device.partymode_capable:
             LOGGER.write(LoggerType.FEATURE_ASSESSMENT, "Party mode capable")
@@ -78,8 +92,8 @@ class LandroidAPI:
         if callback:
             callback()
 
-    def receive_data(self):
-        """Used as callback from API when data is received."""
+    def receive_data(self) -> None:
+        """Callback function when the API sends new data."""
         if not self._last_state and self.device.online:
             self._last_state = True
             self.hass.config_entries.async_reload(self.entry_id)

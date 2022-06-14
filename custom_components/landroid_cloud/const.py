@@ -123,6 +123,7 @@ STATE_MAP = {
     34: STATE_PAUSED,
 }
 
+# Remap the zones to be more "human-readable"
 ZONE_MAP = {
     1: 0,
     2: 1,
@@ -157,16 +158,19 @@ class ScheduleDays(IntEnum):
     SATURDAY = 6
 
 
+# Map schedule to Landroid JSON property
 SCHEDULE_TYPE_MAP = {
     "primary": "d",
     "secondary": "dd",
 }
 
+# Map button type to service
 BUTTONTYPE_TO_SERVICE = {
     LandroidButtonTypes.RESTART: SERVICE_RESTART,
     LandroidButtonTypes.EDGECUT: SERVICE_EDGECUT,
 }
 
+# Map schedule days
 SCHEDULE_TO_DAY = {
     "sunday": {
         "day": ScheduleDays.SUNDAY,
