@@ -1,6 +1,5 @@
 """Support for Landroid cloud compatible mowers."""
 from __future__ import annotations
-from copy import deepcopy
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -38,7 +37,9 @@ async def async_setup_entry(
 
         if not api.features_loaded:
             LOGGER.write(LoggerType.SETUP, "Features not assessed, calling assessment")
-            api.check_features(int(constructor.base_features), constructor.register_services)
+            api.check_features(
+                int(constructor.base_features), constructor.register_services
+            )
 
         mowers.append(constructor)
 
