@@ -224,7 +224,7 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 async def async_init_device(
     hass, entry, device, cloud_email, cloud_password, cloud_type
 ) -> None:
-    """Initialize a device."""
+    """Initialize the device."""
     hass.data[DOMAIN][entry.entry_id][device] = {}
 
     LOGGER.write(
