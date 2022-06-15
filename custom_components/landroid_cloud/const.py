@@ -34,8 +34,8 @@ DEFAULT_NAME = "landroid"
 DOMAIN = "landroid_cloud"
 PLATFORMS = ["vacuum", "select", "button"]
 UPDATE_SIGNAL = "landroid_cloud_update"
-UPDATE_SIGNAL_ZONES = "landroid_cloud_update_zones"
-UPDATE_SIGNAL_REACHABILITY = "landroid_cloud_update_reachability"
+# UPDATE_SIGNAL_ZONES = "landroid_cloud_update_zones"
+# UPDATE_SIGNAL_REACHABILITY = "landroid_cloud_update_reachability"
 LOGLEVEL = LogLevel.DEBUG
 
 # Service consts

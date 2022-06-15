@@ -106,7 +106,6 @@ class LandroidAPI:
         """Try fetching data from cloud."""
         try:
             await self.hass.async_add_executor_job(self.device.update)
-            # dispatcher_send(self.hass, f"{UPDATE_SIGNAL}_{self.device.name}")
         except exceptions.RequestError:
             self.logger.log(
                 LoggerType.API,

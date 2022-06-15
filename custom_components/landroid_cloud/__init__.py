@@ -74,13 +74,13 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             await hass.async_add_executor_job(
                 hass.data[DOMAIN][entry.entry_id][device]["device"].disconnect
             )
-            # services.extend(hass.data[DOMAIN][entry.entry_id][device]["api"].services)
+            services.extend(hass.data[DOMAIN][entry.entry_id][device]["api"].services)
 
         hass.data[DOMAIN].pop(entry.entry_id)
 
-        # if not hass.data[DOMAIN]:
-        #     for service in services:
-        #         hass.services.async_remove(DOMAIN, service)
+        if not hass.data[DOMAIN]:
+            for service in services:
+                hass.services.async_remove(DOMAIN, service)
 
         return True
 

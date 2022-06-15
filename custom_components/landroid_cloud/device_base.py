@@ -67,7 +67,6 @@ from .const import (
     STATE_OFFLINE,
     STATE_RAINDELAY,
     UPDATE_SIGNAL,
-    UPDATE_SIGNAL_ZONES,
     LandroidFeatureSupport,
 )
 
@@ -99,7 +98,6 @@ class LandroidCloudBaseEntity(LandroidLogger):
     async def async_ots(self,  data: dict|None = None) -> None:\n
     async def async_set_schedule(self,  data: dict|None = None) -> None:\n
     async def async_set_torque(self,  data: dict|None = None) -> None:\n
-    def zone_mapping(self) -> None:\n
     """
 
     _battery_level: int | None = None
@@ -123,9 +121,9 @@ class LandroidCloudBaseEntity(LandroidLogger):
 
         super().__init__()
 
-    def zone_mapping(self) -> None:
-        """Map current zone correct."""
-        return None
+    # def zone_mapping(self) -> None:
+    #     """Map current zone correct."""
+    #     return None
 
     async def async_edgecut(self, data: dict | None = None) -> None:
         """Called to start edge cut task."""
@@ -256,7 +254,6 @@ class LandroidCloudBaseEntity(LandroidLogger):
 
     async def async_added_to_hass(self):
         """Connect update callbacks."""
-        # await self.api.async_refresh()
         self.update_callback()
 
         if isinstance(self.api.device_id, type(None)):
@@ -277,11 +274,11 @@ class LandroidCloudBaseEntity(LandroidLogger):
             self.update_callback,
         )
 
-        async_dispatcher_connect(
-            self.hass,
-            f"{UPDATE_SIGNAL_ZONES}_{self.api.device.name}",
-            self.update_selected_zone,
-        )
+        # async_dispatcher_connect(
+        #     self.hass,
+        #     f"{UPDATE_SIGNAL_ZONES}_{self.api.device.name}",
+        #     self.update_selected_zone,
+        # )
 
     @callback
     def update_callback(self):
@@ -324,8 +321,6 @@ class LandroidCloudBaseEntity(LandroidLogger):
             data["capabilities"].append("Party Mode")
         if master.torque_capable:
             data["capabilities"].append("Motor Torque")
-
-        data["device_id"] = self.api.device_id
 
         try:
             # Convert int to bool for charging state
@@ -490,10 +485,6 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
 
     _battery_level: int | None = None
     _attr_state = STATE_INITIALIZING
-
-    # def __init__(self, hass: HomeAssistant, api: LandroidAPI):
-    #     """Initialize a mower base object."""
-    #     super().__init__(hass, api)
 
     @property
     def extra_state_attributes(self) -> str:

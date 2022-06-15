@@ -14,9 +14,6 @@ from .const import (
 from .utils.entity_setup import vendor_to_device
 from .utils.logger import LandroidLogger, LoggerType
 
-# def check_state():
-#     """Check state."""
-
 
 async def async_setup_entry(
     hass: HomeAssistant,
