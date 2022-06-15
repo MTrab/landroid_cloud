@@ -38,8 +38,6 @@ from .scheme import (
 )
 from .utils.logger import LandroidLogger, LogLevel, LoggerType
 
-LOGGER = LandroidLogger(__name__, LOGLEVEL)
-
 
 @dataclass
 class LandroidServiceDescription:
@@ -111,9 +109,10 @@ def async_setup_services(hass: HomeAssistant) -> None:
 
         for device in devices:
             api: LandroidAPI = await async_match_api(hass, device)
+            logger = LandroidLogger(name=__name__, api=api, log_level=LOGLEVEL)
 
             if isinstance(api, type(None)):
-                LOGGER.write(
+                logger.log(
                     LoggerType.SERVICE_CALL,
                     "Couldn't match a device with device_id = %s",
                     device.id,
@@ -122,27 +121,30 @@ def async_setup_services(hass: HomeAssistant) -> None:
                 return
 
             if not service in api.services:
-                LOGGER.write(
+                logger.log(
                     LoggerType.SERVICE_CALL,
                     "The called service, %s, is not supported by this device!",
                     service,
                     log_level=LogLevel.ERROR,
+                    device=api.friendly_name,
                 )
                 return False
 
             if not api.device.online:
-                LOGGER.write(
+                logger.log(
                     LoggerType.SERVICE_CALL,
                     "Device is offline, can't send command.",
                     log_level=LogLevel.ERROR,
+                    device=api.friendly_name,
                 )
                 return False
 
             await api.services[service]["service"](service_data)
 
+    logger = LandroidLogger(name=__name__, log_level=LOGLEVEL)
     for service in SUPPORTED_SERVICES:
         if not hass.services.has_service(DOMAIN, service.key):
-            LOGGER.write(LoggerType.SERVICE_ADD, "Adding %s", service.key)
+            logger.log(LoggerType.SERVICE_ADD, "Adding %s", service.key)
             hass.services.async_register(
                 DOMAIN,
                 service.key,

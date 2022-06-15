@@ -20,8 +20,6 @@ from .const import (
 from .utils.entity_setup import vendor_to_device
 from .utils.logger import LandroidLogger, LoggerType
 
-LOGGER = LandroidLogger(__name__, LOGLEVEL)
-
 # Tuple containing select entities to create
 SELECTS = [
     SelectEntityDescription(
@@ -48,16 +46,15 @@ async def async_setup_entry(
         while not api.features_loaded:
             await asyncio.sleep(1)
 
-        LOGGER.set_api(api)
-
-        LOGGER.write(LoggerType.FEATURE_ASSESSMENT, "Assessing available selects")
+        logger = LandroidLogger(name=__name__, api=api, log_level=LOGLEVEL)
+        logger.log(LoggerType.FEATURE_ASSESSMENT, "Assessing available selects")
         for select in SELECTS:
             constructor = None
             if (
                 select.key == LandroidSelectTypes.NEXT_ZONE
                 and device.DEVICE_FEATURES & LandroidFeatureSupport.SETZONE
             ):
-                LOGGER.write(LoggerType.FEATURE, "Adding %s select", select.key)
+                logger.log(LoggerType.FEATURE, "Adding %s select", select.key)
 
                 out = deepcopy(select)
                 out.name = out.name.replace("NAME", api.friendly_name)

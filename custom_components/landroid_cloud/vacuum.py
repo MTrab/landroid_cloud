@@ -14,11 +14,8 @@ from .const import (
 from .utils.entity_setup import vendor_to_device
 from .utils.logger import LandroidLogger, LoggerType
 
-LOGGER = LandroidLogger(__name__, LOGLEVEL)
-
-
-def check_state():
-    """Check state."""
+# def check_state():
+#     """Check state."""
 
 
 async def async_setup_entry(
@@ -33,10 +30,9 @@ async def async_setup_entry(
         device = vendor_to_device(api.config["type"])
         constructor = device.MowerDevice(hass, api)
 
-        LOGGER.set_api(api)
-
+        logger = LandroidLogger(name=__name__, api=api, log_level=LOGLEVEL)
         if not api.features_loaded:
-            LOGGER.write(LoggerType.SETUP, "Features not assessed, calling assessment")
+            logger.log(LoggerType.SETUP, "Features not assessed, calling assessment")
             api.check_features(
                 int(constructor.base_features), constructor.register_services
             )

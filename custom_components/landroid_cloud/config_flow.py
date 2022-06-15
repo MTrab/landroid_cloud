@@ -12,7 +12,7 @@ from .scheme import DATA_SCHEMA
 
 from .utils.logger import LandroidLogger, LoggerType, LogLevel
 
-LOGGER = LandroidLogger(__name__, LOGLEVEL)
+LOGGER = LandroidLogger(name=__name__, log_level=LOGLEVEL)
 
 
 async def validate_input(hass: core.HomeAssistant, data):
@@ -76,7 +76,7 @@ class LandroidCloudConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             except InvalidAuth:
                 self._errors["base"] = "invalid_auth"
             except Exception as ex:  # pylint: disable=broad-except
-                LOGGER.write(
+                LOGGER.log(
                     LoggerType.CONFIG,
                     "Unexpected exception: %s",
                     ex,
@@ -103,7 +103,7 @@ class LandroidCloudConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         """Import a config entry."""
         if import_config is not None:
             if self.check_for_existing(import_config):
-                LOGGER.write(
+                LOGGER.log(
                     LoggerType.CONFIG_IMPORT,
                     "Landroid_cloud configuration for %s already imported, you can "
                     "safely remove the entry from your configuration.yaml as this "
@@ -120,7 +120,7 @@ class LandroidCloudConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             except InvalidAuth:
                 self._errors["base"] = "invalid_auth"
             except Exception:  # pylint: disable=broad-except
-                LOGGER.write(
+                LOGGER.log(
                     LoggerType.CONFIG_IMPORT,
                     "Unexpected exception",
                     log_level=LogLevel.ERROR,

@@ -24,8 +24,6 @@ from .const import (
 from .utils.entity_setup import vendor_to_device
 from .utils.logger import LandroidLogger, LoggerType
 
-LOGGER = LandroidLogger(__name__, LOGLEVEL)
-
 # Tuple containing buttons to create
 BUTTONS = [
     ButtonEntityDescription(
@@ -59,9 +57,8 @@ async def async_setup_entry(
         while not api.features_loaded:
             await asyncio.sleep(1)
 
-        LOGGER.set_api(api)
-
-        LOGGER.write(LoggerType.FEATURE_ASSESSMENT, "Assessing available buttons")
+        logger = LandroidLogger(name=__name__, api=api, log_level=LOGLEVEL)
+        logger.log(LoggerType.FEATURE_ASSESSMENT, "Assessing available buttons")
         for button in BUTTONS:
             constructor = None
             if (
@@ -71,7 +68,7 @@ async def async_setup_entry(
                 button.key == LandroidButtonTypes.EDGECUT
                 and api.features & LandroidFeatureSupport.EDGECUT
             ):
-                LOGGER.write(LoggerType.FEATURE, "Adding %s button", button.key)
+                logger.log(LoggerType.FEATURE, "Adding %s button", button.key)
                 out = deepcopy(button)
                 out.name = out.name.replace("NAME", api.friendly_name)
                 constructor = device.Button

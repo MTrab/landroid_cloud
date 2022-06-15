@@ -41,8 +41,6 @@ from ..device_base import (
 
 from ..utils.logger import LandroidLogger, LoggerType
 
-LOGGER = LandroidLogger(__name__, LOGLEVEL)
-
 SUPPORTED_FEATURES = SUPPORT_LANDROID_BASE
 
 CONFIG_SCHEME = vol.Schema(
@@ -85,12 +83,12 @@ class Button(LandroidCloudButtonBase, ButtonEntity):
     ) -> None:
         """Initialize a button."""
         super().__init__(description, hass, api)
-        LOGGER.write(
-            LoggerType.BUTTON,
+        self.device: WorxCloud = self.api.device
+        self.log(
+            LoggerType.SELECT,
             "Adding %s",
             description.key,
         )
-        self.device: WorxCloud = self.api.device
 
 
 class Select(LandroidCloudSelectEntity):
@@ -104,12 +102,12 @@ class Select(LandroidCloudSelectEntity):
     ):
         """Init new Worx Select entity."""
         super().__init__(description, hass, api)
-        LOGGER.write(
+        self.device: WorxCloud = self.api.device
+        self.log(
             LoggerType.SELECT,
             "Adding %s",
             description.key,
         )
-        self.device: WorxCloud = self.api.device
 
 
 class ZoneSelect(Select, LandroidCloudSelectZoneEntity):
@@ -134,8 +132,6 @@ class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
         super().__init__(hass, api)
         self.device: WorxCloud = self.api.device
 
-        # self.register_services()
-
     @property
     def base_features(self):
         """Flag which Landroid Cloud specific features that are supported."""
@@ -151,10 +147,8 @@ class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
         device: WorxCloud = self.api.device
         current_zone = device.mowing_zone
         virtual_zones = device.zone_probability
-        LOGGER.write(LoggerType.MOWER, "Zone reported by API: %s", current_zone)
-        LOGGER.write(
-            LoggerType.MOWER, "Corrected zone: %s", virtual_zones[current_zone]
-        )
+        self.log(LoggerType.MOWER, "Zone reported by API: %s", current_zone)
+        self.log(LoggerType.MOWER, "Corrected zone: %s", virtual_zones[current_zone])
         self._attributes.update({"current_zone": virtual_zones[current_zone]})
         self.api.shared_options.update({"current_zone": virtual_zones[current_zone]})
         dispatcher_send(self.hass, f"{UPDATE_SIGNAL_ZONES}_{device.name}")
@@ -172,7 +166,7 @@ class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
     async def async_set_torque(self, data: dict | None = None) -> None:
         """Set wheel torque."""
         device: WorxCloud = self.api.device
-        LOGGER.write(
+        self.log(
             LoggerType.SERVICE_CALL,
             "Setting wheel torque to %s",
             data[ATTR_TORQUE],

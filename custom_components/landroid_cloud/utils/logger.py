@@ -8,7 +8,7 @@ from homeassistant.backports.enum import StrEnum
 
 try:
     from ..api import LandroidAPI
-except: # pylint: disable=bare-except
+except:  # pylint: disable=bare-except
     pass
 
 
@@ -48,70 +48,81 @@ class LogLevel(StrEnum):
 
 
 class LandroidLogger:
-    """Define logger."""
+    """Basic logger instance."""
 
     def __init__(
-        self, name: str, log_level: LogLevel = LogLevel.DEBUG, api: LandroidAPI = None
-    ):
-        """Initialize logger."""
-        self._api = api
-        self._devicename: str | None = (
-            None if isinstance(api, type(None)) else api.friendly_name
-        )
-        self._logname = name
-        self._loglevel = log_level
-        self._logger: logging.Logger = logging.getLogger(name)
+        self,
+        name: str = None,
+        api: LandroidAPI = None,
+        log_level: LogLevel = LogLevel.DEBUG,
+    ) -> None:
+        """Initialize base logger."""
 
-        if not isinstance(self._devicename, type(None)):
-            self._logger = self._logger.getChild(self._devicename)
+        self.logapi = api
+        self.logname = name
+        self.loglevel = log_level
+        self.logdevicename = None
 
-    def set_child(self, name: str):
-        """Set child logger."""
-        self._logger = self._logger.getChild(name)
+        if self.logapi:
+            self.logdevicename = self.logapi.friendly_name
 
-    def set_api(self, api: LandroidAPI):
-        """Set integration API."""
-        self._api = api
-        self._devicename = api.friendly_name
-
-    def write(
+    def log(
         self,
         log_type: LoggerType | None,
         message: str,
         *args,
         log_level: str | None = None,
+        device: str | None = None,
     ):
         """Write to logger component."""
+        logger = logging.getLogger(self.logname)
+
         prefix = ""
         if not log_type in [LoggerType.NONE, None]:
-            prefix = (
-                "(" + log_type + ") "
-                if isinstance(self._devicename, type(None))
-                else "(" + self._devicename + ", " + log_type + ") "
-            )
+            if not device:
+                prefix = (
+                    "(" + log_type + ") "
+                    if isinstance(self.logapi, type(None))
+                    else "(" + self.logapi.friendly_name + ", " + log_type + ") "
+                )
+            else:
+                prefix = (
+                    "(" + log_type + ") "
+                    if isinstance(device, type(None))
+                    else "(" + device + ", " + log_type + ") "
+                )
 
         log_string = prefix + str(message)
-        level = self._loglevel if isinstance(log_level, type(None)) else log_level
+        level = self.loglevel if isinstance(log_level, type(None)) else log_level
 
         if level == "info":
             if args:
-                self._logger.info(log_string, *args)
+                logger.info(log_string, *args)
             else:
-                self._logger.info(log_string)
+                logger.info(log_string)
         elif level == "warning":
             if args:
-                self._logger.warning(log_string, *args)
+                logger.warning(log_string, *args)
             else:
-                self._logger.warning(log_string)
+                logger.warning(log_string)
         elif level == "critical":
             if args:
-                self._logger.critical(log_string, *args)
+                logger.critical(log_string, *args)
             else:
-                self._logger.critical(log_string)
+                logger.critical(log_string)
         elif level == "error":
             if args:
-                self._logger.error(log_string, *args)
+                logger.error(log_string, *args)
             else:
-                self._logger.error(log_string)
+                logger.error(log_string)
         elif level == "debug":
-            self._logger.debug(log_string, *args)
+            logger.debug(log_string, *args)
+
+    def log_set_api(self, api: LandroidAPI) -> None:
+        """Set integration API."""
+        self.logapi = api
+        self.logdevicename = api.friendly_name
+
+    def log_set_name(self, name: str) -> None:
+        """Sets the namespace name used in logging."""
+        self.logname = name

@@ -11,14 +11,11 @@ from pyworxcloud import WorxCloud, exceptions
 
 from .const import (
     DOMAIN,
-    LOGLEVEL,
     UPDATE_SIGNAL,
     LandroidFeatureSupport,
 )
 
 from .utils.logger import LandroidLogger, LoggerType, LogLevel
-
-LOGGER = LandroidLogger(__name__, LOGLEVEL)
 
 
 class LandroidAPI:
@@ -59,7 +56,7 @@ class LandroidAPI:
             "type": hass.data[DOMAIN][entry.entry_id][CONF_TYPE].lower(),
         }
 
-        LOGGER.set_api(self)
+        self.logger = LandroidLogger(name=__name__, api=self)
         self.device.set_callback(self.receive_data)
 
     def check_features(self, features: int, callback=None) -> None:
@@ -73,17 +70,17 @@ class LandroidAPI:
         """
 
         if self.device.partymode_capable:
-            LOGGER.write(LoggerType.FEATURE_ASSESSMENT, "Party mode capable")
+            self.logger.log(LoggerType.FEATURE_ASSESSMENT, "Party mode capable")
             features = features | LandroidFeatureSupport.PARTYMODE
 
         if self.device.ots_capable:
-            LOGGER.write(LoggerType.FEATURE_ASSESSMENT, "OTS capable")
+            self.logger.log(LoggerType.FEATURE_ASSESSMENT, "OTS capable")
             features = (
                 features | LandroidFeatureSupport.EDGECUT | LandroidFeatureSupport.OTS
             )
 
         if self.device.torque_capable:
-            LOGGER.write(LoggerType.FEATURE_ASSESSMENT, "Torque capable")
+            self.logger.log(LoggerType.FEATURE_ASSESSMENT, "Torque capable")
             features = features | LandroidFeatureSupport.TORQUE
 
         self.features = features
@@ -98,7 +95,11 @@ class LandroidAPI:
             self._last_state = True
             self.hass.config_entries.async_reload(self.entry_id)
 
-        LOGGER.write(LoggerType.DATA_UPDATE, "Received new data from API")
+        self.logger.log(
+            LoggerType.DATA_UPDATE,
+            "Received new data from API, dispatching %s",
+            f"{UPDATE_SIGNAL}_{self.device.name}",
+        )
         dispatcher_send(self.hass, f"{UPDATE_SIGNAL}_{self.device.name}")
 
     async def async_refresh(self):
@@ -107,7 +108,7 @@ class LandroidAPI:
             await self.hass.async_add_executor_job(self.device.update)
             # dispatcher_send(self.hass, f"{UPDATE_SIGNAL}_{self.device.name}")
         except exceptions.RequestError:
-            LOGGER.write(
+            self.logger.log(
                 LoggerType.API,
                 "Request for %s was malformed.",
                 self.config["email"],
@@ -115,7 +116,7 @@ class LandroidAPI:
             )
             return False
         except exceptions.AuthorizationError:
-            LOGGER.write(
+            self.logger.log(
                 LoggerType.API,
                 "Unauthorized - please check your credentials for %s at Landroid Cloud",
                 self.config["email"],
@@ -123,7 +124,7 @@ class LandroidAPI:
             )
             return False
         except exceptions.ForbiddenError:
-            LOGGER.write(
+            self.logger.log(
                 LoggerType.API,
                 "Server rejected access for %s at Landroid Cloud - this might be "
                 "temporary due to high numbers of API requests from this IP address.",
@@ -132,7 +133,7 @@ class LandroidAPI:
             )
             return False
         except exceptions.NotFoundError:
-            LOGGER.write(
+            self.logger.log(
                 LoggerType.API,
                 "Endpoint for %s was not found.",
                 self.config["email"],
@@ -140,7 +141,7 @@ class LandroidAPI:
             )
             return False
         except exceptions.TooManyRequestsError:
-            LOGGER.write(
+            self.logger.log(
                 LoggerType.API,
                 "Too many requests for %s at Landroid Cloud. IP address temporary banned.",
                 self.config["email"],
@@ -148,7 +149,7 @@ class LandroidAPI:
             )
             return False
         except exceptions.InternalServerError:
-            LOGGER.write(
+            self.logger.log(
                 LoggerType.API,
                 "Internal server error happend for the request to %s at Landroid Cloud.",
                 self.config["email"],
@@ -156,14 +157,14 @@ class LandroidAPI:
             )
             return False
         except exceptions.ServiceUnavailableError:
-            LOGGER.write(
+            self.logger.log(
                 LoggerType.API,
                 "Service at Landroid Cloud was unavailable.",
                 log_level=LogLevel.ERROR,
             )
             return False
         except exceptions.APIException as ex:
-            LOGGER.write(
+            self.logger.log(
                 LoggerType.API,
                 "%s",
                 ex,

@@ -21,7 +21,7 @@ from .scheme import CONFIG_SCHEMA  # Used for validating YAML config - DO NOT DE
 from .services import async_setup_services
 from .utils.logger import LandroidLogger, LogLevel, LoggerType
 
-LOGGER = LandroidLogger(__name__, LOGLEVEL)
+LOGGER = LandroidLogger(name=__name__, log_level=LOGLEVEL)
 
 
 async def async_setup(hass: HomeAssistant, config: dict):
@@ -33,7 +33,7 @@ async def async_setup(hass: HomeAssistant, config: dict):
         return True
 
     for conf in config[DOMAIN]:
-        LOGGER.write(
+        LOGGER.log(
             LoggerType.SETUP_IMPORT,
             "Importing configuration for %s from configuration.yaml",
             conf["email"],
@@ -96,7 +96,7 @@ async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
 async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Setup the integration using a config entry."""
     integration = await async_get_integration(hass, DOMAIN)
-    LOGGER.write(
+    LOGGER.log(
         None,
         STARTUP,
         integration.version,
@@ -110,7 +110,7 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     if cloud_type is None:
         cloud_type = "worx"
 
-    LOGGER.write(
+    LOGGER.log(
         LoggerType.SETUP,
         "Opening connection to %s account for %s",
         cloud_type,
@@ -121,7 +121,7 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     try:
         auth = await hass.async_add_executor_job(master.authenticate)
     except exceptions.RequestError:
-        LOGGER.write(
+        LOGGER.log(
             LoggerType.API,
             "Request for %s was malformed.",
             cloud_email,
@@ -129,7 +129,7 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         )
         return False
     except exceptions.AuthorizationError:
-        LOGGER.write(
+        LOGGER.log(
             LoggerType.API,
             "Unauthorized - please check your credentials for %s at Landroid Cloud",
             cloud_email,
@@ -137,7 +137,7 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         )
         return False
     except exceptions.ForbiddenError:
-        LOGGER.write(
+        LOGGER.log(
             LoggerType.API,
             "Server rejected access for %s at Landroid Cloud - this might be "
             "temporary due to high numbers of API requests from this IP address.",
@@ -146,7 +146,7 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         )
         return False
     except exceptions.NotFoundError:
-        LOGGER.write(
+        LOGGER.log(
             LoggerType.API,
             "Endpoint for %s was not found.",
             cloud_email,
@@ -154,7 +154,7 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         )
         return False
     except exceptions.TooManyRequestsError:
-        LOGGER.write(
+        LOGGER.log(
             LoggerType.API,
             "Too many requests for %s at Landroid Cloud. IP address temporary banned.",
             cloud_email,
@@ -162,7 +162,7 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         )
         return False
     except exceptions.InternalServerError:
-        LOGGER.write(
+        LOGGER.log(
             LoggerType.API,
             "Internal server error happend for the request to %s at Landroid Cloud.",
             cloud_email,
@@ -170,14 +170,14 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         )
         return False
     except exceptions.ServiceUnavailableError:
-        LOGGER.write(
+        LOGGER.log(
             LoggerType.API,
             "Service at Landroid Cloud was unavailable.",
             log_level=LogLevel.ERROR,
         )
         return False
     except exceptions.APIException as ex:
-        LOGGER.write(
+        LOGGER.log(
             LoggerType.API,
             "%s",
             ex,
@@ -186,7 +186,7 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         return False
 
     if not auth:
-        LOGGER.write(
+        LOGGER.log(
             LoggerType.AUTHENTICATION,
             "Error in authentication for %s",
             cloud_email,
@@ -197,7 +197,7 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     try:
         num_dev = await hass.async_add_executor_job(master.enumerate)
     except Exception as err:  # pylint: disable=broad-except
-        LOGGER.write(LoggerType.AUTHENTICATION, "%s", err, log_level=LogLevel.WARNING)
+        LOGGER.log(LoggerType.AUTHENTICATION, "%s", err, log_level=LogLevel.WARNING)
         return False
 
     hass.data[DOMAIN][entry.entry_id] = {
@@ -227,9 +227,7 @@ async def async_init_device(
     """Initialize the device."""
     hass.data[DOMAIN][entry.entry_id][device] = {}
 
-    LOGGER.write(
-        LoggerType.SETUP, "Setting up device no. %s on %s", device, cloud_email
-    )
+    LOGGER.log(LoggerType.SETUP, "Setting up device no. %s on %s", device, cloud_email)
     # Init the object
     hass.data[DOMAIN][entry.entry_id][device]["device"] = WorxCloud(
         cloud_email, cloud_password, cloud_type.lower()
