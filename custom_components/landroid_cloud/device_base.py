@@ -37,7 +37,6 @@ from pyworxcloud import (
     NoPartymodeError,
     WorxCloud,
 )
-from pyworxcloud.states import ERROR_TO_DESCRIPTION
 from pyworxcloud.exceptions import NoOneTimeScheduleError
 from pyworxcloud.utils import Capability, DeviceCapability
 
@@ -113,18 +112,14 @@ class LandroidCloudBaseEntity(LandroidLogger):
 
         self._attributes = {}
         self._available = False
-        self._unique_id = f"{api.device.serial_number}_{api.name}"
-        self._serialnumber = api.device.serial_number
+        self._unique_id = f'{api.device.product["serial_number"]}_{api.name}'
+        self._serialnumber = api.device.product["serial_number"]
         self._icon = None
         self._name = f"{api.friendly_name}"
-        self._mac = api.device.mac_address
+        self._mac = api.device.product["mac_address"]
         self._connections = {(dr.CONNECTION_NETWORK_MAC, self._mac)}
 
         super().__init__()
-
-    # def zone_mapping(self) -> None:
-    #     """Map current zone correct."""
-    #     return None
 
     async def async_edgecut(self, data: dict | None = None) -> None:
         """Called to start edge cut task."""
@@ -244,13 +239,13 @@ class LandroidCloudBaseEntity(LandroidLogger):
                     DOMAIN,
                     self.api.unique_id,
                     self.api.entry_id,
-                    self.api.device.serial_number,
+                    self.api.device.product["serial_number"],
                 )
             },
             "name": str(self._name),
             "sw_version": self.api.device.firmware_version,
             "manufacturer": self.api.config["type"].capitalize(),
-            "model": self.api.device.model,
+            "model": self.api.device.product["model"],
         }
 
     async def async_added_to_hass(self):
@@ -311,7 +306,6 @@ class LandroidCloudBaseEntity(LandroidLogger):
                 prop_data = getattr(master, prop)
                 if not isinstance(prop_data, type(None)):
                     data[attr] = prop_data
-        data["error"] = ERROR_TO_DESCRIPTION[master.error or 0]
 
         # Populate capabilities attribute
         data["capabilities"] = []
@@ -335,28 +329,27 @@ class LandroidCloudBaseEntity(LandroidLogger):
         ):
             data.pop("gps_location")
 
-        
         self._attributes.update(data)
 
         self.log(LoggerType.DATA_UPDATE, "Online: %s", master.online)
 
         self._available = (
             master.online
-            if master.error == 0
-            else (not bool(isinstance(master.error, type(None))))
+            if master.error.id in [-1, 0]
+            else (not bool(isinstance(master.error.id, type(None))))
         )
         state = STATE_INITIALIZING
 
-        if not master.online and master.error == 0:
+        if not master.online and master.error.id in [-1, 0]:
             state = STATE_OFFLINE
-        elif master.error is not None and master.error > 0:
-            if master.error > 0 and master.error != 5:
+        elif master.error.id is not None and master.error.id > 0:
+            if master.error.id > 0 and master.error.id != 5:
                 state = STATE_ERROR
-            elif master.error == 5:
+            elif master.error.id == 5:
                 state = STATE_RAINDELAY
         else:
             try:
-                state = STATE_MAP[master.status]
+                state = STATE_MAP[master.status.id]
             except KeyError:
                 state = STATE_INITIALIZING
 
@@ -364,8 +357,9 @@ class LandroidCloudBaseEntity(LandroidLogger):
         self.log(LoggerType.DATA_UPDATE, "Attributes:\n%s", self._attributes)
         self._attr_state = state
 
-        self._serialnumber = master.serial_number
-        self._battery_level = master.battery.percent
+        self._serialnumber = master.product["serial_number"]
+        if "percent" in master.battery:
+            self._battery_level = master.battery["percent"]
 
 
 class LandroidCloudSelectEntity(LandroidCloudBaseEntity, SelectEntity):
@@ -411,7 +405,7 @@ class LandroidCloudSelectZoneEntity(LandroidCloudSelectEntity):
     def _update_zone(self) -> None:
         """Update zone selector options."""
         try:
-            zones = self.api.device.zone
+            zones = self.api.device.zone["starting_point"]
         except:  # pylint: disable=bare-except
             zones = []
 
