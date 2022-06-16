@@ -9,7 +9,6 @@ from homeassistant.loader import async_get_integration
 
 from pyworxcloud import WorxCloud, exceptions
 
-
 from .api import LandroidAPI
 from .const import (
     DOMAIN,

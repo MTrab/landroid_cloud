@@ -39,6 +39,7 @@ from pyworxcloud import (
 )
 from pyworxcloud.states import ERROR_TO_DESCRIPTION
 from pyworxcloud.exceptions import NoOneTimeScheduleError
+from pyworxcloud.utils import Capability, DeviceCapability
 
 from .api import LandroidAPI
 
@@ -311,28 +312,30 @@ class LandroidCloudBaseEntity(LandroidLogger):
                 if not isinstance(prop_data, type(None)):
                     data[attr] = prop_data
         data["error"] = ERROR_TO_DESCRIPTION[master.error or 0]
-        data["capabilities"] = []
 
         # Populate capabilities attribute
-        if master.ots_capable:
+        data["capabilities"] = []
+        capabilities: Capability = master.capabilities
+        if capabilities.check(DeviceCapability.ONE_TIME_SCHEDULE):
             data["capabilities"].append("One-Time-Schedule")
+        if capabilities.check(DeviceCapability.EDGE_CUT):
             data["capabilities"].append("Edge cut")
-        if master.partymode_capable:
+        if capabilities.check(DeviceCapability.PARTY_MODE):
             data["capabilities"].append("Party Mode")
-        if master.torque_capable:
+        if capabilities.check(DeviceCapability.TORQUE):
             data["capabilities"].append("Motor Torque")
 
-        try:
-            # Convert int to bool for charging state
-            data["charging"] = bool(data["charging"])
-        except KeyError:
-            # Charging attribute not available, defaulting to False
-            data["charging"] = False
-
         # Remove wheel_torque attribute if the device doesn't support this setting
-        if not master.torque_capable and "wheel_torque" in data:
+        if not capabilities.check(DeviceCapability.TORQUE) and "wheel_torque" in data:
             data.pop("wheel_torque")
 
+        if (
+            not "latitude" in data["gps_location"]
+            or not "longitude" in data["gps_location"]
+        ):
+            data.pop("gps_location")
+
+        
         self._attributes.update(data)
 
         self.log(LoggerType.DATA_UPDATE, "Online: %s", master.online)
@@ -357,16 +360,12 @@ class LandroidCloudBaseEntity(LandroidLogger):
             except KeyError:
                 state = STATE_INITIALIZING
 
-        if "zone_probability" in self._attributes:
-            if len(self._attributes["zone_probability"]) == 10:
-                self.zone_mapping()
-
         self.log(LoggerType.DATA_UPDATE, "State '%s'", state)
         self.log(LoggerType.DATA_UPDATE, "Attributes:\n%s", self._attributes)
         self._attr_state = state
 
         self._serialnumber = master.serial_number
-        self._battery_level = master.battery_percent
+        self._battery_level = master.battery.percent
 
 
 class LandroidCloudSelectEntity(LandroidCloudBaseEntity, SelectEntity):

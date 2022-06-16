@@ -8,6 +8,7 @@ from homeassistant.helpers.dispatcher import dispatcher_send
 from homeassistant.util import slugify as util_slugify
 
 from pyworxcloud import WorxCloud, exceptions
+from pyworxcloud.utils import Capability, DeviceCapability
 
 from .const import (
     DOMAIN,
@@ -69,17 +70,18 @@ class LandroidAPI:
                 have been assessed. Defaults to None.
         """
 
-        if self.device.partymode_capable:
+        capabilities: Capability = self.device.capabilities
+        if capabilities.check(DeviceCapability.PARTY_MODE):
             self.logger.log(LoggerType.FEATURE_ASSESSMENT, "Party mode capable")
             features = features | LandroidFeatureSupport.PARTYMODE
 
-        if self.device.ots_capable:
+        if capabilities.check(DeviceCapability.ONE_TIME_SCHEDULE):
             self.logger.log(LoggerType.FEATURE_ASSESSMENT, "OTS capable")
             features = (
                 features | LandroidFeatureSupport.EDGECUT | LandroidFeatureSupport.OTS
             )
 
-        if self.device.torque_capable:
+        if capabilities.check(DeviceCapability.TORQUE):
             self.logger.log(LoggerType.FEATURE_ASSESSMENT, "Torque capable")
             features = features | LandroidFeatureSupport.TORQUE
 
