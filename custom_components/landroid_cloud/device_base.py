@@ -3,6 +3,7 @@
 from __future__ import annotations
 from functools import partial
 import json
+from logging import Logger
 from typing import Any
 
 from homeassistant.components.button import (
@@ -302,10 +303,19 @@ class LandroidCloudBaseEntity(LandroidLogger):
         data = {}
         self._icon = methods["icon"]
         for prop, attr in methods["state"].items():
+            if prop == "blades":
+                self.log(LoggerType.DEVELOP, "Blades requested")
             if hasattr(master, prop):
                 prop_data = getattr(master, prop)
+                if prop == "blades":
+                    self.log(LoggerType.DEVELOP, "Blades found as attr: %s", prop_data)
                 if not isinstance(prop_data, type(None)):
                     data[attr] = prop_data
+            else:
+                if prop == "blades":
+                    self.log(
+                        LoggerType.DEVELOP, "Blades not found as attr: %s", prop_data
+                    )
 
         # Populate capabilities attribute
         data["capabilities"] = []
