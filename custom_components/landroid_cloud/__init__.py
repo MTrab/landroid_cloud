@@ -236,9 +236,14 @@ async def async_init_device(
         hass.data[DOMAIN][entry.entry_id][device]["device"].authenticate
     )
     # Connect
-    await hass.async_add_executor_job(
-        hass.data[DOMAIN][entry.entry_id][device]["device"].connect, device, False
-    )
+    try:
+        await hass.async_add_executor_job(
+            hass.data[DOMAIN][entry.entry_id][device]["device"].connect, device, False
+        )
+        hass.data[DOMAIN][entry.entry_id][device]["mqttstate"] = True
+    except exceptions.TimeoutException as exc:
+        LOGGER.log(LoggerType.SETUP, exc, log_level=LogLevel.WARNING)
+        hass.data[DOMAIN][entry.entry_id][device]["mqttstate"] = False
     # Get initial data
     await hass.async_add_executor_job(
         hass.data[DOMAIN][entry.entry_id][device]["device"].update
