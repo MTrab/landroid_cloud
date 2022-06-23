@@ -3,11 +3,11 @@ from __future__ import annotations
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.dispatcher import dispatcher_send
 from homeassistant.util import slugify as util_slugify
 
-from pyworxcloud import WorxCloud, exceptions
+from pyworxcloud import WorxCloud
 from pyworxcloud.utils import Capability, DeviceCapability
 
 from .const import (
@@ -16,7 +16,7 @@ from .const import (
     LandroidFeatureSupport,
 )
 
-from .utils.logger import LandroidLogger, LoggerType, LogLevel
+from .utils.logger import LandroidLogger, LoggerType
 
 
 class LandroidAPI:
@@ -91,84 +91,35 @@ class LandroidAPI:
         if callback:
             callback()
 
-    def receive_data(self) -> None:
+    @callback
+    def receive_data(self, serial, trigger) -> None:
         """Callback function when the API sends new data."""
+        if not serial == self.device.product["serial_number"]:
+            # Callback was not for me
+            self.logger.log(
+                LoggerType.DATA_UPDATE,
+                "Got new data from API to %s on trigger %s, but that was not me!",
+                serial,
+                trigger,
+            )
+            return
+
         if not self._last_state and self.device.online:
+            self.logger.log(
+                LoggerType.DATA_UPDATE,
+                "Received new data from API on trigger %s, but devices is marked as offline. "
+                "Reloading device integration for %s",
+                trigger,
+                f"{UPDATE_SIGNAL}_{self.device.name}",
+            )
             self._last_state = True
             self.hass.config_entries.async_reload(self.entry_id)
 
         self.logger.log(
             LoggerType.DATA_UPDATE,
-            "Received new data from API, dispatching %s",
+            "Received new data from API on serial %s from trigger %s, dispatching %s",
+            self.device.product["serial_number"],
+            trigger,
             f"{UPDATE_SIGNAL}_{self.device.name}",
         )
         dispatcher_send(self.hass, f"{UPDATE_SIGNAL}_{self.device.name}")
-
-    async def async_refresh(self):
-        """Try fetching data from cloud."""
-        try:
-            await self.hass.async_add_executor_job(self.device.update)
-        except exceptions.RequestError:
-            self.logger.log(
-                LoggerType.API,
-                "Request for %s was malformed.",
-                self.config["email"],
-                log_level=LogLevel.ERROR,
-            )
-            return False
-        except exceptions.AuthorizationError:
-            self.logger.log(
-                LoggerType.API,
-                "Unauthorized - please check your credentials for %s at Landroid Cloud",
-                self.config["email"],
-                log_level=LogLevel.ERROR,
-            )
-            return False
-        except exceptions.ForbiddenError:
-            self.logger.log(
-                LoggerType.API,
-                "Server rejected access for %s at Landroid Cloud - this might be "
-                "temporary due to high numbers of API requests from this IP address.",
-                self.config["email"],
-                log_level=LogLevel.ERROR,
-            )
-            return False
-        except exceptions.NotFoundError:
-            self.logger.log(
-                LoggerType.API,
-                "Endpoint for %s was not found.",
-                self.config["email"],
-                log_level=LogLevel.ERROR,
-            )
-            return False
-        except exceptions.TooManyRequestsError:
-            self.logger.log(
-                LoggerType.API,
-                "Too many requests for %s at Landroid Cloud. IP address temporary banned.",
-                self.config["email"],
-                log_level=LogLevel.ERROR,
-            )
-            return False
-        except exceptions.InternalServerError:
-            self.logger.log(
-                LoggerType.API,
-                "Internal server error happend for the request to %s at Landroid Cloud.",
-                self.config["email"],
-                log_level=LogLevel.ERROR,
-            )
-            return False
-        except exceptions.ServiceUnavailableError:
-            self.logger.log(
-                LoggerType.API,
-                "Service at Landroid Cloud was unavailable.",
-                log_level=LogLevel.ERROR,
-            )
-            return False
-        except exceptions.APIException as ex:
-            self.logger.log(
-                LoggerType.API,
-                "%s",
-                ex,
-                log_level=LogLevel.ERROR,
-            )
-            return False

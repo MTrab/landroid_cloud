@@ -130,7 +130,7 @@ def async_setup_services(hass: HomeAssistant) -> None:
                 )
                 return False
 
-            if not api.device.online:
+            if not api.device.online or not api.device.mqtt.connected:
                 logger.log(
                     LoggerType.SERVICE_CALL,
                     "Device is offline, can't send command.",

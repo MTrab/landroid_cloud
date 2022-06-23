@@ -26,6 +26,8 @@ ATTR_MAP = {
             "torque": "wheel_torque",
             "battery_charging": "charging",
             "updated": "last_update",
+            "mqttdata": "mqtt_data",
+            "_json_data": "json",
         },
         "icon": "mdi:robot-mower",
     },
