@@ -39,7 +39,7 @@ from pyworxcloud import (
     NoPartymodeError,
     WorxCloud,
 )
-from pyworxcloud.exceptions import NoOneTimeScheduleError
+from pyworxcloud.exceptions import NoOneTimeScheduleError, MQTTException
 from pyworxcloud.utils import Capability, DeviceCapability
 
 from .api import LandroidAPI
@@ -548,42 +548,84 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
         """Start or resume the task."""
         device: WorxCloud = self.api.device
         self.log(LoggerType.SERVICE_CALL, "Starting")
-        await self.hass.async_add_executor_job(device.start)
+        try:
+            await self.hass.async_add_executor_job(device.start)
+        except MQTTException:
+            self.log(
+                LoggerType.SERVICE_CALL,
+                "Couldn't send command, MQTT was not connected",
+                log_level=LogLevel.ERROR,
+            )
 
     async def async_pause(self) -> None:
         """Pause the mowing cycle."""
         device: WorxCloud = self.api.device
         self.log(LoggerType.SERVICE_CALL, "Pausing")
-        await self.hass.async_add_executor_job(device.pause)
+        try:
+            await self.hass.async_add_executor_job(device.pause)
+        except MQTTException:
+            self.log(
+                LoggerType.SERVICE_CALL,
+                "Couldn't send command, MQTT was not connected",
+                log_level=LogLevel.ERROR,
+            )
 
     async def async_start_pause(self) -> None:
         """Toggle the state of the mower."""
         self.log(LoggerType.SERVICE_CALL, "Toggeling state")
-        if STATE_MOWING in self.state:
-            await self.async_pause()
-        else:
-            await self.async_start()
+        try:
+            if STATE_MOWING in self.state:
+                await self.async_pause()
+            else:
+                await self.async_start()
+        except MQTTException:
+            self.log(
+                LoggerType.SERVICE_CALL,
+                "Couldn't send command, MQTT was not connected",
+                log_level=LogLevel.ERROR,
+            )
 
     async def async_return_to_base(self, **kwargs: Any) -> None:
         """Set the device to return to the dock."""
         if self.state not in [STATE_DOCKED, STATE_RETURNING]:
             device: WorxCloud = self.api.device
             self.log(LoggerType.SERVICE_CALL, "Going back to dock")
-            # Try calling safehome
-            await self.hass.async_add_executor_job(device.safehome)
-            # Ensure we are going home, in case the safehome wasn't successful
-            await self.hass.async_add_executor_job(device.home)
+            try:
+                # Try calling safehome
+                await self.hass.async_add_executor_job(device.safehome)
+                # Ensure we are going home, in case the safehome wasn't successful
+                await self.hass.async_add_executor_job(device.home)
+            except MQTTException:
+                self.log(
+                    LoggerType.SERVICE_CALL,
+                    "Couldn't send command, MQTT was not connected",
+                    log_level=LogLevel.ERROR,
+                )
 
     async def async_stop(self, **kwargs: Any) -> None:
         """Alias for return to base function."""
-        await self.async_return_to_base()
+        try:
+            await self.async_return_to_base()
+        except MQTTException:
+            self.log(
+                LoggerType.SERVICE_CALL,
+                "Couldn't send command, MQTT was not connected",
+                log_level=LogLevel.ERROR,
+            )
 
     async def async_set_zone(self, data: dict | None = None) -> None:
         """Set next zone to cut."""
         device: WorxCloud = self.api.device
         zone = data["zone"]
         self.log(LoggerType.SERVICE_CALL, "Setting zone to %s", zone)
-        await self.hass.async_add_executor_job(partial(device.setzone, str(zone)))
+        try:
+            await self.hass.async_add_executor_job(partial(device.setzone, str(zone)))
+        except MQTTException:
+            self.log(
+                LoggerType.SERVICE_CALL,
+                "Couldn't send command, MQTT was not connected",
+                log_level=LogLevel.ERROR,
+            )
 
     async def async_set_schedule(self, data: dict | None = None) -> None:
         """Set or change the schedule."""
@@ -629,14 +671,28 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
 
         data = json.dumps({"sc": schedule})
         self.log(LoggerType.SERVICE_CALL, "New %s schedule, %s", schedule_type, data)
-        await self.hass.async_add_executor_job(partial(device.send, data))
+        try:
+            await self.hass.async_add_executor_job(partial(device.send, data))
+        except MQTTException:
+            self.log(
+                LoggerType.SERVICE_CALL,
+                "Couldn't send command, MQTT was not connected",
+                log_level=LogLevel.ERROR,
+            )
 
     async def async_toggle_lock(self, data: dict | None = None) -> None:
         """Toggle device lock state."""
         device: WorxCloud = self.api.device
         set_lock = not bool(device.locked)
         self.log(LoggerType.SERVICE_CALL, "Setting locked state to %s", set_lock)
-        await self.hass.async_add_executor_job(partial(device.lock, set_lock))
+        try:
+            await self.hass.async_add_executor_job(partial(device.lock, set_lock))
+        except MQTTException:
+            self.log(
+                LoggerType.SERVICE_CALL,
+                "Couldn't send command, MQTT was not connected",
+                log_level=LogLevel.ERROR,
+            )
 
     async def async_edgecut(self, data: dict | None = None) -> None:
         """Start edgecut routine."""
@@ -653,6 +709,12 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
                 "This device does not support Edge-Cut-OnDemand",
                 log_level=LogLevel.ERROR,
             )
+        except MQTTException:
+            self.log(
+                LoggerType.SERVICE_CALL,
+                "Couldn't send command, MQTT was not connected",
+                log_level=LogLevel.ERROR,
+            )
 
     async def async_toggle_partymode(self, data: dict | None = None) -> None:
         """Toggle partymode state."""
@@ -667,12 +729,25 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
             self.log(
                 LoggerType.SERVICE_CALL, "%s", ex.args[0], log_level=LogLevel.ERROR
             )
+        except MQTTException:
+            self.log(
+                LoggerType.SERVICE_CALL,
+                "Couldn't send command, MQTT was not connected",
+                log_level=LogLevel.ERROR,
+            )
 
     async def async_restart(self, data: dict | None = None):
         """Restart mower baseboard OS."""
         device: WorxCloud = self.api.device
         self.log(LoggerType.SERVICE_CALL, "Restarting")
-        await self.hass.async_add_executor_job(device.restart)
+        try:
+            await self.hass.async_add_executor_job(device.restart)
+        except MQTTException:
+            self.log(
+                LoggerType.SERVICE_CALL,
+                "Couldn't send command, MQTT was not connected",
+                log_level=LogLevel.ERROR,
+            )
 
     async def async_ots(self, data: dict | None = None) -> None:
         """Begin OTS routine."""
@@ -683,9 +758,16 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
             data[ATTR_BOUNDARY],
             data[ATTR_RUNTIME],
         )
-        await self.hass.async_add_executor_job(
-            partial(device.ots, data[ATTR_BOUNDARY], data[ATTR_RUNTIME])
-        )
+        try:
+            await self.hass.async_add_executor_job(
+                partial(device.ots, data[ATTR_BOUNDARY], data[ATTR_RUNTIME])
+            )
+        except MQTTException:
+            self.log(
+                LoggerType.SERVICE_CALL,
+                "Couldn't send command, MQTT was not connected",
+                log_level=LogLevel.ERROR,
+            )
 
     async def async_config(self, data: dict | None = None) -> None:
         """Set config parameters."""
@@ -765,4 +847,11 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
         if tmpdata:
             data = json.dumps(tmpdata)
             self.log(LoggerType.SERVICE_CALL, "New config: %s", data)
-            await self.hass.async_add_executor_job(partial(device.send, data))
+            try:
+                await self.hass.async_add_executor_job(partial(device.send, data))
+            except MQTTException:
+                self.log(
+                    LoggerType.SERVICE_CALL,
+                    "Couldn't send command, MQTT was not connected",
+                    log_level=LogLevel.ERROR,
+                )
