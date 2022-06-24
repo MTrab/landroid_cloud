@@ -367,7 +367,11 @@ class LandroidCloudBaseEntity(LandroidLogger):
 
         if not self._attributes["mqtt"]["connected"]:
             # If MQTT is not connected, then pull state from API
-            self.log(LoggerType.DATA_UPDATE, "MQTT connection is offline, scheduling Web API refresh in 15 minutes.", log_level=LogLevel.WARNING)
+            self.log(
+                LoggerType.DATA_UPDATE,
+                "MQTT connection is offline, scheduling Web API refresh in 15 minutes.",
+                log_level=LogLevel.WARNING,
+            )
             async_call_later(
                 self.hass,
                 timedelta(minutes=15),
@@ -379,7 +383,7 @@ class LandroidCloudBaseEntity(LandroidLogger):
         """Fallback to fetching state from WebAPI rather than MQTT."""
         self.log(LoggerType.DATA_UPDATE, "Starting forced Web API refresh.")
 
-        self.api.device.update()
+        self.hass.async_add_executor_job(self.api.device.update)
 
 
 class LandroidCloudSelectEntity(LandroidCloudBaseEntity, SelectEntity):
