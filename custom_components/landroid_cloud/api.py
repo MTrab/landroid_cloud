@@ -1,5 +1,6 @@
 """Representing the Landroid Cloud API interface."""
 from __future__ import annotations
+from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
@@ -8,6 +9,7 @@ from homeassistant.helpers.dispatcher import dispatcher_send
 from homeassistant.util import slugify as util_slugify
 
 from pyworxcloud import WorxCloud
+from pyworxcloud.events import LandroidEvent
 from pyworxcloud.utils import Capability, DeviceCapability
 
 from .const import (
@@ -58,14 +60,14 @@ class LandroidAPI:
         }
 
         self.logger = LandroidLogger(name=__name__, api=self)
-        self.device.set_callback(self.receive_data)
+        self.device.set_callback(LandroidEvent.DATA_RECEIVED, self.receive_data)
 
-    def check_features(self, features: int, callback=None) -> None:
+    def check_features(self, features: int, callback_func: Any = None) -> None:
         """Check which features the device supports.
 
         Args:
             features (int): Current feature set.
-            callback (_type_, optional):
+            callback_func (_type_, optional):
                 Function to be called when the features
                 have been assessed. Defaults to None.
         """
@@ -88,8 +90,8 @@ class LandroidAPI:
         self.features = features
         self.features_loaded = True
 
-        if callback:
-            callback()
+        if callback_func:
+            callback_func()
 
     @callback
     def receive_data(self, serial, trigger) -> None:

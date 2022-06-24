@@ -1,6 +1,7 @@
 """Adds support for Landroid Cloud compatible devices."""
 from __future__ import annotations
 import asyncio
+from copy import deepcopy
 
 from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
@@ -228,25 +229,24 @@ async def async_init_device(
 
     LOGGER.log(LoggerType.SETUP, "Setting up device no. %s on %s", device, cloud_email)
     # Init the object
-    hass.data[DOMAIN][entry.entry_id][device]["device"] = WorxCloud(
-        cloud_email, cloud_password, cloud_type.lower()
+    hass.data[DOMAIN][entry.entry_id][device]["device"] = deepcopy(
+        WorxCloud(cloud_email, cloud_password, cloud_type.lower())
     )
     # Authenticate
     await hass.async_add_executor_job(
         hass.data[DOMAIN][entry.entry_id][device]["device"].authenticate
     )
     # Connect
+    hass.data[DOMAIN][entry.entry_id][device]["mqttstate"] = False
     try:
         await hass.async_add_executor_job(
             hass.data[DOMAIN][entry.entry_id][device]["device"].connect,
             device,
             False,
-            True,
         )
         hass.data[DOMAIN][entry.entry_id][device]["mqttstate"] = True
     except exceptions.TimeoutException as exc:
         LOGGER.log(LoggerType.SETUP, exc, log_level=LogLevel.WARNING)
-        hass.data[DOMAIN][entry.entry_id][device]["mqttstate"] = False
     # Get initial data
     await hass.async_add_executor_job(
         hass.data[DOMAIN][entry.entry_id][device]["device"].update

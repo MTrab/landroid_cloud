@@ -1,6 +1,7 @@
 """Define device classes."""
 # pylint: disable=unused-argument,too-many-instance-attributes,no-self-use
 from __future__ import annotations
+from datetime import timedelta
 from functools import partial
 import json
 from typing import Any
@@ -31,6 +32,7 @@ from homeassistant.helpers import (
     device_registry as dr,
 )
 from homeassistant.helpers.entity_registry import EntityRegistry
+from homeassistant.helpers.event import async_call_later
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 
 from pyworxcloud import (
@@ -331,7 +333,7 @@ class LandroidCloudBaseEntity(LandroidLogger):
 
         self._attributes.update(data)
 
-        self._attributes["mqtt_data"].update({"connected": master.mqtt.connected})
+        # self._attributes["mqtt"].update({"connected": master.mqtt.connected})
 
         self.log(LoggerType.DATA_UPDATE, "Online: %s", master.online)
 
@@ -362,6 +364,22 @@ class LandroidCloudBaseEntity(LandroidLogger):
         self._serialnumber = master.product["serial_number"]
         if "percent" in master.battery:
             self._battery_level = master.battery["percent"]
+
+        if not self._attributes["mqtt"]["connected"]:
+            # If MQTT is not connected, then pull state from API
+            self.log(LoggerType.DATA_UPDATE, "MQTT connection is offline, scheduling Web API refresh in 15 minutes.", log_level=LogLevel.WARNING)
+            async_call_later(
+                self.hass,
+                timedelta(minutes=15),
+                partial(self.async_get_state_from_api),
+            )
+
+    @callback
+    async def async_get_state_from_api(self, dt=None) -> None:
+        """Fallback to fetching state from WebAPI rather than MQTT."""
+        self.log(LoggerType.DATA_UPDATE, "Starting forced Web API refresh.")
+
+        self.api.device.update()
 
 
 class LandroidCloudSelectEntity(LandroidCloudBaseEntity, SelectEntity):

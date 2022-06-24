@@ -8,6 +8,7 @@ from homeassistant.components.button import ButtonEntity, ButtonEntityDescriptio
 from homeassistant.components.select import SelectEntityDescription
 from homeassistant.components.vacuum import StateVacuumEntity
 from homeassistant.core import HomeAssistant
+
 # from homeassistant.helpers.dispatcher import dispatcher_send
 
 from pyworxcloud import (
@@ -122,6 +123,11 @@ class ZoneSelect(Select, LandroidCloudSelectZoneEntity):
 class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
     """Definition of Landxcape device."""
 
+    def __init__(self, hass, api):
+        """Initialize mower entity."""
+        super().__init__(hass, api)
+        self.device: WorxCloud = self.api.device
+
     @property
     def base_features(self):
         """Flag which Landroid Cloud specific features that are supported."""
@@ -131,17 +137,6 @@ class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
     def supported_features(self):
         """Flag which mower robot features that are supported."""
         return SUPPORTED_FEATURES
-
-    # def zone_mapping(self) -> None:
-    #     """Map current zone correct."""
-    #     device: WorxCloud = self.api.device
-    #     current_zone = device.mowing_zone
-    #     virtual_zones = device.zone_probability
-    #     self.log(LoggerType.MOWER, "Zone reported by API: %s", current_zone)
-    #     self.log(LoggerType.MOWER, "Corrected zone: %s", virtual_zones[current_zone])
-    #     self._attributes.update({"current_zone": virtual_zones[current_zone]})
-    #     self.api.shared_options.update({"current_zone": virtual_zones[current_zone]})
-    #     dispatcher_send(self.hass, f"{UPDATE_SIGNAL_ZONES}_{device.name}")
 
     @staticmethod
     def get_ots_scheme():
