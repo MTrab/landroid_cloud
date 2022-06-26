@@ -94,34 +94,22 @@ class LandroidAPI:
             callback_func()
 
     @callback
-    def receive_data(self, serial, trigger) -> None:
+    def receive_data(self) -> None:
         """Callback function when the API sends new data."""
-        if not serial == self.device.product["serial_number"]:
-            # Callback was not for me
-            self.logger.log(
-                LoggerType.DATA_UPDATE,
-                "Got new data from API to %s on trigger %s, but that was not me!",
-                serial,
-                trigger,
-            )
-            return
-
         if not self._last_state and self.device.online:
             self.logger.log(
                 LoggerType.DATA_UPDATE,
-                "Received new data from API on trigger %s, but devices is marked as offline. "
+                "Received new data from API, but devices is marked as offline. "
                 "Reloading device integration for %s",
-                trigger,
-                f"{UPDATE_SIGNAL}_{self.device.name}",
+                self.friendly_name,
             )
             self._last_state = True
             self.hass.config_entries.async_reload(self.entry_id)
 
         self.logger.log(
             LoggerType.DATA_UPDATE,
-            "Received new data from API on serial %s from trigger %s, dispatching %s",
-            self.device.product["serial_number"],
-            trigger,
+            "Received new data from API, dispatching %s to %s",
             f"{UPDATE_SIGNAL}_{self.device.name}",
+            self.friendly_name,
         )
         dispatcher_send(self.hass, f"{UPDATE_SIGNAL}_{self.device.name}")

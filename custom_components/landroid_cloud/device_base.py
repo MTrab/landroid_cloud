@@ -4,6 +4,7 @@ from __future__ import annotations
 from datetime import timedelta
 from functools import partial
 import json
+from pprint import pprint
 from typing import Any
 
 from homeassistant.components.button import (
@@ -33,7 +34,7 @@ from homeassistant.helpers import (
 )
 from homeassistant.helpers.entity_registry import EntityRegistry
 from homeassistant.helpers.event import async_call_later
-from homeassistant.helpers.dispatcher import async_dispatcher_connect
+from homeassistant.helpers.dispatcher import async_dispatcher_connect, dispatcher_send
 
 from pyworxcloud import (
     NoPartymodeError,
@@ -369,7 +370,9 @@ class LandroidCloudBaseEntity(LandroidLogger):
             # If MQTT is not connected, then pull state from API
             self.log(
                 LoggerType.DATA_UPDATE,
-                "MQTT connection is offline, scheduling Web API refresh in 15 minutes.",
+                "MQTT connection is offline, scheduling Web API refresh in 15 minutes. "
+                "Device is in readonly mode! %s",
+                master.mqttdata,
                 log_level=LogLevel.WARNING,
             )
             async_call_later(
@@ -379,11 +382,12 @@ class LandroidCloudBaseEntity(LandroidLogger):
             )
 
     @callback
-    async def async_get_state_from_api(self, dt=None) -> None:
+    async def async_get_state_from_api(self, dt=None) -> None:  # type: ignore pylint: disable=unused-argument,invalid-name
         """Fallback to fetching state from WebAPI rather than MQTT."""
         self.log(LoggerType.DATA_UPDATE, "Starting forced Web API refresh.")
 
         self.hass.async_add_executor_job(self.api.device.update)
+        dispatcher_send(self.hass, f"{UPDATE_SIGNAL}_{self.api.device.name}")
 
 
 class LandroidCloudSelectEntity(LandroidCloudBaseEntity, SelectEntity):
