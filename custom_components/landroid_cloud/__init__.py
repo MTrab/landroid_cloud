@@ -56,6 +56,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     await check_unique_id(hass, entry)
     result = await _setup(hass, entry)
 
+    LOGGER.log(LoggerType.DEVELOP,entry.data[CONF_EMAIL])
+    LOGGER.log(LoggerType.DEVELOP,entry.data[CONF_PASSWORD])
     if result:
         hass.config_entries.async_setup_platforms(entry, PLATFORMS)
 
@@ -116,7 +118,7 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         cloud_type,
         cloud_email,
     )
-    master = WorxCloud(cloud_email, cloud_password, cloud_type.lower())
+    master = deepcopy(WorxCloud(cloud_email, cloud_password, cloud_type.lower()))
     auth = False
     try:
         auth = await hass.async_add_executor_job(master.authenticate)
@@ -244,6 +246,10 @@ async def async_init_device(
             device,
             False,
         )
+
+        while not hass.data[DOMAIN][entry.entry_id][device]["device"].mqtt.connected:
+            pass
+
         hass.data[DOMAIN][entry.entry_id][device]["mqttstate"] = True
     except exceptions.TimeoutException as exc:
         LOGGER.log(LoggerType.SETUP, exc, log_level=LogLevel.WARNING)
@@ -267,4 +273,5 @@ async def check_unique_id(hass: HomeAssistant, entry: ConfigEntry) -> None:
         CONF_PASSWORD: entry.data[CONF_PASSWORD],
         CONF_TYPE: entry.data[CONF_TYPE],
     }
+
     hass.config_entries.async_update_entry(entry, data=data, unique_id=new_unique_id)

@@ -5,6 +5,7 @@ ATTR_MAP = {
     "default": {
         "state": {
             "id": "cloud_id",
+            "product": "device",
             "blades": "blades",
             "battery": "battery",
             "work_time": "work_time",
@@ -27,7 +28,7 @@ ATTR_MAP = {
             "battery_charging": "charging",
             "updated": "last_update",
             "mqttdata": "mqtt",
-            "_json_data": "json",
+            "_mqtt_data": "json",
         },
         "icon": "mdi:robot-mower",
     },
