@@ -4,7 +4,6 @@ from __future__ import annotations
 from datetime import timedelta
 from functools import partial
 import json
-from pprint import pprint
 from typing import Any
 
 from homeassistant.components.button import (
@@ -26,6 +25,7 @@ from homeassistant.components.vacuum import (
     VacuumEntityFeature,
 )
 
+from homeassistant.const import ATTR_LOCATION, ATTR_LOCKED, ATTR_MODEL
 from homeassistant.core import callback, HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import (
@@ -36,20 +36,40 @@ from homeassistant.helpers.entity_registry import EntityRegistry
 from homeassistant.helpers.event import async_call_later
 from homeassistant.helpers.dispatcher import async_dispatcher_connect, dispatcher_send
 
-from pyworxcloud import (
+from pyworxcloud import WorxCloud
+from pyworxcloud.exceptions import (
+    MQTTException,
+    NoOneTimeScheduleError,
     NoPartymodeError,
-    WorxCloud,
 )
-from pyworxcloud.exceptions import NoOneTimeScheduleError, MQTTException
 from pyworxcloud.utils import Capability, DeviceCapability
+from pyworxcloud.utils.capability import CAPABILITY_TO_TEXT
+
 
 from .api import LandroidAPI
 
 from .attribute_map import ATTR_MAP
 
 from .const import (
+    ATTR_ACCESSORIES,
+    ATTR_DEVICEIDS,
+    ATTR_FIRMWARE,
+    ATTR_LAWN,
+    ATTR_MACADDRESS,
+    ATTR_MQTTCONNECTED,
+    ATTR_RAINSENSOR,
+    ATTR_REGISTERED,
+    ATTR_SCHEDULE,
+    ATTR_SERIAL,
+    ATTR_SERVICE,
+    ATTR_WARRANTY,
+    ATTR_BATTERY,
+    ATTR_BLADES,
     ATTR_BOUNDARY,
+    ATTR_CAPABILITIES,
+    ATTR_ERROR,
     ATTR_RUNTIME,
+    ATTR_TORQUE,
     ATTR_ZONE,
     BUTTONTYPE_TO_SERVICE,
     DOMAIN,
@@ -115,11 +135,11 @@ class LandroidCloudBaseEntity(LandroidLogger):
 
         self._attributes = {}
         self._available = False
-        self._unique_id = f'{api.device.product["serial_number"]}_{api.name}'
-        self._serialnumber = api.device.product["serial_number"]
+        self._unique_id = f"{api.device.serial_number}_{api.name}"
+        self._serialnumber = api.device.serial_number
         self._icon = None
         self._name = f"{api.friendly_name}"
-        self._mac = api.device.product["mac_address"]
+        self._mac = api.device.mac_address
         self._connections = {(dr.CONNECTION_NETWORK_MAC, self._mac)}
 
         super().__init__()
@@ -189,47 +209,47 @@ class LandroidCloudBaseEntity(LandroidLogger):
 
         if self.api.features & LandroidFeatureSupport.EDGECUT:
             self.api.services[SERVICE_EDGECUT] = {
-                "service": self.async_edgecut,
+                ATTR_SERVICE: self.async_edgecut,
             }
 
         if self.api.features & LandroidFeatureSupport.LOCK:
             self.api.services[SERVICE_LOCK] = {
-                "service": self.async_toggle_lock,
+                ATTR_SERVICE: self.async_toggle_lock,
             }
 
         if self.api.features & LandroidFeatureSupport.PARTYMODE:
             self.api.services[SERVICE_PARTYMODE] = {
-                "service": self.async_toggle_partymode,
+                ATTR_SERVICE: self.async_toggle_partymode,
             }
 
         if self.api.features & LandroidFeatureSupport.SETZONE:
             self.api.services[SERVICE_SETZONE] = {
-                "service": self.async_set_zone,
+                ATTR_SERVICE: self.async_set_zone,
             }
 
         if self.api.features & LandroidFeatureSupport.RESTART:
             self.api.services[SERVICE_RESTART] = {
-                "service": self.async_restart,
+                ATTR_SERVICE: self.async_restart,
             }
 
         if self.api.features & LandroidFeatureSupport.CONFIG:
             self.api.services[SERVICE_CONFIG] = {
-                "service": self.async_config,
+                ATTR_SERVICE: self.async_config,
             }
 
         if self.api.features & LandroidFeatureSupport.OTS:
             self.api.services[SERVICE_OTS] = {
-                "service": self.async_ots,
+                ATTR_SERVICE: self.async_ots,
             }
 
         if self.api.features & LandroidFeatureSupport.SCHEDULES:
             self.api.services[SERVICE_SCHEDULE] = {
-                "service": self.async_set_schedule,
+                ATTR_SERVICE: self.async_set_schedule,
             }
 
         if self.api.features & LandroidFeatureSupport.TORQUE:
             self.api.services[SERVICE_TORQUE] = {
-                "service": self.async_set_torque,
+                ATTR_SERVICE: self.async_set_torque,
             }
 
     @property
@@ -242,13 +262,13 @@ class LandroidCloudBaseEntity(LandroidLogger):
                     DOMAIN,
                     self.api.unique_id,
                     self.api.entry_id,
-                    self.api.device.product["serial_number"],
+                    self.api.device.serial_number,
                 )
             },
             "name": str(self._name),
-            "sw_version": self.api.device.firmware_version,
+            "sw_version": self.api.device.firmware["version"],
             "manufacturer": self.api.config["type"].capitalize(),
-            "model": self.api.device.product["model"],
+            "model": self.api.device.model,
         }
 
     async def async_added_to_hass(self):
@@ -260,13 +280,20 @@ class LandroidCloudBaseEntity(LandroidLogger):
             entry = entity_reg.async_get(self.entity_id)
             self.api.device_id = entry.device_id
             if (
-                not entry.device_id
-                in self.hass.data[DOMAIN][self.api.entry_id]["device_ids"]
+                not self.hass.data[DOMAIN][self.api.entry_id][ATTR_DEVICEIDS][
+                    self.api.device.name
+                ]
+                == entry.device_id
             ):
-                self.hass.data[DOMAIN][self.api.entry_id]["device_ids"].append(
-                    entry.device_id
+                self.hass.data[DOMAIN][self.api.entry_id][ATTR_DEVICEIDS].update(
+                    {self.api.device.name: entry.device_id}
                 )
 
+        self.log(
+            LoggerType.SETUP,
+            "Connecting to dispatcher signal '%s'",
+            f"{UPDATE_SIGNAL}_{self.api.device.name}",
+        )
         async_dispatcher_connect(
             self.hass,
             f"{UPDATE_SIGNAL}_{self.api.device.name}",
@@ -299,80 +326,69 @@ class LandroidCloudBaseEntity(LandroidLogger):
         self.log_set_api(self.api)
         self.log(LoggerType.DATA_UPDATE, "Updating")
 
-        master: WorxCloud = self.api.device
+        device: WorxCloud = self.api.device
 
-        methods = ATTR_MAP["default"]
         data = {}
-        self._icon = methods["icon"]
-        for prop, attr in methods["state"].items():
-            if hasattr(master, prop):
-                prop_data = getattr(master, prop)
-                if not isinstance(prop_data, type(None)):
-                    data[attr] = prop_data
+
+        for key, value in ATTR_MAP.items():
+            if hasattr(device, key):
+                data[value] = getattr(device, key)
 
         # Populate capabilities attribute
-        data["capabilities"] = []
-        capabilities: Capability = master.capabilities
-        if capabilities.check(DeviceCapability.ONE_TIME_SCHEDULE):
-            data["capabilities"].append("One-Time-Schedule")
-        if capabilities.check(DeviceCapability.EDGE_CUT):
-            data["capabilities"].append("Edge cut")
-        if capabilities.check(DeviceCapability.PARTY_MODE):
-            data["capabilities"].append("Party Mode")
-        if capabilities.check(DeviceCapability.TORQUE):
-            data["capabilities"].append("Motor Torque")
+        data[ATTR_CAPABILITIES] = []
+        capabilities: Capability = device.capabilities
+        for capability in DeviceCapability:
+            if capabilities.check(capability):
+                data[ATTR_CAPABILITIES].append(CAPABILITY_TO_TEXT[capability])
+
+        # If no extra capabilities were found,
+        # then set the attribute to None (just for visual appearance)
+        if len(data[ATTR_CAPABILITIES]) == 0:
+            data.update({ATTR_CAPABILITIES: None})
 
         # Remove wheel_torque attribute if the device doesn't support this setting
-        if not capabilities.check(DeviceCapability.TORQUE) and "wheel_torque" in data:
-            data.pop("wheel_torque")
+        if not capabilities.check(DeviceCapability.TORQUE) and ATTR_TORQUE in data:
+            data.pop(ATTR_TORQUE)
 
-        if (
-            not "latitude" in data["gps_location"]
-            or not "longitude" in data["gps_location"]
-        ):
-            data.pop("gps_location")
+        data[ATTR_MQTTCONNECTED] = device.mqtt.connected
 
         self._attributes.update(data)
 
-        # self._attributes["mqtt"].update({"connected": master.mqtt.connected})
-
-        self.log(LoggerType.DATA_UPDATE, "Online: %s", master.online)
-
         self._available = (
-            master.online
-            if master.error.id in [-1, 0]
-            else (not bool(isinstance(master.error.id, type(None))))
+            device.online
+            if device.error.id in [-1, 0]
+            else (not bool(isinstance(device.error.id, type(None))))
         )
         state = STATE_INITIALIZING
 
-        if not master.online and master.error.id in [-1, 0]:
+        if not device.online and device.error.id in [-1, 0]:
             state = STATE_OFFLINE
-        elif master.error.id is not None and master.error.id > 0:
-            if master.error.id > 0 and master.error.id != 5:
+        elif device.error.id is not None and device.error.id > 0:
+            if device.error.id > 0 and device.error.id != 5:
                 state = STATE_ERROR
-            elif master.error.id == 5:
+            elif device.error.id == 5:
                 state = STATE_RAINDELAY
         else:
             try:
-                state = STATE_MAP[master.status.id]
+                state = STATE_MAP[device.status.id]
             except KeyError:
                 state = STATE_INITIALIZING
 
+        self.log(LoggerType.DATA_UPDATE, "Online: %s", device.online)
         self.log(LoggerType.DATA_UPDATE, "State '%s'", state)
         self.log(LoggerType.DATA_UPDATE, "Attributes:\n%s", self._attributes)
         self._attr_state = state
 
-        self._serialnumber = master.product["serial_number"]
-        if "percent" in master.battery:
-            self._battery_level = master.battery["percent"]
+        self._serialnumber = device.serial_number
+        if "percent" in device.battery:
+            self._battery_level = device.battery["percent"]
 
-        if not self._attributes["mqtt"]["connected"]:
+        if not device.mqtt.connected:
             # If MQTT is not connected, then pull state from API
             self.log(
                 LoggerType.DATA_UPDATE,
                 "MQTT connection is offline, scheduling Web API refresh in 15 minutes. "
-                "Device is in readonly mode! %s",
-                master.mqttdata,
+                "Device is in readonly mode!",
                 log_level=LogLevel.WARNING,
             )
             async_call_later(

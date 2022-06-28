@@ -32,7 +32,8 @@ https://github.com/mtrab/landroid_cloud/issues
 # Some defaults
 DEFAULT_NAME = "landroid"
 DOMAIN = "landroid_cloud"
-PLATFORMS = ["vacuum", "select", "button"]
+# PLATFORMS = ["vacuum", "select", "button"]
+PLATFORMS = ["vacuum"]
 UPDATE_SIGNAL = "landroid_cloud_update"
 LOGLEVEL = LogLevel.DEBUG
 
@@ -65,6 +66,8 @@ ATTR_ZONE = "zone"
 ATTR_BOUNDARY = "boundary"
 ATTR_RUNTIME = "runtime"
 ATTR_TORQUE = "torque"
+ATTR_SERVICES = "services"
+ATTR_SERVICE = "service"
 
 # Attributes used for managing schedules
 ATTR_TYPE = "type"
@@ -90,8 +93,36 @@ ATTR_SUNDAY_START = "sunday_start"
 ATTR_SUNDAY_END = "sunday_end"
 ATTR_SUNDAY_BOUNDARY = "sunday_boundary"
 
+# Entity extra attributes
+ATTR_ACCESSORIES = "accessories"
+ATTR_BATTERY = "battery"
+ATTR_BLADES = "blades"
+ATTR_CAPABILITIES = "capabilities"
+ATTR_ERROR = "error"
+ATTR_FIRMWARE = "firmware"
+ATTR_LAWN = "lawn"
+ATTR_MACADDRESS = "mac_address"
+ATTR_MQTTCONNECTED = "mqtt_connected"
+ATTR_ONLINE = "online"
+ATTR_ORIENTATION = "orientation"
+ATTR_RAINSENSOR = "rain_sensor"
+ATTR_REGISTERED = "registered_at"
+ATTR_SCHEDULE = "schedule"
+ATTR_SERIAL = "serial_number"
+ATTR_STATISTICS = "statistics"
+ATTR_TIMEZONE = "time_zone"
+ATTR_UPDATED = "state_updated_at"
+ATTR_WARRANTY = "warranty"
+ATTR_PARTYMODE = "party_mode_enabled"
+ATTR_RSSI = "rssi"
+
 # Misc. attributes
 ATTR_NEXT_ZONE = "next_zone"
+ATTR_CLOUD = "cloud"
+ATTR_DEVICES = "devices"
+ATTR_DEVICEIDS = "device_ids"
+ATTR_DEVICE = "device"
+ATTR_API = "api"
 
 # Available cloud vendors
 CLOUDS = []

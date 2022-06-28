@@ -7,6 +7,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .api import LandroidAPI
 from .const import (
+    ATTR_DEVICES,
     DOMAIN,
     LOGLEVEL,
 )
@@ -22,8 +23,8 @@ async def async_setup_entry(
 ) -> None:
     """Set up the mower device."""
     mowers = []
-    for idx in range(hass.data[DOMAIN][config.entry_id]["count"]):
-        api: LandroidAPI = hass.data[DOMAIN][config.entry_id][idx]["api"]
+    for name, info in hass.data[DOMAIN][config.entry_id][ATTR_DEVICES].items():
+        api: LandroidAPI = info["api"]
         device = vendor_to_device(api.config["type"])
         constructor = device.MowerDevice(hass, api)
 

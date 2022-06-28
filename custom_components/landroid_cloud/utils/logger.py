@@ -64,7 +64,10 @@ class LandroidLogger:
         self.logdevicename = None
 
         if self.logapi:
-            self.logdevicename = self.logapi.friendly_name
+            if hasattr(self.logapi, "friendly_name"):
+                self.logdevicename = self.logapi.friendly_name
+            elif hasattr(self.logapi, "name"):
+                self.logdevicename = self.logapi.name
 
     def log(
         self,
@@ -83,7 +86,15 @@ class LandroidLogger:
                 prefix = (
                     "(" + log_type + ") "
                     if isinstance(self.logapi, type(None))
-                    else "(" + self.logapi.friendly_name + ", " + log_type + ") "
+                    else "("
+                    + (
+                        self.logapi.friendly_name
+                        if hasattr(self.logapi, "friendly_name")
+                        else self.logapi.name
+                    )
+                    + ", "
+                    + log_type
+                    + ") "
                 )
             else:
                 prefix = (

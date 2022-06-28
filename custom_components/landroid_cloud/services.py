@@ -15,6 +15,11 @@ from pyworxcloud import WorxCloud
 
 from .api import LandroidAPI
 from .const import (
+    ATTR_API,
+    ATTR_DEVICEIDS,
+    ATTR_DEVICES,
+    ATTR_SERVICE,
+    ATTR_SERVICES,
     DOMAIN,
     LOGLEVEL,
     SERVICE_CONFIG,
@@ -139,7 +144,7 @@ def async_setup_services(hass: HomeAssistant) -> None:
                 )
                 return False
 
-            await api.services[service]["service"](service_data)
+            await api.services[service][ATTR_SERVICE](service_data)
 
     logger = LandroidLogger(name=__name__, log_level=LOGLEVEL)
     for service in SUPPORTED_SERVICES:
@@ -153,17 +158,28 @@ def async_setup_services(hass: HomeAssistant) -> None:
             )
 
 
-async def async_match_api(hass: HomeAssistant, device: DeviceEntry) -> WorxCloud | None:
+async def async_match_api(
+    hass: HomeAssistant, device: DeviceEntry
+) -> LandroidAPI | None:
     """Match device to API."""
+    logger = LandroidLogger(name=__name__, log_level=LOGLEVEL)
+    logger.log(LoggerType.SERVICE_CALL, "Trying to match ID '%s'", device.id)
     for possible_entry in hass.data[DOMAIN].values():
-        if device.id in possible_entry["device_ids"]:
-            for possible_device in possible_entry.values():
-                if not isinstance(possible_device, dict):
-                    continue  # This property isn't a dict, so we are skipping
-                if not "api" in possible_device:
-                    continue  # This dict doesn't contain the property api, so we are skipping
-                check_api = cast(LandroidAPI, possible_device["api"])
-                if check_api.device_id == device.id:
-                    return check_api
+        if not ATTR_DEVICEIDS in possible_entry:
+            continue
+        device_ids = possible_entry[ATTR_DEVICEIDS]
+        logger.log(
+            LoggerType.SERVICE_CALL, "Checking for '%s' in %s", device.id, device_ids
+        )
+        for name, did in device_ids.items():
+            logger.log(LoggerType.SERVICE_CALL, "Matching '%s' to '%s'", device.id, did)
+            if did == device.id:
+                logger.log(
+                    LoggerType.SERVICE_CALL,
+                    "Found a match for '%s' in '%s'",
+                    device.id,
+                    name,
+                )
+                return possible_entry[ATTR_DEVICES][name][ATTR_API]
 
     return None

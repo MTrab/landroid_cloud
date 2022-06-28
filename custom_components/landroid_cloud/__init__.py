@@ -1,6 +1,5 @@
 """Adds support for Landroid Cloud compatible devices."""
 from __future__ import annotations
-import asyncio
 from copy import deepcopy
 
 from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
@@ -12,6 +11,11 @@ from pyworxcloud import WorxCloud, exceptions
 
 from .api import LandroidAPI
 from .const import (
+    ATTR_API,
+    ATTR_CLOUD,
+    ATTR_DEVICE,
+    ATTR_DEVICEIDS,
+    ATTR_DEVICES,
     DOMAIN,
     LOGLEVEL,
     PLATFORMS,
@@ -56,8 +60,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     await check_unique_id(hass, entry)
     result = await _setup(hass, entry)
 
-    LOGGER.log(LoggerType.DEVELOP,entry.data[CONF_EMAIL])
-    LOGGER.log(LoggerType.DEVELOP,entry.data[CONF_PASSWORD])
     if result:
         hass.config_entries.async_setup_platforms(entry, PLATFORMS)
 
@@ -72,11 +74,12 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     services = []
     if unload_ok:
-        for device in range(hass.data[DOMAIN][entry.entry_id]["count"]):
-            await hass.async_add_executor_job(
-                hass.data[DOMAIN][entry.entry_id][device]["device"].disconnect
-            )
-            services.extend(hass.data[DOMAIN][entry.entry_id][device]["api"].services)
+        await hass.async_add_executor_job(
+            hass.data[DOMAIN][entry.entry_id][ATTR_CLOUD].disconnect
+        )
+
+        # for device in range(hass.data[DOMAIN][entry.entry_id]["count"]):
+        #     services.extend(hass.data[DOMAIN][entry.entry_id][device]["api"].services)
 
         hass.data[DOMAIN].pop(entry.entry_id)
 
@@ -118,10 +121,11 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         cloud_type,
         cloud_email,
     )
-    master = deepcopy(WorxCloud(cloud_email, cloud_password, cloud_type.lower()))
+    cloud = WorxCloud(cloud_email, cloud_password, cloud_type.lower())
     auth = False
+
     try:
-        auth = await hass.async_add_executor_job(master.authenticate)
+        auth = await hass.async_add_executor_job(cloud.authenticate)
     except exceptions.RequestError:
         LOGGER.log(
             LoggerType.API,
@@ -196,69 +200,34 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         )
         return False
 
-    try:
-        num_dev = await hass.async_add_executor_job(master.enumerate)
-    except Exception as err:  # pylint: disable=broad-except
-        LOGGER.log(LoggerType.AUTHENTICATION, "%s", err, log_level=LogLevel.WARNING)
-        return False
+    await hass.async_add_executor_job(cloud.connect, None, False, False)
 
     hass.data[DOMAIN][entry.entry_id] = {
-        "count": num_dev,
+        ATTR_CLOUD: cloud,
+        ATTR_DEVICES: {},
+        ATTR_DEVICEIDS: {},
         CONF_EMAIL: cloud_email,
         CONF_PASSWORD: cloud_password,
         CONF_TYPE: cloud_type,
     }
 
-    hass.data[DOMAIN][entry.entry_id]["device_ids"] = []
+    while not cloud.mqtt.connected:
+        pass  # Await connection
 
-    await asyncio.gather(
-        *[
-            async_init_device(
-                hass, entry, device, cloud_email, cloud_password, cloud_type
-            )
-            for device in range(num_dev)
-        ]
-    )
-
-    return True
-
-
-async def async_init_device(
-    hass, entry, device, cloud_email, cloud_password, cloud_type
-) -> None:
-    """Initialize the device."""
-    hass.data[DOMAIN][entry.entry_id][device] = {}
-
-    LOGGER.log(LoggerType.SETUP, "Setting up device no. %s on %s", device, cloud_email)
-    # Init the object
-    hass.data[DOMAIN][entry.entry_id][device]["device"] = deepcopy(
-        WorxCloud(cloud_email, cloud_password, cloud_type.lower())
-    )
-    # Authenticate
-    await hass.async_add_executor_job(
-        hass.data[DOMAIN][entry.entry_id][device]["device"].authenticate
-    )
-    # Connect
-    hass.data[DOMAIN][entry.entry_id][device]["mqttstate"] = False
-    try:
-        await hass.async_add_executor_job(
-            hass.data[DOMAIN][entry.entry_id][device]["device"].connect,
-            device,
-            False,
+    for name, device in cloud.devices.items():
+        LOGGER.log(
+            LoggerType.SETUP,
+            "Setting up device '%s' on account '%s'",
+            name,
+            hass.data[DOMAIN][entry.entry_id][CONF_EMAIL],
+        )
+        api = LandroidAPI(hass, name, entry)
+        hass.data[DOMAIN][entry.entry_id][ATTR_DEVICEIDS].update({name: None})
+        hass.data[DOMAIN][entry.entry_id][ATTR_DEVICES].update(
+            {name: {ATTR_API: api, ATTR_DEVICE: device}}
         )
 
-        while not hass.data[DOMAIN][entry.entry_id][device]["device"].mqtt.connected:
-            pass
-
-        hass.data[DOMAIN][entry.entry_id][device]["mqttstate"] = True
-    except exceptions.TimeoutException as exc:
-        LOGGER.log(LoggerType.SETUP, exc, log_level=LogLevel.WARNING)
-    # Get initial data
-    await hass.async_add_executor_job(
-        hass.data[DOMAIN][entry.entry_id][device]["device"].update
-    )
-    api = LandroidAPI(hass, device, hass.data[DOMAIN][entry.entry_id][device], entry)
-    hass.data[DOMAIN][entry.entry_id][device]["api"] = api
+    return True
 
 
 async def check_unique_id(hass: HomeAssistant, entry: ConfigEntry) -> None:

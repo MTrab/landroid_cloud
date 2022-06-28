@@ -10,9 +10,10 @@ from homeassistant.util import slugify as util_slugify
 
 from pyworxcloud import WorxCloud
 from pyworxcloud.events import LandroidEvent
-from pyworxcloud.utils import Capability, DeviceCapability
+from pyworxcloud.utils import Capability, DeviceCapability, DeviceHandler
 
 from .const import (
+    ATTR_CLOUD,
     DOMAIN,
     UPDATE_SIGNAL,
     LandroidFeatureSupport,
@@ -24,9 +25,7 @@ from .utils.logger import LandroidLogger, LoggerType
 class LandroidAPI:
     """Handle the API calls."""
 
-    def __init__(
-        self, hass: HomeAssistant, index: int, device: WorxCloud, entry: ConfigEntry
-    ):
+    def __init__(self, hass: HomeAssistant, device_name: str, entry: ConfigEntry):
         """Initialize API connection for a device.
 
         Args:
@@ -39,8 +38,8 @@ class LandroidAPI:
         self.entry_id = entry.entry_id
         self.data = entry.data
         self.options = entry.options
-        self.device: WorxCloud = device["device"]
-        self.index = index
+        self.cloud: WorxCloud = hass.data[DOMAIN][entry.entry_id][ATTR_CLOUD]
+        self.device: DeviceHandler = self.cloud.devices[device_name]
         self.unique_id = entry.unique_id
         self.services = {}
         self.shared_options = {}
@@ -50,8 +49,8 @@ class LandroidAPI:
 
         self._last_state = self.device.online
 
-        self.name = util_slugify(f"{self.device.name}")
-        self.friendly_name = self.device.name
+        self.name = util_slugify(f"{device_name}")
+        self.friendly_name = device_name
 
         self.config = {
             "email": hass.data[DOMAIN][entry.entry_id][CONF_EMAIL].lower(),
@@ -60,7 +59,7 @@ class LandroidAPI:
         }
 
         self.logger = LandroidLogger(name=__name__, api=self)
-        self.device.set_callback(LandroidEvent.DATA_RECEIVED, self.receive_data)
+        self.cloud.set_callback(LandroidEvent.DATA_RECEIVED, self.receive_data)
 
     def check_features(self, features: int, callback_func: Any = None) -> None:
         """Check which features the device supports.
@@ -94,22 +93,15 @@ class LandroidAPI:
             callback_func()
 
     @callback
-    def receive_data(self) -> None:
+    def receive_data(
+        self, name: str, device: DeviceHandler  # pylint: disable=unused-argument
+    ) -> None:
         """Callback function when the API sends new data."""
-        if not self._last_state and self.device.online:
-            self.logger.log(
-                LoggerType.DATA_UPDATE,
-                "Received new data from API, but devices is marked as offline. "
-                "Reloading device integration for %s",
-                self.friendly_name,
-            )
-            self._last_state = True
-            self.hass.config_entries.async_reload(self.entry_id)
-
         self.logger.log(
             LoggerType.DATA_UPDATE,
-            "Received new data from API, dispatching %s to %s",
-            f"{UPDATE_SIGNAL}_{self.device.name}",
-            self.friendly_name,
+            "Received new data from API to %s, dispatching %s",
+            name,
+            f"{UPDATE_SIGNAL}_{name}",
+            device=name,
         )
-        dispatcher_send(self.hass, f"{UPDATE_SIGNAL}_{self.device.name}")
+        dispatcher_send(self.hass, f"{UPDATE_SIGNAL}_{name}")
