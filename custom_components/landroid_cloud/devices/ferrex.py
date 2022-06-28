@@ -1,4 +1,4 @@
-"""Kress device definition."""
+"""Aldi Ferrex device definition."""
 # pylint: disable=unused-argument,relative-beyond-top-level
 from __future__ import annotations
 
@@ -68,7 +68,7 @@ CONFIG_SCHEME = vol.Schema(
 
 
 class Button(LandroidCloudButtonBase, ButtonEntity):
-    """Definition of Kress button."""
+    """Definition of Aldi Ferrex button."""
 
     def __init__(
         self,
@@ -76,18 +76,18 @@ class Button(LandroidCloudButtonBase, ButtonEntity):
         hass: HomeAssistant,
         api: LandroidAPI,
     ) -> None:
-        """Initialize a Kress button."""
+        """Initialize a Aldi Ferrex button."""
         super().__init__(description, hass, api)
-        self.device: WorxCloud = self.api.device
         self.log(
-            LoggerType.SELECT,
+            LoggerType.BUTTON,
             "Adding %s",
             description.key,
         )
+        self.device: WorxCloud = self.api.device
 
 
 class Select(LandroidCloudSelectEntity):
-    """Definition of Kress select entity."""
+    """Definition of Aldi Ferrex select entity."""
 
     def __init__(
         self,
@@ -95,7 +95,7 @@ class Select(LandroidCloudSelectEntity):
         hass: HomeAssistant,
         api: LandroidAPI,
     ):
-        """Init new Kress Select entity."""
+        """Init new Aldi Ferrex Select entity."""
         super().__init__(description, hass, api)
         self.device: WorxCloud = self.api.device
         self.log(
@@ -106,7 +106,7 @@ class Select(LandroidCloudSelectEntity):
 
 
 class ZoneSelect(Select, LandroidCloudSelectZoneEntity):
-    """Definition of a Kress zone selector."""
+    """Definition of a Aldi Ferrex zone selector."""
 
     def __init__(
         self,
@@ -120,7 +120,7 @@ class ZoneSelect(Select, LandroidCloudSelectZoneEntity):
 
 
 class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
-    """Definition of Kress device."""
+    """Definition of KreAldi Ferrexss device."""
 
     @property
     def base_features(self):

@@ -1,15 +1,12 @@
 """Utilities used by this module."""
+# pylint: disable=relative-beyond-top-level
 from __future__ import annotations
-
-import logging
+from datetime import datetime
 import re
 
-from datetime import datetime
 from homeassistant.exceptions import HomeAssistantError
 
 TIME_REGEX = "(([0-9]){1,2}:([0-9]){2})"
-
-_LOGGER = logging.getLogger(__name__)
 
 
 def parseday(day: dict, data: dict) -> list:
@@ -65,7 +62,6 @@ def pass_thru(schedule, sunday_first: bool = True) -> list:
         )
 
     for day in schedule.items():
-        _LOGGER.debug(day)
         if sunday_first and day[0] != "sunday":
             result.append(
                 [day[1]["start"], int(day[1]["duration"]), int(day[1]["boundary"])]

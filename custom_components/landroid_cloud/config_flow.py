@@ -1,17 +1,18 @@
 """Adds support for Landroid Cloud compatible devices."""
 from __future__ import annotations
 
-import logging
 
 from homeassistant import config_entries, core, exceptions
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
 
 from pyworxcloud import WorxCloud
 
-from .const import DOMAIN
+from .const import DOMAIN, LOGLEVEL
 from .scheme import DATA_SCHEMA
 
-_LOGGER = logging.getLogger(__name__)
+from .utils.logger import LandroidLogger, LoggerType, LogLevel
+
+LOGGER = LandroidLogger(name=__name__, log_level=LOGLEVEL)
 
 
 async def validate_input(hass: core.HomeAssistant, data):
@@ -23,7 +24,7 @@ async def validate_input(hass: core.HomeAssistant, data):
         data[CONF_TYPE] = "worx"
 
     worx = WorxCloud(data[CONF_EMAIL], data[CONF_PASSWORD], data[CONF_TYPE].lower())
-    auth = await hass.async_add_executor_job(worx.initialize)
+    auth = await hass.async_add_executor_job(worx.authenticate)
     if not auth:
         raise InvalidAuth
 
@@ -74,11 +75,20 @@ class LandroidCloudConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 self._errors["base"] = "cannot_connect"
             except InvalidAuth:
                 self._errors["base"] = "invalid_auth"
-            except Exception:  # pylint: disable=broad-except
-                _LOGGER.exception("Unexpected exception")
+            except Exception as ex:  # pylint: disable=broad-except
+                LOGGER.log(
+                    LoggerType.CONFIG,
+                    "Unexpected exception: %s",
+                    ex,
+                    log_level=LogLevel.ERROR,
+                )
                 self._errors["base"] = "unknown"
 
             if "base" not in self._errors:
+                await self.async_set_unique_id(
+                    f"{user_input[CONF_EMAIL]}_{user_input[CONF_TYPE]}"
+                )
+
                 return self.async_create_entry(
                     title=validated["title"],
                     data=user_input,
@@ -89,13 +99,17 @@ class LandroidCloudConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             step_id="user", data_schema=DATA_SCHEMA, errors=self._errors
         )
 
-    async def async_step_import(self, import_config):  # pylint: disable=unused-argument
+    async def async_step_import(self, import_config):
         """Import a config entry."""
         if import_config is not None:
             if self.check_for_existing(import_config):
-                _LOGGER.warning(
-                    "Landroid_cloud configuration for %s already imported, you can safely remove the entry from your configuration.yaml as this is no longer used",
+                LOGGER.log(
+                    LoggerType.CONFIG_IMPORT,
+                    "Landroid_cloud configuration for %s already imported, you can "
+                    "safely remove the entry from your configuration.yaml as this "
+                    "is no longer used",
                     import_config.get(CONF_EMAIL),
+                    log_level=LogLevel.WARNING,
                 )
                 return self.async_abort(reason="already_exists")
 
@@ -106,11 +120,15 @@ class LandroidCloudConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             except InvalidAuth:
                 self._errors["base"] = "invalid_auth"
             except Exception:  # pylint: disable=broad-except
-                _LOGGER.exception("Unexpected exception")
+                LOGGER.log(
+                    LoggerType.CONFIG_IMPORT,
+                    "Unexpected exception",
+                    log_level=LogLevel.ERROR,
+                )
                 self._errors["base"] = "unknown"
 
             if "base" not in self._errors:
                 return self.async_create_entry(
-                    title=f"configuration.yaml - {import_config.get(CONF_EMAIL)}",
+                    title=f"Import - {import_config.get(CONF_EMAIL)}",
                     data=import_config,
                 )

@@ -4,6 +4,7 @@ logger:
   default: warning
   logs:
     custom_components.landroid_cloud: debug
+    pyworxcloud: info
 
 
 # If you need to debug uncomment the line below (doc: https://www.home-assistant.io/integrations/debugpy/)

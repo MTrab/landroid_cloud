@@ -2,6 +2,8 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from enum import IntEnum
+import inspect
+from homeassistant.backports.enum import StrEnum
 
 from homeassistant.components.vacuum import (
     STATE_DOCKED,
@@ -10,8 +12,10 @@ from homeassistant.components.vacuum import (
     STATE_PAUSED,
     STATE_IDLE,
 )
+from pyworxcloud.clouds import CloudType
 
-from pyworxcloud.clouds import CLOUDS as api_clouds
+from .utils.logger import LogLevel
+
 
 # Startup banner
 STARTUP = """
@@ -28,19 +32,22 @@ https://github.com/mtrab/landroid_cloud/issues
 # Some defaults
 DEFAULT_NAME = "landroid"
 DOMAIN = "landroid_cloud"
-PLATFORM = "vacuum"
+# PLATFORMS = ["vacuum", "select", "button"]
+PLATFORMS = ["vacuum"]
 UPDATE_SIGNAL = "landroid_cloud_update"
+LOGLEVEL = LogLevel.DEBUG
 
 # Service consts
-SERVICE_POLL = "poll"
 SERVICE_CONFIG = "config"
 SERVICE_PARTYMODE = "partymode"
 SERVICE_SETZONE = "setzone"
 SERVICE_LOCK = "lock"
+SERVICE_REFRESH = "refresh"
 SERVICE_RESTART = "restart"
 SERVICE_EDGECUT = "edgecut"
 SERVICE_OTS = "ots"
 SERVICE_SCHEDULE = "schedule"
+SERVICE_TORQUE = "torque"
 
 # Extra states
 STATE_INITIALIZING = "initializing"
@@ -59,6 +66,9 @@ ATTR_TIMEEXTENSION = "timeextension"
 ATTR_ZONE = "zone"
 ATTR_BOUNDARY = "boundary"
 ATTR_RUNTIME = "runtime"
+ATTR_TORQUE = "torque"
+ATTR_SERVICES = "services"
+ATTR_SERVICE = "service"
 
 # Attributes used for managing schedules
 ATTR_TYPE = "type"
@@ -84,10 +94,44 @@ ATTR_SUNDAY_START = "sunday_start"
 ATTR_SUNDAY_END = "sunday_end"
 ATTR_SUNDAY_BOUNDARY = "sunday_boundary"
 
+# Entity extra attributes
+ATTR_ACCESSORIES = "accessories"
+ATTR_BATTERY = "battery"
+ATTR_BLADES = "blades"
+ATTR_CAPABILITIES = "capabilities"
+ATTR_ERROR = "error"
+ATTR_FIRMWARE = "firmware"
+ATTR_LANDROIDFEATURES = "supported_landroid_features"
+ATTR_LAWN = "lawn"
+ATTR_MACADDRESS = "mac_address"
+ATTR_MQTTCONNECTED = "mqtt_connected"
+ATTR_ONLINE = "online"
+ATTR_ORIENTATION = "orientation"
+ATTR_RAINSENSOR = "rain_sensor"
+ATTR_REGISTERED = "registered_at"
+ATTR_SCHEDULE = "schedule"
+ATTR_SERIAL = "serial_number"
+ATTR_STATISTICS = "statistics"
+ATTR_TIMEZONE = "time_zone"
+ATTR_UPDATED = "state_updated_at"
+ATTR_WARRANTY = "warranty"
+ATTR_PARTYMODE = "party_mode_enabled"
+ATTR_RSSI = "rssi"
+ATTR_STATUS = "status_info"
+
+# Misc. attributes
+ATTR_NEXT_ZONE = "next_zone"
+ATTR_CLOUD = "cloud"
+ATTR_DEVICES = "devices"
+ATTR_DEVICEIDS = "device_ids"
+ATTR_DEVICE = "device"
+ATTR_API = "api"
+
 # Available cloud vendors
 CLOUDS = []
-for cloud in api_clouds:
-    CLOUDS.append(cloud.capitalize())
+for name, cloud in inspect.getmembers(CloudType):
+    if inspect.isclass(cloud) and not "__" in name:
+        CLOUDS.append(name.capitalize())
 
 # State mapping
 STATE_MAP = {
@@ -111,6 +155,27 @@ STATE_MAP = {
     34: STATE_PAUSED,
 }
 
+# Remap the zones to be more "human-readable"
+ZONE_MAP = {
+    1: 0,
+    2: 1,
+    3: 2,
+    4: 3,
+}
+
+
+class LandroidButtonTypes(StrEnum):
+    """Defines different button types for Landroid Cloud integration."""
+
+    RESTART = SERVICE_RESTART
+    EDGECUT = SERVICE_EDGECUT
+
+
+class LandroidSelectTypes(StrEnum):
+    """Defines different button types for Landroid Cloud integration."""
+
+    NEXT_ZONE = ATTR_NEXT_ZONE
+
 
 @dataclass
 class ScheduleDays(IntEnum):
@@ -125,11 +190,19 @@ class ScheduleDays(IntEnum):
     SATURDAY = 6
 
 
+# Map schedule to Landroid JSON property
 SCHEDULE_TYPE_MAP = {
     "primary": "d",
     "secondary": "dd",
 }
 
+# Map button type to service
+BUTTONTYPE_TO_SERVICE = {
+    LandroidButtonTypes.RESTART: SERVICE_RESTART,
+    LandroidButtonTypes.EDGECUT: SERVICE_EDGECUT,
+}
+
+# Map schedule days
 SCHEDULE_TO_DAY = {
     "sunday": {
         "day": ScheduleDays.SUNDAY,
@@ -181,3 +254,21 @@ SCHEDULE_TO_DAY = {
         "clear": "saturday",
     },
 }
+
+
+class LandroidFeatureSupport(IntEnum):
+    """Supported features of the Landroid integration."""
+
+    MOWER = 1
+    BUTTON = 2
+    SELECT = 4
+    SETZONE = 8
+    RESTART = 16
+    LOCK = 32
+    OTS = 64
+    EDGECUT = 128
+    PARTYMODE = 256
+    CONFIG = 512
+    SCHEDULES = 1024
+    TORQUE = 2048
+    REFRESH = 4096
