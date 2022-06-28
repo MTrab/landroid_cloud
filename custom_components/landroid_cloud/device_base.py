@@ -25,7 +25,6 @@ from homeassistant.components.vacuum import (
     VacuumEntityFeature,
 )
 
-from homeassistant.const import ATTR_LOCATION, ATTR_LOCKED, ATTR_MODEL
 from homeassistant.core import callback, HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import (
@@ -41,6 +40,7 @@ from pyworxcloud.exceptions import (
     MQTTException,
     NoOneTimeScheduleError,
     NoPartymodeError,
+    RateLimit,
 )
 from pyworxcloud.utils import Capability, DeviceCapability
 from pyworxcloud.utils.capability import CAPABILITY_TO_TEXT
@@ -51,24 +51,13 @@ from .api import LandroidAPI
 from .attribute_map import ATTR_MAP
 
 from .const import (
-    ATTR_ACCESSORIES,
     ATTR_DEVICEIDS,
-    ATTR_FIRMWARE,
-    ATTR_LAWN,
-    ATTR_MACADDRESS,
+    ATTR_LANDROIDFEATURES,
     ATTR_MQTTCONNECTED,
-    ATTR_RAINSENSOR,
-    ATTR_REGISTERED,
-    ATTR_SCHEDULE,
-    ATTR_SERIAL,
-    ATTR_SERVICE,
-    ATTR_WARRANTY,
-    ATTR_BATTERY,
-    ATTR_BLADES,
     ATTR_BOUNDARY,
     ATTR_CAPABILITIES,
-    ATTR_ERROR,
     ATTR_RUNTIME,
+    ATTR_SERVICE,
     ATTR_TORQUE,
     ATTR_ZONE,
     BUTTONTYPE_TO_SERVICE,
@@ -80,6 +69,7 @@ from .const import (
     SERVICE_LOCK,
     SERVICE_OTS,
     SERVICE_PARTYMODE,
+    SERVICE_REFRESH,
     SERVICE_RESTART,
     SERVICE_SCHEDULE,
     SERVICE_SETZONE,
@@ -180,6 +170,14 @@ class LandroidCloudBaseEntity(LandroidLogger):
         """Set wheel torque."""
         return None
 
+    async def async_refresh(self, data: dict | None = None) -> None:
+        """Refresh data from API endpoint."""
+        try:
+            self.api.device.refresh()
+        except RateLimit as exc:
+            self.log(LoggerType.SERVICE_CALL, exc.message, log_level=LogLevel.ERROR)
+        return None
+
     @staticmethod
     def get_ots_scheme() -> Any:
         """Return device specific OTS_SCHEME."""
@@ -189,68 +187,6 @@ class LandroidCloudBaseEntity(LandroidLogger):
     def get_config_scheme() -> Any:
         """Return device specific CONFIG_SCHEME."""
         return None
-
-    @callback
-    def register_services(self) -> None:
-        """Register services."""
-        if self.api.features == 0:
-            self.log(
-                LoggerType.SERVICE_REGISTER,
-                "No services registred as feature flags is set to %s",
-                self.api.features,
-            )
-            return
-
-        self.log(
-            LoggerType.SERVICE_REGISTER,
-            "Registering services with feature flags set to %s",
-            self.api.features,
-        )
-
-        if self.api.features & LandroidFeatureSupport.EDGECUT:
-            self.api.services[SERVICE_EDGECUT] = {
-                ATTR_SERVICE: self.async_edgecut,
-            }
-
-        if self.api.features & LandroidFeatureSupport.LOCK:
-            self.api.services[SERVICE_LOCK] = {
-                ATTR_SERVICE: self.async_toggle_lock,
-            }
-
-        if self.api.features & LandroidFeatureSupport.PARTYMODE:
-            self.api.services[SERVICE_PARTYMODE] = {
-                ATTR_SERVICE: self.async_toggle_partymode,
-            }
-
-        if self.api.features & LandroidFeatureSupport.SETZONE:
-            self.api.services[SERVICE_SETZONE] = {
-                ATTR_SERVICE: self.async_set_zone,
-            }
-
-        if self.api.features & LandroidFeatureSupport.RESTART:
-            self.api.services[SERVICE_RESTART] = {
-                ATTR_SERVICE: self.async_restart,
-            }
-
-        if self.api.features & LandroidFeatureSupport.CONFIG:
-            self.api.services[SERVICE_CONFIG] = {
-                ATTR_SERVICE: self.async_config,
-            }
-
-        if self.api.features & LandroidFeatureSupport.OTS:
-            self.api.services[SERVICE_OTS] = {
-                ATTR_SERVICE: self.async_ots,
-            }
-
-        if self.api.features & LandroidFeatureSupport.SCHEDULES:
-            self.api.services[SERVICE_SCHEDULE] = {
-                ATTR_SERVICE: self.async_set_schedule,
-            }
-
-        if self.api.features & LandroidFeatureSupport.TORQUE:
-            self.api.services[SERVICE_TORQUE] = {
-                ATTR_SERVICE: self.async_set_torque,
-            }
 
     @property
     def device_info(self):
@@ -320,6 +256,73 @@ class LandroidCloudBaseEntity(LandroidLogger):
         """Default async_update"""
         return
 
+    @callback
+    def register_services(self) -> None:
+        """Register services."""
+        if self.api.features == 0:
+            self.log(
+                LoggerType.SERVICE_REGISTER,
+                "No services registred as feature flags is set to %s",
+                self.api.features,
+            )
+            return
+
+        self.log(
+            LoggerType.SERVICE_REGISTER,
+            "Registering services with feature flags set to %s",
+            self.api.features,
+        )
+
+        if self.api.features & LandroidFeatureSupport.EDGECUT:
+            self.api.services[SERVICE_EDGECUT] = {
+                ATTR_SERVICE: self.async_edgecut,
+            }
+
+        if self.api.features & LandroidFeatureSupport.LOCK:
+            self.api.services[SERVICE_LOCK] = {
+                ATTR_SERVICE: self.async_toggle_lock,
+            }
+
+        if self.api.features & LandroidFeatureSupport.PARTYMODE:
+            self.api.services[SERVICE_PARTYMODE] = {
+                ATTR_SERVICE: self.async_toggle_partymode,
+            }
+
+        if self.api.features & LandroidFeatureSupport.SETZONE:
+            self.api.services[SERVICE_SETZONE] = {
+                ATTR_SERVICE: self.async_set_zone,
+            }
+
+        if self.api.features & LandroidFeatureSupport.REFRESH:
+            self.api.services[SERVICE_REFRESH] = {
+                ATTR_SERVICE: self.async_refresh,
+            }
+
+        if self.api.features & LandroidFeatureSupport.RESTART:
+            self.api.services[SERVICE_RESTART] = {
+                ATTR_SERVICE: self.async_restart,
+            }
+
+        if self.api.features & LandroidFeatureSupport.CONFIG:
+            self.api.services[SERVICE_CONFIG] = {
+                ATTR_SERVICE: self.async_config,
+            }
+
+        if self.api.features & LandroidFeatureSupport.OTS:
+            self.api.services[SERVICE_OTS] = {
+                ATTR_SERVICE: self.async_ots,
+            }
+
+        if self.api.features & LandroidFeatureSupport.SCHEDULES:
+            self.api.services[SERVICE_SCHEDULE] = {
+                ATTR_SERVICE: self.async_set_schedule,
+            }
+
+        if self.api.features & LandroidFeatureSupport.TORQUE:
+            self.api.services[SERVICE_TORQUE] = {
+                ATTR_SERVICE: self.async_set_torque,
+            }
+
     def data_update(self):
         """Update the device."""
         self.log_set_name(__name__)
@@ -351,6 +354,8 @@ class LandroidCloudBaseEntity(LandroidLogger):
             data.pop(ATTR_TORQUE)
 
         data[ATTR_MQTTCONNECTED] = device.mqtt.connected
+
+        data[ATTR_LANDROIDFEATURES] = self.api.features
 
         self._attributes.update(data)
 
@@ -576,6 +581,12 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
                 "Couldn't send command, MQTT was not connected",
                 log_level=LogLevel.ERROR,
             )
+        except RateLimit as exc:
+            self.log(
+                LoggerType.SERVICE_CALL,
+                exc.message,
+                log_level=LogLevel.ERROR,
+            )
 
     async def async_pause(self) -> None:
         """Pause the mowing cycle."""
@@ -587,6 +598,12 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
             self.log(
                 LoggerType.SERVICE_CALL,
                 "Couldn't send command, MQTT was not connected",
+                log_level=LogLevel.ERROR,
+            )
+        except RateLimit as exc:
+            self.log(
+                LoggerType.SERVICE_CALL,
+                exc.message,
                 log_level=LogLevel.ERROR,
             )
 
@@ -602,6 +619,12 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
             self.log(
                 LoggerType.SERVICE_CALL,
                 "Couldn't send command, MQTT was not connected",
+                log_level=LogLevel.ERROR,
+            )
+        except RateLimit as exc:
+            self.log(
+                LoggerType.SERVICE_CALL,
+                exc.message,
                 log_level=LogLevel.ERROR,
             )
 
@@ -621,6 +644,12 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
                     "Couldn't send command, MQTT was not connected",
                     log_level=LogLevel.ERROR,
                 )
+            except RateLimit as exc:
+                self.log(
+                    LoggerType.SERVICE_CALL,
+                    exc.message,
+                    log_level=LogLevel.ERROR,
+                )
 
     async def async_stop(self, **kwargs: Any) -> None:
         """Alias for return to base function."""
@@ -630,6 +659,12 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
             self.log(
                 LoggerType.SERVICE_CALL,
                 "Couldn't send command, MQTT was not connected",
+                log_level=LogLevel.ERROR,
+            )
+        except RateLimit as exc:
+            self.log(
+                LoggerType.SERVICE_CALL,
+                exc.message,
                 log_level=LogLevel.ERROR,
             )
 
@@ -644,6 +679,12 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
             self.log(
                 LoggerType.SERVICE_CALL,
                 "Couldn't send command, MQTT was not connected",
+                log_level=LogLevel.ERROR,
+            )
+        except RateLimit as exc:
+            self.log(
+                LoggerType.SERVICE_CALL,
+                exc.message,
                 log_level=LogLevel.ERROR,
             )
 
@@ -699,6 +740,12 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
                 "Couldn't send command, MQTT was not connected",
                 log_level=LogLevel.ERROR,
             )
+        except RateLimit as exc:
+            self.log(
+                LoggerType.SERVICE_CALL,
+                exc.message,
+                log_level=LogLevel.ERROR,
+            )
 
     async def async_toggle_lock(self, data: dict | None = None) -> None:
         """Toggle device lock state."""
@@ -711,6 +758,12 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
             self.log(
                 LoggerType.SERVICE_CALL,
                 "Couldn't send command, MQTT was not connected",
+                log_level=LogLevel.ERROR,
+            )
+        except RateLimit as exc:
+            self.log(
+                LoggerType.SERVICE_CALL,
+                exc.message,
                 log_level=LogLevel.ERROR,
             )
 
@@ -735,6 +788,12 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
                 "Couldn't send command, MQTT was not connected",
                 log_level=LogLevel.ERROR,
             )
+        except RateLimit as exc:
+            self.log(
+                LoggerType.SERVICE_CALL,
+                exc.message,
+                log_level=LogLevel.ERROR,
+            )
 
     async def async_toggle_partymode(self, data: dict | None = None) -> None:
         """Toggle partymode state."""
@@ -755,6 +814,12 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
                 "Couldn't send command, MQTT was not connected",
                 log_level=LogLevel.ERROR,
             )
+        except RateLimit as exc:
+            self.log(
+                LoggerType.SERVICE_CALL,
+                exc.message,
+                log_level=LogLevel.ERROR,
+            )
 
     async def async_restart(self, data: dict | None = None):
         """Restart mower baseboard OS."""
@@ -766,6 +831,12 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
             self.log(
                 LoggerType.SERVICE_CALL,
                 "Couldn't send command, MQTT was not connected",
+                log_level=LogLevel.ERROR,
+            )
+        except RateLimit as exc:
+            self.log(
+                LoggerType.SERVICE_CALL,
+                exc.message,
                 log_level=LogLevel.ERROR,
             )
 
@@ -786,6 +857,12 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
             self.log(
                 LoggerType.SERVICE_CALL,
                 "Couldn't send command, MQTT was not connected",
+                log_level=LogLevel.ERROR,
+            )
+        except RateLimit as exc:
+            self.log(
+                LoggerType.SERVICE_CALL,
+                exc.message,
                 log_level=LogLevel.ERROR,
             )
 
@@ -873,5 +950,11 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
                 self.log(
                     LoggerType.SERVICE_CALL,
                     "Couldn't send command, MQTT was not connected",
+                    log_level=LogLevel.ERROR,
+                )
+            except RateLimit as exc:
+                self.log(
+                    LoggerType.SERVICE_CALL,
+                    exc.message,
                     log_level=LogLevel.ERROR,
                 )

@@ -281,3 +281,10 @@ torque:
           step: 1
           unit_of_measurement: "%"
           mode: slider
+
+refresh:
+  description: Send a refresh request to the API endpoint - ONLY USE FOR RARE CASES
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: vacuum

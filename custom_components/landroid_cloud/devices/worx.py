@@ -10,6 +10,7 @@ from homeassistant.components.button import ButtonEntity, ButtonEntityDescriptio
 from homeassistant.components.select import SelectEntityDescription
 from homeassistant.components.vacuum import StateVacuumEntity
 from homeassistant.core import HomeAssistant
+
 # from homeassistant.helpers.dispatcher import dispatcher_send
 
 from pyworxcloud import (
@@ -65,6 +66,7 @@ DEVICE_FEATURES = (
     | LandroidFeatureSupport.LOCK
     | LandroidFeatureSupport.CONFIG
     | LandroidFeatureSupport.RESTART
+    | LandroidFeatureSupport.REFRESH
     | LandroidFeatureSupport.SELECT
     | LandroidFeatureSupport.SETZONE
 )
