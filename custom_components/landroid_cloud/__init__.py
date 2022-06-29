@@ -200,7 +200,7 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         )
         return False
 
-    await hass.async_add_executor_job(cloud.connect, None, False, False)
+    await hass.async_add_executor_job(cloud.connect, False, False)
 
     hass.data[DOMAIN][entry.entry_id] = {
         ATTR_CLOUD: cloud,
