@@ -106,8 +106,11 @@ def async_setup_services(hass: HomeAssistant) -> None:
         devices: DeviceEntry = []
 
         if CONF_DEVICE_ID in service_data:
-            for entry in service_data[CONF_DEVICE_ID]:
-                devices.append(device_registry.async_get(entry))
+            if isinstance(service_data[CONF_DEVICE_ID], str):
+                devices.append(device_registry.async_get(service_data[CONF_DEVICE_ID]))
+            else:
+                for entry in service_data[CONF_DEVICE_ID]:
+                    devices.append(device_registry.async_get(entry))
         else:
             for entry in service_data[CONF_ENTITY_ID]:
                 devices.append(
@@ -121,12 +124,13 @@ def async_setup_services(hass: HomeAssistant) -> None:
             logger = LandroidLogger(name=__name__, api=api, log_level=LOGLEVEL)
 
             if isinstance(api, type(None)):
-                logger.log(
-                    LoggerType.SERVICE_CALL,
-                    "Couldn't match a device with device_id = %s",
-                    device.id,
-                    log_level=LogLevel.ERROR,
-                )
+                if not isinstance(device, type(None)):
+                    logger.log(
+                        LoggerType.SERVICE_CALL,
+                        "Couldn't match a device with device_id = %s",
+                        device.id,
+                        log_level=LogLevel.ERROR,
+                    )
                 return
 
             if not service in api.services:
@@ -167,6 +171,14 @@ async def async_match_api(
 ) -> LandroidAPI | None:
     """Match device to API."""
     logger = LandroidLogger(name=__name__, log_level=LOGLEVEL)
+    if not hasattr(device, "id"):
+        logger.log(
+            LoggerType.SERVICE_CALL,
+            "No valid device object was specified, not calling service!",
+            log_level=LogLevel.ERROR,
+        )
+        return None
+
     logger.log(LoggerType.SERVICE_CALL, "Trying to match ID '%s'", device.id)
     for possible_entry in hass.data[DOMAIN].values():
         if not ATTR_DEVICEIDS in possible_entry:

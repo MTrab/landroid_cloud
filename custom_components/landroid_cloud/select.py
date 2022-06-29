@@ -11,7 +11,9 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
+from .api import LandroidAPI
 from .const import (
+    ATTR_DEVICES,
     DOMAIN,
     LOGLEVEL,
     LandroidFeatureSupport,
@@ -38,10 +40,9 @@ async def async_setup_entry(
 ) -> None:
     """Set up Landroid buttons for specific service."""
     entities = []
-    for idx in range(hass.data[DOMAIN][config.entry_id]["count"]):
-        api = hass.data[DOMAIN][config.entry_id][idx]["api"]
-        vendor = api.config["type"]
-        device = vendor_to_device(vendor)
+    for name, info in hass.data[DOMAIN][config.entry_id][ATTR_DEVICES].items():
+        api: LandroidAPI = info["api"]
+        device = vendor_to_device(api.config["type"])
 
         while not api.features_loaded:
             await asyncio.sleep(1)
