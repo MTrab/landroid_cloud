@@ -90,7 +90,7 @@ The easiest way to get one is to [click here](https://lokalise.com/login/) then 
 <br/>
 When you have created your account, [clich here](https://app.lokalise.com/public/97921736629219cb0306a3.84106577/) to join the project on Lokalise.<br/>
 <br/>
-Chect Lokalise documentation [here](https://docs.lokalise.com/en/) - it's really good.<br/>
+Check Lokalise documentation [here](https://docs.lokalise.com/en/) - it's really good.<br/>
 <br/>
 Can't find the language you want to translate to? [Open a new language request](https://github.com/MTrab/landroid_cloud/issues/new?assignees=&labels=translation&template=translation_request.md&title=%5BLR%5D%3A+New%20language%20request)<br/>
 <br/>
