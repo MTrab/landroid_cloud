@@ -1,21 +1,14 @@
 """Define device classes."""
 # pylint: disable=unused-argument,too-many-instance-attributes,no-self-use
 from __future__ import annotations
+
+import json
 from datetime import timedelta
 from functools import partial
-import json
 from typing import Any
 
-from homeassistant.components.button import (
-    ButtonEntity,
-    ButtonEntityDescription,
-)
-
-from homeassistant.components.select import (
-    SelectEntity,
-    SelectEntityDescription,
-)
-
+from homeassistant.components.button import ButtonEntity, ButtonEntityDescription
+from homeassistant.components.select import SelectEntity, SelectEntityDescription
 from homeassistant.components.vacuum import (
     ENTITY_ID_FORMAT,
     STATE_DOCKED,
@@ -24,17 +17,13 @@ from homeassistant.components.vacuum import (
     StateVacuumEntity,
     VacuumEntityFeature,
 )
-
-from homeassistant.core import callback, HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.exceptions import HomeAssistantError
-from homeassistant.helpers import (
-    entity_registry as er,
-    device_registry as dr,
-)
+from homeassistant.helpers import device_registry as dr
+from homeassistant.helpers import entity_registry as er
+from homeassistant.helpers.dispatcher import async_dispatcher_connect, dispatcher_send
 from homeassistant.helpers.entity_registry import EntityRegistry
 from homeassistant.helpers.event import async_call_later
-from homeassistant.helpers.dispatcher import async_dispatcher_connect, dispatcher_send
-
 from pyworxcloud import WorxCloud
 from pyworxcloud.exceptions import (
     MQTTException,
@@ -45,17 +34,16 @@ from pyworxcloud.exceptions import (
 from pyworxcloud.utils import Capability, DeviceCapability
 from pyworxcloud.utils.capability import CAPABILITY_TO_TEXT
 
-
 from .api import LandroidAPI
-
 from .attribute_map import ATTR_MAP
-
 from .const import (
-    ATTR_DEVICEIDS,
-    ATTR_LANDROIDFEATURES,
-    ATTR_MQTTCONNECTED,
     ATTR_BOUNDARY,
     ATTR_CAPABILITIES,
+    ATTR_DEVICEIDS,
+    ATTR_LANDROIDFEATURES,
+    ATTR_LATITUDE,
+    ATTR_LONGITUDE,
+    ATTR_MQTTCONNECTED,
     ATTR_RUNTIME,
     ATTR_SERVICE,
     ATTR_TORQUE,
@@ -82,9 +70,8 @@ from .const import (
     UPDATE_SIGNAL,
     LandroidFeatureSupport,
 )
-
-from .utils.schedules import pass_thru, parseday
 from .utils.logger import LandroidLogger, LoggerType, LogLevel
+from .utils.schedules import parseday, pass_thru
 
 # Commonly supported features
 SUPPORT_LANDROID_BASE = (
@@ -356,6 +343,14 @@ class LandroidCloudBaseEntity(LandroidLogger):
         data[ATTR_MQTTCONNECTED] = device.mqtt.connected
 
         data[ATTR_LANDROIDFEATURES] = self.api.features
+
+        if hasattr(data, "gps"):
+            data.update(
+                {
+                    ATTR_LATITUDE: data.gps["latitude"],
+                    ATTR_LONGITUDE: data.gps["longitude"],
+                }
+            )
 
         self._attributes.update(data)
 

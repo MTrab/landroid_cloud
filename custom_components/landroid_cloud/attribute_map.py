@@ -1,7 +1,7 @@
 """Attribute map used by Landroid Cloud integration."""
 from __future__ import annotations
 
-from homeassistant.const import ATTR_LOCATION, ATTR_LOCKED, ATTR_MODEL
+from homeassistant.const import ATTR_LOCKED, ATTR_MODEL
 
 from .const import (
     ATTR_ACCESSORIES,
@@ -32,7 +32,6 @@ ATTR_MAP = {
     "blades": ATTR_BLADES,
     "error": ATTR_ERROR,
     "firmware": ATTR_FIRMWARE,
-    "gps": ATTR_LOCATION,
     "lawn": ATTR_LAWN,
     "locked": ATTR_LOCKED,
     "mac_address": ATTR_MACADDRESS,
