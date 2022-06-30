@@ -1,21 +1,21 @@
 """Constants used by Landroid Cloud integration."""
 from __future__ import annotations
+
+import inspect
 from dataclasses import dataclass
 from enum import IntEnum
-import inspect
-from homeassistant.backports.enum import StrEnum
 
+from homeassistant.backports.enum import StrEnum
 from homeassistant.components.vacuum import (
     STATE_DOCKED,
-    STATE_RETURNING,
     STATE_ERROR,
-    STATE_PAUSED,
     STATE_IDLE,
+    STATE_PAUSED,
+    STATE_RETURNING,
 )
 from pyworxcloud.clouds import CloudType
 
 from .utils.logger import LogLevel
-
 
 # Startup banner
 STARTUP = """
@@ -102,6 +102,8 @@ ATTR_CAPABILITIES = "capabilities"
 ATTR_ERROR = "error"
 ATTR_FIRMWARE = "firmware"
 ATTR_LANDROIDFEATURES = "supported_landroid_features"
+ATTR_LATITUDE = "latitude"
+ATTR_LONGITUDE = "longitude"
 ATTR_LAWN = "lawn"
 ATTR_MACADDRESS = "mac_address"
 ATTR_MQTTCONNECTED = "mqtt_connected"
