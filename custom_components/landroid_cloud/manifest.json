@@ -5,7 +5,7 @@
   "domain": "landroid_cloud",
   "iot_class": "cloud_push",
   "requirements": [
-    "pyworxcloud==2.1.6"
+    "pyworxcloud==2.1.7"
   ],
   "after_dependencies": [
     "http"
@@ -17,5 +17,5 @@
     "pyworxcloud"
   ],
   "config_flow": true,
-  "version": "2.1.3"
+  "version": "2.1.4"
 }
