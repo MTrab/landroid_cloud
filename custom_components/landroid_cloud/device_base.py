@@ -24,6 +24,7 @@ from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.dispatcher import async_dispatcher_connect, dispatcher_send
 from homeassistant.helpers.entity_registry import EntityRegistry
 from homeassistant.helpers.event import async_call_later
+from homeassistant.util import slugify as util_slugify
 from pyworxcloud import WorxCloud
 from pyworxcloud.exceptions import (
     MQTTException,
@@ -215,17 +216,17 @@ class LandroidCloudBaseEntity(LandroidLogger):
         self.log(
             LoggerType.SETUP,
             "Connecting to dispatcher signal '%s'",
-            f"{UPDATE_SIGNAL}_{self.api.device.name}",
+            util_slugify(f"{UPDATE_SIGNAL}_{self.api.device.name}"),
         )
         async_dispatcher_connect(
             self.hass,
-            f"{UPDATE_SIGNAL}_{self.api.device.name}",
+            util_slugify(f"{UPDATE_SIGNAL}_{self.api.device.name}"),
             self.update_callback,
         )
 
         # async_dispatcher_connect(
         #     self.hass,
-        #     f"{UPDATE_SIGNAL_ZONES}_{self.api.device.name}",
+        #     util_slugify(f"{UPDATE_SIGNAL_ZONES}_{self.api.device.name}"),
         #     self.update_selected_zone,
         # )
 
@@ -403,7 +404,9 @@ class LandroidCloudBaseEntity(LandroidLogger):
         self.log(LoggerType.DATA_UPDATE, "Starting forced Web API refresh.")
 
         self.hass.async_add_executor_job(self.api.device.update)
-        dispatcher_send(self.hass, f"{UPDATE_SIGNAL}_{self.api.device.name}")
+        dispatcher_send(
+            self.hass, util_slugify(f"{UPDATE_SIGNAL}_{self.api.device.name}")
+        )
 
 
 class LandroidCloudSelectEntity(LandroidCloudBaseEntity, SelectEntity):

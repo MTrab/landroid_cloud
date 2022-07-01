@@ -1,12 +1,10 @@
 """Adds support for Landroid Cloud compatible devices."""
 from __future__ import annotations
-from copy import deepcopy
 
 from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
 from homeassistant.core import HomeAssistant
 from homeassistant.loader import async_get_integration
-
 from pyworxcloud import WorxCloud, exceptions
 
 from .api import LandroidAPI
@@ -23,7 +21,7 @@ from .const import (
 )
 from .scheme import CONFIG_SCHEMA  # Used for validating YAML config - DO NOT DELETE!
 from .services import async_setup_services
-from .utils.logger import LandroidLogger, LogLevel, LoggerType
+from .utils.logger import LandroidLogger, LoggerType, LogLevel
 
 LOGGER = LandroidLogger(name=__name__, log_level=LOGLEVEL)
 

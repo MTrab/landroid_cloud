@@ -1,5 +1,6 @@
 """Representing the Landroid Cloud API interface."""
 from __future__ import annotations
+
 from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
@@ -7,18 +8,11 @@ from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.dispatcher import dispatcher_send
 from homeassistant.util import slugify as util_slugify
-
 from pyworxcloud import WorxCloud
 from pyworxcloud.events import LandroidEvent
 from pyworxcloud.utils import Capability, DeviceCapability, DeviceHandler
 
-from .const import (
-    ATTR_CLOUD,
-    DOMAIN,
-    UPDATE_SIGNAL,
-    LandroidFeatureSupport,
-)
-
+from .const import ATTR_CLOUD, DOMAIN, UPDATE_SIGNAL, LandroidFeatureSupport
 from .utils.logger import LandroidLogger, LoggerType
 
 
@@ -60,6 +54,7 @@ class LandroidAPI:
 
         self.logger = LandroidLogger(name=__name__, api=self)
         self.cloud.set_callback(LandroidEvent.DATA_RECEIVED, self.receive_data)
+        self.device.mqtt.set_eventloop(self.hass.loop)
 
     def check_features(self, features: int, callback_func: Any = None) -> None:
         """Check which features the device supports.
@@ -101,7 +96,7 @@ class LandroidAPI:
             LoggerType.DATA_UPDATE,
             "Received new data from API to %s, dispatching %s",
             name,
-            f"{UPDATE_SIGNAL}_{name}",
+            util_slugify(f"{UPDATE_SIGNAL}_{name}"),
             device=name,
         )
-        dispatcher_send(self.hass, f"{UPDATE_SIGNAL}_{name}")
+        dispatcher_send(self.hass, util_slugify(f"{UPDATE_SIGNAL}_{name}"))
