@@ -63,11 +63,11 @@ OTS_SCHEME = vol.Schema(
 DEVICE_FEATURES = (
     LandroidFeatureSupport.MOWER
     | LandroidFeatureSupport.BUTTON
+    | LandroidFeatureSupport.SELECT
     | LandroidFeatureSupport.LOCK
     | LandroidFeatureSupport.CONFIG
     | LandroidFeatureSupport.RESTART
     | LandroidFeatureSupport.REFRESH
-    | LandroidFeatureSupport.SELECT
     | LandroidFeatureSupport.SETZONE
 )
 

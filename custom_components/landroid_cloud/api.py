@@ -1,5 +1,8 @@
 """Representing the Landroid Cloud API interface."""
 from __future__ import annotations
+import asyncio
+from datetime import datetime, timedelta
+import time
 
 from typing import Any
 
@@ -13,7 +16,7 @@ from pyworxcloud.events import LandroidEvent
 from pyworxcloud.utils import Capability, DeviceCapability, DeviceHandler
 
 from .const import ATTR_CLOUD, DOMAIN, UPDATE_SIGNAL, LandroidFeatureSupport
-from .utils.logger import LandroidLogger, LoggerType
+from .utils.logger import LandroidLogger, LogLevel, LoggerType
 
 
 class LandroidAPI:
@@ -54,9 +57,67 @@ class LandroidAPI:
 
         self.logger = LandroidLogger(name=__name__, api=self)
         self.cloud.set_callback(LandroidEvent.DATA_RECEIVED, self.receive_data)
+        self.cloud.set_callback(LandroidEvent.MQTT_RATELIMIT, self._on_ratelimit)
+        self.cloud.set_callback(LandroidEvent.MQTT_PUBLISH, self._on_mqtt_publish)
+        self.cloud.set_callback(LandroidEvent.LOG, self._on_log)
+
+    @callback
+    def _on_log(self, message: str, level=str) -> None:
+        """Callback for logging from pyworxcloud module."""
+        self.logger.log(LoggerType.API, message, log_level=LogLevel(level), device=None)
+
+    @callback
+    def _on_ratelimit(self, message: str) -> None:
+        """Callback when ratelimit is reached on MQTT handler."""
+        self.logger.log(
+            LoggerType.API, message, log_level=LogLevel.WARNING, device=None
+        )
+
+    @callback
+    def _on_mqtt_publish(
+        self, message: str, topic: str, device: str, qos: int, retain: bool
+    ) -> None:
+        """Callback when trying to publish a message to the API endpoint."""
+        self.logger.log(
+            LoggerType.API,
+            'Sending "%s" to "%s" via "%s" with QOS "%s" and retain flag set to %s',
+            message,
+            device,
+            topic,
+            qos,
+            retain,
+            log_level=LogLevel.WARNING,
+            device=None,
+        )
+
+    async def async_await_features(self, timeout: int = 10) -> None:
+        """Used to await feature checks."""
+        timeout_at = datetime.now() + timedelta(seconds=timeout)
+
+        while (
+            not self.device.capabilities.ready
+            or not self.features_loaded
+            # or self.features == 0
+        ):
+            if datetime.now() > timeout_at:
+                raise TimeoutError(
+                    f"Timeout waiting for features to load for {self.name} {self.device.capabilities.ready} {self.features_loaded}"
+                )
+
+            # pass
+
+        if (
+            not self.device.capabilities.ready
+            or not self.features_loaded
+            or self.features == 0
+        ):
+            raise TimeoutError("Timeout waiting for features to load")
+
         self.device.mqtt.set_eventloop(self.hass.loop)
 
-    def check_features(self, features: int, callback_func: Any = None) -> None:
+    def check_features(
+        self, features: int, callback_func: Any = None
+    ) -> None:
         """Check which features the device supports.
 
         Args:
@@ -65,27 +126,34 @@ class LandroidAPI:
                 Function to be called when the features
                 have been assessed. Defaults to None.
         """
+        logger = LandroidLogger(name=__name__, api=self, log_level=LogLevel.DEBUG)
+        logger.log(LoggerType.FEATURE_ASSESSMENT, "Features: %s", features)
 
         capabilities: Capability = self.device.capabilities
+
         if capabilities.check(DeviceCapability.PARTY_MODE):
             self.logger.log(LoggerType.FEATURE_ASSESSMENT, "Party mode capable")
             features = features | LandroidFeatureSupport.PARTYMODE
 
         if capabilities.check(DeviceCapability.ONE_TIME_SCHEDULE):
             self.logger.log(LoggerType.FEATURE_ASSESSMENT, "OTS capable")
-            features = (
-                features | LandroidFeatureSupport.EDGECUT | LandroidFeatureSupport.OTS
-            )
+            features = features | LandroidFeatureSupport.OTS
+
+        if capabilities.check(DeviceCapability.EDGE_CUT):
+            self.logger.log(LoggerType.FEATURE_ASSESSMENT, "Edge Cut capable")
+            features = features | LandroidFeatureSupport.EDGECUT
 
         if capabilities.check(DeviceCapability.TORQUE):
             self.logger.log(LoggerType.FEATURE_ASSESSMENT, "Torque capable")
             features = features | LandroidFeatureSupport.TORQUE
 
+        old_feature = self.features
         self.features = features
-        self.features_loaded = True
+     
+        # self.features_loaded = True
 
         if callback_func:
-            callback_func()
+            callback_func(old_feature)
 
     @callback
     def receive_data(

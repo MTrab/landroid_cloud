@@ -53,12 +53,16 @@ async def async_setup_entry(
     for name, info in hass.data[DOMAIN][config.entry_id][ATTR_DEVICES].items():
         api: LandroidAPI = info["api"]
         device = vendor_to_device(api.config["type"])
-
-        while not api.features_loaded:
-            await asyncio.sleep(1)
-
         logger = LandroidLogger(name=__name__, api=api, log_level=LOGLEVEL)
-        logger.log(LoggerType.FEATURE_ASSESSMENT, "Assessing available buttons")
+
+        await api.async_await_features()
+
+        logger.log(
+            LoggerType.FEATURE_ASSESSMENT,
+            "Features fully loaded, feature bit: %s -- assessing available button entities",
+            api.features,
+        )
+
         for button in BUTTONS:
             constructor = None
             if (

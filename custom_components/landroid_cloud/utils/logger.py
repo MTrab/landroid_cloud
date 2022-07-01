@@ -75,14 +75,14 @@ class LandroidLogger:
         message: str,
         *args,
         log_level: str | None = None,
-        device: str | None = None,
+        device: str | bool | None = False,
     ):
         """Write to logger component."""
         logger = logging.getLogger(self.logname)
 
         prefix = ""
         if not log_type in [LoggerType.NONE, None]:
-            if not isinstance(device, type(None)):
+            if not device and not isinstance(device, type(None)):
                 prefix = (
                     "(" + log_type + ") "
                     if isinstance(self.logapi, type(None))
