@@ -350,7 +350,9 @@ class LandroidCloudBaseEntity(LandroidLogger):
         if not capabilities.check(DeviceCapability.TORQUE) and ATTR_TORQUE in data:
             data.pop(ATTR_TORQUE)
 
-        data[ATTR_MQTTCONNECTED] = device.mqtt.connected if hasattr(device,"mqtt") else False
+        data[ATTR_MQTTCONNECTED] = (
+            device.mqtt.connected if hasattr(device, "mqtt") else False
+        )
 
         data[ATTR_LANDROIDFEATURES] = self.api.features
 
@@ -393,7 +395,7 @@ class LandroidCloudBaseEntity(LandroidLogger):
         if "percent" in device.battery:
             self._battery_level = device.battery["percent"]
 
-        mqtt = device.mqtt.connected if hasattr(device,"mqtt") else False
+        mqtt = device.mqtt.connected if hasattr(device, "mqtt") else False
         if not mqtt:
             # If MQTT is not connected, then pull state from API
             self.log(
