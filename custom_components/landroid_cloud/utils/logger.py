@@ -82,7 +82,7 @@ class LandroidLogger:
 
         prefix = ""
         if not log_type in [LoggerType.NONE, None]:
-            if not device:
+            if not isinstance(device, type(None)):
                 prefix = (
                     "(" + log_type + ") "
                     if isinstance(self.logapi, type(None))
