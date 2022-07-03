@@ -44,11 +44,14 @@ async def async_setup_entry(
         api: LandroidAPI = info["api"]
         device = vendor_to_device(api.config["type"])
 
-        while not api.features_loaded:
-            await asyncio.sleep(1)
+        await api.async_await_features()
 
         logger = LandroidLogger(name=__name__, api=api, log_level=LOGLEVEL)
-        logger.log(LoggerType.FEATURE_ASSESSMENT, "Assessing available selects")
+        logger.log(
+            LoggerType.FEATURE_ASSESSMENT,
+            "Features fully loaded, feature bit: %s -- assessing available select entities",
+            api.features,
+        )
         for select in SELECTS:
             constructor = None
             if (

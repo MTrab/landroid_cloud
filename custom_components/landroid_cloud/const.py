@@ -32,8 +32,8 @@ https://github.com/mtrab/landroid_cloud/issues
 # Some defaults
 DEFAULT_NAME = "landroid"
 DOMAIN = "landroid_cloud"
-PLATFORMS = ["vacuum", "select", "button"]
-# PLATFORMS = ["vacuum"]
+PLATFORMS_SECONDARY = []
+PLATFORMS_PRIMARY = ["vacuum"]
 UPDATE_SIGNAL = "landroid_cloud_update"
 LOGLEVEL = LogLevel.DEBUG
 
@@ -128,6 +128,7 @@ ATTR_DEVICES = "devices"
 ATTR_DEVICEIDS = "device_ids"
 ATTR_DEVICE = "device"
 ATTR_API = "api"
+ATTR_FEATUREBITS = "feature_bits"
 
 # Available cloud vendors
 CLOUDS = []

@@ -1,12 +1,13 @@
 """Adds support for Landroid Cloud compatible devices."""
 from __future__ import annotations
+import asyncio
 from copy import deepcopy
+import time
 
 from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
 from homeassistant.core import HomeAssistant
 from homeassistant.loader import async_get_integration
-
 from pyworxcloud import WorxCloud, exceptions
 
 from .api import LandroidAPI
@@ -16,14 +17,16 @@ from .const import (
     ATTR_DEVICE,
     ATTR_DEVICEIDS,
     ATTR_DEVICES,
+    ATTR_FEATUREBITS,
     DOMAIN,
     LOGLEVEL,
-    PLATFORMS,
+    PLATFORMS_PRIMARY,
+    PLATFORMS_SECONDARY,
     STARTUP,
 )
 from .scheme import CONFIG_SCHEMA  # Used for validating YAML config - DO NOT DELETE!
 from .services import async_setup_services
-from .utils.logger import LandroidLogger, LogLevel, LoggerType
+from .utils.logger import LandroidLogger, LoggerType, LogLevel
 
 LOGGER = LandroidLogger(name=__name__, log_level=LOGLEVEL)
 
@@ -58,10 +61,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.data.setdefault(DOMAIN, {})
 
     await check_unique_id(hass, entry)
-    result = await _setup(hass, entry)
+    result = await _async_setup(hass, entry)
 
     if result:
-        hass.config_entries.async_setup_platforms(entry, PLATFORMS)
+        hass.config_entries.async_setup_platforms(entry, PLATFORMS_PRIMARY)
 
     async_setup_services(hass)
 
@@ -70,16 +73,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
-    unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+    unload_ok = await hass.config_entries.async_unload_platforms(
+        entry, PLATFORMS_PRIMARY + PLATFORMS_SECONDARY
+    )
 
     services = []
     if unload_ok:
         await hass.async_add_executor_job(
             hass.data[DOMAIN][entry.entry_id][ATTR_CLOUD].disconnect
         )
-
-        # for device in range(hass.data[DOMAIN][entry.entry_id]["count"]):
-        #     services.extend(hass.data[DOMAIN][entry.entry_id][device]["api"].services)
 
         hass.data[DOMAIN].pop(entry.entry_id)
 
@@ -98,7 +100,7 @@ async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
     await async_setup_entry(hass, entry)
 
 
-async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+async def _async_setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Setup the integration using a config entry."""
     integration = await async_get_integration(hass, DOMAIN)
     LOGGER.log(
@@ -206,28 +208,35 @@ async def _setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         ATTR_CLOUD: cloud,
         ATTR_DEVICES: {},
         ATTR_DEVICEIDS: {},
+        ATTR_FEATUREBITS: {},
         CONF_EMAIL: cloud_email,
         CONF_PASSWORD: cloud_password,
         CONF_TYPE: cloud_type,
     }
 
-    while not cloud.mqtt.connected:
-        pass  # Await connection
-
-    for name, device in cloud.devices.items():
-        LOGGER.log(
-            LoggerType.SETUP,
-            "Setting up device '%s' on account '%s'",
-            name,
-            hass.data[DOMAIN][entry.entry_id][CONF_EMAIL],
-        )
-        api = LandroidAPI(hass, name, entry)
-        hass.data[DOMAIN][entry.entry_id][ATTR_DEVICEIDS].update({name: None})
-        hass.data[DOMAIN][entry.entry_id][ATTR_DEVICES].update(
-            {name: {ATTR_API: api, ATTR_DEVICE: device}}
-        )
+    await asyncio.gather(
+        *[
+            async_init_device(hass, entry, name, device)
+            for name, device in cloud.devices.items()
+        ]
+    )
 
     return True
+
+
+async def async_init_device(hass, entry, name, device) -> None:
+    """Initialize a device"""
+    LOGGER.log(
+        LoggerType.SETUP,
+        "Setting up device '%s' on account '%s'",
+        name,
+        hass.data[DOMAIN][entry.entry_id][CONF_EMAIL],
+    )
+    api = LandroidAPI(hass, name, entry)
+    hass.data[DOMAIN][entry.entry_id][ATTR_DEVICEIDS].update({name: None})
+    hass.data[DOMAIN][entry.entry_id][ATTR_DEVICES].update(
+        {name: {ATTR_API: api, ATTR_DEVICE: device}}
+    )
 
 
 async def check_unique_id(hass: HomeAssistant, entry: ConfigEntry) -> None:

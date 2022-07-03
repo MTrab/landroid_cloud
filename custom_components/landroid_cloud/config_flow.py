@@ -1,7 +1,6 @@
 """Adds support for Landroid Cloud compatible devices."""
 from __future__ import annotations
 
-
 from homeassistant import config_entries, core, exceptions
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
 

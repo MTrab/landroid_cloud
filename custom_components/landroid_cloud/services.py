@@ -138,6 +138,14 @@ def async_setup_services(hass: HomeAssistant) -> None:
                     log_level=LogLevel.ERROR,
                     device=api.friendly_name,
                 )
+                supported = [service for service in api.services]
+                logger.log(
+                    LoggerType.SERVICE_CALL,
+                    "Supported services for this device: %s",
+                    supported,
+                    log_level=LogLevel.ERROR,
+                    device=api.friendly_name,
+                )
                 return False
 
             if not api.device.online or not api.device.mqtt.connected:
