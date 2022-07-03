@@ -29,12 +29,12 @@ async def async_setup_entry(
         device = vendor_to_device(api.config["type"])
         constructor = device.MowerDevice(hass, api)
 
-        logger = LandroidLogger(name=__name__, api=api, log_level=LOGLEVEL)
-        if not api.features_loaded:
-            logger.log(LoggerType.SETUP, "Features not assessed, calling assessment")
-            api.check_features(
-                int(constructor.base_features)
-            )
+        # logger = LandroidLogger(name=__name__, api=api, log_level=LOGLEVEL)
+        # if not api.features_loaded:
+        #     logger.log(LoggerType.SETUP, "Features not assessed, calling assessment")
+        #     api.check_features(
+        #         int(constructor.base_features)
+        #     )
 
         mowers.append(constructor)
 

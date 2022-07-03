@@ -17,9 +17,11 @@ from .const import (
     ATTR_DEVICE,
     ATTR_DEVICEIDS,
     ATTR_DEVICES,
+    ATTR_FEATUREBITS,
     DOMAIN,
     LOGLEVEL,
-    PLATFORMS,
+    PLATFORMS_PRIMARY,
+    PLATFORMS_SECONDARY,
     STARTUP,
 )
 from .scheme import CONFIG_SCHEMA  # Used for validating YAML config - DO NOT DELETE!
@@ -62,7 +64,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     result = await _async_setup(hass, entry)
 
     if result:
-        hass.config_entries.async_setup_platforms(entry, PLATFORMS)
+        hass.config_entries.async_setup_platforms(entry, PLATFORMS_PRIMARY)
 
     async_setup_services(hass)
 
@@ -71,16 +73,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
-    unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+    unload_ok = await hass.config_entries.async_unload_platforms(
+        entry, PLATFORMS_PRIMARY + PLATFORMS_SECONDARY
+    )
 
     services = []
     if unload_ok:
         await hass.async_add_executor_job(
             hass.data[DOMAIN][entry.entry_id][ATTR_CLOUD].disconnect
         )
-
-        # for device in range(hass.data[DOMAIN][entry.entry_id]["count"]):
-        #     services.extend(hass.data[DOMAIN][entry.entry_id][device]["api"].services)
 
         hass.data[DOMAIN].pop(entry.entry_id)
 
@@ -207,6 +208,7 @@ async def _async_setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         ATTR_CLOUD: cloud,
         ATTR_DEVICES: {},
         ATTR_DEVICEIDS: {},
+        ATTR_FEATUREBITS: {},
         CONF_EMAIL: cloud_email,
         CONF_PASSWORD: cloud_password,
         CONF_TYPE: cloud_type,

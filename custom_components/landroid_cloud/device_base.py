@@ -6,6 +6,7 @@ import asyncio
 import json
 from datetime import timedelta
 from functools import partial
+from pprint import pprint
 from typing import Any
 
 from homeassistant.components.button import ButtonEntity, ButtonEntityDescription
@@ -52,6 +53,7 @@ from .const import (
     ATTR_ZONE,
     BUTTONTYPE_TO_SERVICE,
     DOMAIN,
+    PLATFORMS_SECONDARY,
     SCHEDULE_TO_DAY,
     SCHEDULE_TYPE_MAP,
     SERVICE_CONFIG,
@@ -541,16 +543,21 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
             "Features not assessed, calling assessment with base features at %s",
             self.base_features,
         )
-        await self.api.async_check_features(int(self.base_features))
 
+        while not self.api.device.capabilities.ready:
+            pass
+
+        self.api.check_features(int(self.base_features))
+        self.api.features_loaded = True
         while not self.api.features_loaded:
             self.log(
                 LoggerType.FEATURE_ASSESSMENT,
                 "Waiting for features to be fully loaded, before continuing",
             )
-            pass
 
         self.register_services()
+
+        self.hass.config_entries.async_setup_platforms(self.api.entry, PLATFORMS_SECONDARY)
 
     @property
     def extra_state_attributes(self) -> str:

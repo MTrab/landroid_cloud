@@ -35,6 +35,7 @@ class LandroidAPI:
         self.entry_id = entry.entry_id
         self.data = entry.data
         self.options = entry.options
+        self.entry = entry
         self.cloud: WorxCloud = hass.data[DOMAIN][entry.entry_id][ATTR_CLOUD]
         self.device: DeviceHandler = self.cloud.devices[device_name]
         self.unique_id = entry.unique_id
@@ -86,7 +87,7 @@ class LandroidAPI:
             topic,
             qos,
             retain,
-            log_level=LogLevel.WARNING,
+            log_level=LogLevel.DEBUG,
             device=None,
         )
 
@@ -95,14 +96,11 @@ class LandroidAPI:
         timeout_at = datetime.now() + timedelta(seconds=timeout)
 
         while (
-            not self.device.capabilities.ready
-            or not self.features_loaded
+            not self.features_loaded
             # or self.features == 0
         ):
             if datetime.now() > timeout_at:
-                raise TimeoutError(
-                    f"Timeout waiting for features to load for {self.name} {self.device.capabilities.ready} {self.features_loaded}"
-                )
+                break
 
             # pass
 
@@ -111,13 +109,13 @@ class LandroidAPI:
             or not self.features_loaded
             or self.features == 0
         ):
-            raise TimeoutError("Timeout waiting for features to load")
+            raise ValueError(
+                f"Capabilities ready: {self.device.capabilities.ready} -- Features loaded: {self.features_loaded} -- Feature bits: {self.features}"
+            )
 
         self.device.mqtt.set_eventloop(self.hass.loop)
 
-    def check_features(
-        self, features: int, callback_func: Any = None
-    ) -> None:
+    def check_features(self, features: int, callback_func: Any = None) -> None:
         """Check which features the device supports.
 
         Args:
@@ -147,9 +145,10 @@ class LandroidAPI:
             self.logger.log(LoggerType.FEATURE_ASSESSMENT, "Torque capable")
             features = features | LandroidFeatureSupport.TORQUE
 
+        logger.log(LoggerType.FEATURE_ASSESSMENT, "Features: %s", features)
         old_feature = self.features
         self.features = features
-     
+
         # self.features_loaded = True
 
         if callback_func:
