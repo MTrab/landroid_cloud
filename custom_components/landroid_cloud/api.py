@@ -1,8 +1,7 @@
 """Representing the Landroid Cloud API interface."""
 from __future__ import annotations
-import asyncio
+
 from datetime import datetime, timedelta
-import time
 
 from typing import Any
 
@@ -97,12 +96,9 @@ class LandroidAPI:
 
         while (
             not self.features_loaded
-            # or self.features == 0
         ):
             if datetime.now() > timeout_at:
                 break
-
-            # pass
 
         if (
             not self.device.capabilities.ready
@@ -148,8 +144,6 @@ class LandroidAPI:
         logger.log(LoggerType.FEATURE_ASSESSMENT, "Features: %s", features)
         old_feature = self.features
         self.features = features
-
-        # self.features_loaded = True
 
         if callback_func:
             callback_func(old_feature)

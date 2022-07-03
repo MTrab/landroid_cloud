@@ -1,12 +1,10 @@
 """Define device classes."""
 # pylint: disable=unused-argument,too-many-instance-attributes,no-self-use
 from __future__ import annotations
-import asyncio
 
 import json
 from datetime import timedelta
 from functools import partial
-from pprint import pprint
 from typing import Any
 
 from homeassistant.components.button import ButtonEntity, ButtonEntityDescription
@@ -231,12 +229,6 @@ class LandroidCloudBaseEntity(LandroidLogger):
             util_slugify(f"{UPDATE_SIGNAL}_{self.api.device.name}"),
             self.update_callback,
         )
-
-        # async_dispatcher_connect(
-        #     self.hass,
-        #     util_slugify(f"{UPDATE_SIGNAL_ZONES}_{self.api.device.name}"),
-        #     self.update_selected_zone,
-        # )
 
     @callback
     def update_callback(self):
@@ -557,7 +549,9 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
 
         self.register_services()
 
-        self.hass.config_entries.async_setup_platforms(self.api.entry, PLATFORMS_SECONDARY)
+        self.hass.config_entries.async_setup_platforms(
+            self.api.entry, PLATFORMS_SECONDARY
+        )
 
     @property
     def extra_state_attributes(self) -> str:
