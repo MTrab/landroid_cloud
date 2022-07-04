@@ -1,6 +1,6 @@
-name: Close-label
+name: Auto label
 on:
-  pull-request:
+  pull_request:
     types:
       - closed
 
