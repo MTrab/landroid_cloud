@@ -1,0 +1,13 @@
+name: Close-label
+on:
+  pull-request:
+    types:
+      - closed
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: logerfo/close-label@0.0.4
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
