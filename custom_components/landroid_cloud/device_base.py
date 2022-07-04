@@ -350,11 +350,11 @@ class LandroidCloudBaseEntity(LandroidLogger):
 
         data[ATTR_LANDROIDFEATURES] = self.api.features
 
-        if hasattr(data, "gps"):
+        if hasattr(device, "gps"):
             data.update(
                 {
-                    ATTR_LATITUDE: data.gps["latitude"],
-                    ATTR_LONGITUDE: data.gps["longitude"],
+                    ATTR_LATITUDE: device.gps["latitude"],
+                    ATTR_LONGITUDE: device.gps["longitude"],
                 }
             )
 
