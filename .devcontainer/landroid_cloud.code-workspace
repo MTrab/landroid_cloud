@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../../config"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"*.yaml": "home-assistant"
+		}
+	}
+}
