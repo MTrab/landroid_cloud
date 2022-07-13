@@ -1,6 +1,7 @@
 """Define device classes."""
 # pylint: disable=unused-argument,too-many-instance-attributes,no-self-use
 from __future__ import annotations
+import asyncio
 
 import json
 from datetime import timedelta
@@ -536,8 +537,14 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
             self.base_features,
         )
 
-        while not self.api.device.capabilities.ready:
-            pass
+        if not self.api.device.online:
+            logger.log(
+                LoggerType.SETUP, "Device is currently offline, skipping further setup."
+            )
+            return False
+
+        # while not self.api.device.capabilities.ready:
+        #     asyncio.sleep(1)
 
         self.api.check_features(int(self.base_features))
         self.api.features_loaded = True
