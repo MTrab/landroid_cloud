@@ -58,12 +58,3 @@ Then launch the task `Run Home Assistant on port 9123`, and launch the debugger
 with the existing debugging configuration `Python: Attach Local`.
 
 For more information, look at [the Remote Python Debugger integration documentation](https://www.home-assistant.io/integrations/debugpy/).
-
-### Workaround for creating new devcontainer
-
-As seen in [this issue](https://github.com/custom-components/integration_blueprint/issues/71) there is an error creating a new devcontainer.
-The current workaround is confirmed working:
-
-1. `nano /usr/share/container/upgrade`
-2. replace `python3 -m pip install --upgrade git+git://github.com/home-assistant/home-assistant.git@dev` with `python3 -m pip install --upgrade git+https://github.com/home-assistant/home-assistant.git@dev`, save changes
-3. run `container install`
