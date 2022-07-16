@@ -18,7 +18,7 @@ jobs:
 
       - name: "Update manifest.json"
         run: |
-          python3 ${{ github.workspace }}/.github/scripts/update_hacs_manifest.py --version ${{ steps.version.outputs.version }} --path /custom_components/energidataservice/
+          python3 ${{ github.workspace }}/.github/scripts/update_hacs_manifest.py --version ${{ steps.version.outputs.version }} --path /custom_components/landroid_cloud/
       - name: Commit manifest update
         run: |
           if [ $(git diff HEAD | wc -l) -gt 30 ]
@@ -29,13 +29,13 @@ jobs:
           git push || true
       - name: Create zip
         run: |
-          cd custom_components/energidataservice
-          zip energidataservice.zip -r ./
+          cd custom_components/landroid_cloud
+          zip landroid_cloud.zip -r ./
       - name: Upload zip to release
         uses: svenstaro/upload-release-action@v1-release
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ./custom_components/energidataservice/energidataservice.zip
-          asset_name: energidataservice.zip
+          file: ./custom_components/landroid_cloud/landroid_cloud.zip
+          asset_name: landroid_cloud.zip
           tag: ${{ github.ref }}
           overwrite: true
