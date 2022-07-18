@@ -27,6 +27,7 @@ jobs:
           git config user.name "GitHub Actions"
           git commit -m "Updated manifest.json" -a || true
           git push || true
+          fi
       - name: Create zip
         run: |
           cd custom_components/landroid_cloud
