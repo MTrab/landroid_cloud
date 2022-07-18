@@ -14,7 +14,7 @@ def update_manifest():
         if value in ["--version", "-V"]:
             version = sys.argv[index + 1]
         if value in ["--path", "-P"]:
-            manifest_path = sys.argv[index + 1]
+            manifest_path = str(sys.argv[index + 1])[1:-1]
         if value in ["--requirements", "-R"]:
             dorequirements = True
 
@@ -27,7 +27,7 @@ def update_manifest():
     ) as manifestfile:
         manifest = json.load(manifestfile)
 
-    manifest["version"] = version.removeprefix("v")
+    manifest["version"] = version
 
     if dorequirements:
         requirements = []
