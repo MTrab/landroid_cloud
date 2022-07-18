@@ -17,5 +17,5 @@
     "requirements": [
         "pyworxcloud==2.1.15"
     ],
-    "version": "--path"
+    "version": "2.2.2"
 }
