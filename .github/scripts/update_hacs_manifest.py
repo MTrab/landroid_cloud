@@ -22,7 +22,7 @@ def update_manifest():
         sys.exit("Missing path to manifest file")
 
     with open(
-        f"{os.getcwd()}/{manifest_path.removesuffix('/').removesuffix('/')}/manifest.json",
+        f"{os.getcwd()}{manifest_path}manifest.json",
         encoding="UTF-8",
     ) as manifestfile:
         manifest = json.load(manifestfile)
