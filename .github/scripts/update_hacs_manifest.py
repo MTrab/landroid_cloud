@@ -12,7 +12,7 @@ def update_manifest():
 
     for index, value in enumerate(sys.argv):
         if value in ["--version", "-V"]:
-            version = sys.argv[index + 1]
+            version = str(sys.argv[index + 1]).replace("v", "")
         if value in ["--path", "-P"]:
             manifest_path = str(sys.argv[index + 1])[1:-1]
         if value in ["--requirements", "-R"]:
@@ -22,7 +22,7 @@ def update_manifest():
         sys.exit("Missing path to manifest file")
 
     with open(
-        f"{os.getcwd()}{manifest_path}manifest.json",
+        f"{os.getcwd()}/{manifest_path}/manifest.json",
         encoding="UTF-8",
     ) as manifestfile:
         manifest = json.load(manifestfile)
@@ -52,7 +52,7 @@ def update_manifest():
             manifest["requirements"] = new_requirements
 
     with open(
-        f"{os.getcwd()}/{manifest_path.removesuffix('/').removesuffix('/')}/manifest.json",
+        f"{os.getcwd()}/{manifest_path}/manifest.json",
         "w",
         encoding="UTF-8",
     ) as manifestfile:
