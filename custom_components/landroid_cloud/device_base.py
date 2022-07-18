@@ -32,6 +32,7 @@ from pyworxcloud.exceptions import (
     NoOneTimeScheduleError,
     NoPartymodeError,
     RateLimit,
+    RequestException,
 )
 from pyworxcloud.utils import Capability, DeviceCapability
 from pyworxcloud.utils.capability import CAPABILITY_TO_TEXT
@@ -724,6 +725,14 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
                 LoggerType.SERVICE_CALL,
                 exc.message,
                 log_level=LogLevel.WARNING,
+            )
+        except RequestException as exc:
+            self.log(
+                LoggerType.SERVICE_CALL,
+                "%s Zone requested: %s",
+                exc.args[0],
+                zone,
+                log_level=LogLevel.ERROR,
             )
 
     async def async_set_schedule(self, data: dict | None = None) -> None:
