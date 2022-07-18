@@ -274,6 +274,8 @@ torque:
       name: Wheel torque
       description: Set wheel torque. Ranging from -50% to 50%
       example: 22
+      required: true
+      default: 0
       selector:
         number:
           min: -50
@@ -288,3 +290,18 @@ refresh:
     entity:
       integration: landroid_cloud
       domain: vacuum
+
+send_raw:
+  description: Send a raw JSON command to the device
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: vacuum
+  fields:
+    json:
+      name: JSON data
+      description: Data to send, formatted as valid JSON
+      example: "{'cmd': 1}"
+      required: true
+      selector:
+        text:

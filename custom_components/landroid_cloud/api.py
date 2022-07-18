@@ -12,9 +12,15 @@ from homeassistant.helpers.dispatcher import dispatcher_send
 from homeassistant.util import slugify as util_slugify
 from pyworxcloud import WorxCloud
 from pyworxcloud.events import LandroidEvent
-from pyworxcloud.utils import Capability, DeviceCapability, DeviceHandler
+from pyworxcloud.utils import DeviceCapability, DeviceHandler
 
-from .const import ATTR_CLOUD, DOMAIN, UPDATE_SIGNAL, LandroidFeatureSupport
+from .const import (
+    API_TO_INTEGRATION_FEATURE_MAP,
+    ATTR_CLOUD,
+    DOMAIN,
+    UPDATE_SIGNAL,
+    LandroidFeatureSupport,
+)
 from .utils.logger import LandroidLogger, LogLevel, LoggerType
 
 
@@ -94,9 +100,7 @@ class LandroidAPI:
         """Used to await feature checks."""
         timeout_at = datetime.now() + timedelta(seconds=timeout)
 
-        while (
-            not self.features_loaded
-        ):
+        while not self.features_loaded:
             if datetime.now() > timeout_at:
                 break
 
@@ -111,7 +115,9 @@ class LandroidAPI:
 
         self.device.mqtt.set_eventloop(self.hass.loop)
 
-    def check_features(self, features: int, callback_func: Any = None) -> None:
+    def check_features(
+        self, features: int | None = None, callback_func: Any = None
+    ) -> None:
         """Check which features the device supports.
 
         Args:
@@ -120,33 +126,45 @@ class LandroidAPI:
                 Function to be called when the features
                 have been assessed. Defaults to None.
         """
-        logger = LandroidLogger(name=__name__, api=self, log_level=LogLevel.DEBUG)
-        logger.log(LoggerType.FEATURE_ASSESSMENT, "Features: %s", features)
+        self.logger.log(LoggerType.FEATURE_ASSESSMENT, "Assessing available features")
+        if isinstance(features, type(None)):
+            features = self.features
 
-        capabilities: Capability = self.device.capabilities
+        # capabilities: Capability = self.device.capabilities
 
-        if capabilities.check(DeviceCapability.PARTY_MODE):
+        if self.has_feature(DeviceCapability.PARTY_MODE):
             self.logger.log(LoggerType.FEATURE_ASSESSMENT, "Party mode capable")
             features = features | LandroidFeatureSupport.PARTYMODE
 
-        if capabilities.check(DeviceCapability.ONE_TIME_SCHEDULE):
+        if self.has_feature(DeviceCapability.ONE_TIME_SCHEDULE):
             self.logger.log(LoggerType.FEATURE_ASSESSMENT, "OTS capable")
             features = features | LandroidFeatureSupport.OTS
 
-        if capabilities.check(DeviceCapability.EDGE_CUT):
+        if self.has_feature(DeviceCapability.EDGE_CUT):
             self.logger.log(LoggerType.FEATURE_ASSESSMENT, "Edge Cut capable")
             features = features | LandroidFeatureSupport.EDGECUT
 
-        if capabilities.check(DeviceCapability.TORQUE):
+        if self.has_feature(DeviceCapability.TORQUE):
             self.logger.log(LoggerType.FEATURE_ASSESSMENT, "Torque capable")
             features = features | LandroidFeatureSupport.TORQUE
 
-        logger.log(LoggerType.FEATURE_ASSESSMENT, "Features: %s", features)
         old_feature = self.features
         self.features = features
 
         if callback_func:
             callback_func(old_feature)
+
+    def has_feature(self, api_feature: DeviceCapability) -> bool:
+        """Check if the feature is already known.
+
+        Return True if feature is supported and not known to us.
+        Returns False if not supported or already known.
+        """
+
+        if API_TO_INTEGRATION_FEATURE_MAP[api_feature] & self.features != 0:
+            return False
+        else:
+            return self.device.capabilities.check(api_feature)
 
     @callback
     def receive_data(

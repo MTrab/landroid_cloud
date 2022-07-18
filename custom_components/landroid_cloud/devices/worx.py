@@ -69,6 +69,7 @@ DEVICE_FEATURES = (
     | LandroidFeatureSupport.RESTART
     | LandroidFeatureSupport.REFRESH
     | LandroidFeatureSupport.SETZONE
+    | LandroidFeatureSupport.RAW
 )
 
 
@@ -160,7 +161,7 @@ class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
             "Setting wheel torque to %s",
             data[ATTR_TORQUE],
         )
-        tmpdata = {"cfg": {"tq": data[ATTR_TORQUE]}}
+        tmpdata = {"tq": data[ATTR_TORQUE]}
         await self.hass.async_add_executor_job(
             partial(device.send, json.dumps(tmpdata))
         )
