@@ -12,12 +12,9 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
-      - name: Get version
-        id: version
-        uses: home-assistant/actions/helpers/version@master
-      - name: "Update manifest.json"
+      - name: Update manifest.json version to ${{ github.ref_name }}
         run: |
-          python3 ${{ github.workspace }}/.github/scripts/update_hacs_manifest.py --version ${{ steps.version.outputs.version }} --path /custom_components/landroid_cloud/
+          python3 ${{ github.workspace }}/.github/scripts/update_hacs_manifest.py --version ${{ github.ref_name }} --path /custom_components/landroid_cloud/
       - name: Commit manifest update
         run: |
           git config user.name github-actions
