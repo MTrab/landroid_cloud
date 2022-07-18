@@ -11,7 +11,9 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
-
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
       - name: Get version
         id: version
         uses: home-assistant/actions/helpers/version@master
@@ -21,13 +23,11 @@ jobs:
           python3 ${{ github.workspace }}/.github/scripts/update_hacs_manifest.py --version ${{ steps.version.outputs.version }} --path /custom_components/landroid_cloud/
       - name: Commit manifest update
         run: |
-          if [ $(git diff HEAD | wc -l) -gt 30 ]
-          then
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config user.name "GitHub Actions"
-          git commit -m "Updated manifest.json" -a || true
-          git push || true
-          fi
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add ./custom_components/landroid_cloud/manifest.json
+          git commit -m "Updated manifest.json"
+          git push
       - name: Create zip
         run: |
           cd custom_components/landroid_cloud
