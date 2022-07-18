@@ -3,12 +3,10 @@ from __future__ import annotations
 
 from homeassistant import config_entries, core, exceptions
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
-
 from pyworxcloud import WorxCloud
 
 from .const import DOMAIN, LOGLEVEL
 from .scheme import DATA_SCHEMA
-
 from .utils.logger import LandroidLogger, LoggerType, LogLevel
 
 LOGGER = LandroidLogger(name=__name__, log_level=LOGLEVEL)

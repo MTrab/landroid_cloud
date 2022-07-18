@@ -1,8 +1,8 @@
 """Define device classes."""
 # pylint: disable=unused-argument,too-many-instance-attributes,no-self-use
 from __future__ import annotations
-import asyncio
 
+import asyncio
 import json
 from datetime import timedelta
 from functools import partial
@@ -938,7 +938,9 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
 
         self.log(LoggerType.SERVICE_CALL, "Data being sent: %s", data[ATTR_JSON])
         try:
-            await self.hass.async_add_executor_job(partial(device.send, data[ATTR_JSON]))
+            await self.hass.async_add_executor_job(
+                partial(device.send, data[ATTR_JSON])
+            )
         except MQTTException:
             self.log(
                 LoggerType.SERVICE_CALL,

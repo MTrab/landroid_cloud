@@ -6,11 +6,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .api import LandroidAPI
-from .const import (
-    ATTR_DEVICES,
-    DOMAIN,
-)
-
+from .const import ATTR_DEVICES, DOMAIN
 from .utils.entity_setup import vendor_to_device
 
 

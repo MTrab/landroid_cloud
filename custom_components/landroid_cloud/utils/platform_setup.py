@@ -3,11 +3,12 @@ from __future__ import annotations
 
 import logging
 
-from homeassistant.const import __version__ as ha_version
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import __version__ as ha_version
 from homeassistant.core import HomeAssistant
 
 _LOGGER = logging.getLogger(__name__)
+
 
 async def async_setup_entity_platforms(
     hass: HomeAssistant,

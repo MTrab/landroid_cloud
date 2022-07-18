@@ -5,7 +5,6 @@ import voluptuous as vol
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
 from homeassistant.helpers import config_validation as cv
 
-
 from .const import (
     ATTR_FRIDAY_BOUNDARY,
     ATTR_FRIDAY_END,

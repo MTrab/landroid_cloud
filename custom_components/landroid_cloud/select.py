@@ -1,11 +1,10 @@
 """Representation of a select entity."""
 from __future__ import annotations
+
 import asyncio
 from copy import deepcopy
 
-from homeassistant.components.select import (
-    SelectEntityDescription,
-)
+from homeassistant.components.select import SelectEntityDescription
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityCategory

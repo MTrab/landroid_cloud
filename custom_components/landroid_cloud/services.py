@@ -3,12 +3,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from homeassistant.const import CONF_ENTITY_ID, CONF_DEVICE_ID
+from homeassistant.const import CONF_DEVICE_ID, CONF_ENTITY_ID
 from homeassistant.core import HomeAssistant, ServiceCall, callback
-from homeassistant.helpers import (
-    device_registry as dr,
-    entity_registry as er,
-)
+from homeassistant.helpers import device_registry as dr
+from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.device_registry import DeviceEntry
 
 from .api import LandroidAPI
@@ -41,7 +39,7 @@ from .scheme import (
     SET_ZONE_SCHEME,
     TORQUE_SCHEME,
 )
-from .utils.logger import LandroidLogger, LogLevel, LoggerType
+from .utils.logger import LandroidLogger, LoggerType, LogLevel
 
 
 @dataclass

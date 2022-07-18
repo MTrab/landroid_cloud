@@ -1,24 +1,18 @@
 """Worx Landroid device definition."""
 # pylint: disable=unused-argument,relative-beyond-top-level
 from __future__ import annotations
+
 import json
-
 from functools import partial
-import voluptuous as vol
 
+import voluptuous as vol
 from homeassistant.components.button import ButtonEntity, ButtonEntityDescription
 from homeassistant.components.select import SelectEntityDescription
 from homeassistant.components.vacuum import StateVacuumEntity
 from homeassistant.core import HomeAssistant
-
-# from homeassistant.helpers.dispatcher import dispatcher_send
-
-from pyworxcloud import (
-    WorxCloud,
-)
+from pyworxcloud import WorxCloud
 
 from ..api import LandroidAPI
-
 from ..const import (
     ATTR_BOUNDARY,
     ATTR_MULTIZONE_DISTANCES,
@@ -29,16 +23,17 @@ from ..const import (
     ATTR_TORQUE,
     LandroidFeatureSupport,
 )
-
 from ..device_base import (
+    SUPPORT_LANDROID_BASE,
     LandroidCloudButtonBase,
     LandroidCloudMowerBase,
-    SUPPORT_LANDROID_BASE,
     LandroidCloudSelectEntity,
     LandroidCloudSelectZoneEntity,
 )
-
 from ..utils.logger import LoggerType
+
+# from homeassistant.helpers.dispatcher import dispatcher_send
+
 
 SUPPORTED_FEATURES = SUPPORT_LANDROID_BASE
 

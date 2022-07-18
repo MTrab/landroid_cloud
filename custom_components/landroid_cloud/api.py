@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta
-
 from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
@@ -21,7 +20,7 @@ from .const import (
     UPDATE_SIGNAL,
     LandroidFeatureSupport,
 )
-from .utils.logger import LandroidLogger, LogLevel, LoggerType
+from .utils.logger import LandroidLogger, LoggerType, LogLevel
 
 
 class LandroidAPI:
