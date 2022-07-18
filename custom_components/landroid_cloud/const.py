@@ -14,6 +14,7 @@ from homeassistant.components.vacuum import (
     STATE_RETURNING,
 )
 from pyworxcloud.clouds import CloudType
+from pyworxcloud.utils import DeviceCapability
 
 from .utils.logger import LogLevel
 
@@ -47,6 +48,7 @@ SERVICE_RESTART = "restart"
 SERVICE_EDGECUT = "edgecut"
 SERVICE_OTS = "ots"
 SERVICE_SCHEDULE = "schedule"
+SERVICE_SEND_RAW = "send_raw"
 SERVICE_TORQUE = "torque"
 
 # Extra states
@@ -65,6 +67,7 @@ ATTR_RAINDELAY = "raindelay"
 ATTR_TIMEEXTENSION = "timeextension"
 ATTR_ZONE = "zone"
 ATTR_BOUNDARY = "boundary"
+ATTR_JSON = "json"
 ATTR_RUNTIME = "runtime"
 ATTR_TORQUE = "torque"
 ATTR_SERVICES = "services"
@@ -275,3 +278,12 @@ class LandroidFeatureSupport(IntEnum):
     SCHEDULES = 1024
     TORQUE = 2048
     REFRESH = 4096
+    RAW = 8192
+
+
+API_TO_INTEGRATION_FEATURE_MAP = {
+    DeviceCapability.EDGE_CUT: LandroidFeatureSupport.EDGECUT,
+    DeviceCapability.ONE_TIME_SCHEDULE: LandroidFeatureSupport.OTS,
+    DeviceCapability.PARTY_MODE: LandroidFeatureSupport.PARTYMODE,
+    DeviceCapability.TORQUE: LandroidFeatureSupport.TORQUE,
+}

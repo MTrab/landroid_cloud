@@ -27,6 +27,7 @@ from .const import (
     SERVICE_REFRESH,
     SERVICE_RESTART,
     SERVICE_SCHEDULE,
+    SERVICE_SEND_RAW,
     SERVICE_SETZONE,
     SERVICE_TORQUE,
     LandroidFeatureSupport,
@@ -35,6 +36,7 @@ from .scheme import (
     CONFIG_SCHEMA,
     EMPTY_SCHEME,
     OTS_SCHEME,
+    RAW_SCHEME,
     SCHEDULE_SCHEME,
     SET_ZONE_SCHEME,
     TORQUE_SCHEME,
@@ -84,6 +86,9 @@ SUPPORTED_SERVICES = [
     ),
     LandroidServiceDescription(
         key=SERVICE_REFRESH, feature=LandroidFeatureSupport.REFRESH
+    ),
+    LandroidServiceDescription(
+        key=SERVICE_SEND_RAW, feature=LandroidFeatureSupport.CONFIG, schema=RAW_SCHEME
     ),
 ]
 
