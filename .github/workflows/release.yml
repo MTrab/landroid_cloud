@@ -12,9 +12,9 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
-      - name: Update manifest.json version to ${{ github.ref_name }}
+      - name: Update manifest.json version to ${{ github.event.release.tag_name }}
         run: |
-          python3 ${{ github.workspace }}/.github/scripts/update_hacs_manifest.py --version ${{ github.ref_name }} --path /custom_components/landroid_cloud/
+          python3 ${{ github.workspace }}/.github/scripts/update_hacs_manifest.py --version ${{ github.event.release.tag_name }} --path /custom_components/landroid_cloud/
       - name: Commit manifest update
         run: |
           git config user.name github-actions
