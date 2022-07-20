@@ -123,6 +123,8 @@ ATTR_WARRANTY = "warranty"
 ATTR_PARTYMODE = "party_mode_enabled"
 ATTR_RSSI = "rssi"
 ATTR_STATUS = "status_info"
+ATTR_PROGRESS = "daily_progress"
+ATTR_NEXT_SCHEDULE = "next_scheduled_start"
 
 # Misc. attributes
 ATTR_NEXT_ZONE = "next_zone"
