@@ -15,7 +15,7 @@
     ],
     "name": "Landroid Cloud",
     "requirements": [
-        "git+https://github.com/mtrab/pyworxcloud@master#pyworxcloud==2.1.18"
+        "pyworxcloud==2.1.18"
     ],
     "version": "2.2.2"
 }
