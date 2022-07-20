@@ -4,10 +4,10 @@ from __future__ import annotations
 
 import asyncio
 import json
-from datetime import timedelta
-from functools import partial
 import pprint
 import time
+from datetime import timedelta
+from functools import partial
 from typing import Any
 
 from homeassistant.components.button import ButtonEntity, ButtonEntityDescription
@@ -391,9 +391,13 @@ class LandroidCloudBaseEntity(LandroidLogger):
         self._attributes.update(
             {
                 ATTR_PROGRESS: device.schedules["daily_progress"]
-                or old_data[ATTR_PROGRESS] if ATTR_PROGRESS in old_data else None,
+                or old_data[ATTR_PROGRESS]
+                if ATTR_PROGRESS in old_data
+                else None,
                 ATTR_NEXT_SCHEDULE: device.schedules["next_schedule_start"]
-                or old_data[ATTR_NEXT_SCHEDULE] if ATTR_NEXT_SCHEDULE in old_data else None,
+                or old_data[ATTR_NEXT_SCHEDULE]
+                if ATTR_NEXT_SCHEDULE in old_data
+                else None,
             }
         )
 

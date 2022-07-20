@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import asyncio
+
 from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
 from homeassistant.core import HomeAssistant
