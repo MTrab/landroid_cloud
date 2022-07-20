@@ -15,7 +15,7 @@
     ],
     "name": "Landroid Cloud",
     "requirements": [
-        "git+https://github.com/mtrab/pyworxcloud@Fixing-buggy-calculations-for-next-scheduled-start-and-daily-progress#pyworxcloud==2.1.17"
+        "pyworxcloud==2.1.17"
     ],
     "version": "2.2.2"
 }
