@@ -69,7 +69,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         await async_setup_entity_platforms(hass, entry, PLATFORMS_PRIMARY)
         # hass.config_entries.async_setup_platforms(entry, PLATFORMS_PRIMARY)
 
-    async_setup_services(hass)
+    await async_setup_services(hass)
 
     return result
 
