@@ -1,8 +1,8 @@
 """Define device classes."""
 # pylint: disable=unused-argument,too-many-instance-attributes,no-self-use
 from __future__ import annotations
-import asyncio
 
+import asyncio
 import json
 from datetime import timedelta
 from functools import partial
@@ -49,6 +49,8 @@ from .const import (
     ATTR_LATITUDE,
     ATTR_LONGITUDE,
     ATTR_MQTTCONNECTED,
+    ATTR_NEXT_SCHEDULE,
+    ATTR_PROGRESS,
     ATTR_RUNTIME,
     ATTR_SERVICE,
     ATTR_TORQUE,
@@ -89,6 +91,8 @@ SUPPORT_LANDROID_BASE = (
     | VacuumEntityFeature.STATE
     | VacuumEntityFeature.STATUS
 )
+
+SCAN_INTERVAL = timedelta(minutes=5)
 
 
 class LandroidCloudBaseEntity(LandroidLogger):
@@ -252,6 +256,7 @@ class LandroidCloudBaseEntity(LandroidLogger):
 
     async def async_update(self):
         """Default async_update"""
+        # self.log(LoggerType.DEVELOP, "Async_update was called", log_level=LogLevel.INFO)
         return
 
     @callback
@@ -378,6 +383,16 @@ class LandroidCloudBaseEntity(LandroidLogger):
                     ATTR_LONGITUDE: device.gps["longitude"],
                 }
             )
+
+        self._attributes.update(
+            {
+                ATTR_PROGRESS: device.schedules["daily_progress"],
+                ATTR_NEXT_SCHEDULE: device.schedules["next_schedule_start"],
+            }
+        )
+
+        device.schedules.pop("daily_progress")
+        device.schedules.pop("next_schedule_start")
 
         self._attributes.update(data)
 
