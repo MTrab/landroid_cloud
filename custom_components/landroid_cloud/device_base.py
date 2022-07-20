@@ -6,6 +6,7 @@ import asyncio
 import json
 from datetime import timedelta
 from functools import partial
+import pprint
 import time
 from typing import Any
 
@@ -384,6 +385,9 @@ class LandroidCloudBaseEntity(LandroidLogger):
                 }
             )
 
+
+        self._attributes.update(data)
+
         self._attributes.update(
             {
                 ATTR_PROGRESS: device.schedules["daily_progress"],
@@ -391,10 +395,10 @@ class LandroidCloudBaseEntity(LandroidLogger):
             }
         )
 
-        device.schedules.pop("daily_progress")
-        device.schedules.pop("next_schedule_start")
+        # device.schedules.pop("daily_progress")
+        # device.schedules.pop("next_schedule_start")
 
-        self._attributes.update(data)
+        pprint.pprint(device.schedules)
 
         self._available = (
             device.online
