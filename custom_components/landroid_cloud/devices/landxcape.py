@@ -59,6 +59,7 @@ DEVICE_FEATURES = (
     | LandroidFeatureSupport.RESTART
     | LandroidFeatureSupport.SELECT
     | LandroidFeatureSupport.SETZONE
+    | LandroidFeatureSupport.SCHEDULES
 )
 
 
