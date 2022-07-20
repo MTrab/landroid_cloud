@@ -5,6 +5,7 @@ from dataclasses import dataclass
 
 from homeassistant.const import CONF_DEVICE_ID, CONF_ENTITY_ID
 from homeassistant.core import HomeAssistant, ServiceCall, callback
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.device_registry import DeviceEntry
@@ -92,7 +93,7 @@ SUPPORTED_SERVICES = [
 
 
 @callback
-def async_setup_services(hass: HomeAssistant) -> None:
+async def async_setup_services(hass: HomeAssistant) -> None:
     """Set up services for Landroid Cloud integration."""
 
     async def async_call_landroid_service(service_call: ServiceCall) -> None:
@@ -124,41 +125,21 @@ def async_setup_services(hass: HomeAssistant) -> None:
             logger = LandroidLogger(name=__name__, api=api, log_level=LOGLEVEL)
 
             if isinstance(api, type(None)):
-                if not isinstance(device, type(None)):
-                    logger.log(
-                        LoggerType.SERVICE_CALL,
-                        "Couldn't match a device with device_id = %s",
-                        device.id,
-                        log_level=LogLevel.ERROR,
-                    )
-                return
+                raise HomeAssistantError(
+                    f"Failed to call service '{service_call.service}'. Config entry for target not found"
+                )
 
             if not service in api.services:
-                logger.log(
-                    LoggerType.SERVICE_CALL,
-                    "The called service, %s, is not supported by this device!",
-                    service,
-                    log_level=LogLevel.ERROR,
-                    device=api.friendly_name,
+                raise HomeAssistantError(
+                    f"Failed to call service '{service_call.service}'. "
+                    "Service is not supported by this device."
                 )
-                supported = [service for service in api.services]
-                logger.log(
-                    LoggerType.SERVICE_CALL,
-                    "Supported services for this device: %s",
-                    supported,
-                    log_level=LogLevel.ERROR,
-                    device=api.friendly_name,
-                )
-                return False
 
             if not api.device.online or not api.device.mqtt.connected:
-                logger.log(
-                    LoggerType.SERVICE_CALL,
-                    "Device is offline, can't send command.",
-                    log_level=LogLevel.ERROR,
-                    device=api.friendly_name,
+                raise HomeAssistantError(
+                    f"Failed to call service '{service_call.service}'. "
+                    "Device is currently offline."
                 )
-                return False
 
             await api.services[service][ATTR_SERVICE](service_data)
 
@@ -180,12 +161,7 @@ async def async_match_api(
     """Match device to API."""
     logger = LandroidLogger(name=__name__, log_level=LOGLEVEL)
     if not hasattr(device, "id"):
-        logger.log(
-            LoggerType.SERVICE_CALL,
-            "No valid device object was specified, not calling service!",
-            log_level=LogLevel.ERROR,
-        )
-        return None
+        raise HomeAssistantError("No valid device object was specified.")
 
     logger.log(LoggerType.SERVICE_CALL, "Trying to match ID '%s'", device.id)
     for possible_entry in hass.data[DOMAIN].values():
