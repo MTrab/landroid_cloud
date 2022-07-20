@@ -6,6 +6,7 @@ import asyncio
 import json
 from datetime import timedelta
 from functools import partial
+import pprint
 import time
 from typing import Any
 
@@ -349,6 +350,7 @@ class LandroidCloudBaseEntity(LandroidLogger):
         device: WorxCloud = self.api.device
 
         data = {}
+        old_data = self._attributes
 
         for key, value in ATTR_MAP.items():
             if hasattr(device, key):
@@ -384,17 +386,19 @@ class LandroidCloudBaseEntity(LandroidLogger):
                 }
             )
 
+        self._attributes.update(data)
+
         self._attributes.update(
             {
-                ATTR_PROGRESS: device.schedules["daily_progress"],
-                ATTR_NEXT_SCHEDULE: device.schedules["next_schedule_start"],
+                ATTR_PROGRESS: device.schedules["daily_progress"]
+                or old_data[ATTR_PROGRESS] if ATTR_PROGRESS in old_data else None,
+                ATTR_NEXT_SCHEDULE: device.schedules["next_schedule_start"]
+                or old_data[ATTR_NEXT_SCHEDULE] if ATTR_NEXT_SCHEDULE in old_data else None,
             }
         )
 
         device.schedules.pop("daily_progress")
         device.schedules.pop("next_schedule_start")
-
-        self._attributes.update(data)
 
         self._available = (
             device.online
