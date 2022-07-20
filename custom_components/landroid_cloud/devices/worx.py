@@ -65,6 +65,7 @@ DEVICE_FEATURES = (
     | LandroidFeatureSupport.REFRESH
     | LandroidFeatureSupport.SETZONE
     | LandroidFeatureSupport.RAW
+    | LandroidFeatureSupport.SCHEDULES
 )
 
 
