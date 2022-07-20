@@ -1,11 +1,12 @@
 """Define device classes."""
 # pylint: disable=unused-argument,too-many-instance-attributes,no-self-use
 from __future__ import annotations
-
 import asyncio
+
 import json
 from datetime import timedelta
 from functools import partial
+import time
 from typing import Any
 
 from homeassistant.components.button import ButtonEntity, ButtonEntityDescription
@@ -695,7 +696,13 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
                 # Try calling safehome
                 await self.hass.async_add_executor_job(device.safehome)
                 # Ensure we are going home, in case the safehome wasn't successful
-                await self.hass.async_add_executor_job(device.home)
+                wait_start = time.time()
+                while time.time() < wait_start + 15:
+                    await asyncio.sleep(1)
+                    if self.state in [STATE_RETURNING, STATE_DOCKED]:
+                        break
+                if not self.state in [STATE_RETURNING, STATE_DOCKED]:
+                    await self.hass.async_add_executor_job(device.home)
             except MQTTException:
                 self.log(
                     LoggerType.SERVICE_CALL,
