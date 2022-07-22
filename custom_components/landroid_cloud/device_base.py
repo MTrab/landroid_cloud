@@ -403,8 +403,11 @@ class LandroidCloudBaseEntity(LandroidLogger):
             }
         )
 
-        device.schedules.pop("daily_progress")
-        device.schedules.pop("next_schedule_start")
+        if "daily_progress" in device.schedules:
+            device.schedules.pop("daily_progress")
+
+        if "daily_progress" in device.schedules:
+            device.schedules.pop("daily_progress")
 
         self._available = (
             device.online
