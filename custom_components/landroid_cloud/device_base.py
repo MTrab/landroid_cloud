@@ -391,13 +391,15 @@ class LandroidCloudBaseEntity(LandroidLogger):
         self._attributes.update(
             {
                 ATTR_PROGRESS: device.schedules["daily_progress"]
-                or old_data[ATTR_PROGRESS]
-                if ATTR_PROGRESS in old_data
-                else None,
+                if "daily_progress" in device.schedules
+                else (old_data[ATTR_PROGRESS] if ATTR_PROGRESS in old_data else None),
                 ATTR_NEXT_SCHEDULE: device.schedules["next_schedule_start"]
-                or old_data[ATTR_NEXT_SCHEDULE]
-                if ATTR_NEXT_SCHEDULE in old_data
-                else None,
+                if "next_schedule_start" in device.schedules
+                else (
+                    old_data[ATTR_NEXT_SCHEDULE]
+                    if ATTR_NEXT_SCHEDULE in old_data
+                    else None
+                ),
             }
         )
 
