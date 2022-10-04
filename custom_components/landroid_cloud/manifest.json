@@ -15,7 +15,7 @@
     ],
     "name": "Landroid Cloud",
     "requirements": [
-        "pyworxcloud==2.1.19"
+        "pyworxcloud==2.1.20"
     ],
     "version": "2.3.1"
 }
