@@ -169,10 +169,10 @@ class LandroidAPI:
     def receive_data(
         self, name: str, device: DeviceHandler  # pylint: disable=unused-argument
     ) -> None:
-        """Callback function when the API sends new data."""
+        """Callback function when the MQTT broker sends new data."""
         self.logger.log(
             LoggerType.DATA_UPDATE,
-            "Received new data from API to %s, dispatching %s",
+            "Received new data from MQTT to %s, dispatching %s",
             name,
             util_slugify(f"{UPDATE_SIGNAL}_{name}"),
             device=name,
