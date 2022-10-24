@@ -107,4 +107,4 @@ Follow this simple guide to make it work again:
 
 ### To-do
 
-* Make this an official integration
+* Make this an official integration (far in the future as there is to many changes right now)
