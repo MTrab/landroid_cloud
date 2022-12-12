@@ -2,6 +2,10 @@
 [![Lokalize translation](https://img.shields.io/static/v1?label=Help%20translate&message=using%20Lokalize&color=green&style=plastic)](https://app.lokalise.com/public/97921736629219cb0306a3.84106577/) [![Buy me a coffee](https://img.shields.io/static/v1?label=Buy%20me%20a%20coffee&message=and%20say%20thanks&color=orange&logo=buymeacoffee&logoColor=white&style=plastic)](https://www.buymeacoffee.com/mtrab)
 
 
+# INTEGRATION IS CURRENTLY NOT WORKING DUE TO API CHANGES
+And because all the devices which I have access to are stored for the winter, I have no possibility to fix the integration until spring.
+IF you want to use this integration AND have a mower that is still online and willing to lend me access to your account, please email me your account credentials on landroid_cloud(at)trab.dk
+
 # Landroid Cloud
 
 This component has been created to be used with Home Assistant.
@@ -11,10 +15,6 @@ Currently these vendors are supported:<br />
 - Worx Landroid
 - Kress
 - LandXcape
-
-## Credit
-
-Credit for inspiring to this component goes to [virtualzone](https://github.com/virtualzone) and [Eisha DeskApp](https://drive.google.com/drive/folders/0B63Mhn1k_KcbdXB5ZjdUUHNCWWc?resourcekey=0-DGwWcHl_QU2d_0clj8Xm3A&usp=sharing).
 
 ### Installation:
 
