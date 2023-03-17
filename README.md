@@ -3,8 +3,7 @@
 
 
 # INTEGRATION IS CURRENTLY NOT WORKING DUE TO API CHANGES
-And because all the devices which I have access to are stored for the winter, I have no possibility to fix the integration until spring.
-IF you want to use this integration AND have a mower that is still online and willing to lend me access to your account, please email me your account credentials on landroid_cloud(at)trab.dk
+A fix is being worked on, but due to not having much spare time because of jobs and other duties I cannot give an ETA on the release.
 
 # Landroid Cloud
 
