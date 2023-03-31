@@ -49,6 +49,9 @@ class LandroidAPI:
         self.features = 0
         self.features_loaded = False
 
+        self.cloud.update(self.device.serial_number)
+        self.cloud._decode_data(self.device)
+
         self._last_state = self.device.online
 
         self.name = util_slugify(f"{device_name}")
@@ -62,38 +65,8 @@ class LandroidAPI:
 
         self.logger = LandroidLogger(name=__name__, api=self)
         self.cloud.set_callback(LandroidEvent.DATA_RECEIVED, self.receive_data)
-        self.cloud.set_callback(LandroidEvent.MQTT_RATELIMIT, self._on_ratelimit)
-        self.cloud.set_callback(LandroidEvent.MQTT_PUBLISH, self._on_mqtt_publish)
-        self.cloud.set_callback(LandroidEvent.LOG, self._on_log)
 
-    @callback
-    def _on_log(self, message: str, level=str) -> None:
-        """Callback for logging from pyworxcloud module."""
-        self.logger.log(LoggerType.API, message, log_level=LogLevel(level), device=None)
-
-    @callback
-    def _on_ratelimit(self, message: str) -> None:
-        """Callback when ratelimit is reached on MQTT handler."""
-        self.logger.log(
-            LoggerType.API, message, log_level=LogLevel.WARNING, device=None
-        )
-
-    @callback
-    def _on_mqtt_publish(
-        self, message: str, topic: str, device: str, qos: int, retain: bool
-    ) -> None:
-        """Callback when trying to publish a message to the API endpoint."""
-        self.logger.log(
-            LoggerType.API,
-            'Sending "%s" to "%s" via "%s" with QOS "%s" and retain flag set to %s',
-            message,
-            device,
-            topic,
-            qos,
-            retain,
-            log_level=LogLevel.DEBUG,
-            device=None,
-        )
+        self.logger.log(LoggerType.API, "Device: %s", self.cloud.devices[device_name])
 
     async def async_await_features(self, timeout: int = 10) -> None:
         """Used to await feature checks."""

@@ -40,7 +40,7 @@ from .scheme import (
     SET_ZONE_SCHEME,
     TORQUE_SCHEME,
 )
-from .utils.logger import LandroidLogger, LoggerType, LogLevel
+from .utils.logger import LandroidLogger, LoggerType
 
 
 @dataclass
@@ -122,7 +122,6 @@ async def async_setup_services(hass: HomeAssistant) -> None:
 
         for device in devices:
             api: LandroidAPI = await async_match_api(hass, device)
-            logger = LandroidLogger(name=__name__, api=api, log_level=LOGLEVEL)
 
             if isinstance(api, type(None)):
                 raise HomeAssistantError(
@@ -135,7 +134,7 @@ async def async_setup_services(hass: HomeAssistant) -> None:
                     "Service is not supported by this device."
                 )
 
-            if not api.device.online or not api.device.mqtt.connected:
+            if not api.device.online:
                 raise HomeAssistantError(
                     f"Failed to call service '{service_call.service}'. "
                     "Device is currently offline."
