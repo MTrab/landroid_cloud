@@ -1,0 +1,21 @@
+name: Language request
+description: Make a request for a new language added to the Lokalise project.
+title: "[LR]: "
+labels: ["translation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This form is only for requesting a new language added for translation in Lokalise.
+
+        Remember to add the requested language in the title.
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: Requested language
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: Language code (ie. de for German)
