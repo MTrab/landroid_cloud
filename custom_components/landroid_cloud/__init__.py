@@ -26,7 +26,6 @@ from .const import (
 from .scheme import CONFIG_SCHEMA  # Used for validating YAML config - DO NOT DELETE!
 from .services import async_setup_services
 from .utils.logger import LandroidLogger, LoggerType, LogLevel
-from .utils.platform_setup import async_setup_entity_platforms
 
 LOGGER = LandroidLogger(name=__name__, log_level=LOGLEVEL)
 
@@ -64,7 +63,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     result = await _async_setup(hass, entry)
 
     if result:
-        await async_setup_entity_platforms(hass, entry, PLATFORMS_PRIMARY)
+        # await async_setup_entity_platforms(hass, entry, PLATFORMS_PRIMARY)
+        await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS_PRIMARY)
         # hass.config_entries.async_setup_platforms(entry, PLATFORMS_PRIMARY)
 
     await async_setup_services(hass)
@@ -205,7 +205,7 @@ async def _async_setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         )
         return False
 
-    await hass.async_add_executor_job(cloud.connect, False, False)
+    await hass.async_add_executor_job(cloud.connect)
 
     hass.data[DOMAIN][entry.entry_id] = {
         ATTR_CLOUD: cloud,
