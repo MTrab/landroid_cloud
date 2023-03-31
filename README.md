@@ -2,9 +2,6 @@
 [![Lokalize translation](https://img.shields.io/static/v1?label=Help%20translate&message=using%20Lokalize&color=green&style=plastic)](https://app.lokalise.com/public/97921736629219cb0306a3.84106577/) [![Buy me a coffee](https://img.shields.io/static/v1?label=Buy%20me%20a%20coffee&message=and%20say%20thanks&color=orange&logo=buymeacoffee&logoColor=white&style=plastic)](https://www.buymeacoffee.com/mtrab)
 
 
-# INTEGRATION IS CURRENTLY NOT WORKING DUE TO API CHANGES
-A fix is being worked on, but due to not having much spare time because of jobs and other duties I cannot give an ETA on the release.
-
 # Landroid Cloud
 
 This component has been created to be used with Home Assistant.
