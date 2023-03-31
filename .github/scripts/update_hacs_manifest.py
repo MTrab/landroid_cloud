@@ -56,7 +56,20 @@ def update_manifest():
         "w",
         encoding="UTF-8",
     ) as manifestfile:
-        manifestfile.write(json.dumps(manifest, indent=4, sort_keys=True))
+        manifestfile.write(
+            json.dumps(
+                {
+                    "domain": manifest["domain"],
+                    "name": manifest["name"],
+                    **{
+                        k: v
+                        for k, v in sorted(manifest.items())
+                        if k not in ("domain", "name")
+                    },
+                },
+                indent=4,
+            )
+        )
 
 
 update_manifest()
