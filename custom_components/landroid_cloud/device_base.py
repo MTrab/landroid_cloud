@@ -5,10 +5,16 @@ from __future__ import annotations
 import asyncio
 import json
 import pprint
+import sys
 import time
 from datetime import timedelta
 from functools import partial
-from typing import Any, Mapping
+from typing import Any, Mapping, Generator
+
+if sys.version_info.major == 3 and sys.version_info.minor >= 10:
+    from collections.abc import MutableMapping
+else:
+    from collections import MutableMapping
 
 from homeassistant.components.button import ButtonEntity, ButtonEntityDescription
 from homeassistant.components.select import SelectEntity, SelectEntityDescription
