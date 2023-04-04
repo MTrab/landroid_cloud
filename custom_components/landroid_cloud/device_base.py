@@ -8,7 +8,7 @@ import pprint
 import time
 from datetime import timedelta
 from functools import partial
-from typing import Any
+from typing import Any, Mapping
 
 from homeassistant.components.button import ButtonEntity, ButtonEntityDescription
 from homeassistant.components.select import SelectEntity, SelectEntityDescription
@@ -619,7 +619,7 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
         )
 
     @property
-    def extra_state_attributes(self) -> str:
+    def extra_state_attributes(self) -> Mapping[str, Any] | None:
         """Return sensor attributes."""
         return self._attributes
 
