@@ -4,13 +4,10 @@
             "initializing": "Initialiserer",
             "offline": "Afbrudt",
             "rain_delay": "Regn forsinkelse",
-            "mowing": "Sl\u00e5r gr\u00e6s",
+            "mowing": "Slår græs",
             "starting": "Starter",
-            "zoning": "Zone tr\u00e6ning",
-            "edgecut": "Klipper kant",
-            "returning": "Returnerer til base",
-            "docked": "Hjemme",
-            "error": "Fejl"
+            "zoning": "Zone træning",
+            "edgecut": "Klipper kant"
         }
     }
 }

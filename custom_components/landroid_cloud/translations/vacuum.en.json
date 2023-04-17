@@ -7,10 +7,7 @@
             "mowing": "Mowing",
             "starting": "Starting",
             "zoning": "Zone training",
-            "edgecut": "Cutting edge",
-            "returning": "Returning to base",
-            "docked": "Home",
-            "error": "Error"
+            "edgecut": "Cutting edge"
         }
     }
 }
