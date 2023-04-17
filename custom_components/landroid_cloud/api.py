@@ -1,5 +1,6 @@
 """Representing the Landroid Cloud API interface."""
 from __future__ import annotations
+import asyncio
 
 from datetime import datetime, timedelta
 from typing import Any
@@ -67,6 +68,13 @@ class LandroidAPI:
         self.cloud.set_callback(LandroidEvent.DATA_RECEIVED, self.receive_data)
 
         self.logger.log(LoggerType.API, "Device: %s", self.cloud.devices[device_name])
+
+    def mqtt_conn_check(self, state: bool) -> None:
+        """Check connection state."""
+        if state is False:
+            asyncio.run_coroutine_threadsafe(
+                self.cloud.connect(), self.hass.loop
+            ).result()
 
     async def async_await_features(self, timeout: int = 10) -> None:
         """Used to await feature checks."""
