@@ -1,7 +1,7 @@
 """Get diagnostics."""
 from __future__ import annotations
-import json
 
+import json
 from typing import Any
 
 from homeassistant.components.diagnostics import async_redact_data
@@ -10,9 +10,8 @@ from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE, CONF_UNIQU
 from homeassistant.core import HomeAssistant
 
 from .api import LandroidAPI
-from .utils.entity_setup import vendor_to_device
-
 from .const import ATTR_CLOUD, ATTR_DEVICEIDS, ATTR_DEVICES, ATTR_FEATUREBITS, DOMAIN
+from .utils.entity_setup import vendor_to_device
 
 TO_REDACT = {
     CONF_UNIQUE_ID,
