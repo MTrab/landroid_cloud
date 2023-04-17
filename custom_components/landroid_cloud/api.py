@@ -66,7 +66,6 @@ class LandroidAPI:
 
         self.logger = LandroidLogger(name=__name__, api=self)
         self.cloud.set_callback(LandroidEvent.DATA_RECEIVED, self.receive_data)
-        self.cloud.set_callback(LandroidEvent.MQTT_CONNECTION, self.mqtt_conn_check)
 
         self.logger.log(LoggerType.API, "Device: %s", self.cloud.devices[device_name])
 

@@ -395,6 +395,9 @@ class LandroidCloudBaseEntity(LandroidLogger):
             )
 
         self._attributes.update(data)
+        self._attributes.update(
+            {"api connected": self.api.cloud.mqtt.client.is_connected()}
+        )
 
         self._attributes.update(
             {
