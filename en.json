@@ -1,0 +1,22 @@
+{
+    "config": {
+        "abort": {
+            "already_exists": "This user account have already been configured"
+        },
+        "error": {
+            "cannot_connect": "Failed to connect",
+            "invalid_auth": "Error in authentication",
+            "unknown": "Unexpected error"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "email": "Email",
+                    "password": "Password",
+                    "type": "Make"
+                },
+                "title": "Connect to your Landroid Cloud account"
+            }
+        }
+    }
+}
