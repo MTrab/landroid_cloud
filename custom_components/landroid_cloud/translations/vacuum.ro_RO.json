@@ -1,13 +1,13 @@
 {
     "state": {
         "landroid_cloud__state": {
+            "edgecut": "Tunde perimetrul",
             "initializing": "Se inițializează",
+            "mowing": "Tunde",
             "offline": "Deconectat",
             "rain_delay": "Întârziere din cauza ploii",
-            "mowing": "Tunde",
             "starting": "Pornește",
-            "zoning": "Antrenament zone",
-            "edgecut": "Tunde perimetrul"
+            "zoning": "Antrenament zone"
         }
     }
 }

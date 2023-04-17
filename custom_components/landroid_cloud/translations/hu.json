@@ -1,0 +1,22 @@
+{
+    "config": {
+        "abort": {
+            "already_exists": ""
+        },
+        "error": {
+            "cannot_connect": "",
+            "invalid_auth": "",
+            "unknown": ""
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "email": "",
+                    "password": "",
+                    "type": ""
+                },
+                "title": ""
+            }
+        }
+    }
+}

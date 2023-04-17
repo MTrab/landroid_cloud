@@ -1,13 +1,13 @@
 {
     "state": {
         "landroid_cloud__state": {
+            "edgecut": "Klipper kant",
             "initializing": "Initialiserer",
+            "mowing": "Slår græs",
             "offline": "Afbrudt",
             "rain_delay": "Regn forsinkelse",
-            "mowing": "Slår græs",
             "starting": "Starter",
-            "zoning": "Zone træning",
-            "edgecut": "Klipper kant"
+            "zoning": "Zone træning"
         }
     }
 }

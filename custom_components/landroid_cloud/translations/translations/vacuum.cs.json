@@ -1,0 +1,9 @@
+{
+    "state": {
+        "landroid_cloud__state": {
+            "docked": "V nabíjecí stanici",
+            "error": "Chyba",
+            "returning": "Návrat do stanice"
+        }
+    }
+}

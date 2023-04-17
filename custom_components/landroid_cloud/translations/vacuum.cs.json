@@ -1,13 +1,13 @@
 {
     "state": {
         "landroid_cloud__state": {
+            "edgecut": "Sekání podél okraje",
             "initializing": "Inicializace",
+            "mowing": "Sekání",
             "offline": "Offline",
             "rain_delay": "Prodleva po dešti",
-            "mowing": "Sekání",
             "starting": "Začínání",
-            "zoning": "",
-            "edgecut": "Sekání podél okraje"
+            "zoning": ""
         }
     }
 }

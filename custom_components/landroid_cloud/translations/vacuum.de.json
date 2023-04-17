@@ -1,13 +1,13 @@
 {
     "state": {
         "landroid_cloud__state": {
+            "edgecut": "Kantenschnitt",
             "initializing": "Initialisierung",
+            "mowing": "Mähen",
             "offline": "Offline",
             "rain_delay": "Regenverzögerung",
-            "mowing": "Mähen",
             "starting": "Startet",
-            "zoning": "Suche Mähbereich",
-            "edgecut": "Kantenschnitt"
+            "zoning": "Suche Mähbereich"
         }
     }
 }

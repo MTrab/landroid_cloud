@@ -1,13 +1,13 @@
 {
     "state": {
         "landroid_cloud__state": {
+            "edgecut": "Przycinanie obrzeży",
             "initializing": "Inicjalizacja",
+            "mowing": "Koszenie",
             "offline": "Niedostępny",
             "rain_delay": "Opóźnienie po deszczu",
-            "mowing": "Koszenie",
             "starting": "Rozpoczynanie",
-            "zoning": "Przyuczanie strefy",
-            "edgecut": "Przycinanie obrzeży"
+            "zoning": "Przyuczanie strefy"
         }
     }
 }

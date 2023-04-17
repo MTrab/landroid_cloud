@@ -1,13 +1,13 @@
 {
     "state": {
         "landroid_cloud__state": {
+            "edgecut": "Cutting edge",
             "initializing": "Initializing",
+            "mowing": "Mowing",
             "offline": "Offline",
             "rain_delay": "Rain delay",
-            "mowing": "Mowing",
             "starting": "Starting",
-            "zoning": "Zone training",
-            "edgecut": "Cutting edge"
+            "zoning": "Zone training"
         }
     }
 }

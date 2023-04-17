@@ -1,13 +1,13 @@
 {
     "state": {
         "landroid_cloud__state": {
+            "edgecut": "Vanguardia",
             "initializing": "Inicialización de",
+            "mowing": "Cortar el césped",
             "offline": "Fuera de línea",
             "rain_delay": "Retraso por lluvia",
-            "mowing": "Cortar el césped",
             "starting": "Empezando por",
-            "zoning": "Formación por zonas",
-            "edgecut": "Vanguardia"
+            "zoning": "Formación por zonas"
         }
     }
 }

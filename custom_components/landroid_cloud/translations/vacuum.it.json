@@ -1,13 +1,13 @@
 {
     "state": {
         "landroid_cloud__state": {
+            "edgecut": "Taglio bordo",
             "initializing": "Inizializzazione in corso",
+            "mowing": "Taglio in corso",
             "offline": "Offline",
             "rain_delay": "Ritardo pioggia",
-            "mowing": "Taglio in corso",
             "starting": "Partenza",
-            "zoning": "Apprendimento zone",
-            "edgecut": "Taglio bordo"
+            "zoning": "Apprendimento zone"
         }
     }
 }
