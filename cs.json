@@ -1,0 +1,22 @@
+{
+    "config": {
+        "abort": {
+            "already_exists": "Tento uživatelský účet již byl nastaven"
+        },
+        "error": {
+            "cannot_connect": "Chyba připojení",
+            "invalid_auth": "Chyba přihlášení",
+            "unknown": "Neočekávaná chyba"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "email": "Email",
+                    "password": "Heslo",
+                    "type": "Model"
+                },
+                "title": "Přihlášení k Landroid Cloud účtu"
+            }
+        }
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "state": {
+        "landroid_cloud__state": {
+            "initializing": "Initialiseren",
+            "offline": "Offline",
+            "rain_delay": "Regenvertraging",
+            "mowing": "Maaien",
+            "starting": "Starten",
+            "zoning": "Zone instellen",
+            "edgecut": "Randroutine"
+        }
+    }
+}

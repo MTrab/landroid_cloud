@@ -1,0 +1,9 @@
+{
+    "state": {
+        "landroid_cloud__state": {
+            "returning": "Returning to base",
+            "docked": "Home",
+            "error": "Error"
+        }
+    }
+}
