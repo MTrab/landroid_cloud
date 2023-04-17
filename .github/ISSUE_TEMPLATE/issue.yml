@@ -51,6 +51,12 @@ body:
         - Home Assistant Container
         - Home Assistant Supervised
         - Home Assistant Core
+  - type: input
+    validations:
+      required: true
+    attributes:
+      label: Which make and model is the mower used for this integration?
+      placeholder: Worx WRxyz or Landroid M500
   - type: markdown
     attributes:
       value: |
@@ -59,7 +65,7 @@ body:
     validations:
       required: true
     attributes:
-      label: Diagnostics information
+      label: Diagnostics information (NOT log entries!)
       placeholder: "drag-and-drop the diagnostics data file here (do not copy-and-paste the content)"
       description: >-
         This integrations provide the ability to [download diagnostic data](https://www.home-assistant.io/docs/configuration/troubleshooting/#debug-logs-and-diagnostics).
@@ -70,6 +76,16 @@ body:
         It generally allows pinpointing defects and thus resolving issues faster.
 
         If you are unable to provide the diagnostics (ie. you cannot add the integration), please write **None** in this field.
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: Relevant log entries
+      description: >-
+        Anything from home-assistant.log that has any direct relevance for this issue
+
+        If you are unable to provide any relevant log entries, please write **None** in this field.
+      render: txt
   - type: textarea
     attributes:
       label: Anything in the logs that might be useful for us?
