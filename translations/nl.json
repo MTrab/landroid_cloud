@@ -1,0 +1,22 @@
+{
+    "config": {
+        "abort": {
+            "already_exists": "Deze gebruiker is al geconfigureerd"
+        },
+        "error": {
+            "cannot_connect": "Kan geen verbinding maken",
+            "invalid_auth": "Fout in authenticatie",
+            "unknown": "Onverwachtse fout"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "email": "Email",
+                    "password": "Wachtwoord",
+                    "type": "Maken"
+                },
+                "title": "Maak verbinding met uw Landroid Cloud-account"
+            }
+        }
+    }
+}

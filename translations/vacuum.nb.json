@@ -1,0 +1,13 @@
+{
+    "state": {
+        "landroid_cloud__state": {
+            "initializing": "Klargjør",
+            "offline": "Frakoblet",
+            "rain_delay": "Regnforsinkelse",
+            "mowing": "Klipper",
+            "starting": "Starter",
+            "zoning": "Sonetrening",
+            "edgecut": "Klipper kant"
+        }
+    }
+}
