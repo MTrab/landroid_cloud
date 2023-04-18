@@ -37,6 +37,11 @@ body:
       placeholder: core-
       description: >
         If known, otherwise leave blank.
+  - type: input
+    validations:
+      required: true
+    attributes:
+      label: What version of the Landroid Cloud integration do you have installed
   - type: dropdown
     validations:
       required: true
