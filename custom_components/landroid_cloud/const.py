@@ -38,6 +38,9 @@ PLATFORMS_PRIMARY = ["vacuum"]
 UPDATE_SIGNAL = "landroid_cloud_update"
 LOGLEVEL = LogLevel.DEBUG
 
+# Redact consts
+REDACT_TITLE = "title"
+
 # Service consts
 SERVICE_CONFIG = "config"
 SERVICE_PARTYMODE = "partymode"
