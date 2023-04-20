@@ -1,23 +1,37 @@
 """Get diagnostics."""
 from __future__ import annotations
 
-import json
 from typing import Any
 
 from homeassistant.components.diagnostics import async_redact_data
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE, CONF_UNIQUE_ID
+from homeassistant.const import (
+    CONF_EMAIL,
+    CONF_LATITUDE,
+    CONF_LONGITUDE,
+    CONF_PASSWORD,
+    CONF_TYPE,
+    CONF_UNIQUE_ID,
+)
 from homeassistant.core import HomeAssistant
 
 from .api import LandroidAPI
-from .const import ATTR_CLOUD, ATTR_DEVICEIDS, ATTR_DEVICES, ATTR_FEATUREBITS, DOMAIN
-from .utils.entity_setup import vendor_to_device
+from .const import (
+    ATTR_CLOUD,
+    ATTR_DEVICEIDS,
+    ATTR_DEVICES,
+    ATTR_FEATUREBITS,
+    DOMAIN,
+    REDACT_TITLE,
+)
 
 TO_REDACT = {
+    CONF_LONGITUDE,
+    CONF_LATITUDE,
     CONF_UNIQUE_ID,
     CONF_PASSWORD,
     CONF_EMAIL,
-    "title",
+    REDACT_TITLE,
 }
 
 
