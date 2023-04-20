@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import asyncio
 import json
-import pprint
 import time
 from datetime import timedelta
 from functools import partial
@@ -26,14 +25,11 @@ from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.dispatcher import async_dispatcher_connect, dispatcher_send
 from homeassistant.helpers.entity_registry import EntityRegistry
-from homeassistant.helpers.event import async_call_later
 from homeassistant.util import slugify as util_slugify
 from pyworxcloud import WorxCloud
 from pyworxcloud.exceptions import (
     NoOneTimeScheduleError,
     NoPartymodeError,
-    RateLimit,
-    RequestException,
 )
 from pyworxcloud.utils import Capability, DeviceCapability
 from pyworxcloud.utils.capability import CAPABILITY_TO_TEXT
@@ -48,7 +44,6 @@ from .const import (
     ATTR_LANDROIDFEATURES,
     ATTR_LATITUDE,
     ATTR_LONGITUDE,
-    ATTR_MQTTCONNECTED,
     ATTR_NEXT_SCHEDULE,
     ATTR_PROGRESS,
     ATTR_RUNTIME,
@@ -835,7 +830,7 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
         )
         await self.hass.async_add_executor_job(
             partial(
-                device.ots,
+                self.api.cloud.ots,
                 device.serial_number,
                 data[ATTR_BOUNDARY],
                 data[ATTR_RUNTIME],
