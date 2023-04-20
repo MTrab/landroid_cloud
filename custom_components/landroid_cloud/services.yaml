@@ -26,6 +26,22 @@ partymode:
       integration: landroid_cloud
       domain: vacuum
 
+setpartymode:
+  description: Set Partymode (if supported)
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: vacuum
+  fields:
+    party_mode_enabled:
+      name: Partymode
+      description: Partymode enabled
+      example: true
+      required: true
+      default: false
+      selector:
+        boolean:
+
 setzone:
   description: Set which zone to be mowed next
   target:

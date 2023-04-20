@@ -41,6 +41,7 @@ LOGLEVEL = LogLevel.DEBUG
 # Service consts
 SERVICE_CONFIG = "config"
 SERVICE_PARTYMODE = "partymode"
+SERVICE_SETPARTYMODE = "setpartymode"
 SERVICE_SETZONE = "setzone"
 SERVICE_LOCK = "lock"
 SERVICE_REFRESH = "refresh"
@@ -281,6 +282,7 @@ class LandroidFeatureSupport(IntEnum):
     TORQUE = 2048
     REFRESH = 4096
     RAW = 8192
+    SETPARTYMODE = 16384
 
 
 API_TO_INTEGRATION_FEATURE_MAP = {
