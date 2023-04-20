@@ -108,9 +108,9 @@ RAW_SCHEME = vol.Schema(
 
 OTS_SCHEME = ""
 
-SET_PARTYMODE_SCHEME = vol.Schema(
+PARTYMODE_SCHEME = vol.Schema(
     {
-        vol.Required(ATTR_PARTYMODE): bool,
+        vol.Optional(ATTR_PARTYMODE): bool,
     },
     extra=vol.ALLOW_EXTRA,
 )

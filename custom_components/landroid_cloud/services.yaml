@@ -20,14 +20,7 @@ edgecut:
       domain: vacuum
 
 partymode:
-  description: Toggle PartyMode (if supported)
-  target:
-    entity:
-      integration: landroid_cloud
-      domain: vacuum
-
-setpartymode:
-  description: Set Partymode (if supported)
+  description: Toggle or set PartyMode (if supported)
   target:
     entity:
       integration: landroid_cloud
@@ -36,8 +29,8 @@ setpartymode:
     party_mode_enabled:
       name: Partymode
       description: Partymode enabled
-      example: true
-      required: true
+      required: false
+      example: false
       default: false
       selector:
         boolean:

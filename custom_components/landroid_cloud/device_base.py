@@ -65,7 +65,6 @@ from .const import (
     SERVICE_LOCK,
     SERVICE_OTS,
     SERVICE_PARTYMODE,
-    SERVICE_SETPARTYMODE,
     SERVICE_REFRESH,
     SERVICE_RESTART,
     SERVICE_SCHEDULE,
@@ -110,7 +109,6 @@ class LandroidCloudBaseEntity(LandroidLogger):
     async def async_ots(self,  data: dict|None = None) -> None:\n
     async def async_set_schedule(self,  data: dict|None = None) -> None:\n
     async def async_set_torque(self,  data: dict|None = None) -> None:\n
-    async def async_set_partymode(self,  data: dict|None = None) -> None:\n
     """
 
     _battery_level: int | None = None
@@ -174,10 +172,6 @@ class LandroidCloudBaseEntity(LandroidLogger):
 
     async def async_set_torque(self, data: dict | None = None) -> None:
         """Set wheel torque."""
-        return None
-
-    async def async_set_partymode(self, data: dict | None = None) -> None:
-        """Set partymode."""
         return None
 
     async def async_send_raw(self, data: dict | None = None) -> None:
@@ -303,9 +297,6 @@ class LandroidCloudBaseEntity(LandroidLogger):
         if self.api.features & LandroidFeatureSupport.PARTYMODE:
             self.api.services[SERVICE_PARTYMODE] = {
                 ATTR_SERVICE: self.async_toggle_partymode,
-            }
-            self.api.services[SERVICE_SETPARTYMODE] = {
-                ATTR_SERVICE: self.async_set_partymode,
             }
 
         if self.api.features & LandroidFeatureSupport.SETZONE:
@@ -812,23 +803,12 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
     async def async_toggle_partymode(self, data: dict | None = None) -> None:
         """Toggle partymode state."""
         device: WorxCloud = self.api.device
-        set_partymode = not bool(device.partymode_enabled)
-        self.log(LoggerType.SERVICE_CALL, "Setting PartyMode to %s", set_partymode)
-        try:
-            await self.hass.async_add_executor_job(
-                partial(
-                    self.api.cloud.set_partymode, device.serial_number, set_partymode
-                )
-            )
-        except NoPartymodeError as ex:
-            self.log(
-                LoggerType.SERVICE_CALL, "%s", ex.args[0], log_level=LogLevel.ERROR
-            )
 
-    async def async_set_partymode(self, data: dict | None = None) -> None:
-        """Set partymode state."""
-        device: WorxCloud = self.api.device
-        set_partymode = bool(data["party_mode_enabled"])
+        if hasattr(data, "party_mode_enabled"):
+            set_partymode = bool(data["party_mode_enabled"])
+        else:
+            set_partymode = not bool(device.partymode_enabled)
+
         self.log(LoggerType.SERVICE_CALL, "Setting PartyMode to %s", set_partymode)
         try:
             await self.hass.async_add_executor_job(

@@ -23,7 +23,6 @@ from .const import (
     SERVICE_LOCK,
     SERVICE_OTS,
     SERVICE_PARTYMODE,
-    SERVICE_SETPARTYMODE,
     SERVICE_REFRESH,
     SERVICE_RESTART,
     SERVICE_SCHEDULE,
@@ -40,7 +39,7 @@ from .scheme import (
     SCHEDULE_SCHEME,
     SET_ZONE_SCHEME,
     TORQUE_SCHEME,
-    SET_PARTYMODE_SCHEME,
+    PARTYMODE_SCHEME,
 )
 from .utils.logger import LandroidLogger, LoggerType
 
@@ -60,12 +59,9 @@ SUPPORTED_SERVICES = [
         key=SERVICE_CONFIG, schema=CONFIG_SCHEMA, feature=LandroidFeatureSupport.CONFIG
     ),
     LandroidServiceDescription(
-        key=SERVICE_PARTYMODE, feature=LandroidFeatureSupport.PARTYMODE
-    ),
-    LandroidServiceDescription(
-        key=SERVICE_SETPARTYMODE,
-        schema=SET_PARTYMODE_SCHEME,
-        feature=LandroidFeatureSupport.SETPARTYMODE,
+        key=SERVICE_PARTYMODE,
+        schema=PARTYMODE_SCHEME,
+        feature=LandroidFeatureSupport.PARTYMODE,
     ),
     LandroidServiceDescription(
         key=SERVICE_SETZONE,
