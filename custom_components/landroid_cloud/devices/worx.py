@@ -159,5 +159,5 @@ class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
         )
         tmpdata = {"tq": data[ATTR_TORQUE]}
         await self.hass.async_add_executor_job(
-            partial(device.send, json.dumps(tmpdata))
+            self.api.cloud.send, device.serial_number, json.dumps(tmpdata)
         )
