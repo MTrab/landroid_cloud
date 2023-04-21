@@ -13,6 +13,7 @@ from .const import (
     ATTR_MONDAY_BOUNDARY,
     ATTR_MONDAY_END,
     ATTR_MONDAY_START,
+    ATTR_PARTYMODE,
     ATTR_SATURDAY_BOUNDARY,
     ATTR_SATURDAY_END,
     ATTR_SATURDAY_START,
@@ -106,3 +107,10 @@ RAW_SCHEME = vol.Schema(
 
 
 OTS_SCHEME = ""
+
+PARTYMODE_SCHEME = vol.Schema(
+    {
+        vol.Optional(ATTR_PARTYMODE): bool,
+    },
+    extra=vol.ALLOW_EXTRA,
+)

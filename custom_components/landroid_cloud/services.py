@@ -39,6 +39,7 @@ from .scheme import (
     SCHEDULE_SCHEME,
     SET_ZONE_SCHEME,
     TORQUE_SCHEME,
+    PARTYMODE_SCHEME,
 )
 from .utils.logger import LandroidLogger, LoggerType
 
@@ -58,7 +59,9 @@ SUPPORTED_SERVICES = [
         key=SERVICE_CONFIG, schema=CONFIG_SCHEMA, feature=LandroidFeatureSupport.CONFIG
     ),
     LandroidServiceDescription(
-        key=SERVICE_PARTYMODE, feature=LandroidFeatureSupport.PARTYMODE
+        key=SERVICE_PARTYMODE,
+        schema=PARTYMODE_SCHEME,
+        feature=LandroidFeatureSupport.PARTYMODE,
     ),
     LandroidServiceDescription(
         key=SERVICE_SETZONE,

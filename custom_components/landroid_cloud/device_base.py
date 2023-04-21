@@ -798,7 +798,12 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
     async def async_toggle_partymode(self, data: dict | None = None) -> None:
         """Toggle partymode state."""
         device: WorxCloud = self.api.device
-        set_partymode = not bool(device.partymode_enabled)
+
+        if hasattr(data, "party_mode_enabled"):
+            set_partymode = bool(data["party_mode_enabled"])
+        else:
+            set_partymode = not bool(device.partymode_enabled)
+
         self.log(LoggerType.SERVICE_CALL, "Setting PartyMode to %s", set_partymode)
         try:
             await self.hass.async_add_executor_job(
