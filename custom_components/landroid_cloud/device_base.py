@@ -27,10 +27,7 @@ from homeassistant.helpers.dispatcher import async_dispatcher_connect, dispatche
 from homeassistant.helpers.entity_registry import EntityRegistry
 from homeassistant.util import slugify as util_slugify
 from pyworxcloud import WorxCloud
-from pyworxcloud.exceptions import (
-    NoOneTimeScheduleError,
-    NoPartymodeError,
-)
+from pyworxcloud.exceptions import NoOneTimeScheduleError, NoPartymodeError
 from pyworxcloud.utils import Capability, DeviceCapability
 from pyworxcloud.utils.capability import CAPABILITY_TO_TEXT
 

@@ -35,11 +35,11 @@ from .scheme import (
     CONFIG_SCHEMA,
     EMPTY_SCHEME,
     OTS_SCHEME,
+    PARTYMODE_SCHEME,
     RAW_SCHEME,
     SCHEDULE_SCHEME,
     SET_ZONE_SCHEME,
     TORQUE_SCHEME,
-    PARTYMODE_SCHEME,
 )
 from .utils.logger import LandroidLogger, LoggerType
 
