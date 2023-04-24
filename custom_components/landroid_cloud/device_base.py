@@ -580,6 +580,7 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
 
     _battery_level: int | None = None
     _attr_state = STATE_INITIALIZING
+    _attr_translation_key = DOMAIN
 
     async def async_added_to_hass(self):
         await super().async_added_to_hass()
