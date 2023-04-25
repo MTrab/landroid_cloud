@@ -796,7 +796,7 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
         """Toggle partymode state."""
         device: WorxCloud = self.api.device
 
-        if hasattr(data, "party_mode_enabled"):
+        if "party_mode_enabled" in data:
             set_partymode = bool(data["party_mode_enabled"])
         else:
             set_partymode = not bool(device.partymode_enabled)
