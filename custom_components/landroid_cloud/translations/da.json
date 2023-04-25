@@ -18,5 +18,20 @@
                 "title": "Forbind til din Landroid Cloud konto"
             }
         }
+    },
+    "entity": {
+        "vacuum": {
+            "landroid_cloud": {
+                "state": {
+                    "initializing": "Initialiserer",
+                    "offline": "Afbrudt",
+                    "rain_delay": "Regn forsinkelse",
+                    "mowing": "Slår græs",
+                    "starting": "Starter",
+                    "zoning": "Zone træning",
+                    "edgecut": "Klipper kant"
+                }
+            }
+        }
     }
 }

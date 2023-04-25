@@ -18,5 +18,20 @@
                 "title": "Conectează-te cu contul tău Landroid Cloud"
             }
         }
+    },
+    "entity": {
+        "vacuum": {
+            "landroid_cloud": {
+                "state": {
+                    "initializing": "Se inițializează",
+                    "offline": "Deconectat",
+                    "rain_delay": "Întârziere din cauza ploii",
+                    "mowing": "Tunde",
+                    "starting": "Pornește",
+                    "zoning": "Antrenament zone",
+                    "edgecut": "Tunde perimetrul"
+                }
+            }
+        }
     }
 }

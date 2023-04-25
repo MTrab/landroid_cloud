@@ -18,5 +18,20 @@
                 "title": "Подключиться к учетной записи Landroid Cloud"
             }
         }
+    },
+    "entity": {
+        "vacuum": {
+            "landroid_cloud": {
+                "state": {
+                    "initializing": "Инициализация",
+                    "offline": "Не в сети",
+                    "rain_delay": "Задержка из-за дождя",
+                    "mowing": "Стрижка",
+                    "starting": "Старт",
+                    "zoning": "Поиск зоны",
+                    "edgecut": "Обрезка края"
+                }
+            }
+        }
     }
 }

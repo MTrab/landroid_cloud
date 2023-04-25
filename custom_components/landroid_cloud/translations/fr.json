@@ -18,5 +18,20 @@
                 "title": "Connectez-vous à votre compte Landroid Cloud"
             }
         }
+    },
+    "entity": {
+        "vacuum": {
+            "landroid_cloud": {
+                "state": {
+                    "initializing": "Initialisation de",
+                    "offline": "Hors ligne",
+                    "rain_delay": "Retard de pluie",
+                    "mowing": "Tonte",
+                    "starting": "Démarrage",
+                    "zoning": "Formation en zone",
+                    "edgecut": "Bordure de coupe"
+                }
+            }
+        }
     }
 }

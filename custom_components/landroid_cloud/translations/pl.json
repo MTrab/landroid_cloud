@@ -18,5 +18,20 @@
                 "title": "Połącz z kontem w chmurze Landroid"
             }
         }
+    },
+    "entity": {
+        "vacuum": {
+            "landroid_cloud": {
+                "state": {
+                    "initializing": "Inicjalizacja",
+                    "offline": "Niedostępny",
+                    "rain_delay": "Opóźnienie po deszczu",
+                    "mowing": "Koszenie",
+                    "starting": "Rozpoczynanie",
+                    "zoning": "Przyuczanie strefy",
+                    "edgecut": "Przycinanie obrzeży"
+                }
+            }
+        }
     }
 }

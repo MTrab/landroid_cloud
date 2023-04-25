@@ -18,5 +18,19 @@
                 "title": "Přihlášení k Landroid Cloud účtu"
             }
         }
+    },
+    "entity": {
+        "vacuum": {
+            "landroid_cloud": {
+                "state": {
+                    "initializing": "Inicializace",
+                    "offline": "Offline",
+                    "rain_delay": "Prodleva po dešti",
+                    "mowing": "Sekání",
+                    "starting": "Začínání",
+                    "edgecut": "Sekání podél okraje"
+                }
+            }
+        }
     }
 }
