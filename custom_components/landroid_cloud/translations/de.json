@@ -18,5 +18,20 @@
                 "title": "Verbinden Sie sich mit Ihrem Landroid Cloud-Konto"
             }
         }
+    },
+    "entity": {
+        "vacuum": {
+            "landroid_cloud": {
+                "state": {
+                    "initializing": "Initialisierung",
+                    "offline": "Offline",
+                    "rain_delay": "Regenverzögerung",
+                    "mowing": "Mähen",
+                    "starting": "Startet",
+                    "zoning": "Suche Mähbereich",
+                    "edgecut": "Kantenschnitt"
+                }
+            }
+        }
     }
 }
