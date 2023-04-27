@@ -29,33 +29,6 @@ Currently these vendors are supported:<br />
 - Restart Home Assistant.
 - Go to Integrations and add the Landroid Cloud integration
 
-### Example entry for configuration.yaml (legacy)
-
-```
-landroid_cloud:
-  - email: this@example.com
-    password: YourPassword
-```
-
-You can add multiple accounts like in this example:
-
-```
-landroid_cloud:
-  - email: this@example.com
-    password: YourPassword
-  - email: another@example.com
-    password: AnotherPassword
-```
-
-If you have LandXcape or Kress robots you can add `type` to the config instead of default 'worx':
-
-```
-landroid_cloud:
-  - email: this@example.com
-    password: YourPassword
-    type: landxcape
-```
-
 ### Entities & Services
 
 Once installed, the following entities are created in Home Assistant:
