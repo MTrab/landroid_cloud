@@ -27,7 +27,12 @@ from homeassistant.helpers.dispatcher import async_dispatcher_connect, dispatche
 from homeassistant.helpers.entity_registry import EntityRegistry
 from homeassistant.util import slugify as util_slugify
 from pyworxcloud import WorxCloud
-from pyworxcloud.exceptions import NoOneTimeScheduleError, NoPartymodeError
+from pyworxcloud.exceptions import (
+    NoOneTimeScheduleError,
+    NoPartymodeError,
+    ZoneNotDefined,
+    ZoneNoProbability,
+)
 from pyworxcloud.utils import Capability, DeviceCapability
 from pyworxcloud.utils.capability import CAPABILITY_TO_TEXT
 
@@ -713,10 +718,17 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
         """Set next zone to cut."""
         device: WorxCloud = self.api.device
         zone = data["zone"]
-        self.log(LoggerType.SERVICE_CALL, "Setting zone to %s", zone)
-        await self.hass.async_add_executor_job(
-            partial(self.api.cloud.setzone, device.serial_number, str(zone))
-        )
+        try:
+            self.log(LoggerType.SERVICE_CALL, "Setting zone to %s", zone)
+            await self.hass.async_add_executor_job(
+                partial(self.api.cloud.setzone, device.serial_number, str(zone))
+            )
+        except ZoneNotDefined:
+            raise HomeAssistantError("The requested zone is not defined") from None
+        except ZoneNoProbability:
+            raise HomeAssistantError(
+                "The requested zone has no probability set"
+            ) from None
 
     async def async_set_schedule(self, data: dict | None = None) -> None:
         """Set or change the schedule."""
