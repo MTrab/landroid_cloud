@@ -765,7 +765,7 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
                 )
                 schedule[SCHEDULE_TYPE_MAP[schedule_type]].append(current)
 
-        if schedule_type == "primary":
+        if schedule_type == "primary" and "secondary" in device.schedules:
             # We are generating a primary schedule
             # To keep a secondary schedule we need to pass this thru to the dataset
             schedule[SCHEDULE_TYPE_MAP["secondary"]] = pass_thru(
