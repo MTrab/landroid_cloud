@@ -11,6 +11,8 @@ Currently these vendors are supported:<br />
 - Kress
 - LandXcape
 
+<u>NOTE:</u> Landroid Vision is currently NOT supported.
+
 ### Installation:
 
 #### HACS
