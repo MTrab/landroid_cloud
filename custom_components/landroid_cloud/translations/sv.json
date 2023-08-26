@@ -13,7 +13,7 @@
                 "data": {
                     "email": "E-post",
                     "password": "Lösenord",
-                    "type": "Gör"
+                    "type": "Märke"
                 },
                 "title": "Anslut till ditt Landroid Cloud-konto"
             }
@@ -23,13 +23,13 @@
         "vacuum": {
             "landroid_cloud": {
                 "state": {
-                    "initializing": "Initialisering av",
+                    "initializing": "Initialiserar",
                     "offline": "Offline",
-                    "rain_delay": "Fördröjning av regn",
-                    "mowing": "Gräsklippning",
-                    "starting": "Startsida",
-                    "zoning": "Zonträning",
-                    "edgecut": "Skärande kant"
+                    "rain_delay": "Regnfördröjning",
+                    "mowing": "Klipper",
+                    "starting": "Startar",
+                    "zoning": "Söker zon",
+                    "edgecut": "Kantklippning"
                 }
             }
         }
