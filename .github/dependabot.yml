@@ -1,18 +1,28 @@
 version: 2
 updates:
-- package-ecosystem: github-actions
-  directory: "/"
-  schedule:
-    interval: daily
-- package-ecosystem: pip
-  directory: "/.github/workflows"
-  schedule:
-    interval: daily
-- package-ecosystem: pip
-  directory: "/"
-  schedule:
-    interval: daily
-    time: "04:00"
-  labels:
-    - dependencies
-    - patch
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: daily
+    labels:
+      - dependencies
+      - patch
+      - skip-changelog
+  - package-ecosystem: pip
+    directory: "/.github/workflows"
+    schedule:
+      interval: daily
+    labels:
+      - dependencies
+      - patch
+      - skip-changelog
+  - package-ecosystem: pip
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "04:00"
+    labels:
+      - dependencies
+      - patch
+    ignore:
+      - dependency-name: "homeassistant"
