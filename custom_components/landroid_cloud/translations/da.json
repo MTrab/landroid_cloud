@@ -23,15 +23,203 @@
         "vacuum": {
             "landroid_cloud": {
                 "state": {
+                    "edgecut": "Klipper kant",
                     "initializing": "Initialiserer",
+                    "mowing": "Slår græs",
                     "offline": "Afbrudt",
                     "rain_delay": "Regn forsinkelse",
-                    "mowing": "Slår græs",
                     "starting": "Starter",
-                    "zoning": "Zone træning",
-                    "edgecut": "Klipper kant"
+                    "zoning": "Zone træning"
                 }
             }
+        }
+    },
+    "services": {
+        "config": {
+            "description": "Ændre konfigurationsparametre",
+            "fields": {
+                "multizone_distances": {
+                    "description": "Indstil multi zone afstande i meter. 0 = Deaktiveret. Format: 15, 80, 120, 155",
+                    "name": "Multi zone afstand"
+                },
+                "multizone_probabilities": {
+                    "description": "Indstil multi zone sandsynligheder. Format: 50, 10, 20, 20",
+                    "name": "Multi zone sandsynlighed"
+                },
+                "raindelay": {
+                    "description": "Indstil regnforsinkelse. Tid i minutter fra 0 til 300. 0 = Deaktiveret",
+                    "name": "Regn forsinkelse"
+                },
+                "timeextension": {
+                    "description": "Indstil tidsforlængelse. Forlængelse angives i % fra -100 til 100",
+                    "name": "Tidsforlængelse"
+                }
+            },
+            "name": "Indstil zone"
+        },
+        "edgecut": {
+            "description": "Start kantklip (hvis understøttet)",
+            "name": "Kantklip"
+        },
+        "lock": {
+            "description": "Skift låse status",
+            "name": "Lås/oplås enheden"
+        },
+        "ots": {
+            "description": "Start engangs kørsel (hvis understøttet)",
+            "fields": {
+                "boundary": {
+                    "description": "Skal kanten klippes?",
+                    "name": "Kantklip"
+                },
+                "runtime": {
+                    "description": "Klippetid i minutter inden der returneres til opladeren",
+                    "name": "Klippetid"
+                }
+            },
+            "name": "Engangs kørsel"
+        },
+        "partymode": {
+            "description": "Indstil PartyMode (hvis understøttet)",
+            "fields": {
+                "party_mode_enabled": {
+                    "description": "PartyMode aktiveret",
+                    "name": "Aktiver PartyMode"
+                }
+            },
+            "name": "PartyMode"
+        },
+        "refresh": {
+            "description": "Send en kommando til enheden for at starte en data opdatering - BENYT KUN I SJÆLDNE TILFÆLDE",
+            "name": "Opdater enheds  informationer"
+        },
+        "restart": {
+            "description": "Genstarter enheden",
+            "name": "Genstart enhed"
+        },
+        "schedule": {
+            "description": "Indstil eller rediger planen for græsslåning",
+            "fields": {
+                "friday_boundary": {
+                    "description": "Skal vi starte denne handling med at klippe kanten?",
+                    "name": "Fredag, Kant"
+                },
+                "friday_end": {
+                    "description": "Klokslet for stop om fredagen",
+                    "name": "Fredag, Slut"
+                },
+                "friday_start": {
+                    "description": "Klokslet for start om fredagen",
+                    "name": "Fredag, Start"
+                },
+                "monday_boundary": {
+                    "description": "Skal vi starte denne handling med at klippe kanten?",
+                    "name": "Mandag, Kant"
+                },
+                "monday_end": {
+                    "description": "Klokslet for stop om mandagen",
+                    "name": "Mandag, Slut"
+                },
+                "monday_start": {
+                    "description": "Klokslet for start om mandagen",
+                    "name": "Mandag, Start"
+                },
+                "saturday_boundary": {
+                    "description": "Skal vi starte denne handling med at klippe kanten?",
+                    "name": "Lørdag, Kant"
+                },
+                "saturday_end": {
+                    "description": "Klokslet for stop om lørdagen?",
+                    "name": "Lørdag, Slut"
+                },
+                "saturday_start": {
+                    "description": "Klokslet for start om lørdagen",
+                    "name": "Lørdag, Start"
+                },
+                "sunday_boundary": {
+                    "description": "Skal vi starte denne handling med at klippe kanten?",
+                    "name": "Søndag, Kant"
+                },
+                "sunday_end": {
+                    "description": "Klokslet for stop om søndagen?",
+                    "name": "Søndag, Slut"
+                },
+                "sunday_start": {
+                    "description": "Klokslet for start om søndagen",
+                    "name": "Søndag, Start"
+                },
+                "thursday_boundary": {
+                    "description": "Skal vi starte denne handling med at klippe kanten?",
+                    "name": "Torsdag, Kant"
+                },
+                "thursday_end": {
+                    "description": "Klokslet for stop om torsdagen",
+                    "name": "Torsdag, Slut"
+                },
+                "thursday_start": {
+                    "description": "Klokslet for start om torsdagen",
+                    "name": "Onsdag, Start"
+                },
+                "tuesday_boundary": {
+                    "description": "Skal vi starte denne handling med at klippe kanten?",
+                    "name": "Tirsdag, Kant"
+                },
+                "tuesday_end": {
+                    "description": "Klokslet for stop om tirsdagen",
+                    "name": "Tirsdag, Slut"
+                },
+                "tuesday_start": {
+                    "description": "Klokslet for start om tirsdagen",
+                    "name": "Tirsdag, Start"
+                },
+                "type": {
+                    "description": "Rediger primær eller sekundær plan?",
+                    "name": "Type"
+                },
+                "wednesday_boundary": {
+                    "description": "Skal vi starte denne handling med at klippe kanten?",
+                    "name": "Onsdag, Kant"
+                },
+                "wednesday_end": {
+                    "description": "Klokslet for stop om onsdagen",
+                    "name": "Onsdag, Slut"
+                },
+                "wednesday_start": {
+                    "description": "Klokslet for start om onsdagen",
+                    "name": "Onsdag, Start"
+                }
+            },
+            "name": "Indstil eller rediger plan"
+        },
+        "send_raw": {
+            "description": "Send en raw JSON kommando til enheden",
+            "fields": {
+                "json": {
+                    "description": "Data der skal sendes, formateret som gyldig JSON",
+                    "name": "JSON data"
+                }
+            },
+            "name": "Send RAW kommando"
+        },
+        "setzone": {
+            "description": "Indstil hvilken zone der skal slås næste gang",
+            "fields": {
+                "zone": {
+                    "description": "Indstil næste zone til klipning. Fra 0 til 3",
+                    "name": "Zone"
+                }
+            },
+            "name": "Indstil zone"
+        },
+        "torque": {
+            "description": "Indstil moment på hjulene (hvis understøttet)",
+            "fields": {
+                "torque": {
+                    "description": "Indstil moment leveret til hjulene. Fra -50% til 50%",
+                    "name": "Moment"
+                }
+            },
+            "name": "Moment"
         }
     }
 }

@@ -23,14 +23,203 @@
         "vacuum": {
             "landroid_cloud": {
                 "state": {
-                    "initializing": "Inicializace",
+                    "edgecut": "Sekání podél okraje",
+                    "initializing": "Initializing",
+                    "mowing": "Sekání",
                     "offline": "Offline",
                     "rain_delay": "Prodleva po dešti",
-                    "mowing": "Sekání",
                     "starting": "Začínání",
-                    "edgecut": "Sekání podél okraje"
+                    "zoning": "Zone training"
                 }
             }
+        }
+    },
+    "services": {
+        "config": {
+            "description": "Set device config parameters",
+            "fields": {
+                "multizone_distances": {
+                    "description": "Set multizone distance array in meters. 0 = Disabled. Format: 15, 80, 120, 155",
+                    "name": "Multi zone distances"
+                },
+                "multizone_probabilities": {
+                    "description": "Set multizone probabilities array. Format: 50, 10, 20, 20",
+                    "name": "Multi zone probabilities"
+                },
+                "raindelay": {
+                    "description": "Set rain delay. Time in minutes ranging from 0 to 300. 0 = Disabled",
+                    "name": "Prodleva po dešti"
+                },
+                "timeextension": {
+                    "description": "Set time extension. Extension in % ranging from -100 to 100",
+                    "name": "Time extension"
+                }
+            },
+            "name": "Set zone"
+        },
+        "edgecut": {
+            "description": "Start edgecut (if supported)",
+            "name": "Border-/Edgecut"
+        },
+        "lock": {
+            "description": "Toggle device lock",
+            "name": "Lock/Unlock device"
+        },
+        "ots": {
+            "description": "Start One-Time-Schedule (if supported)",
+            "fields": {
+                "boundary": {
+                    "description": "Do boundary (Edge/Border cut)",
+                    "name": "Boundary"
+                },
+                "runtime": {
+                    "description": "Run time in minutes before returning to charging station",
+                    "name": "Run time"
+                }
+            },
+            "name": "One-Time-Schedule"
+        },
+        "partymode": {
+            "description": "Toggle or set PartyMode (if supported)",
+            "fields": {
+                "party_mode_enabled": {
+                    "description": "Partymode enabled",
+                    "name": "Enable Partymode"
+                }
+            },
+            "name": "Partymode"
+        },
+        "refresh": {
+            "description": "Send a refresh request to the API endpoint - ONLY USE FOR RARE CASES",
+            "name": "Refresh device info"
+        },
+        "restart": {
+            "description": "Restarts or reboots device",
+            "name": "Restart device"
+        },
+        "schedule": {
+            "description": "Set or change the schedule of the mower",
+            "fields": {
+                "friday_boundary": {
+                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
+                    "name": "Friday, Boundary"
+                },
+                "friday_end": {
+                    "description": "When should the schedule stop on fridays?",
+                    "name": "Friday, End"
+                },
+                "friday_start": {
+                    "description": "Starting time for fridays",
+                    "name": "Friday, Start"
+                },
+                "monday_boundary": {
+                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
+                    "name": "Monday, Boundary"
+                },
+                "monday_end": {
+                    "description": "When should the schedule stop on mondays?",
+                    "name": "Monday, End"
+                },
+                "monday_start": {
+                    "description": "Starting time for mondays",
+                    "name": "Monday, Start"
+                },
+                "saturday_boundary": {
+                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
+                    "name": "Saturday, Boundary"
+                },
+                "saturday_end": {
+                    "description": "When should the schedule stop on saturdays?",
+                    "name": "Saturday, End"
+                },
+                "saturday_start": {
+                    "description": "Starting time for saturdays",
+                    "name": "Saturday, Start"
+                },
+                "sunday_boundary": {
+                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
+                    "name": "Sunday, Boundary"
+                },
+                "sunday_end": {
+                    "description": "When should the schedule stop on sundays?",
+                    "name": "Sunday, End"
+                },
+                "sunday_start": {
+                    "description": "Starting time for sundays",
+                    "name": "Sunday, Start"
+                },
+                "thursday_boundary": {
+                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
+                    "name": "Thursday, Boundary"
+                },
+                "thursday_end": {
+                    "description": "When should the schedule stop on thursdays?",
+                    "name": "Thursday, End"
+                },
+                "thursday_start": {
+                    "description": "Starting time for thursdays",
+                    "name": "Wednesday, Start"
+                },
+                "tuesday_boundary": {
+                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
+                    "name": "Tuesday, Boundary"
+                },
+                "tuesday_end": {
+                    "description": "When should the schedule stop on tuesdays?",
+                    "name": "Tuesday, End"
+                },
+                "tuesday_start": {
+                    "description": "Starting time for tuesdays",
+                    "name": "Tuesday, Start"
+                },
+                "type": {
+                    "description": "Change primary or secondary schedule?",
+                    "name": "Schedule type"
+                },
+                "wednesday_boundary": {
+                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
+                    "name": "Wednesday, Boundary"
+                },
+                "wednesday_end": {
+                    "description": "When should the schedule stop on wednesdays?",
+                    "name": "Wednesday, End"
+                },
+                "wednesday_start": {
+                    "description": "Starting time for wednesdays",
+                    "name": "Wednesday, Start"
+                }
+            },
+            "name": "Set or update schedule"
+        },
+        "send_raw": {
+            "description": " Send a raw JSON command to the device",
+            "fields": {
+                "json": {
+                    "description": "Data to send, formatted as valid JSON",
+                    "name": "JSON data"
+                }
+            },
+            "name": "Send RAW command"
+        },
+        "setzone": {
+            "description": "Set which zone to be mowed next",
+            "fields": {
+                "zone": {
+                    "description": "Sets the zone number, ranging from 0 to 3, to be mowed next",
+                    "name": "Zone"
+                }
+            },
+            "name": "Set zone"
+        },
+        "torque": {
+            "description": "Set wheel torque (if supported)",
+            "fields": {
+                "torque": {
+                    "description": "Set wheel torque. Ranging from -50% to 50%",
+                    "name": "Wheel torque"
+                }
+            },
+            "name": "Torque"
         }
     }
 }
