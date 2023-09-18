@@ -62,6 +62,7 @@ STATE_MOWING = "mowing"
 STATE_STARTING = "starting"
 STATE_ZONING = "zoning"
 STATE_EDGECUT = "edgecut"
+STATE_ESCAPED_DIGITAL_FENCE = "escaped_digital_fence"
 
 # Service attributes
 ATTR_MULTIZONE_DISTANCES = "multizone_distances"
@@ -159,6 +160,7 @@ STATE_MAP = {
     10: STATE_ERROR,
     11: STATE_ERROR,
     12: STATE_MOWING,
+    13: STATE_ESCAPED_DIGITAL_FENCE,
     30: STATE_RETURNING,
     31: STATE_ZONING,
     32: STATE_EDGECUT,

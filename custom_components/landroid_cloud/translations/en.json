@@ -29,7 +29,8 @@
                     "mowing": "Mowing",
                     "starting": "Starting",
                     "zoning": "Zone training",
-                    "edgecut": "Cutting edge"
+                    "edgecut": "Cutting edge",
+                    "escaped_digital_fence": "Escaped digital fence"
                 }
             }
         }
