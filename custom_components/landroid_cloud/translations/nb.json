@@ -24,6 +24,7 @@
             "landroid_cloud": {
                 "state": {
                     "edgecut": "Klipper kant",
+                    "escaped_digital_fence": "Escaped digital fence",
                     "initializing": "Initializing",
                     "mowing": "Klipper",
                     "offline": "Frakoblet",

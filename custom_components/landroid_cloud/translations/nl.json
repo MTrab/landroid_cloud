@@ -24,6 +24,7 @@
             "landroid_cloud": {
                 "state": {
                     "edgecut": "Randroutine",
+                    "escaped_digital_fence": "Escaped digital fence",
                     "initializing": "Initialiseren",
                     "mowing": "Maaien",
                     "offline": "Offline",

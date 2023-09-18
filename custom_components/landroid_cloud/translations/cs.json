@@ -24,6 +24,7 @@
             "landroid_cloud": {
                 "state": {
                     "edgecut": "Sekání podél okraje",
+                    "escaped_digital_fence": "Escaped digital fence",
                     "initializing": "Initializing",
                     "mowing": "Sekání",
                     "offline": "Offline",
