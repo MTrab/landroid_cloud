@@ -24,6 +24,7 @@
             "landroid_cloud": {
                 "state": {
                     "edgecut": "Taglio bordo",
+                    "escaped_digital_fence": "Escaped digital fence",
                     "initializing": "Avvio in corso",
                     "mowing": "Taglio in corso",
                     "offline": "Offline",
