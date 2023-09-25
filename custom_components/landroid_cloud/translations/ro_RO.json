@@ -24,7 +24,7 @@
             "landroid_cloud": {
                 "state": {
                     "edgecut": "Cosire perimetru",
-                    "escaped_digital_fence": "Escaped digital fence",
+                    "escaped_digital_fence": "A trecut peste gardul digital",
                     "initializing": "Inițializare",
                     "mowing": "Cosire",
                     "offline": "Deconectat",
@@ -37,190 +37,186 @@
     },
     "services": {
         "config": {
-            "description": "Set device config parameters",
+            "description": "Setează parametrii de configurare a dispozitivului",
             "fields": {
                 "multizone_distances": {
-                    "description": "Set multizone distance array in meters. 0 = Disabled. Format: 15, 80, 120, 155",
-                    "name": "Multi zone distances"
+                    "description": "Setează matricea de distanțe multi-zonă, în metri. 0 = Dezactivat. Format: 15, 80, 120, 155",
+                    "name": "Distanțe multi-zonă"
                 },
                 "multizone_probabilities": {
-                    "description": "Set multizone probabilities array. Format: 50, 10, 20, 20",
-                    "name": "Multi zone probabilities"
+                    "description": "Setează matricea de probabilități multi-zonă. Format: 50, 10, 20, 20",
+                    "name": "Probabilități multi-zonă"
                 },
                 "raindelay": {
-                    "description": "Set rain delay. Time in minutes ranging from 0 to 300. 0 = Disabled",
+                    "description": "Setează întârzierea cauzată de ploaie. Interval între 0 și 300 de minute. 0 = Dezactivat",
                     "name": "Întârziere din cauza ploii"
                 },
                 "timeextension": {
-                    "description": "Set time extension. Extension in % ranging from -100 to 100",
-                    "name": "Time extension"
+                    "description": "Setează extensia de timp. Extensia este un procent între -100 și 100",
+                    "name": "Extensie de timp"
                 }
             },
-            "name": "Set zone"
+            "name": "Setează zona"
         },
         "edgecut": {
-            "description": "Start edgecut (if supported)",
-            "name": "Border-/Edgecut"
+            "description": "Pornește cosirea perimetrului (dacă dispozivul permite)",
+            "name": "Cosirea perimetrului"
         },
         "lock": {
-            "description": "Toggle device lock",
-            "name": "Lock/Unlock device"
+            "description": "Comută blocarea dispozitivului",
+            "name": "Blochează/deblochează dispozitivul"
         },
         "ots": {
-            "description": "Start One-Time-Schedule (if supported)",
+            "description": "Pornește programarea unică (dacă dispozitivul permite)",
             "fields": {
                 "boundary": {
-                    "description": "Do boundary (Edge/Border cut)",
-                    "name": "Boundary"
+                    "description": "Efectuează cosirea perimetrului",
+                    "name": "Perimetru"
                 },
                 "runtime": {
-                    "description": "Run time in minutes before returning to charging station",
-                    "name": "Run time"
+                    "description": "Timpul de funcționare până la întoarcerea la stația de încărcare",
+                    "name": "Timp de rulare"
                 }
             },
-            "name": "One-Time-Schedule"
+            "name": "Programare unică"
         },
         "partymode": {
-            "description": "Toggle or set PartyMode (if supported)",
+            "description": "Comută sau setează modul petrecere (dacă dispozitvul permite)",
             "fields": {
                 "party_mode_enabled": {
-                    "description": "Partymode enabled",
-                    "name": "Enable Partymode"
+                    "description": "Mod petrecere activat",
+                    "name": "Activează mod petrecere"
                 }
             },
-            "name": "Partymode"
-        },
-        "refresh": {
-            "description": "Send a refresh request to the API endpoint - ONLY USE FOR RARE CASES",
-            "name": "Refresh device info"
+            "name": "Mod petrecere"
         },
         "restart": {
-            "description": "Restarts or reboots device",
-            "name": "Restart device"
+            "description": "Repornește dispozitivul",
+            "name": "Repornește dispozitivul"
         },
         "schedule": {
-            "description": "Set or change the schedule of the mower",
+            "description": "Setează sau schimbă programul robotului de tuns iarba",
             "fields": {
                 "friday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Friday, Boundary"
+                    "description": "Ar trebui început programul cu cosirea perimetrului (edge/border cut)?",
+                    "name": "Vineri, Perimetru"
                 },
                 "friday_end": {
-                    "description": "When should the schedule stop on fridays?",
-                    "name": "Friday, End"
+                    "description": "Când ar trebui să se oprească programul vineri?",
+                    "name": "Vineri, Sfârșit"
                 },
                 "friday_start": {
-                    "description": "Starting time for fridays",
-                    "name": "Friday, Start"
+                    "description": "Ora de începere pentru vineri",
+                    "name": "Vineri, Start"
                 },
                 "monday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Monday, Boundary"
+                    "description": "Ar trebui început programul cu cosirea perimetrului (edge/border cut)?",
+                    "name": "Luni, Perimetru"
                 },
                 "monday_end": {
-                    "description": "When should the schedule stop on mondays?",
-                    "name": "Monday, End"
+                    "description": "Când ar trebui să se oprească programul luni?",
+                    "name": "Luni, Sfârșit"
                 },
                 "monday_start": {
-                    "description": "Starting time for mondays",
-                    "name": "Monday, Start"
+                    "description": "Ora de începere pentru luni",
+                    "name": "Luni, Start"
                 },
                 "saturday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Saturday, Boundary"
+                    "description": "Ar trebui început programul cu cosirea perimetrului (edge/border cut)?",
+                    "name": "Sâmbătă, Perimetru"
                 },
                 "saturday_end": {
-                    "description": "When should the schedule stop on saturdays?",
-                    "name": "Saturday, End"
+                    "description": "Când ar trebui să se oprească programul sâmbătă?",
+                    "name": "Sâmbătă, Sfârșit"
                 },
                 "saturday_start": {
-                    "description": "Starting time for saturdays",
-                    "name": "Saturday, Start"
+                    "description": "Ora de începere pentru sâmbătă",
+                    "name": "Sâmbătă, Start"
                 },
                 "sunday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Sunday, Boundary"
+                    "description": "Ar trebui început programul cu cosirea perimetrului (edge/border cut)?",
+                    "name": "Duminică, Perimetru"
                 },
                 "sunday_end": {
-                    "description": "When should the schedule stop on sundays?",
-                    "name": "Sunday, End"
+                    "description": "Când ar trebui să se oprească programul duminică?",
+                    "name": "Duminică, Sfârșit"
                 },
                 "sunday_start": {
-                    "description": "Starting time for sundays",
-                    "name": "Sunday, Start"
+                    "description": "Ora de începere pentru duminică",
+                    "name": "Duminică, Start"
                 },
                 "thursday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Thursday, Boundary"
+                    "description": "Ar trebui început programul cu cosirea perimetrului (edge/border cut)?",
+                    "name": "Joi, Perimetru"
                 },
                 "thursday_end": {
-                    "description": "When should the schedule stop on thursdays?",
-                    "name": "Thursday, End"
+                    "description": "Când ar trebui să se oprească programul joi?",
+                    "name": "Joi, Sfârșit"
                 },
                 "thursday_start": {
-                    "description": "Starting time for thursdays",
-                    "name": "Wednesday, Start"
+                    "description": "Ora de începere pentru joi",
+                    "name": "Joi, Start"
                 },
                 "tuesday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Tuesday, Boundary"
+                    "description": "Ar trebui început programul cu cosirea perimetrului (edge/border cut)?",
+                    "name": "Marți, Perimetru"
                 },
                 "tuesday_end": {
-                    "description": "When should the schedule stop on tuesdays?",
-                    "name": "Tuesday, End"
+                    "description": "Când ar trebui să se oprească programul marți?",
+                    "name": "Marți, Sfârșit"
                 },
                 "tuesday_start": {
-                    "description": "Starting time for tuesdays",
-                    "name": "Tuesday, Start"
+                    "description": "Ora de începere pentru marți",
+                    "name": "Marți, Start"
                 },
                 "type": {
-                    "description": "Change primary or secondary schedule?",
-                    "name": "Schedule type"
+                    "description": "Schimb programul primar sau secundar?",
+                    "name": "Tip de program"
                 },
                 "wednesday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Wednesday, Boundary"
+                    "description": "Ar trebui început programul cu cosirea perimetrului (edge/border cut)?",
+                    "name": "Miercuri, Perimetru"
                 },
                 "wednesday_end": {
-                    "description": "When should the schedule stop on wednesdays?",
-                    "name": "Wednesday, End"
+                    "description": "Când ar trebui să se oprească programul miercuri?",
+                    "name": "Miercuri, Sfârșit"
                 },
                 "wednesday_start": {
-                    "description": "Starting time for wednesdays",
-                    "name": "Wednesday, Start"
+                    "description": "Ora de începere pentru miercuri",
+                    "name": "Miercuri, Start"
                 }
             },
-            "name": "Set or update schedule"
+            "name": "Setează sau actualizează programul"
         },
         "send_raw": {
-            "description": " Send a raw JSON command to the device",
+            "description": "Trimite o comandă JSON brută către dispozitiv",
             "fields": {
                 "json": {
-                    "description": "Data to send, formatted as valid JSON",
-                    "name": "JSON data"
+                    "description": "Date de trimis, formatate ca JSON valid",
+                    "name": "Date JSON"
                 }
             },
-            "name": "Send RAW command"
+            "name": "Trimite comandă RAW"
         },
         "setzone": {
-            "description": "Set which zone to be mowed next",
+            "description": "Selectează zona ce urmează a fi cosită",
             "fields": {
                 "zone": {
-                    "description": "Sets the zone number, ranging from 0 to 3, to be mowed next",
-                    "name": "Zone"
+                    "description": "Setează numărul zonei, de la 1 la 3, ce urmează a fi cosită",
+                    "name": "Zonă"
                 }
             },
-            "name": "Set zone"
+            "name": "Setează zona"
         },
         "torque": {
-            "description": "Set wheel torque (if supported)",
+            "description": "Setează cuplul roților (dacă dispozitivul permite)",
             "fields": {
                 "torque": {
-                    "description": "Set wheel torque. Ranging from -50% to 50%",
-                    "name": "Wheel torque"
+                    "description": "Setează cuplul roților. De la -50% la 50%",
+                    "name": "Cuplul la roată"
                 }
             },
-            "name": "Torque"
+            "name": "Cuplu"
         }
     }
 }

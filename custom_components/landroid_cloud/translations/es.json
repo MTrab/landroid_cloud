@@ -90,10 +90,6 @@
             },
             "name": "Partymode"
         },
-        "refresh": {
-            "description": "Send a refresh request to the API endpoint - ONLY USE FOR RARE CASES",
-            "name": "Refresh device info"
-        },
         "restart": {
             "description": "Restarts or reboots device",
             "name": "Restart device"

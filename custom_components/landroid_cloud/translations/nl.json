@@ -15,7 +15,7 @@
                     "password": "Wachtwoord",
                     "type": "Merknaam"
                 },
-                "title": "Maak verbinding met uw Landroid Cloud-account"
+                "title": "Maak verbinding met uw Landroid Cloud account"
             }
         }
     },
@@ -24,7 +24,7 @@
             "landroid_cloud": {
                 "state": {
                     "edgecut": "Randroutine",
-                    "escaped_digital_fence": "Escaped digital fence",
+                    "escaped_digital_fence": "Buiten werkgebied",
                     "initializing": "Initialiseren",
                     "mowing": "Maaien",
                     "offline": "Offline",
@@ -37,7 +37,7 @@
     },
     "services": {
         "config": {
-            "description": "Set device config parameters",
+            "description": "Stel configuratieparameters voor het apparaat in",
             "fields": {
                 "multizone_distances": {
                     "description": "Set multizone distance array in meters. 0 = Disabled. Format: 15, 80, 120, 155",
@@ -48,179 +48,175 @@
                     "name": "Multi zone probabilities"
                 },
                 "raindelay": {
-                    "description": "Set rain delay. Time in minutes ranging from 0 to 300. 0 = Disabled",
+                    "description": "Regenvertraging instellen. Tijd in minuten, variërend van 0 tot 300. 0 = Uitgeschakeld",
                     "name": "Regenvertraging"
                 },
                 "timeextension": {
-                    "description": "Set time extension. Extension in % ranging from -100 to 100",
-                    "name": "Time extension"
+                    "description": "Werktijd instellen. Uitbreiding in % variërend van -100 tot 100",
+                    "name": "Werktijd"
                 }
             },
-            "name": "Set zone"
+            "name": "Zone instellen"
         },
         "edgecut": {
-            "description": "Start edgecut (if supported)",
-            "name": "Border-/Edgecut"
+            "description": "Start randroutine (indien ondersteund)",
+            "name": "Randroutine"
         },
         "lock": {
-            "description": "Toggle device lock",
-            "name": "Lock/Unlock device"
+            "description": "Apparaatvergrendeling in-/uitschakelen",
+            "name": "Apparaat vergrendelen/ontgrendelen"
         },
         "ots": {
-            "description": "Start One-Time-Schedule (if supported)",
+            "description": "Eenmalig schema starten (indien ondersteund)",
             "fields": {
                 "boundary": {
-                    "description": "Do boundary (Edge/Border cut)",
-                    "name": "Boundary"
+                    "description": "Start randroutine",
+                    "name": "Rand"
                 },
                 "runtime": {
-                    "description": "Run time in minutes before returning to charging station",
-                    "name": "Run time"
+                    "description": "Maaitijd in minuten voordat de maaier terugkeert naar het laadstation",
+                    "name": "Maaitijd"
                 }
             },
-            "name": "One-Time-Schedule"
+            "name": "Eenmalig schema"
         },
         "partymode": {
-            "description": "Toggle or set PartyMode (if supported)",
+            "description": "Feestmodus in- of uitschakelen (indien ondersteund)",
             "fields": {
                 "party_mode_enabled": {
-                    "description": "Partymode enabled",
-                    "name": "Enable Partymode"
+                    "description": "Feestmodus ingeschakeld",
+                    "name": "Feestmodus inschakelen"
                 }
             },
-            "name": "Partymode"
-        },
-        "refresh": {
-            "description": "Send a refresh request to the API endpoint - ONLY USE FOR RARE CASES",
-            "name": "Refresh device info"
+            "name": "Feestmodus"
         },
         "restart": {
-            "description": "Restarts or reboots device",
-            "name": "Restart device"
+            "description": "Apparaat herstarten of opnieuw opstarten",
+            "name": "Herstart apparaat"
         },
         "schedule": {
-            "description": "Set or change the schedule of the mower",
+            "description": "Het schema van de maaier instellen of wijzigen",
             "fields": {
                 "friday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Friday, Boundary"
+                    "description": "Moeten we dit schema beginnen met de randroutine?",
+                    "name": "Vrijdag, Randroutine"
                 },
                 "friday_end": {
-                    "description": "When should the schedule stop on fridays?",
-                    "name": "Friday, End"
+                    "description": "Wanneer moet het schema stoppen op vrijdag?",
+                    "name": "Vrijdag, Einde"
                 },
                 "friday_start": {
-                    "description": "Starting time for fridays",
-                    "name": "Friday, Start"
+                    "description": "Starttijd voor vrijdag",
+                    "name": "Vrijdag, Begin"
                 },
                 "monday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Monday, Boundary"
+                    "description": "Moeten we dit schema beginnen met de randroutine?",
+                    "name": "Maandag, Randroutine"
                 },
                 "monday_end": {
-                    "description": "When should the schedule stop on mondays?",
-                    "name": "Monday, End"
+                    "description": "Wanneer moet het schema op maandag stoppen?",
+                    "name": "Maandag, Einde"
                 },
                 "monday_start": {
-                    "description": "Starting time for mondays",
-                    "name": "Monday, Start"
+                    "description": "Starttijd voor maandag",
+                    "name": "Maandag, Begin"
                 },
                 "saturday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Saturday, Boundary"
+                    "description": "Moeten we dit schema beginnen met de randroutine?",
+                    "name": "Zaterdag, Randroutine"
                 },
                 "saturday_end": {
-                    "description": "When should the schedule stop on saturdays?",
-                    "name": "Saturday, End"
+                    "description": "Wanneer moet het schema stoppen op zaterdag?",
+                    "name": "Zaterdag, Einde"
                 },
                 "saturday_start": {
-                    "description": "Starting time for saturdays",
-                    "name": "Saturday, Start"
+                    "description": "Starttijd voor zaterdag",
+                    "name": "Zaterdag, Begin"
                 },
                 "sunday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Sunday, Boundary"
+                    "description": "Moeten we dit schema beginnen met de randroutine?",
+                    "name": "Zondag, Grens"
                 },
                 "sunday_end": {
-                    "description": "When should the schedule stop on sundays?",
-                    "name": "Sunday, End"
+                    "description": "Wanneer moet het schema stoppen op zondag?",
+                    "name": "Zondag, Einde"
                 },
                 "sunday_start": {
-                    "description": "Starting time for sundays",
-                    "name": "Sunday, Start"
+                    "description": "Starttijd voor zondag",
+                    "name": "Zondag, Begin"
                 },
                 "thursday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Thursday, Boundary"
+                    "description": "Moeten we dit schema beginnen met de randroutine?",
+                    "name": "Donderdag, Randroutine"
                 },
                 "thursday_end": {
-                    "description": "When should the schedule stop on thursdays?",
-                    "name": "Thursday, End"
+                    "description": "Wanneer moet het schema stoppen op donderdag?",
+                    "name": "Donderdag, Einde"
                 },
                 "thursday_start": {
-                    "description": "Starting time for thursdays",
-                    "name": "Wednesday, Start"
+                    "description": "Starttijd voor donderdag",
+                    "name": "Woensdag, Begin"
                 },
                 "tuesday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Tuesday, Boundary"
+                    "description": "Moeten we dit schema beginnen met de randroutine?",
+                    "name": "Dinsdag, Randroutine"
                 },
                 "tuesday_end": {
-                    "description": "When should the schedule stop on tuesdays?",
-                    "name": "Tuesday, End"
+                    "description": "Wanneer moet het schema stoppen op dinsdag?",
+                    "name": "Dinsdag, Einde"
                 },
                 "tuesday_start": {
-                    "description": "Starting time for tuesdays",
-                    "name": "Tuesday, Start"
+                    "description": "Starttijd voor dinsdag",
+                    "name": "Dinsdag, Begin"
                 },
                 "type": {
-                    "description": "Change primary or secondary schedule?",
-                    "name": "Schedule type"
+                    "description": "Primair of secundair schema wijzigen?",
+                    "name": "Schematype"
                 },
                 "wednesday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Wednesday, Boundary"
+                    "description": "Moeten we dit schema beginnen met de randroutine?",
+                    "name": "Woensdag, Randroutine"
                 },
                 "wednesday_end": {
-                    "description": "When should the schedule stop on wednesdays?",
-                    "name": "Wednesday, End"
+                    "description": "Wanneer moet het schema stoppen op woensdag?",
+                    "name": "Woensdag, Einde"
                 },
                 "wednesday_start": {
-                    "description": "Starting time for wednesdays",
-                    "name": "Wednesday, Start"
+                    "description": "Starttijd voor woensdag",
+                    "name": "Woensdag, Begin"
                 }
             },
-            "name": "Set or update schedule"
+            "name": "Schema instellen of bijwerken"
         },
         "send_raw": {
-            "description": " Send a raw JSON command to the device",
+            "description": "Stuur een onbewerkte JSON command naar het apparaat",
             "fields": {
                 "json": {
-                    "description": "Data to send, formatted as valid JSON",
+                    "description": "Te verzenden gegevens, geformatteerd als geldige JSON",
                     "name": "JSON data"
                 }
             },
-            "name": "Send RAW command"
+            "name": "Verzend RAW command"
         },
         "setzone": {
-            "description": "Set which zone to be mowed next",
+            "description": "Stel in welke zone vervolgens moet worden gemaaid",
             "fields": {
                 "zone": {
-                    "description": "Sets the zone number, ranging from 0 to 3, to be mowed next",
+                    "description": "Stelt het zonenummer in, variërend van 0 tot 3, dat als volgende moet worden gemaaid",
                     "name": "Zone"
                 }
             },
-            "name": "Set zone"
+            "name": "Zone instellen"
         },
         "torque": {
-            "description": "Set wheel torque (if supported)",
+            "description": "Wielkoppel instellen (indien ondersteund)",
             "fields": {
                 "torque": {
-                    "description": "Set wheel torque. Ranging from -50% to 50%",
-                    "name": "Wheel torque"
+                    "description": "Wielkoppel instellen. Variërend van -50% tot 50%",
+                    "name": "Wielkoppel"
                 }
             },
-            "name": "Torque"
+            "name": "Koppel"
         }
     }
 }
