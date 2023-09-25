@@ -46,7 +46,6 @@ SERVICE_CONFIG = "config"
 SERVICE_PARTYMODE = "partymode"
 SERVICE_SETZONE = "setzone"
 SERVICE_LOCK = "lock"
-SERVICE_REFRESH = "refresh"
 SERVICE_RESTART = "restart"
 SERVICE_EDGECUT = "edgecut"
 SERVICE_OTS = "ots"
@@ -284,8 +283,7 @@ class LandroidFeatureSupport(IntEnum):
     CONFIG = 512
     SCHEDULES = 1024
     TORQUE = 2048
-    REFRESH = 4096
-    RAW = 8192
+    RAW = 4096
 
 
 API_TO_INTEGRATION_FEATURE_MAP = {
