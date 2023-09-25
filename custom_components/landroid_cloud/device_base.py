@@ -62,7 +62,6 @@ from .const import (
     SERVICE_LOCK,
     SERVICE_OTS,
     SERVICE_PARTYMODE,
-    SERVICE_REFRESH,
     SERVICE_RESTART,
     SERVICE_SCHEDULE,
     SERVICE_SEND_RAW,
@@ -174,14 +173,6 @@ class LandroidCloudBaseEntity(LandroidLogger):
     async def async_send_raw(self, data: dict | None = None) -> None:
         """Send a raw command."""
         return None
-
-    async def async_refresh(self, data: dict | None = None) -> None:
-        """Refresh data from API endpoint."""
-        device: WorxCloud = self.api.device
-        self.log(LoggerType.SERVICE_CALL, "Refreshing data from API")
-        await self.hass.async_add_executor_job(
-            self.api.cloud.refresh, device.serial_number
-        )
 
     @staticmethod
     def get_ots_scheme() -> Any:
@@ -299,11 +290,6 @@ class LandroidCloudBaseEntity(LandroidLogger):
         if self.api.features & LandroidFeatureSupport.SETZONE:
             self.api.services[SERVICE_SETZONE] = {
                 ATTR_SERVICE: self.async_set_zone,
-            }
-
-        if self.api.features & LandroidFeatureSupport.REFRESH:
-            self.api.services[SERVICE_REFRESH] = {
-                ATTR_SERVICE: self.async_refresh,
             }
 
         if self.api.features & LandroidFeatureSupport.RESTART:
@@ -448,20 +434,6 @@ class LandroidCloudBaseEntity(LandroidLogger):
             self._battery_level = device.battery["percent"]
 
         self.register_services()
-        # mqtt = device.mqtt.connected if hasattr(device, "mqtt") else False
-        # if not mqtt:
-        #     # If MQTT is not connected, then pull state from API
-        #     self.log(
-        #         LoggerType.DATA_UPDATE,
-        #         "MQTT connection is offline, scheduling Web API refresh in 15 minutes. "
-        #         "Device is in readonly mode!",
-        #         log_level=LogLevel.WARNING,
-        #     )
-        #     async_call_later(
-        #         self.hass,
-        #         timedelta(minutes=15),
-        #         partial(self.async_get_state_from_api),
-        #     )
 
     @callback
     async def async_get_state_from_api(self, dt=None) -> None:  # type: ignore pylint: disable=unused-argument,invalid-name

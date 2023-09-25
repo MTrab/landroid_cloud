@@ -23,7 +23,6 @@ from .const import (
     SERVICE_LOCK,
     SERVICE_OTS,
     SERVICE_PARTYMODE,
-    SERVICE_REFRESH,
     SERVICE_RESTART,
     SERVICE_SCHEDULE,
     SERVICE_SEND_RAW,
@@ -85,9 +84,6 @@ SUPPORTED_SERVICES = [
     ),
     LandroidServiceDescription(
         key=SERVICE_TORQUE, schema=TORQUE_SCHEME, feature=LandroidFeatureSupport.TORQUE
-    ),
-    LandroidServiceDescription(
-        key=SERVICE_REFRESH, feature=LandroidFeatureSupport.REFRESH
     ),
     LandroidServiceDescription(
         key=SERVICE_SEND_RAW, feature=LandroidFeatureSupport.CONFIG, schema=RAW_SCHEME

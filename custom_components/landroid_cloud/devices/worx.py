@@ -62,7 +62,6 @@ DEVICE_FEATURES = (
     | LandroidFeatureSupport.LOCK
     | LandroidFeatureSupport.CONFIG
     | LandroidFeatureSupport.RESTART
-    | LandroidFeatureSupport.REFRESH
     | LandroidFeatureSupport.SETZONE
     | LandroidFeatureSupport.RAW
     | LandroidFeatureSupport.SCHEDULES

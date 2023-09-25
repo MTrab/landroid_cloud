@@ -208,10 +208,6 @@
                 }
             }
         },
-        "refresh": {
-            "description": "Send a refresh request to the API endpoint - ONLY USE FOR RARE CASES",
-            "name": "Refresh device info"
-        },
         "send_raw": {
             "description": " Send a raw JSON command to the device",
             "name": "Send RAW command",
