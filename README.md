@@ -34,7 +34,7 @@ Currently these vendors are supported:<br />
 Once installed, the following entities are created in Home Assistant:
 
 ```
-vacuum.[NAME_FROM_APP]
+lawn_mower.[NAME_FROM_APP]
 ```
 
 In addition, the following services are created:

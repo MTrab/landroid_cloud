@@ -8,7 +8,7 @@ from functools import partial
 import voluptuous as vol
 from homeassistant.components.button import ButtonEntity, ButtonEntityDescription
 from homeassistant.components.select import SelectEntityDescription
-from homeassistant.components.vacuum import StateVacuumEntity
+from homeassistant.components.lawn_mower import LawnMowerEntity
 from homeassistant.core import HomeAssistant
 from pyworxcloud import WorxCloud
 
@@ -120,7 +120,7 @@ class ZoneSelect(Select, LandroidCloudSelectZoneEntity):
         self.device: WorxCloud = self.api.device
 
 
-class MowerDevice(LandroidCloudMowerBase, StateVacuumEntity):
+class MowerDevice(LandroidCloudMowerBase, LawnMowerEntity):
     """Definition of Worx Landroid device."""
 
     def __init__(self, hass, api):

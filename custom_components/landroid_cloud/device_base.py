@@ -11,13 +11,10 @@ from typing import Any
 
 from homeassistant.components.button import ButtonEntity, ButtonEntityDescription
 from homeassistant.components.select import SelectEntity, SelectEntityDescription
-from homeassistant.components.vacuum import (
-    ENTITY_ID_FORMAT,
-    STATE_DOCKED,
-    STATE_ERROR,
-    STATE_RETURNING,
-    StateVacuumEntity,
-    VacuumEntityFeature,
+from homeassistant.components.lawn_mower import (
+    LawnMowerActivity,
+    LawnMowerEntity,
+    LawnMowerEntityFeature,
 )
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.exceptions import HomeAssistantError
@@ -54,6 +51,7 @@ from .const import (
     ATTR_ZONE,
     BUTTONTYPE_TO_SERVICE,
     DOMAIN,
+    ENTITY_ID_FORMAT,
     PLATFORMS_SECONDARY,
     SCHEDULE_TO_DAY,
     SCHEDULE_TYPE_MAP,
@@ -69,9 +67,9 @@ from .const import (
     SERVICE_TORQUE,
     STATE_INITIALIZING,
     STATE_MAP,
-    STATE_MOWING,
     STATE_OFFLINE,
     STATE_RAINDELAY,
+    STATE_RETURNING,
     UPDATE_SIGNAL,
     LandroidFeatureSupport,
 )
@@ -80,12 +78,12 @@ from .utils.schedules import parseday, pass_thru
 
 # Commonly supported features
 SUPPORT_LANDROID_BASE = (
-    VacuumEntityFeature.BATTERY
-    | VacuumEntityFeature.PAUSE
-    | VacuumEntityFeature.RETURN_HOME
-    | VacuumEntityFeature.START
-    | VacuumEntityFeature.STATE
-    | VacuumEntityFeature.STATUS
+    # LawnMowerEntityFeature.BATTERY
+    LawnMowerEntityFeature.PAUSE
+    | LawnMowerEntityFeature.DOCK
+    | LawnMowerEntityFeature.START_MOWING
+    # | LawnMowerEntityFeature.STATE
+    # | LawnMowerEntityFeature.STATUS
 )
 
 SCAN_INTERVAL = timedelta(minutes=5)
@@ -421,7 +419,7 @@ class LandroidCloudBaseEntity(LandroidLogger):
             state = STATE_OFFLINE
         elif device.error.id is not None and device.error.id > 0:
             if device.error.id > 0 and device.error.id != 5:
-                state = STATE_ERROR
+                state = LawnMowerActivity.ERROR
             elif device.error.id == 5:
                 state = STATE_RAINDELAY
         else:
@@ -559,7 +557,7 @@ class LandroidCloudButtonBase(LandroidCloudBaseEntity, ButtonEntity):
         )
 
 
-class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
+class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
     """Define a base Landroid Cloud mower class."""
 
     _battery_level: int | None = None
@@ -615,7 +613,7 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
 
     @property
     def battery_level(self) -> str:
-        """Return the battery level of the vacuum cleaner."""
+        """Return the battery level of the lawn_mower cleaner."""
         return self._battery_level
 
     @property
@@ -645,7 +643,7 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
         self.api.features_loaded = True
         self.schedule_update_ha_state(True)
 
-    async def async_start(self) -> None:
+    async def async_start_mowing(self) -> None:
         """Start or resume the task."""
         device: WorxCloud = self.api.device
         self.log(LoggerType.SERVICE_CALL, "Starting")
@@ -664,14 +662,14 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
     async def async_start_pause(self) -> None:
         """Toggle the state of the mower."""
         self.log(LoggerType.SERVICE_CALL, "Toggeling state")
-        if STATE_MOWING in self.state:
+        if LawnMowerActivity.MOWING in self.state:
             await self.async_pause()
         else:
             await self.async_start()
 
-    async def async_return_to_base(self, **kwargs: Any) -> None:
+    async def async_dock(self, **kwargs: Any) -> None:
         """Set the device to return to the dock."""
-        if self.state not in [STATE_DOCKED, STATE_RETURNING]:
+        if self.state not in [LawnMowerActivity.DOCKED, STATE_RETURNING]:
             device: WorxCloud = self.api.device
             self.log(LoggerType.SERVICE_CALL, "Going back to dock")
             # Try calling safehome
@@ -682,9 +680,9 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, StateVacuumEntity):
             wait_start = time.time()
             while time.time() < wait_start + 15:
                 await asyncio.sleep(1)
-                if self.state in [STATE_RETURNING, STATE_DOCKED]:
+                if self.state in [STATE_RETURNING, LawnMowerActivity.DOCKED]:
                     break
-            if not self.state in [STATE_RETURNING, STATE_DOCKED]:
+            if not self.state in [STATE_RETURNING, LawnMowerActivity.DOCKED]:
                 await self.hass.async_add_executor_job(
                     self.api.cloud.home, device.serial_number
                 )

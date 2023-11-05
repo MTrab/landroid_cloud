@@ -6,13 +6,8 @@ from dataclasses import dataclass
 from enum import IntEnum
 
 from homeassistant.backports.enum import StrEnum
-from homeassistant.components.vacuum import (
-    STATE_DOCKED,
-    STATE_ERROR,
-    STATE_IDLE,
-    STATE_PAUSED,
-    STATE_RETURNING,
-)
+from homeassistant.const import STATE_IDLE
+from homeassistant.components.lawn_mower import LawnMowerActivity
 from pyworxcloud.clouds import CloudType
 from pyworxcloud.utils import DeviceCapability
 
@@ -34,9 +29,10 @@ https://github.com/mtrab/landroid_cloud/issues
 DEFAULT_NAME = "landroid"
 DOMAIN = "landroid_cloud"
 PLATFORMS_SECONDARY = []
-PLATFORMS_PRIMARY = ["vacuum"]
+PLATFORMS_PRIMARY = ["lawn_mower"]
 UPDATE_SIGNAL = "landroid_cloud_update"
 LOGLEVEL = LogLevel.DEBUG
+ENTITY_ID_FORMAT = DOMAIN + ".{}"
 
 # Redact consts
 REDACT_TITLE = "title"
@@ -57,11 +53,11 @@ SERVICE_TORQUE = "torque"
 STATE_INITIALIZING = "initializing"
 STATE_OFFLINE = "offline"
 STATE_RAINDELAY = "rain_delay"
-STATE_MOWING = "mowing"
 STATE_STARTING = "starting"
 STATE_ZONING = "zoning"
 STATE_EDGECUT = "edgecut"
 STATE_ESCAPED_DIGITAL_FENCE = "escaped_digital_fence"
+STATE_RETURNING = "returning"
 STATE_SEARCHING_ZONE = "searching_zone"
 
 # Service attributes
@@ -148,24 +144,24 @@ for name, cloud in inspect.getmembers(CloudType):
 # State mapping
 STATE_MAP = {
     0: STATE_IDLE,
-    1: STATE_DOCKED,
+    1: LawnMowerActivity.DOCKED,
     2: STATE_STARTING,
     3: STATE_STARTING,
     4: STATE_RETURNING,
     5: STATE_RETURNING,
     6: STATE_RETURNING,
-    7: STATE_MOWING,
-    8: STATE_ERROR,
-    9: STATE_ERROR,
-    10: STATE_ERROR,
-    11: STATE_ERROR,
-    12: STATE_MOWING,
+    7: LawnMowerActivity.MOWING,
+    8: LawnMowerActivity.ERROR,
+    9: LawnMowerActivity.ERROR,
+    10: LawnMowerActivity.ERROR,
+    11: LawnMowerActivity.ERROR,
+    12: LawnMowerActivity.MOWING,
     13: STATE_ESCAPED_DIGITAL_FENCE,
     30: STATE_RETURNING,
     31: STATE_ZONING,
     32: STATE_EDGECUT,
     33: STATE_STARTING,
-    34: STATE_PAUSED,
+    34: LawnMowerActivity.PAUSED,
     103: STATE_SEARCHING_ZONE,
     104: STATE_RETURNING
 }
