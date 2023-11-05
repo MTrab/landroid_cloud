@@ -11,7 +11,7 @@
 
 {% endif %}
 
-Custom component to add support for Landroid Cloud compatible mowers.  
+Custom component to add support for Landroid Cloud compatible mowers.
 Currently these makes are supported:
 
 *   Worx Landroid
@@ -20,7 +20,7 @@ Currently these makes are supported:
 
 In addition Aldi Ferrex are in a limited, experimental, support as well.
 
-This component generates **1 vacuum entity** pr. available mower in an account.
+This component generates **1 lawn_mower entity** pr. available mower in an account.
 
 ## Configuration
 
