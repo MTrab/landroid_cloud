@@ -15,20 +15,22 @@
                     "password": "Parolă",
                     "type": "Marcă"
                 },
-                "title": "Conectează-te cu contul tău Landroid Cloud"
+                "title": "Conectează-te la contul tău Landroid Cloud"
             }
         }
     },
     "entity": {
-        "vacuum": {
+        "lawn_mower": {
             "landroid_cloud": {
                 "state": {
-                    "edgecut": "Cosire perimetru",
+                    "edgecut": "Tunde perimetrul",
                     "escaped_digital_fence": "A trecut peste gardul digital",
-                    "initializing": "Inițializare",
+                    "initializing": "Se inițializează",
                     "mowing": "Cosire",
                     "offline": "Deconectat",
                     "rain_delay": "Întârziere din cauza ploii",
+                    "returning": "Returning to charger",
+                    "searching_zone": "Searching for zone",
                     "starting": "Pornește",
                     "zoning": "Antrenament zone"
                 }
@@ -59,8 +61,8 @@
             "name": "Setează zona"
         },
         "edgecut": {
-            "description": "Pornește cosirea perimetrului (dacă dispozivul permite)",
-            "name": "Cosirea perimetrului"
+            "description": "Pornește tunderea perimetrului (dacă dispozivul permite)",
+            "name": "Tunderea perimetrului"
         },
         "lock": {
             "description": "Comută blocarea dispozitivului",
@@ -81,14 +83,14 @@
             "name": "Programare unică"
         },
         "partymode": {
-            "description": "Comută sau setează modul petrecere (dacă dispozitvul permite)",
+            "description": "Comută sau setează modul \"Petrecere\" (dacă dispozitvul permite)",
             "fields": {
                 "party_mode_enabled": {
-                    "description": "Mod petrecere activat",
-                    "name": "Activează mod petrecere"
+                    "description": "Mod \"Petrecere\" activat",
+                    "name": "Activează mod \"Petrecere\""
                 }
             },
-            "name": "Mod petrecere"
+            "name": "Mod \"Petrecere\""
         },
         "restart": {
             "description": "Repornește dispozitivul",
@@ -98,7 +100,7 @@
             "description": "Setează sau schimbă programul robotului de tuns iarba",
             "fields": {
                 "friday_boundary": {
-                    "description": "Ar trebui început programul cu cosirea perimetrului (edge/border cut)?",
+                    "description": "Ar trebui început programul cu  tunderea perimetrului (edge/border cut)?",
                     "name": "Vineri, Perimetru"
                 },
                 "friday_end": {
@@ -110,7 +112,7 @@
                     "name": "Vineri, Start"
                 },
                 "monday_boundary": {
-                    "description": "Ar trebui început programul cu cosirea perimetrului (edge/border cut)?",
+                    "description": "Ar trebui început programul cu  tunderea perimetrului (edge/border cut)?",
                     "name": "Luni, Perimetru"
                 },
                 "monday_end": {
@@ -122,11 +124,11 @@
                     "name": "Luni, Start"
                 },
                 "saturday_boundary": {
-                    "description": "Ar trebui început programul cu cosirea perimetrului (edge/border cut)?",
+                    "description": "Ar trebui început programul cu  tunderea perimetrului (edge/border cut)?",
                     "name": "Sâmbătă, Perimetru"
                 },
                 "saturday_end": {
-                    "description": "Când ar trebui să se oprească programul sâmbătă?",
+                    "description": "Când ar trebui să se oprească programul sâmbăta?",
                     "name": "Sâmbătă, Sfârșit"
                 },
                 "saturday_start": {
@@ -134,11 +136,11 @@
                     "name": "Sâmbătă, Start"
                 },
                 "sunday_boundary": {
-                    "description": "Ar trebui început programul cu cosirea perimetrului (edge/border cut)?",
+                    "description": "Ar trebui început programul cu  tunderea perimetrului (edge/border cut)?",
                     "name": "Duminică, Perimetru"
                 },
                 "sunday_end": {
-                    "description": "Când ar trebui să se oprească programul duminică?",
+                    "description": "Când ar trebui să se oprească programul duminica?",
                     "name": "Duminică, Sfârșit"
                 },
                 "sunday_start": {
@@ -146,7 +148,7 @@
                     "name": "Duminică, Start"
                 },
                 "thursday_boundary": {
-                    "description": "Ar trebui început programul cu cosirea perimetrului (edge/border cut)?",
+                    "description": "Ar trebui început programul cu  tunderea perimetrului (edge/border cut)?",
                     "name": "Joi, Perimetru"
                 },
                 "thursday_end": {
@@ -158,7 +160,7 @@
                     "name": "Joi, Start"
                 },
                 "tuesday_boundary": {
-                    "description": "Ar trebui început programul cu cosirea perimetrului (edge/border cut)?",
+                    "description": "Ar trebui început programul cu  tunderea perimetrului (edge/border cut)?",
                     "name": "Marți, Perimetru"
                 },
                 "tuesday_end": {
@@ -174,7 +176,7 @@
                     "name": "Tip de program"
                 },
                 "wednesday_boundary": {
-                    "description": "Ar trebui început programul cu cosirea perimetrului (edge/border cut)?",
+                    "description": "Ar trebui început programul cu  tunderea perimetrului (edge/border cut)?",
                     "name": "Miercuri, Perimetru"
                 },
                 "wednesday_end": {
@@ -196,7 +198,7 @@
                     "name": "Date JSON"
                 }
             },
-            "name": "Trimite comandă RAW"
+            "name": "Trimite comandă brută"
         },
         "setzone": {
             "description": "Selectează zona ce urmează a fi cosită",

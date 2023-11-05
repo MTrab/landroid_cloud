@@ -20,15 +20,17 @@
         }
     },
     "entity": {
-        "vacuum": {
+        "lawn_mower": {
             "landroid_cloud": {
                 "state": {
                     "edgecut": "Taglio bordo",
                     "escaped_digital_fence": "Escaped digital fence",
-                    "initializing": "Avvio in corso",
+                    "initializing": "Inizializzazione in corso",
                     "mowing": "Taglio in corso",
                     "offline": "Offline",
                     "rain_delay": "Ritardo pioggia",
+                    "returning": "Returning to charger",
+                    "searching_zone": "Searching for zone",
                     "starting": "Partenza",
                     "zoning": "Apprendimento zone"
                 }
