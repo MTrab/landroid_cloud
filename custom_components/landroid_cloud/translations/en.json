@@ -30,7 +30,8 @@
                     "starting": "Starting",
                     "zoning": "Zone training",
                     "edgecut": "Cutting edge",
-                    "escaped_digital_fence": "Escaped digital fence"
+                    "escaped_digital_fence": "Escaped digital fence",
+                    "searching_zone": "Searching for zone"
                 }
             }
         }

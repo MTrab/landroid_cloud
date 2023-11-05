@@ -337,6 +337,13 @@ class LandroidCloudBaseEntity(LandroidLogger):
         self.log(LoggerType.DATA_UPDATE, "Device data: %s", dir(device))
         for key, value in ATTR_MAP.items():
             if hasattr(device, key):
+                if value == "mac_address" and getattr(device, key) == "__UUID__":
+                    value = "uuid"
+                    key = "uuid"
+
+                if value == "blades" and (getattr(device, key))["total_on"] == 0:
+                    continue
+
                 self.log(
                     LoggerType.DATA_UPDATE,
                     "Mapping '%s': %s",
