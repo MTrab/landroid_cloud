@@ -10,12 +10,12 @@ from functools import partial
 from typing import Any
 
 from homeassistant.components.button import ButtonEntity, ButtonEntityDescription
-from homeassistant.components.select import SelectEntity, SelectEntityDescription
 from homeassistant.components.lawn_mower import (
     LawnMowerActivity,
     LawnMowerEntity,
     LawnMowerEntityFeature,
 )
+from homeassistant.components.select import SelectEntity, SelectEntityDescription
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import device_registry as dr
@@ -27,8 +27,8 @@ from pyworxcloud import WorxCloud
 from pyworxcloud.exceptions import (
     NoOneTimeScheduleError,
     NoPartymodeError,
-    ZoneNotDefined,
     ZoneNoProbability,
+    ZoneNotDefined,
 )
 from pyworxcloud.utils import Capability, DeviceCapability
 from pyworxcloud.utils.capability import CAPABILITY_TO_TEXT

@@ -6,8 +6,8 @@ from dataclasses import dataclass
 from enum import IntEnum
 
 from homeassistant.backports.enum import StrEnum
-from homeassistant.const import STATE_IDLE
 from homeassistant.components.lawn_mower import LawnMowerActivity
+from homeassistant.const import STATE_IDLE
 from pyworxcloud.clouds import CloudType
 from pyworxcloud.utils import DeviceCapability
 
@@ -163,7 +163,7 @@ STATE_MAP = {
     33: STATE_STARTING,
     34: LawnMowerActivity.PAUSED,
     103: STATE_SEARCHING_ZONE,
-    104: STATE_RETURNING
+    104: STATE_RETURNING,
 }
 
 # Remap the zones to be more "human-readable"
