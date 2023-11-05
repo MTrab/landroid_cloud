@@ -20,7 +20,7 @@
         }
     },
     "entity": {
-        "vacuum": {
+        "lawn_mower": {
             "landroid_cloud": {
                 "state": {
                     "edgecut": "Klipper kant",
@@ -29,6 +29,8 @@
                     "mowing": "Slår græs",
                     "offline": "Afbrudt",
                     "rain_delay": "Regn forsinkelse",
+                    "returning": "Returnerer til lader",
+                    "searching_zone": "Søger efter zone",
                     "starting": "Starter",
                     "zoning": "Zone træning"
                 }

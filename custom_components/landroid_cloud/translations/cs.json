@@ -20,15 +20,17 @@
         }
     },
     "entity": {
-        "vacuum": {
+        "lawn_mower": {
             "landroid_cloud": {
                 "state": {
                     "edgecut": "Sekání podél okraje",
                     "escaped_digital_fence": "Escaped digital fence",
-                    "initializing": "Initializing",
+                    "initializing": "Inicializace",
                     "mowing": "Sekání",
                     "offline": "Offline",
                     "rain_delay": "Prodleva po dešti",
+                    "returning": "Returning to charger",
+                    "searching_zone": "Searching for zone",
                     "starting": "Začínání",
                     "zoning": "Zone training"
                 }

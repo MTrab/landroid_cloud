@@ -20,7 +20,7 @@
         }
     },
     "entity": {
-        "vacuum": {
+        "lawn_mower": {
             "landroid_cloud": {
                 "state": {
                     "edgecut": "Randroutine",
@@ -29,6 +29,8 @@
                     "mowing": "Maaien",
                     "offline": "Offline",
                     "rain_delay": "Regenvertraging",
+                    "returning": "Returning to charger",
+                    "searching_zone": "Searching for zone",
                     "starting": "Starten",
                     "zoning": "Zone instellen"
                 }
