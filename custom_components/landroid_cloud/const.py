@@ -58,6 +58,7 @@ STATE_ZONING = "zoning"
 STATE_EDGECUT = "edgecut"
 STATE_ESCAPED_DIGITAL_FENCE = "escaped_digital_fence"
 STATE_RETURNING = "returning"
+STATE_SEARCHING_ZONE = "searching_zone"
 
 # Service attributes
 ATTR_MULTIZONE_DISTANCES = "multizone_distances"
@@ -161,6 +162,8 @@ STATE_MAP = {
     32: STATE_EDGECUT,
     33: STATE_STARTING,
     34: LawnMowerActivity.PAUSED,
+    103: STATE_SEARCHING_ZONE,
+    104: STATE_RETURNING
 }
 
 # Remap the zones to be more "human-readable"
