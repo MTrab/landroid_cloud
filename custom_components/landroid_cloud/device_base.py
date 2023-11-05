@@ -2,6 +2,9 @@
 # pylint: disable=unused-argument,too-many-instance-attributes,no-self-use
 from __future__ import annotations
 
+from collections.abc import Callable
+from dataclasses import dataclass
+
 import asyncio
 import json
 import time
@@ -16,6 +19,7 @@ from homeassistant.components.lawn_mower import (
     LawnMowerEntityFeature,
 )
 from homeassistant.components.select import SelectEntity, SelectEntityDescription
+from homeassistant.components.sensor import SensorEntityDescription
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import device_registry as dr
@@ -919,3 +923,18 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
             await self.hass.async_add_executor_job(
                 partial(self.api.cloud.send, device.serial_number, data)
             )
+
+@dataclass
+class LandroidBaseEntityDescriptionMixin:
+    """Describes a basic Landroid entity."""
+
+    value_fn: Callable[[WorxCloud], bool | str | int | float]
+
+@dataclass
+class LandroidSensorEntityDescription(
+    SensorEntityDescription, LandroidBaseEntityDescriptionMixin
+):
+    """Describes a Webasto sensor."""
+
+    unit_fn: Callable[[WorxCloud], None] = None
+    attributes: [] | None = None

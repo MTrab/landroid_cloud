@@ -28,7 +28,6 @@ from .const import (
 
 ATTR_MAP = {
     "accessories": ATTR_ACCESSORIES,
-    "battery": ATTR_BATTERY,
     "blades": ATTR_BLADES,
     "error": ATTR_ERROR,
     "firmware": ATTR_FIRMWARE,
