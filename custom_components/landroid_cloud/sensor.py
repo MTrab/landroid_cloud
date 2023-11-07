@@ -47,6 +47,7 @@ SENSORS = [
         entity_registry_enabled_default=False,
         native_unit_of_measurement=" ",
         value_fn=lambda landroid: landroid.battery["cycles"]["total"] if "cycles" in landroid.battery else None,
+        icon="mdi:battery-sync"
     ),
     LandroidSensorEntityDescription(
         key="battery_voltage",
@@ -68,6 +69,7 @@ SENSORS = [
         native_unit_of_measurement="hours",
         suggested_display_precision=0,
         value_fn=lambda landroid: round(landroid.blades["total_on"] / 60, 0) if "total_on" in landroid.blades else None,
+        icon="mdi:saw-blade"
     ),
     LandroidSensorEntityDescription(
         key="blades_current_on",
@@ -79,6 +81,7 @@ SENSORS = [
         native_unit_of_measurement="hours",
         suggested_display_precision=0,
         value_fn=lambda landroid: round(landroid.blades["current_on"] / 60, 0) if "current_on" in landroid.blades else None,
+        icon="mdi:saw-blade"
     ),
     LandroidSensorEntityDescription(
         key="blades_reset_at",
@@ -90,6 +93,7 @@ SENSORS = [
         native_unit_of_measurement="hours",
         suggested_display_precision=0,
         value_fn=lambda landroid: round(landroid.blades["reset_at"] / 60, 0) if "reset_at" in landroid.blades else None,
+        icon="mdi:history"
     ),
     LandroidSensorEntityDescription(
         key="blades_reset_time",
@@ -214,6 +218,7 @@ SENSORS = [
         native_unit_of_measurement="hours",
         suggested_display_precision=0,
         value_fn=lambda landroid: round(landroid.statistics["worktime_total"] / 60, 0) if "worktime_total" in landroid.statistics else None,
+        icon="mdi:update"
     ),
     LandroidSensorEntityDescription(
         key="serialnumber",
@@ -223,7 +228,8 @@ SENSORS = [
         device_class=None,
         entity_registry_enabled_default=False,
         native_unit_of_measurement=None,
-        value_fn=lambda landroid: landroid.serial_number
+        value_fn=lambda landroid: landroid.serial_number,
+        icon="mdi:barcode"
     ),
     LandroidSensorEntityDescription(
         key="rssi",
@@ -243,7 +249,8 @@ SENSORS = [
         device_class=SensorDeviceClass.TIMESTAMP,
         entity_registry_enabled_default=True,
         native_unit_of_measurement=None,
-        value_fn=lambda landroid: datetime.fromisoformat(landroid.updated)
+        value_fn=lambda landroid: datetime.fromisoformat(landroid.updated),
+        icon="mdi:clock-check"
     ),
     LandroidSensorEntityDescription(
         key="next_start",
@@ -253,7 +260,8 @@ SENSORS = [
         device_class=SensorDeviceClass.TIMESTAMP,
         entity_registry_enabled_default=True,
         native_unit_of_measurement=None,
-        value_fn=lambda landroid: landroid.schedules["next_schedule_start"]
+        value_fn=lambda landroid: landroid.schedules["next_schedule_start"],
+        icon="mdi:clock-start"
     ),
     LandroidSensorEntityDescription(
         key="daily_progress",
@@ -263,7 +271,8 @@ SENSORS = [
         device_class=None,
         entity_registry_enabled_default=False,
         native_unit_of_measurement="%",
-        value_fn=lambda landroid: landroid.schedules["daily_progress"]
+        value_fn=lambda landroid: landroid.schedules["daily_progress"],
+        icon="mdi:progress-clock"
     )
 ]
 
