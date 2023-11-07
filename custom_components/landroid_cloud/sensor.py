@@ -261,7 +261,8 @@ SENSORS = [
         entity_registry_enabled_default=True,
         native_unit_of_measurement=None,
         value_fn=lambda landroid: landroid.schedules["next_schedule_start"],
-        icon="mdi:clock-start"
+        icon="mdi:clock-start",
+        attributes=["schedule"]
     ),
     LandroidSensorEntityDescription(
         key="daily_progress",

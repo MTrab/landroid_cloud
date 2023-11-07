@@ -945,14 +945,6 @@ class LandroidSensor(SensorEntity, LandroidLogger):
         )
         self._attr_should_poll = False
 
-        try:
-            self._attr_native_value = self.entity_description.value_fn(
-                self.device
-            )
-        except AttributeError as ex:
-            self.log(LoggerType.DEVELOP,"Error occured: \n%s", ex)
-            self._attr_native_value = None
-
         _connections = {(dr.CONNECTION_NETWORK_MAC, self.device.mac_address)}
 
         self._attr_device_info = {
@@ -972,14 +964,6 @@ class LandroidSensor(SensorEntity, LandroidLogger):
         }
 
         self._attr_extra_state_attributes = {}
-
-        if not isinstance(self.entity_description.attributes, type(None)):
-            if self.entity_description.key == "battery_state":
-                for key in self.entity_description.attributes:
-                    self._attr_extra_state_attributes.update({key: self.device.battery[key]})
-            elif self.entity_description.key == "error":
-                for key in self.entity_description.attributes:
-                    self._attr_extra_state_attributes.update({key: self.device.error[key]})
 
         async_dispatcher_connect(
             self.hass,
@@ -1013,6 +997,10 @@ class LandroidSensor(SensorEntity, LandroidLogger):
             elif self.entity_description.key == "error":
                 for key in self.entity_description.attributes:
                     new_attrib.update({key: self.device.error[key]})
+            elif self.entity_description.key == "next_start":
+                self._attr_extra_state_attributes.update(self.device.schedules)
+                self._attr_extra_state_attributes.pop("daily_progress")
+                self._attr_extra_state_attributes.pop("next_schedule_start")
 
         if old_attrib != new_attrib:
             write = True
