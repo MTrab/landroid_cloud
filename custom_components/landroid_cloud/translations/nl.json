@@ -29,8 +29,8 @@
                     "mowing": "Maaien",
                     "offline": "Offline",
                     "rain_delay": "Regenvertraging",
-                    "returning": "Returning to charger",
-                    "searching_zone": "Searching for zone",
+                    "returning": "Terugkeren naar laadstation",
+                    "searching_zone": "Zone zoeken",
                     "starting": "Starten",
                     "zoning": "Zone instellen"
                 }
@@ -42,12 +42,12 @@
             "description": "Stel configuratieparameters voor het apparaat in",
             "fields": {
                 "multizone_distances": {
-                    "description": "Set multizone distance array in meters. 0 = Disabled. Format: 15, 80, 120, 155",
-                    "name": "Multi zone distances"
+                    "description": "Stel de multizone-afstandsarray in meters in. 0 = Uitgeschakeld. Formaat: 15, 80, 120, 155",
+                    "name": "Afstanden in meerdere zones"
                 },
                 "multizone_probabilities": {
-                    "description": "Set multizone probabilities array. Format: 50, 10, 20, 20",
-                    "name": "Multi zone probabilities"
+                    "description": "Stel de meerzonekansenarray in. Formaat: 50, 10, 20, 20",
+                    "name": "Meerzonekansen"
                 },
                 "raindelay": {
                     "description": "Regenvertraging instellen. Tijd in minuten, variërend van 0 tot 300. 0 = Uitgeschakeld",
