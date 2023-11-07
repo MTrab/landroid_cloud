@@ -208,6 +208,7 @@ class LandroidCloudBaseEntity(LandroidLogger):
             "sw_version": self.api.device.firmware["version"],
             "manufacturer": self.api.config["type"].capitalize(),
             "model": self.api.device.model,
+            "serial_number": self.api.device.serial_number,
         }
 
     async def async_added_to_hass(self):
@@ -961,6 +962,7 @@ class LandroidSensor(SensorEntity, LandroidLogger):
             "sw_version": self._api.device.firmware["version"],
             "manufacturer": self._api.config["type"].capitalize(),
             "model": self._api.device.model,
+            "serial_number": self._api.device.serial_number,
         }
 
         self._attr_extra_state_attributes = {}

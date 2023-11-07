@@ -221,17 +221,6 @@ SENSORS = [
         icon="mdi:update"
     ),
     LandroidSensorEntityDescription(
-        key="serialnumber",
-        name="Serialnumber",
-        entity_category=EntityCategory.DIAGNOSTIC,
-        state_class=None,
-        device_class=None,
-        entity_registry_enabled_default=False,
-        native_unit_of_measurement=None,
-        value_fn=lambda landroid: landroid.serial_number,
-        icon="mdi:barcode"
-    ),
-    LandroidSensorEntityDescription(
         key="rssi",
         name="Rssi",
         entity_category=EntityCategory.DIAGNOSTIC,
