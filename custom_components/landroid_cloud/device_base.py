@@ -2,20 +2,27 @@
 # pylint: disable=unused-argument,too-many-instance-attributes,no-self-use
 from __future__ import annotations
 
+from collections.abc import Callable
+from dataclasses import dataclass
+
 import asyncio
 import json
+import logging
 import time
 from datetime import timedelta
 from functools import partial
 from typing import Any
 
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.components.button import ButtonEntity, ButtonEntityDescription
 from homeassistant.components.lawn_mower import (
     LawnMowerActivity,
     LawnMowerEntity,
     LawnMowerEntityFeature,
 )
+from homeassistant.components.sensor import SensorEntity
 from homeassistant.components.select import SelectEntity, SelectEntityDescription
+from homeassistant.components.sensor import SensorEntityDescription
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import device_registry as dr
@@ -85,6 +92,8 @@ SUPPORT_LANDROID_BASE = (
     # | LawnMowerEntityFeature.STATE
     # | LawnMowerEntityFeature.STATUS
 )
+
+_LOGGER = logging.getLogger(__name__)
 
 SCAN_INTERVAL = timedelta(minutes=5)
 
@@ -199,6 +208,7 @@ class LandroidCloudBaseEntity(LandroidLogger):
             "sw_version": self.api.device.firmware["version"],
             "manufacturer": self.api.config["type"].capitalize(),
             "model": self.api.device.model,
+            "serial_number": self.api.device.serial_number,
         }
 
     async def async_added_to_hass(self):
@@ -368,10 +378,6 @@ class LandroidCloudBaseEntity(LandroidLogger):
         if not capabilities.check(DeviceCapability.TORQUE) and ATTR_TORQUE in data:
             data.pop(ATTR_TORQUE)
 
-        # data[ATTR_MQTTCONNECTED] = (
-        #     device.mqtt.connected if hasattr(device, "mqtt") else False
-        # )
-
         data[ATTR_LANDROIDFEATURES] = self.api.features
 
         if hasattr(device, "gps"):
@@ -386,27 +392,6 @@ class LandroidCloudBaseEntity(LandroidLogger):
         self._attributes.update(
             {"api connected": self.api.cloud.mqtt.client.is_connected()}
         )
-
-        self._attributes.update(
-            {
-                ATTR_PROGRESS: device.schedules["daily_progress"]
-                if "daily_progress" in device.schedules
-                else (old_data[ATTR_PROGRESS] if ATTR_PROGRESS in old_data else None),
-                ATTR_NEXT_SCHEDULE: device.schedules["next_schedule_start"]
-                if "next_schedule_start" in device.schedules
-                else (
-                    old_data[ATTR_NEXT_SCHEDULE]
-                    if ATTR_NEXT_SCHEDULE in old_data
-                    else None
-                ),
-            }
-        )
-
-        if "daily_progress" in device.schedules:
-            device.schedules.pop("daily_progress")
-
-        if "daily_progress" in device.schedules:
-            device.schedules.pop("daily_progress")
 
         self._available = (
             device.online
@@ -919,3 +904,113 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
             await self.hass.async_add_executor_job(
                 partial(self.api.cloud.send, device.serial_number, data)
             )
+
+@dataclass
+class LandroidBaseEntityDescriptionMixin:
+    """Describes a basic Landroid entity."""
+
+    value_fn: Callable[[WorxCloud], bool | str | int | float]
+
+@dataclass
+class LandroidSensorEntityDescription(
+    SensorEntityDescription, LandroidBaseEntityDescriptionMixin
+):
+    """Describes a Webasto sensor."""
+
+    unit_fn: Callable[[WorxCloud], None] = None
+    attributes: [] | None = None
+    min_check_value: bool | int | float | str | None = None
+
+class LandroidSensor(SensorEntity, LandroidLogger):
+    """Representation of a Landroid sensor."""
+
+    _attr_has_entity_name = True
+
+    def __init__(self,hass:HomeAssistant, description:LandroidSensorEntityDescription, api:LandroidAPI, config:ConfigEntry)->None:
+        """Initialize a Landroid sensor."""
+        super().__init__()
+
+        self.entity_description = description
+        self.hass = hass
+        self.device = api.device
+
+        self._api = api
+        self._config = config
+
+        self._attr_name = self.entity_description.name
+
+        _LOGGER.debug("(%s, Setup) Added sensor '%s'", self._api.friendly_name, self._attr_name)
+
+        self._attr_unique_id = util_slugify(
+            f"{self._attr_name}_{self._config.entry_id}"
+        )
+        self._attr_should_poll = False
+
+        _connections = {(dr.CONNECTION_NETWORK_MAC, self.device.mac_address)}
+
+        self._attr_device_info = {
+            "connections": _connections,
+            "identifiers": {
+                (
+                    DOMAIN,
+                    self._api.unique_id,
+                    self._api.entry_id,
+                    self._api.device.serial_number,
+                )
+            },
+            "name": str(f"{self._api.friendly_name}"),
+            "sw_version": self._api.device.firmware["version"],
+            "manufacturer": self._api.config["type"].capitalize(),
+            "model": self._api.device.model,
+            "serial_number": self._api.device.serial_number,
+        }
+
+        self._attr_extra_state_attributes = {}
+
+        async_dispatcher_connect(
+            self.hass,
+            util_slugify(f"{UPDATE_SIGNAL}_{self._api.device.name}"),
+            self.handle_update,
+        )
+
+    async def handle_update(self) -> None:
+        """Handle the updates when recieving an update signal."""
+        old_val = self._attr_native_value
+        old_attrib = self._attr_extra_state_attributes
+        new_attrib = {}
+        write = False
+        try:
+            new_val = self.entity_description.value_fn(
+                    self.device
+                )
+        except AttributeError:
+            new_val = None
+
+        if old_val != new_val:
+            write = True
+            self._attr_native_value = new_val
+
+        self._attr_extra_state_attributes = {}
+
+        if not isinstance(self.entity_description.attributes, type(None)):
+            if self.entity_description.key == "battery_state":
+                for key in self.entity_description.attributes:
+                    new_attrib.update({key: self.device.battery[key]})
+            elif self.entity_description.key == "error":
+                for key in self.entity_description.attributes:
+                    new_attrib.update({key: self.device.error[key]})
+            elif self.entity_description.key == "next_start":
+                self._attr_extra_state_attributes.update(self.device.schedules)
+                self._attr_extra_state_attributes.pop("daily_progress")
+                self._attr_extra_state_attributes.pop("next_schedule_start")
+
+        if old_attrib != new_attrib:
+            write = True
+            self._attr_extra_state_attributes = new_attrib
+
+        if write:
+            _LOGGER.debug("(%s, Update signal) Updating sensor '%s' to new value '%s' with attributes '%s'", self._api.friendly_name, self._attr_name, self._attr_native_value, self._attr_extra_state_attributes)
+            try:
+                self.async_write_ha_state()
+            except:
+                pass
