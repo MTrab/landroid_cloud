@@ -2,27 +2,25 @@
 # pylint: disable=unused-argument,too-many-instance-attributes,no-self-use
 from __future__ import annotations
 
-from collections.abc import Callable
-from dataclasses import dataclass
-
 import asyncio
 import json
 import logging
 import time
+from collections.abc import Callable
+from dataclasses import dataclass
 from datetime import timedelta
 from functools import partial
 from typing import Any
 
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.components.button import ButtonEntity, ButtonEntityDescription
 from homeassistant.components.lawn_mower import (
     LawnMowerActivity,
     LawnMowerEntity,
     LawnMowerEntityFeature,
 )
-from homeassistant.components.sensor import SensorEntity
 from homeassistant.components.select import SelectEntity, SelectEntityDescription
-from homeassistant.components.sensor import SensorEntityDescription
+from homeassistant.components.sensor import SensorEntity, SensorEntityDescription
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import device_registry as dr
@@ -905,11 +903,13 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
                 partial(self.api.cloud.send, device.serial_number, data)
             )
 
+
 @dataclass
 class LandroidBaseEntityDescriptionMixin:
     """Describes a basic Landroid entity."""
 
     value_fn: Callable[[WorxCloud], bool | str | int | float]
+
 
 @dataclass
 class LandroidSensorEntityDescription(
@@ -921,12 +921,19 @@ class LandroidSensorEntityDescription(
     attributes: [] | None = None
     min_check_value: bool | int | float | str | None = None
 
+
 class LandroidSensor(SensorEntity, LandroidLogger):
     """Representation of a Landroid sensor."""
 
     _attr_has_entity_name = True
 
-    def __init__(self,hass:HomeAssistant, description:LandroidSensorEntityDescription, api:LandroidAPI, config:ConfigEntry)->None:
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        description: LandroidSensorEntityDescription,
+        api: LandroidAPI,
+        config: ConfigEntry,
+    ) -> None:
         """Initialize a Landroid sensor."""
         super().__init__()
 
@@ -939,7 +946,9 @@ class LandroidSensor(SensorEntity, LandroidLogger):
 
         self._attr_name = self.entity_description.name
 
-        _LOGGER.debug("(%s, Setup) Added sensor '%s'", self._api.friendly_name, self._attr_name)
+        _LOGGER.debug(
+            "(%s, Setup) Added sensor '%s'", self._api.friendly_name, self._attr_name
+        )
 
         self._attr_unique_id = util_slugify(
             f"{self._attr_name}_{self._config.entry_id}"
@@ -980,9 +989,7 @@ class LandroidSensor(SensorEntity, LandroidLogger):
         new_attrib = {}
         write = False
         try:
-            new_val = self.entity_description.value_fn(
-                    self.device
-                )
+            new_val = self.entity_description.value_fn(self.device)
         except AttributeError:
             new_val = None
 
@@ -1009,7 +1016,13 @@ class LandroidSensor(SensorEntity, LandroidLogger):
             self._attr_extra_state_attributes = new_attrib
 
         if write:
-            _LOGGER.debug("(%s, Update signal) Updating sensor '%s' to new value '%s' with attributes '%s'", self._api.friendly_name, self._attr_name, self._attr_native_value, self._attr_extra_state_attributes)
+            _LOGGER.debug(
+                "(%s, Update signal) Updating sensor '%s' to new value '%s' with attributes '%s'",
+                self._api.friendly_name,
+                self._attr_name,
+                self._attr_native_value,
+                self._attr_extra_state_attributes,
+            )
             try:
                 self.async_write_ha_state()
             except:
