@@ -1,25 +1,20 @@
 """Sensors for landroid_cloud."""
 from __future__ import annotations
-import logging
+from datetime import datetime
+import math
 
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers import device_registry as dr
-from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.components.sensor import (
     SensorDeviceClass,
-    SensorEntity,
     SensorStateClass,
 )
-from homeassistant.util import slugify as util_slugify
 
-from .device_base import LandroidSensorEntityDescription
+from .device_base import LandroidSensor, LandroidSensorEntityDescription
 
 from .api import LandroidAPI
-from .const import ATTR_DEVICES, DOMAIN, UPDATE_SIGNAL
-from .utils.entity_setup import vendor_to_device
-
-LOGGER = logging.getLogger(__name__)
+from .const import ATTR_DEVICES, DOMAIN
 
 SENSORS = [
     LandroidSensorEntityDescription(
@@ -28,9 +23,247 @@ SENSORS = [
         entity_category=None,
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.BATTERY,
+        entity_registry_enabled_default=True,
         native_unit_of_measurement="%",
         value_fn=lambda landroid: landroid.battery["percent"] if "percent" in landroid.battery else None,
-        attributes=["cycles","temperature","voltage","charging"]
+        attributes=["charging"]
+    ),
+    LandroidSensorEntityDescription(
+        key="battery_temperature",
+        name="Battery Temperature",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=SensorDeviceClass.TEMPERATURE,
+        entity_registry_enabled_default=False,
+        native_unit_of_measurement="°C",
+        value_fn=lambda landroid: landroid.battery["temperature"] if "temperature" in landroid.battery else None,
+    ),
+    LandroidSensorEntityDescription(
+        key="battery_cycles_total",
+        name="Battery Total Charge Cycles",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=None,
+        entity_registry_enabled_default=False,
+        native_unit_of_measurement=" ",
+        value_fn=lambda landroid: landroid.battery["cycles"]["total"] if "cycles" in landroid.battery else None,
+    ),
+    LandroidSensorEntityDescription(
+        key="battery_voltage",
+        name="Battery Voltage",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=SensorDeviceClass.VOLTAGE,
+        entity_registry_enabled_default=False,
+        native_unit_of_measurement="V",
+        value_fn=lambda landroid: landroid.battery["voltage"] if "voltage" in landroid.battery else None,
+    ),
+    LandroidSensorEntityDescription(
+        key="blades_total_on",
+        name="Blades Total On Time",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=None,
+        entity_registry_enabled_default=False,
+        native_unit_of_measurement="hours",
+        suggested_display_precision=0,
+        value_fn=lambda landroid: round(landroid.blades["total_on"] / 60, 0) if "total_on" in landroid.blades else None,
+    ),
+    LandroidSensorEntityDescription(
+        key="blades_current_on",
+        name="Blades Current On Time",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=None,
+        entity_registry_enabled_default=False,
+        native_unit_of_measurement="hours",
+        suggested_display_precision=0,
+        value_fn=lambda landroid: round(landroid.blades["current_on"] / 60, 0) if "current_on" in landroid.blades else None,
+    ),
+    LandroidSensorEntityDescription(
+        key="blades_reset_at",
+        name="Blades Reset At Hours",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=None,
+        entity_registry_enabled_default=False,
+        native_unit_of_measurement="hours",
+        suggested_display_precision=0,
+        value_fn=lambda landroid: round(landroid.blades["reset_at"] / 60, 0) if "reset_at" in landroid.blades else None,
+    ),
+    LandroidSensorEntityDescription(
+        key="blades_reset_time",
+        name="Blades Reset At",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=None,
+        device_class=SensorDeviceClass.TIMESTAMP,
+        entity_registry_enabled_default=False,
+        native_unit_of_measurement="",
+        value_fn=lambda landroid: landroid.blades["reset_time"] if "reset_time" in landroid.blades else None,
+    ),
+    LandroidSensorEntityDescription(
+        key="error",
+        name="Error",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=None,
+        device_class=SensorDeviceClass.ENUM,
+        entity_registry_enabled_default=True,
+        native_unit_of_measurement=None,
+        value_fn=lambda landroid: landroid.error["description"],
+        attributes=["id"],
+        icon="mdi:alert-circle",
+    ),
+    LandroidSensorEntityDescription(
+        key="online",
+        name="Online",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=None,
+        device_class=None,
+        entity_registry_enabled_default=True,
+        native_unit_of_measurement=None,
+        value_fn=lambda landroid: landroid.online,
+        icon="mdi:connection",
+    ),
+    LandroidSensorEntityDescription(
+        key="pitch",
+        name="Pitch",
+        entity_category=None,
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=None,
+        entity_registry_enabled_default=False,
+        native_unit_of_measurement="°",
+        value_fn=lambda landroid: landroid.orientation["pitch"],
+        suggested_display_precision=1,
+        icon="mdi:axis-x-rotate-clockwise",
+    ),
+    LandroidSensorEntityDescription(
+        key="roll",
+        name="Roll",
+        entity_category=None,
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=None,
+        entity_registry_enabled_default=False,
+        native_unit_of_measurement="°",
+        value_fn=lambda landroid: landroid.orientation["roll"],
+        suggested_display_precision=1,
+        icon="mdi:axis-y-rotate-clockwise",
+    ),
+    LandroidSensorEntityDescription(
+        key="yaw",
+        name="Yaw",
+        entity_category=None,
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=None,
+        entity_registry_enabled_default=False,
+        native_unit_of_measurement="°",
+        value_fn=lambda landroid: landroid.orientation["yaw"],
+        suggested_display_precision=1,
+        icon="mdi:axis-z-rotate-clockwise",
+    ),
+    LandroidSensorEntityDescription(
+        key="rainsensor_triggered",
+        name="Rainsensor Triggered",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=None,
+        device_class=None,
+        entity_registry_enabled_default=True,
+        native_unit_of_measurement=None,
+        value_fn=lambda landroid: landroid.rainsensor["triggered"] if "triggered" in landroid.rainsensor else None,
+        icon="mdi:weather-rainy",
+    ),
+    LandroidSensorEntityDescription(
+        key="rainsensor_delay",
+        name="Rainsensor Delay",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=None,
+        device_class=None,
+        entity_registry_enabled_default=True,
+        native_unit_of_measurement="minutes",
+        value_fn=lambda landroid: landroid.rainsensor["delay"] if "delay" in landroid.rainsensor else None,
+        icon="mdi:weather-rainy",
+    ),
+    LandroidSensorEntityDescription(
+        key="rainsensor_remaining",
+        name="Rainsensor Remaining",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=None,
+        device_class=None,
+        entity_registry_enabled_default=False,
+        native_unit_of_measurement="minutes",
+        value_fn=lambda landroid: landroid.rainsensor["remaining"] if "remaining" in landroid.rainsensor else None,
+        icon="mdi:weather-rainy",
+    ),
+    LandroidSensorEntityDescription(
+        key="distance",
+        name="Distance Driven",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=SensorDeviceClass.DISTANCE,
+        entity_registry_enabled_default=False,
+        native_unit_of_measurement="km",
+        suggested_display_precision=0,
+        value_fn=lambda landroid: round(landroid.statistics["distance"] / 1000, 0) if "distance" in landroid.statistics else None,
+    ),
+    LandroidSensorEntityDescription(
+        key="worktime_total",
+        name="Total Worktime",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=None,
+        entity_registry_enabled_default=False,
+        native_unit_of_measurement="hours",
+        suggested_display_precision=0,
+        value_fn=lambda landroid: round(landroid.statistics["worktime_total"] / 60, 0) if "worktime_total" in landroid.statistics else None,
+    ),
+    LandroidSensorEntityDescription(
+        key="serialnumber",
+        name="Serialnumber",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=None,
+        device_class=None,
+        entity_registry_enabled_default=False,
+        native_unit_of_measurement=None,
+        value_fn=lambda landroid: landroid.serial_number
+    ),
+    LandroidSensorEntityDescription(
+        key="rssi",
+        name="Rssi",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+        entity_registry_enabled_default=True,
+        native_unit_of_measurement="dBm",
+        value_fn=lambda landroid: landroid.rssi
+    ),
+    LandroidSensorEntityDescription(
+        key="last_update",
+        name="Last Update",
+        entity_category=None,
+        state_class=None,
+        device_class=SensorDeviceClass.TIMESTAMP,
+        entity_registry_enabled_default=True,
+        native_unit_of_measurement=None,
+        value_fn=lambda landroid: datetime.fromisoformat(landroid.updated)
+    ),
+    LandroidSensorEntityDescription(
+        key="next_start",
+        name="Next Scheduled Start",
+        entity_category=None,
+        state_class=None,
+        device_class=SensorDeviceClass.TIMESTAMP,
+        entity_registry_enabled_default=True,
+        native_unit_of_measurement=None,
+        value_fn=lambda landroid: landroid.schedules["next_schedule_start"]
+    ),
+    LandroidSensorEntityDescription(
+        key="daily_progress",
+        name="Daily Progress",
+        entity_category=None,
+        state_class=None,
+        device_class=None,
+        entity_registry_enabled_default=False,
+        native_unit_of_measurement="%",
+        value_fn=lambda landroid: landroid.schedules["daily_progress"]
     )
 ]
 
@@ -43,69 +276,14 @@ async def async_setup_entry(
     sensors = []
     for name, info in hass.data[DOMAIN][config.entry_id][ATTR_DEVICES].items():
         api: LandroidAPI = info["api"]
-        device = vendor_to_device(api.config["type"])
-        # constructor = device.MowerDevice(hass, api)
         for sens in SENSORS:
+            if not isinstance(sens.min_check_value, type(None)):
+                val = sens.value_fn(api.device)
+                if val == sens.min_check_value:
+                    continue
+
             entity = LandroidSensor(hass, sens, api, config)
 
             sensors.append(entity)
 
     async_add_devices(sensors)
-
-
-class LandroidSensor(SensorEntity):
-    """Representation of a Landroid sensor."""
-
-    def __init__(self,hass:HomeAssistant, description:LandroidSensorEntityDescription, api:LandroidAPI, config:ConfigEntry)->None:
-        """Initialize a Landroid sensor."""
-        super().__init__()
-
-        self.entity_description = description
-        self.hass = hass
-        self.device = api.device
-
-        self._api = api
-        self._config = config
-
-        self._attr_name = self.entity_description.name
-        self._attr_unique_id = util_slugify(
-            f"{self._attr_name}_{self._config.entry_id}"
-        )
-        self._attr_should_poll = False
-
-        self._attr_native_value = self.entity_description.value_fn(
-            self.device
-        )
-
-        LOGGER.info("Added sensor '%s' with value '%s'", self._attr_name,self._attr_native_value)
-
-        _connections = {(dr.CONNECTION_NETWORK_MAC, self.device.mac_address)}
-
-        self._attr_device_info = {
-            "connections": _connections,
-            "identifiers": {
-                (
-                    DOMAIN,
-                    self._api.unique_id,
-                    self._api.entry_id,
-                    self._api.device.serial_number,
-                )
-            },
-            "name": str(f"{self._api.friendly_name}"),
-            "sw_version": self._api.device.firmware["version"],
-            "manufacturer": self._api.config["type"].capitalize(),
-            "model": self._api.device.model,
-        }
-
-        self._attr_extra_state_attributes = {}
-
-        if not isinstance(self.entity_description.attributes, type(None)):
-            if self.entity_description.key == "battery_state":
-                for key in self.entity_description.attributes:
-                    self._attr_extra_state_attributes.update({key: self.device.battery[key]})
-
-        async_dispatcher_connect(
-            self.hass,
-            util_slugify(f"{UPDATE_SIGNAL}_{self._api.device.name}"),
-            self.async_write_ha_state,
-        )
