@@ -64,10 +64,6 @@
             "description": "Start kantklip (hvis understøttet)",
             "name": "Kantklip"
         },
-        "lock": {
-            "description": "Skift låse status",
-            "name": "Lås/oplås enheden"
-        },
         "ots": {
             "description": "Start engangs kørsel (hvis understøttet)",
             "fields": {
@@ -81,16 +77,6 @@
                 }
             },
             "name": "Engangs kørsel"
-        },
-        "partymode": {
-            "description": "Indstil PartyMode (hvis understøttet)",
-            "fields": {
-                "party_mode_enabled": {
-                    "description": "PartyMode aktiveret",
-                    "name": "Aktiver PartyMode"
-                }
-            },
-            "name": "PartyMode"
         },
         "restart": {
             "description": "Genstarter enheden",

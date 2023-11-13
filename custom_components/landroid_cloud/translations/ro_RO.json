@@ -64,10 +64,6 @@
             "description": "Pornește tunderea perimetrului (dacă dispozivul permite)",
             "name": "Tunderea perimetrului"
         },
-        "lock": {
-            "description": "Comută blocarea dispozitivului",
-            "name": "Blochează/deblochează dispozitivul"
-        },
         "ots": {
             "description": "Pornește programarea unică (dacă dispozitivul permite)",
             "fields": {
@@ -81,16 +77,6 @@
                 }
             },
             "name": "Programare unică"
-        },
-        "partymode": {
-            "description": "Comută sau setează modul \"Petrecere\" (dacă dispozitvul permite)",
-            "fields": {
-                "party_mode_enabled": {
-                    "description": "Mod \"Petrecere\" activat",
-                    "name": "Activează mod \"Petrecere\""
-                }
-            },
-            "name": "Mod \"Petrecere\""
         },
         "restart": {
             "description": "Repornește dispozitivul",
