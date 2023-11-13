@@ -64,10 +64,6 @@
             "description": "Start edgecut (if supported)",
             "name": "Border-/Edgecut"
         },
-        "lock": {
-            "description": "Toggle device lock",
-            "name": "Lock/Unlock device"
-        },
         "ots": {
             "description": "Start One-Time-Schedule (if supported)",
             "fields": {
@@ -81,16 +77,6 @@
                 }
             },
             "name": "One-Time-Schedule"
-        },
-        "partymode": {
-            "description": "Toggle or set PartyMode (if supported)",
-            "fields": {
-                "party_mode_enabled": {
-                    "description": "Partymode enabled",
-                    "name": "Enable Partymode"
-                }
-            },
-            "name": "Partymode"
         },
         "restart": {
             "description": "Restarts or reboots device",

@@ -24,13 +24,13 @@
             "landroid_cloud": {
                 "state": {
                     "edgecut": "Kantenschnitt",
-                    "escaped_digital_fence": "Escaped digital fence",
+                    "escaped_digital_fence": "Außerhalb der Begrenzung",
                     "initializing": "Initialisierung",
                     "mowing": "Mähen",
                     "offline": "Offline",
                     "rain_delay": "Regenverzögerung",
-                    "returning": "Returning to charger",
-                    "searching_zone": "Searching for zone",
+                    "returning": "Rückkerh zur Ausgangsposition",
+                    "searching_zone": "Begrenzung suchen",
                     "starting": "Startet",
                     "zoning": "Suche Mähbereich"
                 }
@@ -50,7 +50,7 @@
                     "name": "Multi zone probabilities"
                 },
                 "raindelay": {
-                    "description": "Set rain delay. Time in minutes ranging from 0 to 300. 0 = Disabled",
+                    "description": "Regenverzögerung einstellen. Zeit zwischen 0 und 300 Minuten. 0 = Deaktiviert",
                     "name": "Regenverzögerung"
                 },
                 "timeextension": {
@@ -64,33 +64,19 @@
             "description": "Start edgecut (if supported)",
             "name": "Border-/Edgecut"
         },
-        "lock": {
-            "description": "Toggle device lock",
-            "name": "Lock/Unlock device"
-        },
         "ots": {
             "description": "Start One-Time-Schedule (if supported)",
             "fields": {
                 "boundary": {
-                    "description": "Do boundary (Edge/Border cut)",
-                    "name": "Boundary"
+                    "description": "Rasenkannte schneiden",
+                    "name": "Kantenschnitt"
                 },
                 "runtime": {
                     "description": "Run time in minutes before returning to charging station",
                     "name": "Run time"
                 }
             },
-            "name": "One-Time-Schedule"
-        },
-        "partymode": {
-            "description": "Toggle or set PartyMode (if supported)",
-            "fields": {
-                "party_mode_enabled": {
-                    "description": "Partymode enabled",
-                    "name": "Enable Partymode"
-                }
-            },
-            "name": "Partymode"
+            "name": "Einmaliger Zeitplan"
         },
         "restart": {
             "description": "Restarts or reboots device",
@@ -101,75 +87,75 @@
             "fields": {
                 "friday_boundary": {
                     "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Friday, Boundary"
+                    "name": "Freitag, Kantenschnitt"
                 },
                 "friday_end": {
                     "description": "When should the schedule stop on fridays?",
-                    "name": "Friday, End"
+                    "name": "Freitag, Ende"
                 },
                 "friday_start": {
                     "description": "Starting time for fridays",
-                    "name": "Friday, Start"
+                    "name": "Freitag, Beginn"
                 },
                 "monday_boundary": {
                     "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Monday, Boundary"
+                    "name": "Montag, Kantenschnitt"
                 },
                 "monday_end": {
                     "description": "When should the schedule stop on mondays?",
-                    "name": "Monday, End"
+                    "name": "Montag, Ende"
                 },
                 "monday_start": {
                     "description": "Starting time for mondays",
-                    "name": "Monday, Start"
+                    "name": "Montag, Beginn"
                 },
                 "saturday_boundary": {
                     "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Saturday, Boundary"
+                    "name": "Samstag, Kantenschnitt"
                 },
                 "saturday_end": {
                     "description": "When should the schedule stop on saturdays?",
-                    "name": "Saturday, End"
+                    "name": "Samstag, Ende"
                 },
                 "saturday_start": {
                     "description": "Starting time for saturdays",
-                    "name": "Saturday, Start"
+                    "name": "Samstag, Beginn"
                 },
                 "sunday_boundary": {
                     "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Sunday, Boundary"
+                    "name": "Sonntag, Kantenschnitt"
                 },
                 "sunday_end": {
                     "description": "When should the schedule stop on sundays?",
-                    "name": "Sunday, End"
+                    "name": "Sonntag, Ende"
                 },
                 "sunday_start": {
                     "description": "Starting time for sundays",
-                    "name": "Sunday, Start"
+                    "name": "Sonntag, Beginn"
                 },
                 "thursday_boundary": {
                     "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Thursday, Boundary"
+                    "name": "Donnerstag, Kantenschnitt"
                 },
                 "thursday_end": {
                     "description": "When should the schedule stop on thursdays?",
-                    "name": "Thursday, End"
+                    "name": "Donnerstag, Ende"
                 },
                 "thursday_start": {
                     "description": "Starting time for thursdays",
-                    "name": "Wednesday, Start"
+                    "name": "Donnerstag, Beginn"
                 },
                 "tuesday_boundary": {
                     "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Tuesday, Boundary"
+                    "name": "Dienstag, Kantenschnitt"
                 },
                 "tuesday_end": {
                     "description": "When should the schedule stop on tuesdays?",
-                    "name": "Tuesday, End"
+                    "name": "Dienstag, Ende"
                 },
                 "tuesday_start": {
                     "description": "Starting time for tuesdays",
-                    "name": "Tuesday, Start"
+                    "name": "Dienstag, Beginn"
                 },
                 "type": {
                     "description": "Change primary or secondary schedule?",
@@ -177,15 +163,15 @@
                 },
                 "wednesday_boundary": {
                     "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Wednesday, Boundary"
+                    "name": "Mittwoch, Kantenschnitt"
                 },
                 "wednesday_end": {
                     "description": "When should the schedule stop on wednesdays?",
-                    "name": "Wednesday, End"
+                    "name": "Mittwoch, Ende"
                 },
                 "wednesday_start": {
                     "description": "Starting time for wednesdays",
-                    "name": "Wednesday, Start"
+                    "name": "Mittwoch, Beginn"
                 }
             },
             "name": "Set or update schedule"
@@ -218,7 +204,7 @@
                     "name": "Wheel torque"
                 }
             },
-            "name": "Torque"
+            "name": "Drehmoment"
         }
     }
 }

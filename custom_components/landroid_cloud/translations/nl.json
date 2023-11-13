@@ -64,10 +64,6 @@
             "description": "Start randroutine (indien ondersteund)",
             "name": "Randroutine"
         },
-        "lock": {
-            "description": "Apparaatvergrendeling in-/uitschakelen",
-            "name": "Apparaat vergrendelen/ontgrendelen"
-        },
         "ots": {
             "description": "Eenmalig schema starten (indien ondersteund)",
             "fields": {
@@ -81,16 +77,6 @@
                 }
             },
             "name": "Eenmalig schema"
-        },
-        "partymode": {
-            "description": "Feestmodus in- of uitschakelen (indien ondersteund)",
-            "fields": {
-                "party_mode_enabled": {
-                    "description": "Feestmodus ingeschakeld",
-                    "name": "Feestmodus inschakelen"
-                }
-            },
-            "name": "Feestmodus"
         },
         "restart": {
             "description": "Apparaat herstarten of opnieuw opstarten",

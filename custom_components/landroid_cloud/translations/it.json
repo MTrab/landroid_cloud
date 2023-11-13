@@ -24,13 +24,13 @@
             "landroid_cloud": {
                 "state": {
                     "edgecut": "Taglio bordo",
-                    "escaped_digital_fence": "Escaped digital fence",
+                    "escaped_digital_fence": "Landroid fuori area di lavoro",
                     "initializing": "Inizializzazione in corso",
                     "mowing": "Taglio in corso",
                     "offline": "Offline",
                     "rain_delay": "Ritardo pioggia",
-                    "returning": "Returning to charger",
-                    "searching_zone": "Searching for zone",
+                    "returning": "Ritorno alla base",
+                    "searching_zone": "Ricerca zona",
                     "starting": "Partenza",
                     "zoning": "Apprendimento zone"
                 }
@@ -39,18 +39,18 @@
     },
     "services": {
         "config": {
-            "description": "Set device config parameters",
+            "description": "Imposta i parametri di configurazione del dispositivo",
             "fields": {
                 "multizone_distances": {
-                    "description": "Set multizone distance array in meters. 0 = Disabled. Format: 15, 80, 120, 155",
-                    "name": "Multi zone distances"
+                    "description": "Imposta la distanza multizona in metri. 0 = Disabilitato. Formato: 15, 80, 120, 155",
+                    "name": "Distanze multizona"
                 },
                 "multizone_probabilities": {
-                    "description": "Set multizone probabilities array. Format: 50, 10, 20, 20",
-                    "name": "Multi zone probabilities"
+                    "description": "Imposta l'array delle probabilità multizona. Formato: 50, 10, 20, 20",
+                    "name": "Probabilità multizona"
                 },
                 "raindelay": {
-                    "description": "Set rain delay. Time in minutes ranging from 0 to 300. 0 = Disabled",
+                    "description": "Imposta il ritardo per la pioggia. Tempo in minuti compreso tra 0 e 300. 0 = Disabilitato",
                     "name": "Ritardo pioggia"
                 },
                 "timeextension": {
@@ -58,167 +58,153 @@
                     "name": "Time extension"
                 }
             },
-            "name": "Set zone"
+            "name": "Imposta zona"
         },
         "edgecut": {
-            "description": "Start edgecut (if supported)",
-            "name": "Border-/Edgecut"
-        },
-        "lock": {
-            "description": "Toggle device lock",
-            "name": "Lock/Unlock device"
+            "description": "Avvia taglio bordo (se supportato)",
+            "name": "Taglio bordo"
         },
         "ots": {
-            "description": "Start One-Time-Schedule (if supported)",
+            "description": "Avvia il programma una tantum (se supportato)",
             "fields": {
                 "boundary": {
-                    "description": "Do boundary (Edge/Border cut)",
-                    "name": "Boundary"
+                    "description": "Esegui un taglio del bordo",
+                    "name": "Taglio bordo"
                 },
                 "runtime": {
-                    "description": "Run time in minutes before returning to charging station",
-                    "name": "Run time"
+                    "description": "Tempo in minuti prima che il robot torni alla stazione di ricarica",
+                    "name": "Durata del programma"
                 }
             },
-            "name": "One-Time-Schedule"
-        },
-        "partymode": {
-            "description": "Toggle or set PartyMode (if supported)",
-            "fields": {
-                "party_mode_enabled": {
-                    "description": "Partymode enabled",
-                    "name": "Enable Partymode"
-                }
-            },
-            "name": "Partymode"
+            "name": "Programma una tantum"
         },
         "restart": {
-            "description": "Restarts or reboots device",
-            "name": "Restart device"
+            "description": "Riavvia il dispositivo",
+            "name": "Riavvia il dispositivo"
         },
         "schedule": {
-            "description": "Set or change the schedule of the mower",
+            "description": "Modifica il programma del tagliaerba",
             "fields": {
                 "friday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Friday, Boundary"
+                    "description": "Avviare questo programma tagliando il bordo?",
+                    "name": "Venerdì - Taglio bordo"
                 },
                 "friday_end": {
-                    "description": "When should the schedule stop on fridays?",
-                    "name": "Friday, End"
+                    "description": "Ora di fine programma",
+                    "name": "Venerdì - Fine programma"
                 },
                 "friday_start": {
-                    "description": "Starting time for fridays",
-                    "name": "Friday, Start"
+                    "description": "Ora di inizio programma",
+                    "name": "Venerdì - Inizio programma"
                 },
                 "monday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Monday, Boundary"
+                    "description": "Avviare questo programma tagliando il bordo?",
+                    "name": "Lunedì - Taglio bordo"
                 },
                 "monday_end": {
-                    "description": "When should the schedule stop on mondays?",
-                    "name": "Monday, End"
+                    "description": "Ora di fine programma",
+                    "name": "Lunedì - Fine programma"
                 },
                 "monday_start": {
-                    "description": "Starting time for mondays",
-                    "name": "Monday, Start"
+                    "description": "Ora di inizio programma",
+                    "name": "Lunedì - Inizio programma"
                 },
                 "saturday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Saturday, Boundary"
+                    "description": "Avviare questo programma tagliando il bordo?",
+                    "name": "Sabato - Taglio bordo"
                 },
                 "saturday_end": {
-                    "description": "When should the schedule stop on saturdays?",
-                    "name": "Saturday, End"
+                    "description": "Ora di fine programma",
+                    "name": "Sabato - Fine programma"
                 },
                 "saturday_start": {
-                    "description": "Starting time for saturdays",
-                    "name": "Saturday, Start"
+                    "description": "Ora di inizio programma",
+                    "name": "Sabato - Inizio programma"
                 },
                 "sunday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Sunday, Boundary"
+                    "description": "Avviare questo programma tagliando il bordo?",
+                    "name": "Domenica - Taglio bordo"
                 },
                 "sunday_end": {
-                    "description": "When should the schedule stop on sundays?",
-                    "name": "Sunday, End"
+                    "description": "Ora di fine programma",
+                    "name": "Domenica - Fine programma"
                 },
                 "sunday_start": {
-                    "description": "Starting time for sundays",
-                    "name": "Sunday, Start"
+                    "description": "Ora di inizio programma",
+                    "name": "Domenica - Inizio programma"
                 },
                 "thursday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Thursday, Boundary"
+                    "description": "Avviare questo programma tagliando il bordo?",
+                    "name": "Giovedì - Taglio bordo"
                 },
                 "thursday_end": {
-                    "description": "When should the schedule stop on thursdays?",
-                    "name": "Thursday, End"
+                    "description": "Ora di fine programma",
+                    "name": "Giovedì - Fine programma"
                 },
                 "thursday_start": {
-                    "description": "Starting time for thursdays",
-                    "name": "Wednesday, Start"
+                    "description": "Ora di inizio programma",
+                    "name": "Giovedì - Inizio programma"
                 },
                 "tuesday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Tuesday, Boundary"
+                    "description": "Avviare questo programma tagliando il bordo?",
+                    "name": "Martedì - Taglio bordo"
                 },
                 "tuesday_end": {
-                    "description": "When should the schedule stop on tuesdays?",
-                    "name": "Tuesday, End"
+                    "description": "Ora di fine programma",
+                    "name": "Martedì - Fine programma"
                 },
                 "tuesday_start": {
-                    "description": "Starting time for tuesdays",
-                    "name": "Tuesday, Start"
+                    "description": "Ora di inizio programma",
+                    "name": "Martedì - Inizio programma"
                 },
                 "type": {
-                    "description": "Change primary or secondary schedule?",
-                    "name": "Schedule type"
+                    "description": "Modificare il programma primario o secondario?",
+                    "name": "Tipo di programma"
                 },
                 "wednesday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Wednesday, Boundary"
+                    "description": "Avviare questo programma tagliando il bordo?",
+                    "name": "Mercoledì - Taglio bordo"
                 },
                 "wednesday_end": {
-                    "description": "When should the schedule stop on wednesdays?",
-                    "name": "Wednesday, End"
+                    "description": "Ora di fine programma",
+                    "name": "Mercoledì - Fine programma"
                 },
                 "wednesday_start": {
-                    "description": "Starting time for wednesdays",
-                    "name": "Wednesday, Start"
+                    "description": "Ora di inizio programma",
+                    "name": "Mercoledì - Inizio programma"
                 }
             },
-            "name": "Set or update schedule"
+            "name": "Modifica il programma"
         },
         "send_raw": {
-            "description": " Send a raw JSON command to the device",
+            "description": "Invia un comando JSON raw al dispositivo",
             "fields": {
                 "json": {
-                    "description": "Data to send, formatted as valid JSON",
+                    "description": "Dati da inviare (formattati in JSON)",
                     "name": "JSON data"
                 }
             },
-            "name": "Send RAW command"
+            "name": "Invia comando RAW"
         },
         "setzone": {
-            "description": "Set which zone to be mowed next",
+            "description": "Imposta la prossima zona da tagliare",
             "fields": {
                 "zone": {
-                    "description": "Sets the zone number, ranging from 0 to 3, to be mowed next",
-                    "name": "Zone"
+                    "description": "Imposta il prossimo numero della zona da tagliare, da 0 a 3",
+                    "name": "Zona"
                 }
             },
-            "name": "Set zone"
+            "name": "Imposta zona"
         },
         "torque": {
-            "description": "Set wheel torque (if supported)",
+            "description": "Imposta la coppia delle ruote (se supportato)",
             "fields": {
                 "torque": {
-                    "description": "Set wheel torque. Ranging from -50% to 50%",
-                    "name": "Wheel torque"
+                    "description": "Imposta la coppia delle ruote. Da -50% a 50%",
+                    "name": "Coppia delle ruote"
                 }
             },
-            "name": "Torque"
+            "name": "Coppia"
         }
     }
 }
