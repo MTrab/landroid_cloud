@@ -1,5 +1,5 @@
 """Define device classes."""
-# pylint: disable=unused-argument,too-many-instance-attributes,no-self-use
+# pylint: disable=unused-argument,too-many-instance-attributes,too-many-lines
 from __future__ import annotations
 
 import asyncio
@@ -12,6 +12,10 @@ from datetime import timedelta
 from functools import partial
 from typing import Any
 
+from homeassistant.components.binary_sensor import (
+    BinarySensorEntity,
+    BinarySensorEntityDescription,
+)
 from homeassistant.components.button import ButtonEntity, ButtonEntityDescription
 from homeassistant.components.lawn_mower import (
     LawnMowerActivity,
@@ -20,6 +24,7 @@ from homeassistant.components.lawn_mower import (
 )
 from homeassistant.components.select import SelectEntity, SelectEntityDescription
 from homeassistant.components.sensor import SensorEntity, SensorEntityDescription
+from homeassistant.components.switch import SwitchEntity, SwitchEntityDescription
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.exceptions import HomeAssistantError
@@ -192,8 +197,7 @@ class LandroidCloudBaseEntity(LandroidLogger):
     @property
     def device_info(self):
         """Return device info"""
-        return {
-            "connections": self._connections,
+        info = {
             "identifiers": {
                 (
                     DOMAIN,
@@ -208,6 +212,11 @@ class LandroidCloudBaseEntity(LandroidLogger):
             "model": self.api.device.model,
             "serial_number": self.api.device.serial_number,
         }
+
+        if self._mac != "__UUID__":
+            info.update({"connections": self._connections})
+
+        return info
 
     async def async_added_to_hass(self):
         """Connect update callbacks."""
@@ -361,20 +370,20 @@ class LandroidCloudBaseEntity(LandroidLogger):
                 self.log(LoggerType.DATA_UPDATE, "Mapping did not find '%s'", value)
 
         # Populate capabilities attribute
-        data[ATTR_CAPABILITIES] = []
-        capabilities: Capability = device.capabilities
-        for capability in DeviceCapability:
-            if capabilities.check(capability):
-                data[ATTR_CAPABILITIES].append(CAPABILITY_TO_TEXT[capability])
+        # data[ATTR_CAPABILITIES] = []
+        # capabilities: Capability = device.capabilities
+        # for capability in DeviceCapability:
+        #     if capabilities.check(capability):
+        #         data[ATTR_CAPABILITIES].append(CAPABILITY_TO_TEXT[capability])
 
-        # If no extra capabilities were found,
-        # then set the attribute to None (just for visual appearance)
-        if len(data[ATTR_CAPABILITIES]) == 0:
-            data.update({ATTR_CAPABILITIES: None})
+        # # If no extra capabilities were found,
+        # # then set the attribute to None (just for visual appearance)
+        # if len(data[ATTR_CAPABILITIES]) == 0:
+        #     data.update({ATTR_CAPABILITIES: None})
 
-        # Remove wheel_torque attribute if the device doesn't support this setting
-        if not capabilities.check(DeviceCapability.TORQUE) and ATTR_TORQUE in data:
-            data.pop(ATTR_TORQUE)
+        # # Remove wheel_torque attribute if the device doesn't support this setting
+        # if not capabilities.check(DeviceCapability.TORQUE) and ATTR_TORQUE in data:
+        #     data.pop(ATTR_TORQUE)
 
         data[ATTR_LANDROIDFEATURES] = self.api.features
 
@@ -648,7 +657,7 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
         if LawnMowerActivity.MOWING in self.state:
             await self.async_pause()
         else:
-            await self.async_start()
+            await self.async_start_mowing()
 
     async def async_dock(self, **kwargs: Any) -> None:
         """Set the device to return to the dock."""
@@ -672,7 +681,7 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
 
     async def async_stop(self, **kwargs: Any) -> None:
         """Alias for return to base function."""
-        await self.async_return_to_base()
+        await self.async_dock()
 
     async def async_set_zone(self, data: dict | None = None) -> None:
         """Set next zone to cut."""
@@ -915,14 +924,31 @@ class LandroidBaseEntityDescriptionMixin:
 class LandroidSensorEntityDescription(
     SensorEntityDescription, LandroidBaseEntityDescriptionMixin
 ):
-    """Describes a Webasto sensor."""
+    """Describes a Landroid sensor."""
 
     unit_fn: Callable[[WorxCloud], None] = None
     attributes: [] | None = None
-    min_check_value: bool | int | float | str | None = None
 
 
-class LandroidSensor(SensorEntity, LandroidLogger):
+@dataclass
+class LandroidBinarySensorEntityDescription(
+    BinarySensorEntityDescription, LandroidBaseEntityDescriptionMixin
+):
+    """Describes a Landroid binary_sensor."""
+
+
+@dataclass
+class LandroidSwitchEntityDescription(
+    SwitchEntityDescription, LandroidBaseEntityDescriptionMixin
+):
+    """Describes a Landroid switch."""
+
+    command_fn: Callable[[WorxCloud], None] = None
+    icon_on: str | None = None
+    icon_off: str | None = None
+
+
+class LandroidSensor(SensorEntity):
     """Representation of a Landroid sensor."""
 
     _attr_has_entity_name = True
@@ -955,10 +981,7 @@ class LandroidSensor(SensorEntity, LandroidLogger):
         )
         self._attr_should_poll = False
 
-        _connections = {(dr.CONNECTION_NETWORK_MAC, self.device.mac_address)}
-
         self._attr_device_info = {
-            "connections": _connections,
             "identifiers": {
                 (
                     DOMAIN,
@@ -973,6 +996,10 @@ class LandroidSensor(SensorEntity, LandroidLogger):
             "model": self._api.device.model,
             "serial_number": self._api.device.serial_number,
         }
+
+        if self.device.mac_address != "__UUID__":
+            _connections = {(dr.CONNECTION_NETWORK_MAC, self.device.mac_address)}
+            self._attr_device_info.update({"connections": _connections})
 
         self._attr_extra_state_attributes = {}
 
@@ -1025,5 +1052,199 @@ class LandroidSensor(SensorEntity, LandroidLogger):
             )
             try:
                 self.async_write_ha_state()
-            except:
+            except RuntimeError:
                 pass
+
+
+class LandroidSwitch(SwitchEntity):
+    """Representation of a Landroid switch."""
+
+    _attr_has_entity_name = True
+
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        description: LandroidSwitchEntityDescription,
+        api: LandroidAPI,
+        config: ConfigEntry,
+    ) -> None:
+        """Initialize a Landroid switch."""
+        super().__init__()
+
+        self.entity_description = description
+        self.hass = hass
+        self.device = api.device
+
+        self._api = api
+        self._config = config
+
+        self._attr_name = self.entity_description.name
+
+        _LOGGER.debug(
+            "(%s, Setup) Added switch '%s'",
+            self._api.friendly_name,
+            self._attr_name,
+        )
+
+        self._attr_unique_id = util_slugify(
+            f"{self._attr_name}_{self._config.entry_id}"
+        )
+        self._attr_should_poll = False
+
+        self._attr_device_info = {
+            "identifiers": {
+                (
+                    DOMAIN,
+                    self._api.unique_id,
+                    self._api.entry_id,
+                    self._api.device.serial_number,
+                )
+            },
+            "name": str(f"{self._api.friendly_name}"),
+            "sw_version": self._api.device.firmware["version"],
+            "manufacturer": self._api.config["type"].capitalize(),
+            "model": self._api.device.model,
+            "serial_number": self._api.device.serial_number,
+        }
+
+        if self.device.mac_address != "__UUID__":
+            _connections = {(dr.CONNECTION_NETWORK_MAC, self.device.mac_address)}
+            self._attr_device_info.update({"connections": _connections})
+
+        self._attr_extra_state_attributes = {}
+
+        async_dispatcher_connect(
+            self.hass,
+            util_slugify(f"{UPDATE_SIGNAL}_{self._api.device.name}"),
+            self.handle_update,
+        )
+
+    # async def
+    async def handle_update(self) -> None:
+        """Handle the updates when recieving an update signal."""
+        try:
+            self._attr_is_on = self.entity_description.value_fn(self.device)
+        except AttributeError:
+            return
+
+        _LOGGER.debug(
+            "(%s, Update signal) Updating switch '%s'",
+            self._api.friendly_name,
+            self._attr_name,
+        )
+        try:
+            self.async_write_ha_state()
+        except RuntimeError:
+            pass
+
+    async def async_turn_on(self, **kwargs: Any) -> None:
+        """Turn on the switch."""
+        await self.hass.async_add_executor_job(
+            self.entity_description.command_fn,
+            self._api.cloud,
+            self._api.device.serial_number,
+            True,
+        )
+
+    async def async_turn_off(self, **kwargs: Any) -> None:
+        """Turn off the switch."""
+        await self.hass.async_add_executor_job(
+            self.entity_description.command_fn,
+            self._api.cloud,
+            self._api.device.serial_number,
+            False,
+        )
+
+    @property
+    def icon(self) -> str | None:
+        """Return the icon specified."""
+        if self.is_on and not isinstance(self.entity_description.icon_on, type(None)):
+            return self.entity_description.icon_on
+        elif not self.is_on and not isinstance(
+            self.entity_description.icon_off, type(None)
+        ):
+            return self.entity_description.icon_off
+        else:
+            return super().icon
+
+
+class LandroidBinarySensor(BinarySensorEntity):
+    """Representation of a Landroid binary_sensor."""
+
+    _attr_has_entity_name = True
+
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        description: LandroidBinarySensorEntityDescription,
+        api: LandroidAPI,
+        config: ConfigEntry,
+    ) -> None:
+        """Initialize a Landroid binary_sensor."""
+        super().__init__()
+
+        self.entity_description = description
+        self.hass = hass
+        self.device = api.device
+
+        self._api = api
+        self._config = config
+
+        self._attr_name = self.entity_description.name
+
+        _LOGGER.debug(
+            "(%s, Setup) Added binary_sensor '%s'",
+            self._api.friendly_name,
+            self._attr_name,
+        )
+
+        self._attr_unique_id = util_slugify(
+            f"{self._attr_name}_{self._config.entry_id}"
+        )
+        self._attr_should_poll = False
+
+        self._attr_device_info = {
+            "identifiers": {
+                (
+                    DOMAIN,
+                    self._api.unique_id,
+                    self._api.entry_id,
+                    self._api.device.serial_number,
+                )
+            },
+            "name": str(f"{self._api.friendly_name}"),
+            "sw_version": self._api.device.firmware["version"],
+            "manufacturer": self._api.config["type"].capitalize(),
+            "model": self._api.device.model,
+            "serial_number": self._api.device.serial_number,
+        }
+
+        if self.device.mac_address != "__UUID__":
+            _connections = {(dr.CONNECTION_NETWORK_MAC, self.device.mac_address)}
+            self._attr_device_info.update({"connections": _connections})
+
+        self._attr_extra_state_attributes = {}
+
+        async_dispatcher_connect(
+            self.hass,
+            util_slugify(f"{UPDATE_SIGNAL}_{self._api.device.name}"),
+            self.handle_update,
+        )
+
+    # async def
+    async def handle_update(self) -> None:
+        """Handle the updates when recieving an update signal."""
+        try:
+            self._attr_is_on = self.entity_description.value_fn(self.device)
+        except AttributeError:
+            return
+
+        _LOGGER.debug(
+            "(%s, Update signal) Updating binary_sensor '%s'",
+            self._api.friendly_name,
+            self._attr_name,
+        )
+        try:
+            self.async_write_ha_state()
+        except RuntimeError:
+            pass

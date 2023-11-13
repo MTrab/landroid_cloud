@@ -1,10 +1,3 @@
-lock:
-  description: Toggle device lock
-  target:
-    entity:
-      integration: landroid_cloud
-      domain: lawn_mower
-
 restart:
   description: Restart device
   target:
@@ -18,22 +11,6 @@ edgecut:
     entity:
       integration: landroid_cloud
       domain: lawn_mower
-
-partymode:
-  description: Toggle or set PartyMode (if supported)
-  target:
-    entity:
-      integration: landroid_cloud
-      domain: lawn_mower
-  fields:
-    party_mode_enabled:
-      name: Partymode
-      description: Partymode enabled
-      required: false
-      example: false
-      default: false
-      selector:
-        boolean:
 
 setzone:
   description: Set which zone to be mowed next

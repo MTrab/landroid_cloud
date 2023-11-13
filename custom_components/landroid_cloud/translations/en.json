@@ -38,10 +38,6 @@
         }
     },
     "services": {
-        "lock": {
-            "description": "Toggle device lock",
-            "name": "Lock/Unlock device"
-        },
         "restart": {
             "description": "Restarts or reboots device",
             "name": "Restart device"
@@ -49,16 +45,6 @@
         "edgecut": {
             "description": "Start edgecut (if supported)",
             "name": "Border-/Edgecut"
-        },
-        "partymode": {
-            "description": "Toggle or set PartyMode (if supported)",
-            "name": "Partymode",
-            "fields": {
-                "party_mode_enabled": {
-                    "description": "Partymode enabled",
-                    "name": "Enable Partymode"
-                }
-            }
         },
         "setzone": {
             "description": "Set which zone to be mowed next",
