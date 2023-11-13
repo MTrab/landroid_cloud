@@ -1,7 +1,6 @@
 """Sensors for landroid_cloud."""
 from __future__ import annotations
 
-import math
 from datetime import datetime
 
 from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
@@ -295,16 +294,11 @@ async def async_setup_entry(
     config: ConfigEntry,
     async_add_devices,
 ) -> None:
-    """Set up the mower device."""
+    """Set up the sensor platform."""
     sensors = []
-    for name, info in hass.data[DOMAIN][config.entry_id][ATTR_DEVICES].items():
+    for _, info in hass.data[DOMAIN][config.entry_id][ATTR_DEVICES].items():
         api: LandroidAPI = info["api"]
         for sens in SENSORS:
-            if not isinstance(sens.min_check_value, type(None)):
-                val = sens.value_fn(api.device)
-                if val == sens.min_check_value:
-                    continue
-
             entity = LandroidSensor(hass, sens, api, config)
 
             sensors.append(entity)

@@ -20,9 +20,7 @@ from .const import (
     LOGLEVEL,
     SERVICE_CONFIG,
     SERVICE_EDGECUT,
-    SERVICE_LOCK,
     SERVICE_OTS,
-    SERVICE_PARTYMODE,
     SERVICE_RESTART,
     SERVICE_SCHEDULE,
     SERVICE_SEND_RAW,
@@ -34,7 +32,6 @@ from .scheme import (
     CONFIG_SCHEMA,
     EMPTY_SCHEME,
     OTS_SCHEME,
-    PARTYMODE_SCHEME,
     RAW_SCHEME,
     SCHEDULE_SCHEME,
     SET_ZONE_SCHEME,
@@ -58,16 +55,10 @@ SUPPORTED_SERVICES = [
         key=SERVICE_CONFIG, schema=CONFIG_SCHEMA, feature=LandroidFeatureSupport.CONFIG
     ),
     LandroidServiceDescription(
-        key=SERVICE_PARTYMODE,
-        schema=PARTYMODE_SCHEME,
-        feature=LandroidFeatureSupport.PARTYMODE,
-    ),
-    LandroidServiceDescription(
         key=SERVICE_SETZONE,
         schema=SET_ZONE_SCHEME,
         feature=LandroidFeatureSupport.SETZONE,
     ),
-    LandroidServiceDescription(key=SERVICE_LOCK, feature=LandroidFeatureSupport.LOCK),
     LandroidServiceDescription(
         key=SERVICE_RESTART, feature=LandroidFeatureSupport.RESTART
     ),
