@@ -40,24 +40,18 @@ from pyworxcloud.exceptions import (
     ZoneNoProbability,
     ZoneNotDefined,
 )
-from pyworxcloud.utils import Capability, DeviceCapability
-from pyworxcloud.utils.capability import CAPABILITY_TO_TEXT
 
 from .api import LandroidAPI
 from .attribute_map import ATTR_MAP
 from .const import (
     ATTR_BOUNDARY,
-    ATTR_CAPABILITIES,
     ATTR_DEVICEIDS,
     ATTR_JSON,
     ATTR_LANDROIDFEATURES,
     ATTR_LATITUDE,
     ATTR_LONGITUDE,
-    ATTR_NEXT_SCHEDULE,
-    ATTR_PROGRESS,
     ATTR_RUNTIME,
     ATTR_SERVICE,
-    ATTR_TORQUE,
     ATTR_ZONE,
     BUTTONTYPE_TO_SERVICE,
     DOMAIN,
@@ -88,12 +82,9 @@ from .utils.schedules import parseday, pass_thru
 
 # Commonly supported features
 SUPPORT_LANDROID_BASE = (
-    # LawnMowerEntityFeature.BATTERY
     LawnMowerEntityFeature.PAUSE
     | LawnMowerEntityFeature.DOCK
     | LawnMowerEntityFeature.START_MOWING
-    # | LawnMowerEntityFeature.STATE
-    # | LawnMowerEntityFeature.STATUS
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -259,7 +250,6 @@ class LandroidCloudBaseEntity(LandroidLogger):
 
     async def async_update(self):
         """Default async_update"""
-        # self.log(LoggerType.DEVELOP, "Async_update was called", log_level=LogLevel.INFO)
         return
 
     @callback
@@ -343,13 +333,13 @@ class LandroidCloudBaseEntity(LandroidLogger):
         self.log_set_name(__name__)
         self.log_set_api(self.api)
         self.log(LoggerType.DATA_UPDATE, "Updating")
+        self.log(LoggerType.DATA_UPDATE, "Device data: \n%s", vars(self.api.device))
 
         device: WorxCloud = self.api.device
 
         data = {}
         old_data = self._attributes
 
-        self.log(LoggerType.DATA_UPDATE, "Device data: %s", dir(device))
         for key, value in ATTR_MAP.items():
             if hasattr(device, key):
                 if value == "mac_address" and getattr(device, key) == "__UUID__":
@@ -368,22 +358,6 @@ class LandroidCloudBaseEntity(LandroidLogger):
                 data[value] = getattr(device, key)
             else:
                 self.log(LoggerType.DATA_UPDATE, "Mapping did not find '%s'", value)
-
-        # Populate capabilities attribute
-        # data[ATTR_CAPABILITIES] = []
-        # capabilities: Capability = device.capabilities
-        # for capability in DeviceCapability:
-        #     if capabilities.check(capability):
-        #         data[ATTR_CAPABILITIES].append(CAPABILITY_TO_TEXT[capability])
-
-        # # If no extra capabilities were found,
-        # # then set the attribute to None (just for visual appearance)
-        # if len(data[ATTR_CAPABILITIES]) == 0:
-        #     data.update({ATTR_CAPABILITIES: None})
-
-        # # Remove wheel_torque attribute if the device doesn't support this setting
-        # if not capabilities.check(DeviceCapability.TORQUE) and ATTR_TORQUE in data:
-        #     data.pop(ATTR_TORQUE)
 
         data[ATTR_LANDROIDFEATURES] = self.api.features
 
@@ -407,8 +381,10 @@ class LandroidCloudBaseEntity(LandroidLogger):
         )
         state = STATE_INITIALIZING
 
-        if not device.online and device.error.id in [-1, 0]:
+        if not device.online:
             state = STATE_OFFLINE
+        # elif not device.online and device.error.id in [-1, 0]:
+        #     state = STATE_OFFLINE
         elif device.error.id is not None and device.error.id > 0:
             if device.error.id > 0 and device.error.id != 5:
                 state = LawnMowerActivity.ERROR
@@ -423,6 +399,7 @@ class LandroidCloudBaseEntity(LandroidLogger):
 
         self.log(LoggerType.DATA_UPDATE, "Online: %s", device.online)
         self.log(LoggerType.DATA_UPDATE, "State '%s'", state)
+        self.log(LoggerType.DATA_UPDATE, "Last update: %s", device.updated)
         self.log(LoggerType.DATA_UPDATE, "Attributes:\n%s", self._attributes)
         self._attr_state = state
 
@@ -566,13 +543,7 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
         )
 
         if not self.api.device.online:
-            logger.log(
-                LoggerType.SETUP, "Device is currently offline, skipping further setup."
-            )
             return False
-
-        # while not self.api.device.capabilities.ready:
-        #     asyncio.sleep(1)
 
         self.api.check_features(int(self.base_features))
         self.api.features_loaded = True
@@ -1009,12 +980,17 @@ class LandroidSensor(SensorEntity):
             self.handle_update,
         )
 
+    async def async_added_to_hass(self) -> None:
+        """Set state on adding to home assistant."""
+        await self.handle_update()
+        return await super().async_added_to_hass()
+
     async def handle_update(self) -> None:
         """Handle the updates when recieving an update signal."""
         old_val = self._attr_native_value
         old_attrib = self._attr_extra_state_attributes
         new_attrib = {}
-        write = False
+        write = True
         try:
             new_val = self.entity_description.value_fn(self.device)
         except AttributeError:
@@ -1119,7 +1095,11 @@ class LandroidSwitch(SwitchEntity):
             self.handle_update,
         )
 
-    # async def
+    async def async_added_to_hass(self) -> None:
+        """Set state on adding to home assistant."""
+        await self.handle_update()
+        return await super().async_added_to_hass()
+
     async def handle_update(self) -> None:
         """Handle the updates when recieving an update signal."""
         try:
@@ -1231,7 +1211,11 @@ class LandroidBinarySensor(BinarySensorEntity):
             self.handle_update,
         )
 
-    # async def
+    async def async_added_to_hass(self) -> None:
+        """Set state on adding to home assistant."""
+        await self.handle_update()
+        return await super().async_added_to_hass()
+
     async def handle_update(self) -> None:
         """Handle the updates when recieving an update signal."""
         try:
