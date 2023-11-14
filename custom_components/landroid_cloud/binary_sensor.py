@@ -36,7 +36,6 @@ BINARYSENSORS = [
         value_fn=lambda landroid: landroid.rainsensor["triggered"]
         if "triggered" in landroid.rainsensor
         else None,
-        icon="mdi:weather-rainy",
     ),
 ]
 

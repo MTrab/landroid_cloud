@@ -990,7 +990,7 @@ class LandroidSensor(SensorEntity):
         old_val = self._attr_native_value
         old_attrib = self._attr_extra_state_attributes
         new_attrib = {}
-        write = True
+        write = False
         try:
             new_val = self.entity_description.value_fn(self.device)
         except AttributeError:
