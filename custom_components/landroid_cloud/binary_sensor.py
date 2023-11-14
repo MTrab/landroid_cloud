@@ -19,6 +19,25 @@ BINARYSENSORS = [
         entity_registry_enabled_default=True,
         value_fn=lambda landroid: landroid.battery["charging"],
     ),
+    LandroidBinarySensorEntityDescription(
+        key="online",
+        name="Online",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        device_class=BinarySensorDeviceClass.CONNECTIVITY,
+        entity_registry_enabled_default=True,
+        value_fn=lambda landroid: landroid.online,
+    ),
+    LandroidBinarySensorEntityDescription(
+        key="rainsensor_triggered",
+        name="Rainsensor Triggered",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        device_class=BinarySensorDeviceClass.MOISTURE,
+        entity_registry_enabled_default=True,
+        value_fn=lambda landroid: landroid.rainsensor["triggered"]
+        if "triggered" in landroid.rainsensor
+        else None,
+        icon="mdi:weather-rainy",
+    ),
 ]
 
 
