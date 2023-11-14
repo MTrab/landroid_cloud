@@ -130,17 +130,6 @@ SENSORS = [
         icon="mdi:alert-circle",
     ),
     LandroidSensorEntityDescription(
-        key="online",
-        name="Online",
-        entity_category=EntityCategory.DIAGNOSTIC,
-        state_class=None,
-        device_class=None,
-        entity_registry_enabled_default=True,
-        native_unit_of_measurement=None,
-        value_fn=lambda landroid: landroid.online,
-        icon="mdi:connection",
-    ),
-    LandroidSensorEntityDescription(
         key="pitch",
         name="Pitch",
         entity_category=None,
@@ -175,19 +164,6 @@ SENSORS = [
         value_fn=lambda landroid: landroid.orientation["yaw"],
         suggested_display_precision=1,
         icon="mdi:axis-z-rotate-clockwise",
-    ),
-    LandroidSensorEntityDescription(
-        key="rainsensor_triggered",
-        name="Rainsensor Triggered",
-        entity_category=EntityCategory.DIAGNOSTIC,
-        state_class=None,
-        device_class=None,
-        entity_registry_enabled_default=True,
-        native_unit_of_measurement=None,
-        value_fn=lambda landroid: landroid.rainsensor["triggered"]
-        if "triggered" in landroid.rainsensor
-        else None,
-        icon="mdi:weather-rainy",
     ),
     LandroidSensorEntityDescription(
         key="rainsensor_delay",
