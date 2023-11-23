@@ -1,12 +1,14 @@
 """Sensors for landroid_cloud."""
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timezone
 
+import pytz
 from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
+from homeassistant.util import dt as dt_utils
 
 from .api import LandroidAPI
 from .const import ATTR_DEVICES, DOMAIN
@@ -236,7 +238,7 @@ SENSORS = [
         device_class=SensorDeviceClass.TIMESTAMP,
         entity_registry_enabled_default=True,
         native_unit_of_measurement=None,
-        value_fn=lambda landroid: datetime.fromisoformat(landroid.updated),
+        value_fn=lambda landroid: landroid.updated.astimezone(pytz.utc),
         icon="mdi:clock-check",
     ),
     LandroidSensorEntityDescription(

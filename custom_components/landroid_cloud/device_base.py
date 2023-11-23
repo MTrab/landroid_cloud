@@ -399,7 +399,9 @@ class LandroidCloudBaseEntity(LandroidLogger):
 
         self.log(LoggerType.DATA_UPDATE, "Online: %s", device.online)
         self.log(LoggerType.DATA_UPDATE, "State '%s'", state)
-        self.log(LoggerType.DATA_UPDATE, "Last update: %s", device.updated)
+        self.log(
+            LoggerType.DATA_UPDATE, "Last update: %s", device.last_status["timestamp"]
+        )
         self.log(LoggerType.DATA_UPDATE, "Attributes:\n%s", self._attributes)
         self._attr_state = state
 
