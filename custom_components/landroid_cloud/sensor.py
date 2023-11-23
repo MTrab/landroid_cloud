@@ -238,7 +238,7 @@ SENSORS = [
         device_class=SensorDeviceClass.TIMESTAMP,
         entity_registry_enabled_default=True,
         native_unit_of_measurement=None,
-        value_fn=lambda landroid: landroid.update.astimezone(pytz.utc),
+        value_fn=lambda landroid: landroid.updated.astimezone(pytz.utc),
         icon="mdi:clock-check",
     ),
     LandroidSensorEntityDescription(
