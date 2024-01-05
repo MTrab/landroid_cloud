@@ -24,187 +24,187 @@
             "landroid_cloud": {
                 "state": {
                     "edgecut": "Sekání podél okraje",
-                    "escaped_digital_fence": "Escaped digital fence",
+                    "escaped_digital_fence": "Sekačka překročila virtuální plot",
                     "initializing": "Inicializace",
                     "mowing": "Sekání",
                     "offline": "Offline",
                     "rain_delay": "Prodleva po dešti",
-                    "returning": "Returning to charger",
-                    "searching_zone": "Searching for zone",
+                    "returning": "Návrat k nabíjecí stanici",
+                    "searching_zone": "Vyhledávání zóny",
                     "starting": "Začínání",
-                    "zoning": "Zone training"
+                    "zoning": "Učení zóny"
                 }
             }
         }
     },
     "services": {
         "config": {
-            "description": "Set device config parameters",
+            "description": "Nastavení konfiguračních parametrů zařízení",
             "fields": {
                 "multizone_distances": {
-                    "description": "Set multizone distance array in meters. 0 = Disabled. Format: 15, 80, 120, 155",
-                    "name": "Multi zone distances"
+                    "description": "Nastavení pole vzdáleností pro více zón. V metrech. 0 = Zakázáno. Formát: 15, 80, 120, 155",
+                    "name": "Vzdálenosti ve více zónách"
                 },
                 "multizone_probabilities": {
-                    "description": "Set multizone probabilities array. Format: 50, 10, 20, 20",
-                    "name": "Multi zone probabilities"
+                    "description": "Nastavení pole pravděpodobností pro více zón. Formát: 50, 10, 20, 20",
+                    "name": "Pravděpodobnosti pro více zón"
                 },
                 "raindelay": {
-                    "description": "Set rain delay. Time in minutes ranging from 0 to 300. 0 = Disabled",
+                    "description": "Nastavení délky prodlevy po dešti. Čas v minutách od 0 do 300. 0 = Zakázáno",
                     "name": "Prodleva po dešti"
                 },
                 "timeextension": {
-                    "description": "Set time extension. Extension in % ranging from -100 to 100",
-                    "name": "Time extension"
+                    "description": "Nastavení prodloužení času. Prodloužení v % v rozmezí od -100 do 100",
+                    "name": "Prodloužení času"
                 }
             },
-            "name": "Set zone"
+            "name": "Nastavit zónu"
         },
         "edgecut": {
-            "description": "Start edgecut (if supported)",
-            "name": "Border-/Edgecut"
+            "description": "Spustit sekání okraje (je-li podporováno)",
+            "name": "Sekání okraje"
         },
         "ots": {
-            "description": "Start One-Time-Schedule (if supported)",
+            "description": "Spuštění jednorázového harmonogramu (je-li podporován)",
             "fields": {
                 "boundary": {
-                    "description": "Do boundary (Edge/Border cut)",
-                    "name": "Boundary"
+                    "description": "Sekání okraje",
+                    "name": "Okraj"
                 },
                 "runtime": {
-                    "description": "Run time in minutes before returning to charging station",
-                    "name": "Run time"
+                    "description": "Doba provozu v minutách před návratem do nabíjecí stanice",
+                    "name": "Doba provozu"
                 }
             },
-            "name": "One-Time-Schedule"
+            "name": "Jednorázový harmonogram"
         },
         "restart": {
-            "description": "Restarts or reboots device",
-            "name": "Restart device"
+            "description": "Restartuje zařízení",
+            "name": "Restart zařízení"
         },
         "schedule": {
-            "description": "Set or change the schedule of the mower",
+            "description": "Nastavení nebo změna časového plánu sekačky",
             "fields": {
                 "friday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Friday, Boundary"
+                    "description": "Má páteční plán začít sekáním okraje?",
+                    "name": "Pátek, sekání okraje"
                 },
                 "friday_end": {
-                    "description": "When should the schedule stop on fridays?",
-                    "name": "Friday, End"
+                    "description": "Kdy má páteční plán skončit?",
+                    "name": "Pátek, konec"
                 },
                 "friday_start": {
-                    "description": "Starting time for fridays",
-                    "name": "Friday, Start"
+                    "description": "Kdy má páteční plán začít?",
+                    "name": "Pátek, začátek"
                 },
                 "monday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Monday, Boundary"
+                    "description": "Má pondělní plán začít sekáním okraje?",
+                    "name": "Pondělí, sekání okraje"
                 },
                 "monday_end": {
-                    "description": "When should the schedule stop on mondays?",
-                    "name": "Monday, End"
+                    "description": "Kdy má pondělní plán skončit?",
+                    "name": "Pondělí, konec"
                 },
                 "monday_start": {
-                    "description": "Starting time for mondays",
-                    "name": "Monday, Start"
+                    "description": "Kdy má pondělní plán začít?",
+                    "name": "Pondělí, začátek"
                 },
                 "saturday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Saturday, Boundary"
+                    "description": "Má sobotní plán začít sekáním okraje?",
+                    "name": "Sobota, sekání okraje"
                 },
                 "saturday_end": {
-                    "description": "When should the schedule stop on saturdays?",
-                    "name": "Saturday, End"
+                    "description": "Kdy má sobotní plán skončit?",
+                    "name": "Sobota, konec"
                 },
                 "saturday_start": {
-                    "description": "Starting time for saturdays",
-                    "name": "Saturday, Start"
+                    "description": "Kdy má sobotní plán začít?",
+                    "name": "Sobota, začátek"
                 },
                 "sunday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Sunday, Boundary"
+                    "description": "Má nedělní plán začít sekáním okraje?",
+                    "name": "Neděle, sekání okraje"
                 },
                 "sunday_end": {
-                    "description": "When should the schedule stop on sundays?",
-                    "name": "Sunday, End"
+                    "description": "Kdy má nedělní plán skončit?",
+                    "name": "Neděle, konec"
                 },
                 "sunday_start": {
-                    "description": "Starting time for sundays",
-                    "name": "Sunday, Start"
+                    "description": "Kdy má nedělní plán začít?",
+                    "name": "Neděle, začátek"
                 },
                 "thursday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Thursday, Boundary"
+                    "description": "Má čtvrteční plán začít sekáním okraje?",
+                    "name": "Čtvrtek, sekání okraje"
                 },
                 "thursday_end": {
-                    "description": "When should the schedule stop on thursdays?",
-                    "name": "Thursday, End"
+                    "description": "Kdy má čtvrteční plán skončit?",
+                    "name": "Čtvrtek, konec"
                 },
                 "thursday_start": {
-                    "description": "Starting time for thursdays",
-                    "name": "Wednesday, Start"
+                    "description": "Kdy má čtvrteční plán začít?",
+                    "name": "Čtvrtek, začátek"
                 },
                 "tuesday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Tuesday, Boundary"
+                    "description": "Má úterní plán začít sekáním okraje?",
+                    "name": "Úterý, sekání okraje"
                 },
                 "tuesday_end": {
-                    "description": "When should the schedule stop on tuesdays?",
-                    "name": "Tuesday, End"
+                    "description": "Kdy má úterní plán skončit?",
+                    "name": "Úterý, konec"
                 },
                 "tuesday_start": {
-                    "description": "Starting time for tuesdays",
-                    "name": "Tuesday, Start"
+                    "description": "Kdy má úterní plán začít?",
+                    "name": "Úterý, začátek"
                 },
                 "type": {
-                    "description": "Change primary or secondary schedule?",
-                    "name": "Schedule type"
+                    "description": "Změna primárního nebo sekundárního plánu?",
+                    "name": "Typ plánu"
                 },
                 "wednesday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Wednesday, Boundary"
+                    "description": "Má středeční plán začít sekáním okraje?",
+                    "name": "Středa, sekání okraje"
                 },
                 "wednesday_end": {
-                    "description": "When should the schedule stop on wednesdays?",
-                    "name": "Wednesday, End"
+                    "description": "Kdy má středeční plán skončit?",
+                    "name": "Středa, konec"
                 },
                 "wednesday_start": {
-                    "description": "Starting time for wednesdays",
-                    "name": "Wednesday, Start"
+                    "description": "Kdy má středeční plán začít?",
+                    "name": "Středa, začátek"
                 }
             },
-            "name": "Set or update schedule"
+            "name": "Nastavení nebo aktualizace plánu"
         },
         "send_raw": {
-            "description": " Send a raw JSON command to the device",
+            "description": "Odeslat nezpracovaný (RAW) JSON příkaz",
             "fields": {
                 "json": {
-                    "description": "Data to send, formatted as valid JSON",
+                    "description": "Data k odeslání, formátovaná jako platný JSON",
                     "name": "JSON data"
                 }
             },
-            "name": "Send RAW command"
+            "name": "Odeslat nezpracovaný (RAW) příkaz"
         },
         "setzone": {
-            "description": "Set which zone to be mowed next",
+            "description": "Nastavení zóny, která se má sekat příště",
             "fields": {
                 "zone": {
-                    "description": "Sets the zone number, ranging from 0 to 3, to be mowed next",
-                    "name": "Zone"
+                    "description": "Nastavení čísla zóny (od 0 do 3), která se bude sekat příště.",
+                    "name": "Zóna"
                 }
             },
-            "name": "Set zone"
+            "name": "Nastavení zóny"
         },
         "torque": {
-            "description": "Set wheel torque (if supported)",
+            "description": "Nastavení síly pohonu (je-li podporováno)",
             "fields": {
                 "torque": {
-                    "description": "Set wheel torque. Ranging from -50% to 50%",
-                    "name": "Wheel torque"
+                    "description": "Nastavení síly pohonu. V rozmezí od -50 % do 50 %",
+                    "name": "Síla pohonu"
                 }
             },
-            "name": "Torque"
+            "name": "Síla"
         }
     }
 }
