@@ -433,11 +433,17 @@ class LandroidCloudSelectEntity(LandroidCloudBaseEntity, SelectEntity):
     ):
         """Initialize a new Landroid Cloud select entity."""
         super().__init__(hass, api)
+        self._api = api
         self.entity_description = description
         self._attr_unique_id = f"{api.name}_select_{description.key}"
         self._attr_options = []
         self._attr_current_option = None
         self.entity_id = ENTITY_ID_FORMAT.format(f"{api.name} {description.key}")
+
+    @property
+    def available(self) -> bool:
+        """Return if the entity is available."""
+        return self._api.device.online
 
     @property
     def device_class(self) -> str:
@@ -507,9 +513,15 @@ class LandroidCloudButtonBase(LandroidCloudBaseEntity, ButtonEntity):
     ) -> None:
         """Init a new Landroid Cloud button."""
         super().__init__(hass, api)
+        self._api = api
         self.entity_description = description
         self._attr_unique_id = f"{api.name}_button_{description.key}"
         self.entity_id = ENTITY_ID_FORMAT.format(f"{api.name} {description.key}")
+
+    @property
+    def available(self) -> bool:
+        """Return if the entity is available."""
+        return self._api.device.online
 
     @property
     def device_class(self) -> str:
@@ -982,6 +994,11 @@ class LandroidSensor(SensorEntity):
             self.handle_update,
         )
 
+    @property
+    def available(self) -> bool:
+        """Return if the entity is available."""
+        return self._api.device.online
+
     async def async_added_to_hass(self) -> None:
         """Set state on adding to home assistant."""
         await self.handle_update()
@@ -1096,6 +1113,11 @@ class LandroidSwitch(SwitchEntity):
             util_slugify(f"{UPDATE_SIGNAL}_{self._api.device.name}"),
             self.handle_update,
         )
+
+    @property
+    def available(self) -> bool:
+        """Return if the entity is available."""
+        return self._api.device.online
 
     async def async_added_to_hass(self) -> None:
         """Set state on adding to home assistant."""
@@ -1212,6 +1234,11 @@ class LandroidBinarySensor(BinarySensorEntity):
             util_slugify(f"{UPDATE_SIGNAL}_{self._api.device.name}"),
             self.handle_update,
         )
+
+    @property
+    def available(self) -> bool:
+        """Return if the entity is available."""
+        return self._api.device.online
 
     async def async_added_to_hass(self) -> None:
         """Set state on adding to home assistant."""
