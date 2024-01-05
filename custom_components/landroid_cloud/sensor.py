@@ -70,9 +70,9 @@ SENSORS = [
         name="Blades Total On Time",
         entity_category=EntityCategory.DIAGNOSTIC,
         state_class=SensorStateClass.MEASUREMENT,
-        device_class=None,
+        device_class=SensorDeviceClass.DURATION,
         entity_registry_enabled_default=False,
-        native_unit_of_measurement="hours",
+        native_unit_of_measurement="h",
         suggested_display_precision=0,
         value_fn=lambda landroid: round(landroid.blades["total_on"] / 60, 0)
         if "total_on" in landroid.blades
@@ -84,9 +84,9 @@ SENSORS = [
         name="Blades Current On Time",
         entity_category=EntityCategory.DIAGNOSTIC,
         state_class=SensorStateClass.MEASUREMENT,
-        device_class=None,
+        device_class=SensorDeviceClass.DURATION,
         entity_registry_enabled_default=False,
-        native_unit_of_measurement="hours",
+        native_unit_of_measurement="h",
         suggested_display_precision=0,
         value_fn=lambda landroid: round(landroid.blades["current_on"] / 60, 0)
         if "current_on" in landroid.blades
@@ -98,9 +98,9 @@ SENSORS = [
         name="Blades Reset At Hours",
         entity_category=EntityCategory.DIAGNOSTIC,
         state_class=SensorStateClass.MEASUREMENT,
-        device_class=None,
+        device_class=SensorDeviceClass.DURATION,
         entity_registry_enabled_default=False,
-        native_unit_of_measurement="hours",
+        native_unit_of_measurement="h",
         suggested_display_precision=0,
         value_fn=lambda landroid: round(landroid.blades["reset_at"] / 60, 0)
         if "reset_at" in landroid.blades
@@ -172,9 +172,9 @@ SENSORS = [
         name="Rainsensor Delay",
         entity_category=EntityCategory.DIAGNOSTIC,
         state_class=None,
-        device_class=None,
+        device_class=SensorDeviceClass.DURATION,
         entity_registry_enabled_default=True,
-        native_unit_of_measurement="minutes",
+        native_unit_of_measurement="min",
         value_fn=lambda landroid: landroid.rainsensor["delay"]
         if "delay" in landroid.rainsensor
         else None,
@@ -185,9 +185,9 @@ SENSORS = [
         name="Rainsensor Remaining",
         entity_category=EntityCategory.DIAGNOSTIC,
         state_class=None,
-        device_class=None,
+        device_class=SensorDeviceClass.DURATION,
         entity_registry_enabled_default=False,
-        native_unit_of_measurement="minutes",
+        native_unit_of_measurement="min",
         value_fn=lambda landroid: landroid.rainsensor["remaining"]
         if "remaining" in landroid.rainsensor
         else None,
