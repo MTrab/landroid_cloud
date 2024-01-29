@@ -1,4 +1,5 @@
 """Landroid Cloud integration wide logger component."""
+
 # pylint: disable=unused-argument,relative-beyond-top-level
 from __future__ import annotations
 

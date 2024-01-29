@@ -1,4 +1,5 @@
 """Setup entity platforms."""
+
 from __future__ import annotations
 
 import logging

@@ -1,4 +1,5 @@
 """Utilities used for entity setup."""
+
 # pylint: disable=relative-beyond-top-level
 from __future__ import annotations
 

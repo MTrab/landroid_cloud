@@ -1,4 +1,5 @@
 """Representation of a button."""
+
 from __future__ import annotations
 
 import asyncio

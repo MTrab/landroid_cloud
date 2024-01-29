@@ -1,4 +1,5 @@
 """Constants used by Landroid Cloud integration."""
+
 from __future__ import annotations
 
 import inspect

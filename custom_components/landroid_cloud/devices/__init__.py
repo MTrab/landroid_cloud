@@ -1,4 +1,5 @@
 """Landroid Cloud device definitions."""
+
 from __future__ import annotations
 
 from . import ferrex as Ferrex

@@ -1,4 +1,5 @@
 """Representation of a select entity."""
+
 from __future__ import annotations
 
 import asyncio

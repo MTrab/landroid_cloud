@@ -1,4 +1,5 @@
 """Representing the Landroid Cloud API interface."""
+
 from __future__ import annotations
 
 import asyncio

@@ -1,4 +1,5 @@
 """Binary sensors for landroid_cloud."""
+
 from __future__ import annotations
 
 from homeassistant.components.binary_sensor import BinarySensorDeviceClass
@@ -33,9 +34,11 @@ BINARYSENSORS = [
         entity_category=EntityCategory.DIAGNOSTIC,
         device_class=BinarySensorDeviceClass.MOISTURE,
         entity_registry_enabled_default=True,
-        value_fn=lambda landroid: landroid.rainsensor["triggered"]
-        if "triggered" in landroid.rainsensor
-        else None,
+        value_fn=lambda landroid: (
+            landroid.rainsensor["triggered"]
+            if "triggered" in landroid.rainsensor
+            else None
+        ),
     ),
 ]
 

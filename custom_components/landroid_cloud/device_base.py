@@ -1,4 +1,5 @@
 """Define device classes."""
+
 # pylint: disable=unused-argument,too-many-instance-attributes,too-many-lines
 from __future__ import annotations
 

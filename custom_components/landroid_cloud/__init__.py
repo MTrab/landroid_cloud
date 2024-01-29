@@ -1,4 +1,5 @@
 """Adds support for Landroid Cloud compatible devices."""
+
 from __future__ import annotations
 
 import asyncio

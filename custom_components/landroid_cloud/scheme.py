@@ -1,4 +1,5 @@
 """Data schemes used by Landroid Cloud integration."""
+
 from __future__ import annotations
 
 import voluptuous as vol
