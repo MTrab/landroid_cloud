@@ -29,7 +29,7 @@
                     "mowing": "Mähen",
                     "offline": "Offline",
                     "rain_delay": "Regenverzögerung",
-                    "returning": "Rückkerh zur Ausgangsposition",
+                    "returning": "Rückkehr zur Ladestation",
                     "searching_zone": "Begrenzung suchen",
                     "starting": "Startet",
                     "zoning": "Suche Mähbereich"
@@ -39,142 +39,142 @@
     },
     "services": {
         "config": {
-            "description": "Set device config parameters",
+            "description": "Gerätekonfigurationsparameter festlegen",
             "fields": {
                 "multizone_distances": {
-                    "description": "Set multizone distance array in meters. 0 = Disabled. Format: 15, 80, 120, 155",
-                    "name": "Multi zone distances"
+                    "description": "Legen Sie das Multizonen-Entfernungsabstand in Metern fest. 0 = Deaktiviert. Format: 15, 80, 120, 155",
+                    "name": "Multizonen Abstände"
                 },
                 "multizone_probabilities": {
-                    "description": "Set multizone probabilities array. Format: 50, 10, 20, 20",
-                    "name": "Multi zone probabilities"
+                    "description": "Legen Sie das Multizonen-Wahrscheinlichkeits-Array fest. Format: 50, 10, 20, 20",
+                    "name": "Multizonen Wahrscheinlichkeit"
                 },
                 "raindelay": {
                     "description": "Regenverzögerung einstellen. Zeit zwischen 0 und 300 Minuten. 0 = Deaktiviert",
                     "name": "Regenverzögerung"
                 },
                 "timeextension": {
-                    "description": "Set time extension. Extension in % ranging from -100 to 100",
-                    "name": "Time extension"
+                    "description": "Zeitverlängerung einstellen in % im Bereich von -100 bis 100",
+                    "name": "Zeitverlängerung"
                 }
             },
-            "name": "Set zone"
+            "name": "Zone setzen"
         },
         "edgecut": {
-            "description": "Start edgecut (if supported)",
-            "name": "Border-/Edgecut"
+            "description": "Kantenschnitt starten (falls unterstützt)",
+            "name": "Rand-/Kantenschnitt"
         },
         "ots": {
-            "description": "Start One-Time-Schedule (if supported)",
+            "description": "Einmalplan starten (falls unterstützt)",
             "fields": {
                 "boundary": {
                     "description": "Rasenkannte schneiden",
                     "name": "Kantenschnitt"
                 },
                 "runtime": {
-                    "description": "Run time in minutes before returning to charging station",
-                    "name": "Run time"
+                    "description": "Laufzeit in Minuten bis zur Rückkehr zur Ladestation",
+                    "name": "Laufzeit"
                 }
             },
             "name": "Einmaliger Zeitplan"
         },
         "restart": {
-            "description": "Restarts or reboots device",
-            "name": "Restart device"
+            "description": "Startet das Gerät neu oder startet es neu",
+            "name": "Gerät neustarten"
         },
         "schedule": {
-            "description": "Set or change the schedule of the mower",
+            "description": "Zeitplan des Mähers einstellen oder ändern.",
             "fields": {
                 "friday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
+                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
                     "name": "Freitag, Kantenschnitt"
                 },
                 "friday_end": {
-                    "description": "When should the schedule stop on fridays?",
+                    "description": "Wann soll der Zeitplan freitags enden?",
                     "name": "Freitag, Ende"
                 },
                 "friday_start": {
-                    "description": "Starting time for fridays",
+                    "description": "Startzeit für Freitage",
                     "name": "Freitag, Beginn"
                 },
                 "monday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
+                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
                     "name": "Montag, Kantenschnitt"
                 },
                 "monday_end": {
-                    "description": "When should the schedule stop on mondays?",
+                    "description": "Wann soll der Zeitplan montags enden?",
                     "name": "Montag, Ende"
                 },
                 "monday_start": {
-                    "description": "Starting time for mondays",
+                    "description": "Startzeit für Montage",
                     "name": "Montag, Beginn"
                 },
                 "saturday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
+                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
                     "name": "Samstag, Kantenschnitt"
                 },
                 "saturday_end": {
-                    "description": "When should the schedule stop on saturdays?",
+                    "description": "Wann soll der Zeitplan samstags enden?",
                     "name": "Samstag, Ende"
                 },
                 "saturday_start": {
-                    "description": "Starting time for saturdays",
+                    "description": "Startzeit für Samstage",
                     "name": "Samstag, Beginn"
                 },
                 "sunday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
+                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
                     "name": "Sonntag, Kantenschnitt"
                 },
                 "sunday_end": {
-                    "description": "When should the schedule stop on sundays?",
+                    "description": "Wann soll der Zeitplan sonntags enden?",
                     "name": "Sonntag, Ende"
                 },
                 "sunday_start": {
-                    "description": "Starting time for sundays",
+                    "description": "Startzeit für Sonntage",
                     "name": "Sonntag, Beginn"
                 },
                 "thursday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
+                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
                     "name": "Donnerstag, Kantenschnitt"
                 },
                 "thursday_end": {
-                    "description": "When should the schedule stop on thursdays?",
+                    "description": "Wann soll der Zeitplan donnerstags enden?",
                     "name": "Donnerstag, Ende"
                 },
                 "thursday_start": {
-                    "description": "Starting time for thursdays",
+                    "description": "Startzeit für Donnerstage",
                     "name": "Donnerstag, Beginn"
                 },
                 "tuesday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
+                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
                     "name": "Dienstag, Kantenschnitt"
                 },
                 "tuesday_end": {
-                    "description": "When should the schedule stop on tuesdays?",
+                    "description": "Wann soll der Zeitplan dienstags enden?",
                     "name": "Dienstag, Ende"
                 },
                 "tuesday_start": {
-                    "description": "Starting time for tuesdays",
+                    "description": "Startzeit für Dienstage",
                     "name": "Dienstag, Beginn"
                 },
                 "type": {
-                    "description": "Change primary or secondary schedule?",
-                    "name": "Schedule type"
+                    "description": "Primären oder sekundären Zeitplan ändern?",
+                    "name": "Zeitplantyp"
                 },
                 "wednesday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
+                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
                     "name": "Mittwoch, Kantenschnitt"
                 },
                 "wednesday_end": {
-                    "description": "When should the schedule stop on wednesdays?",
+                    "description": "Wann soll der Zeitplan mittwochs enden?",
                     "name": "Mittwoch, Ende"
                 },
                 "wednesday_start": {
-                    "description": "Starting time for wednesdays",
+                    "description": "Startzeit für Mittwoche",
                     "name": "Mittwoch, Beginn"
                 }
             },
-            "name": "Set or update schedule"
+            "name": "Zeitplan festlegen oder aktualisieren"
         },
         "send_raw": {
             "description": " Send a raw JSON command to the device",
@@ -187,21 +187,21 @@
             "name": "Send RAW command"
         },
         "setzone": {
-            "description": "Set which zone to be mowed next",
+            "description": "Zone setzen, die als nächstes gemäht werden soll",
             "fields": {
                 "zone": {
-                    "description": "Sets the zone number, ranging from 0 to 3, to be mowed next",
+                    "description": "Legt die Zone im Bereich von 0 bis 3 fest, die als nächstes gemäht werden soll",
                     "name": "Zone"
                 }
             },
-            "name": "Set zone"
+            "name": "Zone setzen"
         },
         "torque": {
-            "description": "Set wheel torque (if supported)",
+            "description": "Raddrehmoment einstellen (falls unterstützt)",
             "fields": {
                 "torque": {
-                    "description": "Set wheel torque. Ranging from -50% to 50%",
-                    "name": "Wheel torque"
+                    "description": "Raddrehmoment einstellen. Im Bereich von -50 % bis 50 %",
+                    "name": "Drehmoment"
                 }
             },
             "name": "Drehmoment"
