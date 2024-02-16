@@ -30,9 +30,9 @@
                     "offline": "Offline",
                     "rain_delay": "Regenverzögerung",
                     "returning": "Rückkehr zur Ladestation",
-                    "searching_zone": "Begrenzung suchen",
+                    "searching_zone": "Zone suchen",
                     "starting": "Startet",
-                    "zoning": "Suche Mähbereich"
+                    "zoning": "Zonentraining"
                 }
             }
         }
@@ -143,7 +143,7 @@
                 },
                 "thursday_start": {
                     "description": "Startzeit für Donnerstage",
-                    "name": "Donnerstag, Beginn"
+                    "name": "Mittwochs, Beginn"
                 },
                 "tuesday_boundary": {
                     "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
@@ -177,14 +177,14 @@
             "name": "Zeitplan festlegen oder aktualisieren"
         },
         "send_raw": {
-            "description": " Send a raw JSON command to the device",
+            "description": "Senden eines JSON-Befehls an das Gerät",
             "fields": {
                 "json": {
-                    "description": "Data to send, formatted as valid JSON",
-                    "name": "JSON data"
+                    "description": "Zu sendende Daten, formatiert als gültiges JSON",
+                    "name": "JSON Daten"
                 }
             },
-            "name": "Send RAW command"
+            "name": "RAW-Befehl senden"
         },
         "setzone": {
             "description": "Zone setzen, die als nächstes gemäht werden soll",
