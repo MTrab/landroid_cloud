@@ -1,16 +1,16 @@
 {
-    "name": "ludeeus/integration_blueprint",
+	"name": "Landroid Cloud",
 	"image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-    "postCreateCommand": "scripts/setup",
-    "appPort": [
-        "9123:8123"
-    ],
-    "portsAttributes": {
-        "8123": {
-            "label": "Home Assistant - Landroid Cloud",
-            "onAutoForward": "notify"
-        }
-    },
+	"postCreateCommand": "scripts/setup",
+	"appPort": [
+		"9123:8123"
+	],
+	"portsAttributes": {
+		"8123": {
+			"label": "Home Assistant - Landroid Cloud",
+			"onAutoForward": "notify"
+		}
+	},
 	"customizations": {
 		"vscode": {
 			"extensions": [
