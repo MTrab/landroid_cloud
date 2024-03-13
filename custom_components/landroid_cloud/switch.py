@@ -17,7 +17,7 @@ SWITCHES = [
         name="Party Mode",
         entity_category=EntityCategory.CONFIG,
         device_class=SwitchDeviceClass.SWITCH,
-        entity_registry_enabled_default=False,
+        entity_registry_enabled_default=True,
         value_fn=lambda landroid: landroid.partymode_enabled,
         command_fn=lambda landroid, serial, state: landroid.set_partymode(
             serial, state
