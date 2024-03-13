@@ -436,7 +436,7 @@ class LandroidCloudSelectEntity(LandroidCloudBaseEntity, SelectEntity):
         super().__init__(hass, api)
         self._api = api
         self.entity_description = description
-        self._attr_unique_id = f"{api.name}_select_{description.key}"
+        self._attr_unique_id = f"{api.name}_select_{description.key}_{api.device.serial_number}"
         self._attr_options = []
         self._attr_current_option = None
         self.entity_id = ENTITY_ID_FORMAT.format(f"{api.name} {description.key}")
@@ -516,7 +516,7 @@ class LandroidCloudButtonBase(LandroidCloudBaseEntity, ButtonEntity):
         super().__init__(hass, api)
         self._api = api
         self.entity_description = description
-        self._attr_unique_id = f"{api.name}_button_{description.key}"
+        self._attr_unique_id = f"{api.name}_button_{description.key}_{api.device.serial_number}"
         self.entity_id = ENTITY_ID_FORMAT.format(f"{api.name} {description.key}")
 
     @property
@@ -963,7 +963,7 @@ class LandroidSensor(SensorEntity):
         )
 
         self._attr_unique_id = util_slugify(
-            f"{self._attr_name}_{self._config.entry_id}"
+            f"{self._attr_name}_{self._config.entry_id}_{self._api.device.serial_number}"
         )
         self._attr_should_poll = False
 
@@ -1083,7 +1083,7 @@ class LandroidSwitch(SwitchEntity):
         )
 
         self._attr_unique_id = util_slugify(
-            f"{self._attr_name}_{self._config.entry_id}"
+            f"{self._attr_name}_{self._config.entry_id}_{self._api.device.serial_number}"
         )
         self._attr_should_poll = False
 
@@ -1204,7 +1204,7 @@ class LandroidBinarySensor(BinarySensorEntity):
         )
 
         self._attr_unique_id = util_slugify(
-            f"{self._attr_name}_{self._config.entry_id}"
+            f"{self._attr_name}_{self._config.entry_id}_{self._api.device.serial_number}"
         )
         self._attr_should_poll = False
 
