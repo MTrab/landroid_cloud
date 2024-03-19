@@ -58,7 +58,7 @@
                     "name": "Zeitverlängerung"
                 }
             },
-            "name": "Zone setzen"
+            "name": "Gerätekonfigurationsparameter festlegen"
         },
         "edgecut": {
             "description": "Kantenschnitt starten (falls unterstützt)",
