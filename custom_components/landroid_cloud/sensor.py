@@ -238,6 +238,22 @@ SENSORS = [
         icon="mdi:update",
     ),
     LandroidSensorEntityDescription(
+        key="worktime_total_minutes",
+        name="Total Worktime (in minutes)",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=None,
+        entity_registry_enabled_default=True,
+        native_unit_of_measurement="minutes",
+        suggested_display_precision=0,
+        value_fn=lambda landroid: (
+            landroid.statistics["worktime_total"]
+            if "worktime_total" in landroid.statistics
+            else None
+        ),
+        icon="mdi:update",
+    ),
+    LandroidSensorEntityDescription(
         key="rssi",
         name="Rssi",
         entity_category=EntityCategory.DIAGNOSTIC,
