@@ -1,21 +1,21 @@
 {
     "config": {
         "abort": {
-            "already_exists": "This user account have already been configured"
+            "already_exists": "Ce compte utilisateur a déjà été configuré"
         },
         "error": {
-            "cannot_connect": "Failed to connect",
-            "invalid_auth": "Error in authentication",
-            "unknown": "Unexpected error"
+            "cannot_connect": "Échec de la connexion",
+            "invalid_auth": "Erreur d’authentification",
+            "unknown": "Erreur inattendue"
         },
         "step": {
             "user": {
                 "data": {
-                    "email": "Email",
-                    "password": "Password",
-                    "type": "Make"
+                    "email": "E-mail",
+                    "password": "Mot de passe",
+                    "type": "Procéder"
                 },
-                "title": "Connect to your Landroid Cloud account"
+                "title": "Connectez-vous à votre compte Landroid Cloud"
             }
         }
     },
@@ -23,188 +23,188 @@
         "lawn_mower": {
             "landroid_cloud": {
                 "state": {
-                    "edgecut": "Cutting edge",
-                    "escaped_digital_fence": "Escaped digital fence",
-                    "initializing": "Initializing",
-                    "mowing": "Mowing",
-                    "offline": "Offline",
-                    "rain_delay": "Rain delay",
-                    "returning": "Returning to charger",
-                    "searching_zone": "Searching for zone",
-                    "starting": "Starting",
-                    "zoning": "Zone training"
+                    "edgecut": "Coupe des bordures",
+                    "escaped_digital_fence": "Hors de la barrière numérique",
+                    "initializing": "Initialisation",
+                    "mowing": "Tonte",
+                    "offline": "Hors ligne",
+                    "rain_delay": "Retard dû à la pluie",
+                    "returning": "Retour à la base",
+                    "searching_zone": "Recherche de zone",
+                    "starting": "Démarrage",
+                    "zoning": "Entraînement par zone"
                 }
             }
         }
     },
     "services": {
         "config": {
-            "description": "Set device config parameters",
+            "description": "Définir les paramètres de configuration de l’appareil",
             "fields": {
                 "multizone_distances": {
-                    "description": "Set multizone distance array in meters. 0 = Disabled. Format: 15, 80, 120, 155",
-                    "name": "Multi zone distances"
+                    "description": "Définissez le tableau de distance multi-zones en mètres. 0 = Désactivé. Format : 15, 80, 120, 155",
+                    "name": "Distances multi-zones"
                 },
                 "multizone_probabilities": {
-                    "description": "Set multizone probabilities array. Format: 50, 10, 20, 20",
-                    "name": "Multi zone probabilities"
+                    "description": "Définir un tableau de probabilités multi-zones. Format : 50, 10, 20, 20",
+                    "name": "Probabilités multi-zones"
                 },
                 "raindelay": {
-                    "description": "Set rain delay. Time in minutes ranging from 0 to 300. 0 = Disabled",
-                    "name": "Rain delay"
+                    "description": "Régler le retard de pluviosité. Temps en minutes compris entre 0 et 300. 0 = Désactivé",
+                    "name": "Retard pluviosité"
                 },
                 "timeextension": {
-                    "description": "Set time extension. Extension in % ranging from -100 to 100",
-                    "name": "Time extension"
+                    "description": "Définir la prolongation du temps de travail. Prolongation en % allant de -100 à 100",
+                    "name": "Temps de travail supplémentaire"
                 }
             },
-            "name": "Set zone"
+            "name": "Définir la zone"
         },
         "edgecut": {
-            "description": "Start edgecut (if supported)",
-            "name": "Border-/Edgecut"
+            "description": "Démarrer la coupe de bord (si supporté)",
+            "name": "Bordure/Coupe-bord"
         },
         "ots": {
-            "description": "Start One-Time-Schedule (if supported)",
+            "description": "Démarrer programmation unique (si supporté)",
             "fields": {
                 "boundary": {
-                    "description": "Do boundary (Edge/Border cut)",
-                    "name": "Boundary"
+                    "description": "Couper les bordures (coupe de bord/bordure)",
+                    "name": "Bordures"
                 },
                 "runtime": {
-                    "description": "Run time in minutes before returning to charging station",
-                    "name": "Run time"
+                    "description": "Temps d'utilisation en minutes avant le retour à la station de charge",
+                    "name": "Temps d'utilisation"
                 }
             },
-            "name": "One-Time-Schedule"
+            "name": "Programmation unique"
         },
         "restart": {
-            "description": "Restarts or reboots device",
-            "name": "Restart device"
+            "description": "Redémarrage ou réinitialisation de l'appareil",
+            "name": "Redémarrer l’appareil"
         },
         "schedule": {
-            "description": "Set or change the schedule of the mower",
+            "description": "Définir ou modifier la programmation de la tondeuse",
             "fields": {
                 "friday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Friday, Boundary"
+                    "description": "Devrions-nous commencer cette programmation en coupant la bordure (coupe bord/bordure) ?",
+                    "name": "Vendredi, Bordure"
                 },
                 "friday_end": {
-                    "description": "When should the schedule stop on fridays?",
-                    "name": "Friday, End"
+                    "description": "Quand la programmation doit-elle s'arrêter le vendredi ?",
+                    "name": "Vendredi, Fin"
                 },
                 "friday_start": {
-                    "description": "Starting time for fridays",
-                    "name": "Friday, Start"
+                    "description": "Heure de départ le vendredi",
+                    "name": "Vendredi, Début"
                 },
                 "monday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Monday, Boundary"
+                    "description": "Devrions-nous commencer cette programmation en coupant la bordure (coupe bord/bordure) ?",
+                    "name": "Lundi, Bordure"
                 },
                 "monday_end": {
-                    "description": "When should the schedule stop on mondays?",
-                    "name": "Monday, End"
+                    "description": "Quand la programmation doit-elle s'arrêter le lundi ?",
+                    "name": "Lundi, Fin"
                 },
                 "monday_start": {
-                    "description": "Starting time for mondays",
-                    "name": "Monday, Start"
+                    "description": "Heure de départ le lundi",
+                    "name": "Lundi, Début"
                 },
                 "saturday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Saturday, Boundary"
+                    "description": "Devrions-nous commencer cette programmation en coupant la bordure (coupe bord/bordure) ?",
+                    "name": "Samedi, Bordure"
                 },
                 "saturday_end": {
-                    "description": "When should the schedule stop on saturdays?",
-                    "name": "Saturday, End"
+                    "description": "Quand la programmation doit-elle s'arrêter le samedi ?",
+                    "name": "Samedi, Fin"
                 },
                 "saturday_start": {
-                    "description": "Starting time for saturdays",
-                    "name": "Saturday, Start"
+                    "description": "Heure de départ le samedi",
+                    "name": "Samedi, Début"
                 },
                 "sunday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Sunday, Boundary"
+                    "description": "Devrions-nous commencer cette programmation en coupant la bordure (coupe bord/bordure) ?",
+                    "name": "Dimanche, Bordure"
                 },
                 "sunday_end": {
-                    "description": "When should the schedule stop on sundays?",
-                    "name": "Sunday, End"
+                    "description": "Quand la programmation doit-elle s'arrêter le dimanche ?",
+                    "name": "Dimanche, Fin"
                 },
                 "sunday_start": {
-                    "description": "Starting time for sundays",
-                    "name": "Sunday, Start"
+                    "description": "Heure de départ le dimanche",
+                    "name": "Dimanche, Début"
                 },
                 "thursday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Thursday, Boundary"
+                    "description": "Devrions-nous commencer cette programmation en coupant la bordure (coupe bord/bordure) ?",
+                    "name": "Jeudi, Bordure"
                 },
                 "thursday_end": {
-                    "description": "When should the schedule stop on thursdays?",
-                    "name": "Thursday, End"
+                    "description": "Quand la programmation doit-elle s'arrêter le jeudi ?",
+                    "name": "Jeudi, Fin"
                 },
                 "thursday_start": {
-                    "description": "Starting time for thursdays",
-                    "name": "Wednesday, Start"
+                    "description": "Heure de départ le jeudi",
+                    "name": "Mercredi, Début"
                 },
                 "tuesday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Tuesday, Boundary"
+                    "description": "Devrions-nous commencer cette programmation en coupant la bordure (coupe bord/bordure) ?",
+                    "name": "Mardi, Bordure"
                 },
                 "tuesday_end": {
-                    "description": "When should the schedule stop on tuesdays?",
-                    "name": "Tuesday, End"
+                    "description": "Quand la programmation doit-elle s'arrêter le mardi ?",
+                    "name": "Mardi, Fin"
                 },
                 "tuesday_start": {
-                    "description": "Starting time for tuesdays",
-                    "name": "Tuesday, Start"
+                    "description": "Heure de départ le mardi",
+                    "name": "Mardi, Début"
                 },
                 "type": {
-                    "description": "Change primary or secondary schedule?",
-                    "name": "Schedule type"
+                    "description": "Changer de programmation principale ou secondaire ?",
+                    "name": "Type de programmation"
                 },
                 "wednesday_boundary": {
-                    "description": "Should we start this schedule by cutting the boundary (edge/border cut)?",
-                    "name": "Wednesday, Boundary"
+                    "description": "Devrions-nous commencer cette programmation en coupant la bordure (coupe bord/bordure) ?",
+                    "name": "Mercredi, Bordure"
                 },
                 "wednesday_end": {
-                    "description": "When should the schedule stop on wednesdays?",
-                    "name": "Wednesday, End"
+                    "description": "Quand la programmation doit-elle s'arrêter le mercredi ?",
+                    "name": "Mercredi, Fin"
                 },
                 "wednesday_start": {
-                    "description": "Starting time for wednesdays",
-                    "name": "Wednesday, Start"
+                    "description": "Heure de départ le mercredi",
+                    "name": "Mercredi, Début"
                 }
             },
-            "name": "Set or update schedule"
+            "name": "Définir ou mettre à jour la programmation"
         },
         "send_raw": {
-            "description": " Send a raw JSON command to the device",
+            "description": " Envoyer une commande JSON brute à l'appareil",
             "fields": {
                 "json": {
-                    "description": "Data to send, formatted as valid JSON",
-                    "name": "JSON data"
+                    "description": "Données à envoyer, formatées en JSON valide",
+                    "name": "Données JSON"
                 }
             },
-            "name": "Send RAW command"
+            "name": "Envoyer une commande brute"
         },
         "setzone": {
-            "description": "Set which zone to be mowed next",
+            "description": "Définir la zone à tondre ensuite",
             "fields": {
                 "zone": {
-                    "description": "Sets the zone number, ranging from 0 to 3, to be mowed next",
+                    "description": "Définit le numéro de la zone, entre 0 et 3, à tondre ensuite.",
                     "name": "Zone"
                 }
             },
-            "name": "Set zone"
+            "name": "Définir la zone"
         },
         "torque": {
-            "description": "Set wheel torque (if supported)",
+            "description": "Réglage du couple de roue (si supporté)",
             "fields": {
                 "torque": {
-                    "description": "Set wheel torque. Ranging from -50% to 50%",
-                    "name": "Wheel torque"
+                    "description": "Réglage du couple de roue. De -50% à 50%",
+                    "name": "Couple de roue"
                 }
             },
-            "name": "Torque"
+            "name": "Couple"
         }
     }
 }
