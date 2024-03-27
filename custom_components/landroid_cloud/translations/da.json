@@ -143,7 +143,7 @@
                 },
                 "thursday_start": {
                     "description": "Klokslet for start om torsdagen",
-                    "name": "Onsdag, Start"
+                    "name": "Torsdag, Start"
                 },
                 "tuesday_boundary": {
                     "description": "Skal vi starte denne handling med at klippe kanten?",
