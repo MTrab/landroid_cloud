@@ -436,7 +436,9 @@ class LandroidCloudSelectEntity(LandroidCloudBaseEntity, SelectEntity):
         super().__init__(hass, api)
         self._api = api
         self.entity_description = description
-        self._attr_unique_id = f"{api.name}_select_{description.key}_{api.device.serial_number}"
+        self._attr_unique_id = (
+            f"{api.name}_select_{description.key}_{api.device.serial_number}"
+        )
         self._attr_options = []
         self._attr_current_option = None
         self.entity_id = ENTITY_ID_FORMAT.format(f"{api.name} {description.key}")
@@ -516,7 +518,9 @@ class LandroidCloudButtonBase(LandroidCloudBaseEntity, ButtonEntity):
         super().__init__(hass, api)
         self._api = api
         self.entity_description = description
-        self._attr_unique_id = f"{api.name}_button_{description.key}_{api.device.serial_number}"
+        self._attr_unique_id = (
+            f"{api.name}_button_{description.key}_{api.device.serial_number}"
+        )
         self.entity_id = ENTITY_ID_FORMAT.format(f"{api.name} {description.key}")
 
     @property
@@ -1036,13 +1040,31 @@ class LandroidSensor(SensorEntity):
             elif self.entity_description.key == "distance":
                 new_attrib.update({"meters": self.device.statistics["distance"]})
             elif self.entity_description.key == "worktime_total":
-                new_attrib.update({"minutes": self.device.statistics["worktime_total"]}) if "worktime_total" in self.device.statistics else None
+                (
+                    new_attrib.update(
+                        {"minutes": self.device.statistics["worktime_total"]}
+                    )
+                    if "worktime_total" in self.device.statistics
+                    else None
+                )
             elif self.entity_description.key == "blades_current_on":
-                new_attrib.update({"minutes": self.device.blades["current_on"]}) if "current_on" in self.device.blades else None
+                (
+                    new_attrib.update({"minutes": self.device.blades["current_on"]})
+                    if "current_on" in self.device.blades
+                    else None
+                )
             elif self.entity_description.key == "blades_total_on":
-                new_attrib.update({"minutes": self.device.blades["total_on"]}) if "total_on" in self.device.blades else None
+                (
+                    new_attrib.update({"minutes": self.device.blades["total_on"]})
+                    if "total_on" in self.device.blades
+                    else None
+                )
             elif self.entity_description.key == "reset_at":
-                new_attrib.update({"minutes": self.device.blades["reset_at"]}) if "reset_at" in self.device.blades else None
+                (
+                    new_attrib.update({"minutes": self.device.blades["reset_at"]})
+                    if "reset_at" in self.device.blades
+                    else None
+                )
 
         if old_attrib != new_attrib:
             write = True
