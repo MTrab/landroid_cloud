@@ -1033,6 +1033,16 @@ class LandroidSensor(SensorEntity):
                 self._attr_extra_state_attributes.update(self.device.schedules)
                 self._attr_extra_state_attributes.pop("daily_progress")
                 self._attr_extra_state_attributes.pop("next_schedule_start")
+            elif self.entity_description.key == "distance":
+                new_attrib.update({"meters": self.device.statistics["distance"]})
+            elif self.entity_description.key == "worktime_total":
+                new_attrib.update({"minutes": self.device.statistics["worktime_total"]}) if "worktime_total" in self.device.statistics else None
+            elif self.entity_description.key == "blades_current_on":
+                new_attrib.update({"minutes": self.device.blades["current_on"]}) if "current_on" in self.device.blades else None
+            elif self.entity_description.key == "blades_total_on":
+                new_attrib.update({"minutes": self.device.blades["total_on"]}) if "total_on" in self.device.blades else None
+            elif self.entity_description.key == "reset_at":
+                new_attrib.update({"minutes": self.device.blades["reset_at"]}) if "reset_at" in self.device.blades else None
 
         if old_attrib != new_attrib:
             write = True

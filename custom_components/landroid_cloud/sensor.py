@@ -80,11 +80,12 @@ SENSORS = [
         native_unit_of_measurement="h",
         suggested_display_precision=0,
         value_fn=lambda landroid: (
-            round(landroid.blades["total_on"] / 60, 0)
+            round(landroid.blades["total_on"] / 60, 2)
             if "total_on" in landroid.blades
             else None
         ),
         icon="mdi:saw-blade",
+        attributes=["total_on"],
     ),
     LandroidSensorEntityDescription(
         key="blades_current_on",
@@ -96,11 +97,12 @@ SENSORS = [
         native_unit_of_measurement="h",
         suggested_display_precision=0,
         value_fn=lambda landroid: (
-            round(landroid.blades["current_on"] / 60, 0)
+            round(landroid.blades["current_on"] / 60, 2)
             if "current_on" in landroid.blades
             else None
         ),
         icon="mdi:saw-blade",
+        attributes=["current_on"],
     ),
     LandroidSensorEntityDescription(
         key="blades_reset_at",
@@ -112,11 +114,12 @@ SENSORS = [
         native_unit_of_measurement="h",
         suggested_display_precision=0,
         value_fn=lambda landroid: (
-            round(landroid.blades["reset_at"] / 60, 0)
+            round(landroid.blades["reset_at"] / 60, 2)
             if "reset_at" in landroid.blades
             else None
         ),
         icon="mdi:history",
+        attributes=["reset_at"],
     ),
     LandroidSensorEntityDescription(
         key="blades_reset_time",
@@ -214,12 +217,13 @@ SENSORS = [
         device_class=SensorDeviceClass.DISTANCE,
         entity_registry_enabled_default=True,
         native_unit_of_measurement="km",
-        suggested_display_precision=0,
+        suggested_display_precision=2,
         value_fn=lambda landroid: (
-            round(landroid.statistics["distance"] / 1000, 0)
+            round(landroid.statistics["distance"] / 1000, 3)
             if "distance" in landroid.statistics
             else None
         ),
+        attributes=["distance"],
     ),
     LandroidSensorEntityDescription(
         key="worktime_total",
@@ -231,11 +235,12 @@ SENSORS = [
         native_unit_of_measurement="hours",
         suggested_display_precision=0,
         value_fn=lambda landroid: (
-            round(landroid.statistics["worktime_total"] / 60, 0)
+            round(landroid.statistics["worktime_total"] / 60, 2)
             if "worktime_total" in landroid.statistics
             else None
         ),
         icon="mdi:update",
+        attributes=["worktime_total"],
     ),
     LandroidSensorEntityDescription(
         key="rssi",
