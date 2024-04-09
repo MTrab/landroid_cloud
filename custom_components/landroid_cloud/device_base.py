@@ -909,6 +909,12 @@ class LandroidBaseEntityDescriptionMixin:
 
     value_fn: Callable[[WorxCloud], bool | str | int | float]
 
+@dataclass
+class LandroidButtonEntityDescription(ButtonEntityDescription):
+    """Describes a Landroid button entity."""
+
+    press_action: Callable[[WorxCloud], None]
+
 
 @dataclass
 class LandroidSensorEntityDescription(

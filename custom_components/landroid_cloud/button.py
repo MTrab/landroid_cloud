@@ -19,20 +19,20 @@ from .const import (
     LandroidButtonTypes,
     LandroidFeatureSupport,
 )
-from .device_base import LandroidButton
-from .utils.entity_setup import vendor_to_device
+from .device_base import LandroidButton, LandroidButtonEntityDescription
 from .utils.logger import LandroidLogger, LoggerType
 
 # Tuple containing buttons to create
 BUTTONS = [
-    ButtonEntityDescription(
+    LandroidButtonEntityDescription(
         key=LandroidButtonTypes.RESTART,
         name="Restart",
         icon="mdi:restart",
         entity_category=EntityCategory.CONFIG,
         device_class=ButtonDeviceClass.RESTART,
+        press_action=lambda landroid: landroid.restart(),
     ),
-    ButtonEntityDescription(
+    LandroidButtonEntityDescription(
         key=LandroidButtonTypes.EDGECUT,
         name="Start cutting edge",
         icon="mdi:map-marker-path",
