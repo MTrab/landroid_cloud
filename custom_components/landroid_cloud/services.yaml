@@ -40,17 +40,6 @@ config:
       integration: landroid_cloud
       domain: lawn_mower
   fields:
-    raindelay:
-      name: Rain delay
-      description: Set rain delay. Time in minutes ranging from 0 to 300. 0 = Disabled
-      example: 30
-      selector:
-        number:
-          min: 0
-          max: 300
-          step: 1
-          unit_of_measurement: "minutes"
-          mode: slider
     timeextension:
       name: Time extension
       description: Set time extension. Extension in % ranging from -100 to 100
