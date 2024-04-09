@@ -26,17 +26,18 @@ from .utils.logger import LandroidLogger, LoggerType
 BUTTONS = [
     LandroidButtonEntityDescription(
         key=LandroidButtonTypes.RESTART,
-        name="Restart",
+        name="Restart baseboard",
         icon="mdi:restart",
         entity_category=EntityCategory.CONFIG,
         device_class=ButtonDeviceClass.RESTART,
-        press_action=lambda landroid: landroid.restart(),
+        press_action=lambda api, serial: api.cloud.restart(serial),
     ),
     LandroidButtonEntityDescription(
         key=LandroidButtonTypes.EDGECUT,
         name="Start cutting edge",
         icon="mdi:map-marker-path",
         entity_category=None,
+        press_action=lambda api, serial: api.cloud.ots(serial, True, 0),
     ),
 ]
 

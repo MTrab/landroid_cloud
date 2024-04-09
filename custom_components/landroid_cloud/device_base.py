@@ -913,7 +913,7 @@ class LandroidBaseEntityDescriptionMixin:
 class LandroidButtonEntityDescription(ButtonEntityDescription):
     """Describes a Landroid button entity."""
 
-    press_action: Callable[[WorxCloud], None]
+    press_action: Callable[[LandroidAPI, str], None] = None
 
 
 @dataclass
@@ -951,7 +951,7 @@ class LandroidButton(ButtonEntity):
     def __init__(
         self,
         hass: HomeAssistant,
-        description: ButtonEntityDescription,
+        description: LandroidButtonEntityDescription,
         api: LandroidAPI,
         config: ConfigEntry
     ) -> None:
@@ -1002,6 +1002,9 @@ class LandroidButton(ButtonEntity):
         """Return if the entity is available."""
         return self._api.device.online
 
+    def press(self) -> None:
+        """Press the button."""
+        self.entity_description.press_action(self._api, self.device.serial_number)
 
 class LandroidSensor(SensorEntity):
     """Representation of a Landroid sensor."""
