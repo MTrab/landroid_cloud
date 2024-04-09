@@ -23,6 +23,7 @@ from homeassistant.components.lawn_mower import (
     LawnMowerEntity,
     LawnMowerEntityFeature,
 )
+from homeassistant.components.number import NumberEntity, NumberEntityDescription
 from homeassistant.components.select import SelectEntity, SelectEntityDescription
 from homeassistant.components.sensor import SensorEntity, SensorEntityDescription
 from homeassistant.components.switch import SwitchEntity, SwitchEntityDescription
@@ -574,6 +575,8 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
 
         self.register_services()
 
+        self._attributes.update({"protocol": self.api.device.protocol})
+
         await self.hass.config_entries.async_forward_entry_setups(
             self.api.entry, PLATFORMS_SECONDARY
         )
@@ -926,6 +929,15 @@ class LandroidBinarySensorEntityDescription(
 ):
     """Describes a Landroid binary_sensor."""
 
+@dataclass
+class LandroidNumberEntityDescription(
+    NumberEntityDescription
+):
+    """Describes a Landroid number."""
+    value_fn: Callable[[LandroidAPI], bool | str | int | float | None] = None
+    command_fn: Callable[[LandroidAPI, str], None] = None
+    required_protocol: int | None = None
+
 
 @dataclass
 class LandroidSwitchEntityDescription(
@@ -1082,6 +1094,101 @@ class LandroidSensor(SensorEntity):
                 self.async_write_ha_state()
             except RuntimeError:
                 pass
+
+
+class LandroidNumber(NumberEntity):
+    """Representation of a Landroid number."""
+
+    _attr_has_entity_name = True
+
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        description: LandroidNumberEntityDescription,
+        api: LandroidAPI,
+        config: ConfigEntry,
+    ) -> None:
+        """Initialize a Landroid number entity."""
+        super().__init__()
+
+        self.entity_description = description
+        self.hass = hass
+        self.device = api.device
+
+        self._api = api
+        self._config = config
+
+        self._attr_name = self.entity_description.name
+
+        _LOGGER.debug(
+            "(%s, Setup) Added switch '%s'",
+            self._api.friendly_name,
+            self._attr_name,
+        )
+
+        self._attr_unique_id = util_slugify(
+            f"{self._attr_name}_{self._config.entry_id}_{self._api.device.serial_number}"
+        )
+        self._attr_should_poll = False
+
+        self._attr_device_info = {
+            "identifiers": {
+                (
+                    DOMAIN,
+                    self._api.unique_id,
+                    self._api.entry_id,
+                    self._api.device.serial_number,
+                )
+            },
+            "name": str(f"{self._api.friendly_name}"),
+            "sw_version": self._api.device.firmware["version"],
+            "manufacturer": self._api.config["type"].capitalize(),
+            "model": self._api.device.model,
+            "serial_number": self._api.device.serial_number,
+        }
+
+        if self.device.mac_address != "__UUID__":
+            _connections = {(dr.CONNECTION_NETWORK_MAC, self.device.mac_address)}
+            self._attr_device_info.update({"connections": _connections})
+
+        self._attr_extra_state_attributes = {}
+
+        async_dispatcher_connect(
+            self.hass,
+            util_slugify(f"{UPDATE_SIGNAL}_{self._api.device.name}"),
+            self.handle_update,
+        )
+
+    @property
+    def available(self) -> bool:
+        """Return if the entity is available."""
+        return self._api.device.online
+
+    async def async_added_to_hass(self) -> None:
+        """Set state on adding to home assistant."""
+        await self.handle_update()
+        return await super().async_added_to_hass()
+
+    async def handle_update(self) -> None:
+        """Handle the updates when recieving an update signal."""
+        try:
+            self._attr_value = self.entity_description.value_fn(self.device)
+        except AttributeError:
+            return
+
+        _LOGGER.debug(
+            "(%s, Update signal) Updating number '%s'",
+            self._api.friendly_name,
+            self._attr_name,
+        )
+        try:
+            self.async_write_ha_state()
+        except RuntimeError:
+            pass
+
+    def set_native_value(self, value: float) -> None:
+        """Set number value"""
+        self.entity_description.command_fn(self._api, value)
 
 
 class LandroidSwitch(SwitchEntity):

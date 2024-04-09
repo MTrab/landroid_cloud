@@ -249,27 +249,6 @@ schedule:
       selector:
         boolean:
 
-torque:
-  description: Set wheel torque
-  target:
-    entity:
-      integration: landroid_cloud
-      domain: lawn_mower
-  fields:
-    torque:
-      name: Wheel torque
-      description: Set wheel torque. Ranging from -50% to 50%
-      example: 22
-      required: true
-      default: 0
-      selector:
-        number:
-          min: -50
-          max: 50
-          step: 1
-          unit_of_measurement: "%"
-          mode: slider
-
 send_raw:
   description: Send a raw JSON command to the device
   target:

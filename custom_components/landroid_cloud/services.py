@@ -75,9 +75,6 @@ SUPPORTED_SERVICES = [
         feature=LandroidFeatureSupport.SCHEDULES,
     ),
     LandroidServiceDescription(
-        key=SERVICE_TORQUE, schema=TORQUE_SCHEME, feature=LandroidFeatureSupport.TORQUE
-    ),
-    LandroidServiceDescription(
         key=SERVICE_SEND_RAW, feature=LandroidFeatureSupport.CONFIG, schema=RAW_SCHEME
     ),
 ]
