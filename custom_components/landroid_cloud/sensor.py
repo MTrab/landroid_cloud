@@ -182,19 +182,6 @@ SENSORS = [
         icon="mdi:axis-z-rotate-clockwise",
     ),
     LandroidSensorEntityDescription(
-        key="rainsensor_delay",
-        name="Rainsensor Delay",
-        entity_category=EntityCategory.DIAGNOSTIC,
-        state_class=None,
-        device_class=SensorDeviceClass.DURATION,
-        entity_registry_enabled_default=True,
-        native_unit_of_measurement="min",
-        value_fn=lambda landroid: (
-            landroid.rainsensor["delay"] if "delay" in landroid.rainsensor else None
-        ),
-        icon="mdi:weather-rainy",
-    ),
-    LandroidSensorEntityDescription(
         key="rainsensor_remaining",
         name="Rainsensor Remaining",
         entity_category=EntityCategory.DIAGNOSTIC,
