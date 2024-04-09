@@ -913,7 +913,8 @@ class LandroidBaseEntityDescriptionMixin:
 class LandroidButtonEntityDescription(ButtonEntityDescription):
     """Describes a Landroid button entity."""
 
-    press_action: Callable[[LandroidAPI, str], None] = None
+    press_action: Callable[[LandroidAPI, str], None] = None,
+    required_feature: LandroidFeatureSupport | None = None
 
 
 @dataclass

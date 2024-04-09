@@ -30,6 +30,7 @@ BUTTONS = [
         icon="mdi:restart",
         entity_category=EntityCategory.CONFIG,
         device_class=ButtonDeviceClass.RESTART,
+        required_feature=LandroidFeatureSupport.RESTART,
         press_action=lambda api, serial: api.cloud.restart(serial),
     ),
     LandroidButtonEntityDescription(
@@ -37,6 +38,7 @@ BUTTONS = [
         name="Start cutting edge",
         icon="mdi:map-marker-path",
         entity_category=None,
+        required_feature=LandroidFeatureSupport.EDGECUT,
         press_action=lambda api, serial: api.cloud.ots(serial, True, 0),
     ),
 ]
@@ -54,13 +56,7 @@ async def async_setup_entry(
         logger = LandroidLogger(name=__name__, api=api, log_level=LOGLEVEL)
 
         for button in BUTTONS:
-            if (
-                button.key == LandroidButtonTypes.RESTART
-                and api.features & LandroidFeatureSupport.RESTART
-            ) or (
-                button.key == LandroidButtonTypes.EDGECUT
-                and api.features & LandroidFeatureSupport.EDGECUT
-            ):
+            if (api.features & button.required_feature):
                 logger.log(LoggerType.FEATURE, "Adding %s button", button.key)
                 entity = LandroidButton(hass, button, api, config)
 
