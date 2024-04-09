@@ -40,8 +40,10 @@ INPUT_NUMBERS = [
         native_step=1,
         mode=NumberMode.SLIDER,
         value_fn=lambda api: api.device.torque,
-        command_fn=lambda api, value: api.cloud.send(api.device.serial_number, json.dumps({"tq": value})),
-        required_capability=DeviceCapability.TORQUE
+        command_fn=lambda api, value: api.cloud.send(
+            api.device.serial_number, json.dumps({"tq": value})
+        ),
+        required_capability=DeviceCapability.TORQUE,
     ),
     LandroidNumberEntityDescription(
         key="raindelay",
@@ -55,9 +57,12 @@ INPUT_NUMBERS = [
         native_step=1,
         mode=NumberMode.BOX,
         value_fn=lambda api: api.device.rainsensor["delay"],
-        command_fn=lambda api, value: api.cloud.raindelay(api.device.serial_number, value),
+        command_fn=lambda api, value: api.cloud.raindelay(
+            api.device.serial_number, value
+        ),
     ),
 ]
+
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -70,10 +75,13 @@ async def async_setup_entry(
         api: LandroidAPI = info["api"]
         for number in INPUT_NUMBERS:
             if (
-                    (isinstance(number.required_protocol, type(None)) or number.required_protocol == api.device.protocol) and
-                    (isinstance(number.required_capability, type(None)) or api.device.capabilities.check(number.required_capability))
-                ):
-                    entity = LandroidNumber(hass, number, api, config)
-                    entities.append(entity)
+                isinstance(number.required_protocol, type(None))
+                or number.required_protocol == api.device.protocol
+            ) and (
+                isinstance(number.required_capability, type(None))
+                or api.device.capabilities.check(number.required_capability)
+            ):
+                entity = LandroidNumber(hass, number, api, config)
+                entities.append(entity)
 
     async_add_devices(entities)
