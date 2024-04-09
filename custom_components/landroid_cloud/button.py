@@ -19,6 +19,7 @@ from .const import (
     LandroidButtonTypes,
     LandroidFeatureSupport,
 )
+from .device_base import LandroidButton
 from .utils.entity_setup import vendor_to_device
 from .utils.logger import LandroidLogger, LoggerType
 
@@ -26,14 +27,14 @@ from .utils.logger import LandroidLogger, LoggerType
 BUTTONS = [
     ButtonEntityDescription(
         key=LandroidButtonTypes.RESTART,
-        name="NAME - Restart",
+        name="Restart",
         icon="mdi:restart",
-        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_category=EntityCategory.CONFIG,
         device_class=ButtonDeviceClass.RESTART,
     ),
     ButtonEntityDescription(
         key=LandroidButtonTypes.EDGECUT,
-        name="NAME - Start cutting edge",
+        name="Start cutting edge",
         icon="mdi:map-marker-path",
         entity_category=None,
     ),
@@ -47,21 +48,11 @@ async def async_setup_entry(
 ) -> None:
     """Set up Landroid buttons for specific service."""
     entities = []
-    for name, info in hass.data[DOMAIN][config.entry_id][ATTR_DEVICES].items():
+    for _, info in hass.data[DOMAIN][config.entry_id][ATTR_DEVICES].items():
         api: LandroidAPI = info["api"]
-        device = vendor_to_device(api.config["type"])
         logger = LandroidLogger(name=__name__, api=api, log_level=LOGLEVEL)
 
-        await api.async_await_features()
-
-        logger.log(
-            LoggerType.FEATURE_ASSESSMENT,
-            "Features fully loaded, feature bit: %s -- assessing available button entities",
-            api.features,
-        )
-
         for button in BUTTONS:
-            constructor = None
             if (
                 button.key == LandroidButtonTypes.RESTART
                 and api.features & LandroidFeatureSupport.RESTART
@@ -70,11 +61,8 @@ async def async_setup_entry(
                 and api.features & LandroidFeatureSupport.EDGECUT
             ):
                 logger.log(LoggerType.FEATURE, "Adding %s button", button.key)
-                out = deepcopy(button)
-                out.name = out.name.replace("NAME", api.friendly_name)
-                constructor = device.Button
+                entity = LandroidButton(hass, button, api, config)
 
-            if not isinstance(constructor, type(None)):
-                entities.append(constructor(out, hass, api))
+                entities.append(entity)
 
     async_add_entities(entities, True)
