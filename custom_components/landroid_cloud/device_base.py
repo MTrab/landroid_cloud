@@ -35,7 +35,7 @@ from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.dispatcher import async_dispatcher_connect, dispatcher_send
 from homeassistant.helpers.entity_registry import EntityRegistry
 from homeassistant.util import slugify as util_slugify
-from pyworxcloud import WorxCloud
+from pyworxcloud import DeviceCapability, WorxCloud
 from pyworxcloud.exceptions import (
     NoOneTimeScheduleError,
     NoPartymodeError,
@@ -937,6 +937,7 @@ class LandroidNumberEntityDescription(
     value_fn: Callable[[LandroidAPI], bool | str | int | float | None] = None
     command_fn: Callable[[LandroidAPI, str], None] = None
     required_protocol: int | None = None
+    required_capability: DeviceCapability | None = None
 
 
 @dataclass

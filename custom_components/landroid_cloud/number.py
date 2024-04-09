@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import json
+import logging
 
 from homeassistant.components.number import NumberDeviceClass
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
+from pyworxcloud import DeviceCapability
 
 from .api import LandroidAPI
 from .const import ATTR_DEVICES, DOMAIN
@@ -39,8 +41,11 @@ INPUT_NUMBERS = [
         native_step=1,
         value_fn=lambda api: api.device.torque,
         command_fn=lambda api, value: api.cloud.send(api.device.serial_number, json.dumps({"tq": value})),
+        required_capability=DeviceCapability.TORQUE
     ),
 ]
+
+_LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -53,8 +58,9 @@ async def async_setup_entry(
         api: LandroidAPI = info["api"]
         for number in INPUT_NUMBERS:
             if (isinstance(number.required_protocol, type(None)) or number.required_protocol == api.device.protocol):
-                entity = LandroidNumber(hass, number, api, config)
-
-                entities.append(entity)
+                if (api.device.capabilities.check(number.required_capability)):
+                    _LOGGER.debug("Added number for %s", number.key)
+                    entity = LandroidNumber(hass, number, api, config)
+                    entities.append(entity)
 
     async_add_devices(entities)
