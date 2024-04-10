@@ -15,19 +15,23 @@ from .const import ATTR_DEVICES, DOMAIN
 from .device_base import LandroidNumber, LandroidNumberEntityDescription
 
 INPUT_NUMBERS = [
-    # LandroidNumberEntityDescription(
-    #     key="timeextention",
-    #     name="Time extention",
-    #     entity_category=EntityCategory.CONFIG,
-    #     device_class=None,
-    #     entity_registry_enabled_default=True,
-    #     native_unit_of_measurement="%",
-    #     max_value=100,
-    #     min_value=-100,
-    #     value_fn=lambda api: api.de,
-    #     command_fn=None,
-    #     required_protocol=0,
-    # ),
+    LandroidNumberEntityDescription(
+        key="timeextention",
+        name="Time extention",
+        entity_category=EntityCategory.CONFIG,
+        device_class=None,
+        entity_registry_enabled_default=True,
+        native_unit_of_measurement="%",
+        native_min_value=-100,
+        native_max_value=100,
+        native_step=1,
+        mode=NumberMode.SLIDER,
+        value_fn=lambda api: api.cloud.device.schedules["time_extension"],
+        command_fn=lambda api, value: api.cloud.send(
+            api.device.serial_number, json.dumps({"sc": {"p": value}})
+        ),
+        required_protocol=0,
+    ),
     LandroidNumberEntityDescription(
         key="torque",
         name="Torque",
