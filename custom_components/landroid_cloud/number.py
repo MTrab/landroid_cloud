@@ -60,6 +60,7 @@ INPUT_NUMBERS = [
         command_fn=lambda api, value: api.cloud.raindelay(
             api.device.serial_number, value
         ),
+        icon="mdi:weather-rainy",
     ),
 ]
 

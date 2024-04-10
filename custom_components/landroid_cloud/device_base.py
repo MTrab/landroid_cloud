@@ -929,11 +929,11 @@ class LandroidBinarySensorEntityDescription(
 ):
     """Describes a Landroid binary_sensor."""
 
+
 @dataclass
-class LandroidNumberEntityDescription(
-    NumberEntityDescription
-):
+class LandroidNumberEntityDescription(NumberEntityDescription):
     """Describes a Landroid number."""
+
     value_fn: Callable[[LandroidAPI], bool | str | int | float | None] = None
     command_fn: Callable[[LandroidAPI, str], None] = None
     required_protocol: int | None = None
@@ -1202,6 +1202,13 @@ class LandroidNumber(NumberEntity):
 
     def set_native_value(self, value: float) -> None:
         """Set number value"""
+        _LOGGER.debug(
+            "(%s, Set value) Setting number value for '%s' to %s",
+            self._api.friendly_name,
+            self._attr_name,
+            value,
+        )
+
         self.entity_description.command_fn(self._api, value)
 
 
