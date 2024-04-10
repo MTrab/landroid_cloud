@@ -35,6 +35,49 @@
                     "zoning": "Entraînement par zone"
                 }
             }
+        },
+        "sensor": {
+            "landroid_cloud_error": {
+                "state": {
+                    "battery_low": "Battery low",
+                    "battery_temperature_error": "Battery temperature error",
+                    "battery_trunk_open_timeout": "Battery trunk open timeout",
+                    "blade_height_adjustment_blocked": "Blade height adjustment blocked",
+                    "blade_motor_blocked": "Blade motor is blocked",
+                    "camera_error": "Camara error",
+                    "charge_error": "Error charging",
+                    "charging_station_docking_error": "Charging station docking error",
+                    "close_door_to_go_home": "Close door to go home",
+                    "close_door_to_mow": "Close door to mow",
+                    "excessive_slope": "Excessive slope detected",
+                    "hbi_error": "HBI error",
+                    "headlight_error": "Headlight error",
+                    "insufficient_sensor_data": "Insufficient sensor data",
+                    "lifted": "Lifted",
+                    "locked": "Mower is locked",
+                    "map_error": "Map error",
+                    "mapping_exploration_failed": "Mapping exploration failed",
+                    "mapping_exploration_required": "Mapping exploration required",
+                    "missing_charging_station": "Missing charging station",
+                    "no_error": "No error",
+                    "ota_error": "OTA error",
+                    "outside_wire": "Outside wire",
+                    "rain_delay": "Raid delay active",
+                    "reverse_wire": "Wire is reversed",
+                    "rfid_reader_error": "RFID reader error",
+                    "timeout_finding_home": "Timed out while finding home",
+                    "training_start_disallowed": "Training start disallowed",
+                    "trapped": "Trapped",
+                    "trapped_timeout": "Timed out while trapped",
+                    "unknown": "Unknown",
+                    "unreachable_charging_station": "Unreachable chargning station",
+                    "unreachable_zone": "Unreachable zone",
+                    "upside_down": "Mower is upside down",
+                    "wheel_motor_blocked": "Wheel motor is blocked",
+                    "wire_missing": "Wire missing",
+                    "wire_sync": "Wire sync"
+                }
+            }
         }
     },
     "services": {
