@@ -40,17 +40,6 @@ config:
       integration: landroid_cloud
       domain: lawn_mower
   fields:
-    timeextension:
-      name: Time extension
-      description: Set time extension. Extension in % ranging from -100 to 100
-      example: -23
-      selector:
-        number:
-          min: -100
-          max: 100
-          step: 1
-          unit_of_measurement: "%"
-          mode: slider
     multizone_distances:
       name: Multi zone distances
       description: 'Set multizone distance array in meters. 0 = Disabled. Format: 15, 80, 120, 155'

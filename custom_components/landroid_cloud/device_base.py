@@ -828,16 +828,6 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
         tmpdata = {}
         device: WorxCloud = self.api.device
 
-
-        if "timeextension" in data:
-            self.log(
-                LoggerType.SERVICE_CALL,
-                "Setting timeextension to %s%%",
-                data["timeextension"],
-            )
-            tmpdata["sc"] = {}
-            tmpdata["sc"]["p"] = int(data["timeextension"])
-
         if "multizone_distances" in data:
             self.log(
                 LoggerType.SERVICE_CALL,
