@@ -35,6 +35,49 @@
                     "zoning": "Zone training"
                 }
             }
+        },
+        "sensor": {
+            "landroid_cloud_error": {
+                "state": {
+                    "unknown": "Unknown",
+                    "no error": "No error",
+                    "trapped": "Trapped",
+                    "lifted": "Lifted",
+                    "wire missing": "Wire missing",
+                    "outside wire": "Outside wire",
+                    "rain delay": "Raid delay active",
+                    "close door to mow": "Close door to mow",
+                    "close door to go home": "Close door to go home",
+                    "blade motor blocked": "Blade motor is blocked",
+                    "wheel motor blocked": "Wheel motor is blocked",
+                    "trapped timeout": "Timed out while trapped",
+                    "upside down": "Mower is upside down",
+                    "battery low": "Battery low",
+                    "reverse wire": "Wire is reversed",
+                    "charge error": "Error charging",
+                    "timeout finding home": "Timed out while finding home",
+                    "locked": "Mower is locked",
+                    "battery temperature error": "Battery temperature error",
+                    "battery trunk open timeout": "Battery trunk open timeout",
+                    "wire sync": "Wire sync",
+                    "charging station docking error": "Charging station docking error",
+                    "hbi error": "HBI error",
+                    "ota error": "OTA error",
+                    "map error": "Map error",
+                    "excessive slope": "Excessive slope detected",
+                    "unreachable zone": "Unreachable zone",
+                    "unreachable charging station": "Unreachable chargning station",
+                    "insufficient sensor data": "Insufficient sensor data",
+                    "training start disallowed": "Training start disallowed",
+                    "camera error": "Camara error",
+                    "mapping exploration required": "Mapping exploration required",
+                    "mapping exploration failed": "Mapping exploration failed",
+                    "rfid reader error": "RFID reader error",
+                    "headlight error": "Headlight error",
+                    "missing charging station": "Missing charging station",
+                    "blade height adjustment blocked": "Blade height adjustment blocked"
+                }
+            }
         }
     },
     "services": {

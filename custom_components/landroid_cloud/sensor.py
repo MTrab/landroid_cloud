@@ -136,6 +136,7 @@ SENSORS = [
     LandroidSensorEntityDescription(
         key="error",
         name="Error",
+        translation_key="landroid_cloud_error",
         entity_category=EntityCategory.DIAGNOSTIC,
         state_class=None,
         device_class=SensorDeviceClass.ENUM,
