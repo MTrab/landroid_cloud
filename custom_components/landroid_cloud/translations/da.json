@@ -35,6 +35,49 @@
                     "zoning": "Zone træning"
                 }
             }
+        },
+        "sensor": {
+            "landroid_cloud_error": {
+                "state": {
+                    "battery_low": "Lavt batteriniveau",
+                    "battery_temperature_error": "Batteritemperatur fejl",
+                    "battery_trunk_open_timeout": "Klap til batterirummet åben",
+                    "blade_height_adjustment_blocked": "Klipper højdejustering blokeret",
+                    "blade_motor_blocked": "Klippemotor blokeret",
+                    "camera_error": "Kamera fejl",
+                    "charge_error": "Fejl ved opladning",
+                    "charging_station_docking_error": "Fejl ved docking til ladestation",
+                    "close_door_to_go_home": "Luk låget for at køre hjem",
+                    "close_door_to_mow": "Luk låget for at klippe",
+                    "excessive_slope": "For stor hældning registreret",
+                    "hbi_error": "HBI fejl",
+                    "headlight_error": "Fejl på forlygte",
+                    "insufficient_sensor_data": "Utilstrækkelige sensordata",
+                    "lifted": "Løftet",
+                    "locked": "Klipperen er låst",
+                    "map_error": "Kortfejl",
+                    "mapping_exploration_failed": "Kortlægningsudforskning mislykkedes",
+                    "mapping_exploration_required": "Kortlægning er påkrævet",
+                    "missing_charging_station": "Kunne ikke finde ladestation",
+                    "no_error": "Ingen fejl",
+                    "ota_error": "Fejl ved OTA",
+                    "outside_wire": "Udenfor kanttråden",
+                    "rain_delay": "Regn udsættelse aktivt",
+                    "reverse_wire": "Kanttråd påsat omvendt",
+                    "rfid_reader_error": "Fejl på RFID læser",
+                    "timeout_finding_home": "Timede ud på vej hjem",
+                    "training_start_disallowed": "Træningsstart ikke tilladt",
+                    "trapped": "Fanget",
+                    "trapped_timeout": "Timeout mens fanget",
+                    "unknown": "Ukendt fejl",
+                    "unreachable_charging_station": "Uopnåelig ladestation",
+                    "unreachable_zone": "Uopnåelig zone",
+                    "upside_down": "Klipperen vender på hovedet",
+                    "wheel_motor_blocked": "Hjulmotor blokeret",
+                    "wire_missing": "Kanttråd mangler",
+                    "wire_sync": "Wire sync"
+                }
+            }
         }
     },
     "services": {

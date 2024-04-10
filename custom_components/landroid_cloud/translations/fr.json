@@ -24,7 +24,6 @@
             "landroid_cloud": {
                 "state": {
                     "edgecut": "Bordure de coupe",
-                    "escaped_digital_fence": "Escaped digital fence",
                     "initializing": "Initialisation",
                     "mowing": "Tonte",
                     "offline": "Hors ligne",
@@ -195,16 +194,6 @@
                 }
             },
             "name": "Définir la zone"
-        },
-        "torque": {
-            "description": "Set wheel torque (if supported)",
-            "fields": {
-                "torque": {
-                    "description": "Set wheel torque. Ranging from -50% to 50%",
-                    "name": "Wheel torque"
-                }
-            },
-            "name": "Torque"
         }
     }
 }
