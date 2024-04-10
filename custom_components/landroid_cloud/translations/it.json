@@ -52,10 +52,6 @@
                 "raindelay": {
                     "description": "Imposta il ritardo per la pioggia. Tempo in minuti compreso tra 0 e 300. 0 = Disabilitato",
                     "name": "Ritardo pioggia"
-                },
-                "timeextension": {
-                    "description": "Set time extension. Extension in % ranging from -100 to 100",
-                    "name": "Time extension"
                 }
             },
             "name": "Imposta zona"
@@ -180,8 +176,7 @@
             "description": "Invia un comando JSON raw al dispositivo",
             "fields": {
                 "json": {
-                    "description": "Dati da inviare (formattati in JSON)",
-                    "name": "JSON data"
+                    "description": "Dati da inviare (formattati in JSON)"
                 }
             },
             "name": "Invia comando RAW"
