@@ -12,7 +12,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.util import dt as dt_utils
 
 from .api import LandroidAPI
-from .const import ATTR_DEVICES, DOMAIN
+from .const import ATTR_DEVICES, DOMAIN, ERROR_MAP, STATE_MAP
 from .device_base import LandroidSensor, LandroidSensorEntityDescription
 
 SENSORS = [
@@ -142,7 +142,7 @@ SENSORS = [
         device_class=SensorDeviceClass.ENUM,
         entity_registry_enabled_default=True,
         native_unit_of_measurement=None,
-        value_fn=lambda landroid: landroid.error["description"],
+        value_fn=lambda landroid: ERROR_MAP[landroid.error["id"]],
         attributes=["id"],
         icon="mdi:alert-circle",
     ),
