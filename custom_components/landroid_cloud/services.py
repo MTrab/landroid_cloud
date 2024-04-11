@@ -35,7 +35,6 @@ from .scheme import (
     OTS_SCHEME,
     RAW_SCHEME,
     SCHEDULE_SCHEME,
-    SET_ZONE_SCHEME,
     TORQUE_SCHEME,
 )
 from .utils.logger import LandroidLogger, LoggerType
@@ -54,11 +53,6 @@ class LandroidServiceDescription:
 SUPPORTED_SERVICES = [
     LandroidServiceDescription(
         key=SERVICE_CONFIG, schema=CONFIG_SCHEMA, feature=LandroidFeatureSupport.CONFIG
-    ),
-    LandroidServiceDescription(
-        key=SERVICE_SETZONE,
-        schema=SET_ZONE_SCHEME,
-        feature=LandroidFeatureSupport.SETZONE,
     ),
     LandroidServiceDescription(
         key=SERVICE_RESTART, feature=LandroidFeatureSupport.RESTART

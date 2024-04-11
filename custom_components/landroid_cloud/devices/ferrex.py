@@ -24,8 +24,6 @@ from ..device_base import (
     SUPPORT_LANDROID_BASE,
     LandroidCloudButtonBase,
     LandroidCloudMowerBase,
-    LandroidCloudSelectEntity,
-    LandroidCloudSelectZoneEntity,
 )
 from ..utils.logger import LoggerType
 
@@ -81,40 +79,6 @@ class Button(LandroidCloudButtonBase, ButtonEntity):
             description.key,
         )
         self.device: WorxCloud = self.api.device
-
-
-class Select(LandroidCloudSelectEntity):
-    """Definition of Aldi Ferrex select entity."""
-
-    def __init__(
-        self,
-        description: SelectEntityDescription,
-        hass: HomeAssistant,
-        api: LandroidAPI,
-    ):
-        """Init new Aldi Ferrex Select entity."""
-        super().__init__(description, hass, api)
-        self.device: WorxCloud = self.api.device
-        self.log(
-            LoggerType.SELECT,
-            "Adding %s",
-            description.key,
-        )
-
-
-class ZoneSelect(Select, LandroidCloudSelectZoneEntity):
-    """Definition of a Aldi Ferrex zone selector."""
-
-    def __init__(
-        self,
-        description: SelectEntityDescription,
-        hass: HomeAssistant,
-        api: LandroidAPI,
-    ):
-        """Init new Kress Zone Select entity."""
-        super().__init__(description, hass, api)
-        self.device: WorxCloud = self.api.device
-
 
 class MowerDevice(LandroidCloudMowerBase, LawnMowerEntity):
     """Definition of KreAldi Ferrexss device."""

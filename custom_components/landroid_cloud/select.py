@@ -1,34 +1,28 @@
-"""Representation of a select entity."""
+"""Input select for landroid_cloud."""
 
 from __future__ import annotations
 
-import asyncio
-from copy import deepcopy
-
-from homeassistant.components.select import SelectEntityDescription
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity import EntityCategory
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .api import LandroidAPI
-from .const import (
-    ATTR_DEVICES,
-    DOMAIN,
-    LOGLEVEL,
-    LandroidFeatureSupport,
-    LandroidSelectTypes,
-)
-from .utils.entity_setup import vendor_to_device
-from .utils.logger import LandroidLogger, LoggerType
+from .const import ATTR_DEVICES, DOMAIN
+from .device_base import LandroidSelect, LandroidSelectEntityDescription
 
-# Tuple containing select entities to create
-SELECTS = [
-    SelectEntityDescription(
-        key=LandroidSelectTypes.NEXT_ZONE,
-        name="NAME - Select Next Zone",
-        icon="mdi:map-clock",
+INPUT_SELECT = [
+    LandroidSelectEntityDescription(
+        key="zoneselect",
+        name="Select next zone",
         entity_category=EntityCategory.CONFIG,
+        device_class=None,
+        entity_registry_enabled_default=True,
+        unit_of_measurement=None,
+        options=["1", "2", "3", "4"],
+        value_fn=lambda device: device.zone.current,
+        command_fn=lambda api, value: api.cloud.setzone(
+            api.device.serial_number, value
+        ),
     ),
 ]
 
@@ -36,35 +30,14 @@ SELECTS = [
 async def async_setup_entry(
     hass: HomeAssistant,
     config: ConfigEntry,
-    async_add_entities: AddEntitiesCallback,
+    async_add_devices,
 ) -> None:
-    """Set up Landroid buttons for specific service."""
+    """Set up the switch platform."""
     entities = []
-    for name, info in hass.data[DOMAIN][config.entry_id][ATTR_DEVICES].items():
+    for _, info in hass.data[DOMAIN][config.entry_id][ATTR_DEVICES].items():
         api: LandroidAPI = info["api"]
-        device = vendor_to_device(api.config["type"])
+        for select in INPUT_SELECT:
+            entity = LandroidSelect(hass, select, api, config)
+            entities.append(entity)
 
-        await api.async_await_features()
-
-        logger = LandroidLogger(name=__name__, api=api, log_level=LOGLEVEL)
-        logger.log(
-            LoggerType.FEATURE_ASSESSMENT,
-            "Features fully loaded, feature bit: %s -- assessing available select entities",
-            api.features,
-        )
-        for select in SELECTS:
-            constructor = None
-            if (
-                select.key == LandroidSelectTypes.NEXT_ZONE
-                and device.DEVICE_FEATURES & LandroidFeatureSupport.SETZONE
-            ):
-                logger.log(LoggerType.FEATURE, "Adding %s select", select.key)
-
-                out = deepcopy(select)
-                out.name = out.name.replace("NAME", api.friendly_name)
-                constructor = device.ZoneSelect
-
-            if not isinstance(constructor, type(None)):
-                entities.append(constructor(out, hass, api))
-
-    async_add_entities(entities, True)
+    async_add_devices(entities)

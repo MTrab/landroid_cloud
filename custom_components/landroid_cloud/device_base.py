@@ -41,6 +41,7 @@ from pyworxcloud.exceptions import (
     ZoneNoProbability,
     ZoneNotDefined,
 )
+from pyworxcloud.utils import DeviceHandler
 
 from .api import LandroidAPI
 from .attribute_map import ATTR_MAP
@@ -53,7 +54,6 @@ from .const import (
     ATTR_LONGITUDE,
     ATTR_RUNTIME,
     ATTR_SERVICE,
-    ATTR_ZONE,
     BUTTONTYPE_TO_SERVICE,
     DOMAIN,
     ENTITY_ID_FORMAT,
@@ -420,88 +420,6 @@ class LandroidCloudBaseEntity(LandroidLogger):
         self.hass.async_add_executor_job(self.api.device.update)
         dispatcher_send(
             self.hass, util_slugify(f"{UPDATE_SIGNAL}_{self.api.device.name}")
-        )
-
-
-class LandroidCloudSelectEntity(LandroidCloudBaseEntity, SelectEntity):
-    """Define a select entity."""
-
-    def __init__(
-        self,
-        description: SelectEntityDescription,
-        hass: HomeAssistant,
-        api: LandroidAPI,
-    ):
-        """Initialize a new Landroid Cloud select entity."""
-        super().__init__(hass, api)
-        self._api = api
-        self.entity_description = description
-        self._attr_unique_id = (
-            f"{api.name}_select_{description.key}_{api.device.serial_number}"
-        )
-        self._attr_options = []
-        self._attr_current_option = None
-        self.entity_id = ENTITY_ID_FORMAT.format(f"{api.name} {description.key}")
-
-    @property
-    def available(self) -> bool:
-        """Return if the entity is available."""
-        return self._api.device.online
-
-    @property
-    def device_class(self) -> str:
-        """Return the ID of the capability, to identify the entity for translations."""
-        return f"{DOMAIN}__select_{self.entity_description.key}"
-
-
-class LandroidCloudSelectZoneEntity(LandroidCloudSelectEntity):
-    """Select zone entity definition."""
-
-    @callback
-    def update_selected_zone(self):
-        """Get new data and update state."""
-        if not isinstance(self._attr_options, type(None)):
-            if len(self._attr_options) > 1:
-                self._update_zone()
-
-            try:
-                self._attr_current_option = str(self.api.shared_options["current_zone"])
-            except:  # pylint: disable=bare-except
-                self._attr_current_option = None
-
-        self.schedule_update_ha_state(True)
-
-    def _update_zone(self) -> None:
-        """Update zone selector options."""
-        try:
-            zones = self.api.device.zone["starting_point"]
-        except:  # pylint: disable=bare-except
-            zones = []
-
-        if len(zones) == 4:
-            options = []
-            options.append("0")
-            for idx in range(1, 4):
-                if zones[idx] != 0:
-                    options.append(str(idx))
-
-            self._attr_options = options
-
-    @callback
-    def update_callback(self):
-        """Get new data and update state."""
-        self._update_zone()
-        self.update_selected_zone()
-
-    async def async_select_option(self, option: str) -> None:
-        """Set next zone to be mowed."""
-        data = {ATTR_ZONE: int(option)}
-        target = {"device_id": self.api.device_id}
-        await self.hass.services.async_call(
-            DOMAIN,
-            SERVICE_SETZONE,
-            service_data=data,
-            target=target,
         )
 
 
@@ -917,7 +835,7 @@ class LandroidSensorEntityDescription(
     """Describes a Landroid sensor."""
 
     unit_fn: Callable[[WorxCloud], None] = None
-    attributes: [] | None = None
+    attributes: [] | None = None  # pylance: disable=reportInvalidTypeForm
 
 
 @dataclass
@@ -936,6 +854,112 @@ class LandroidSwitchEntityDescription(
     command_fn: Callable[[WorxCloud], None] = None
     icon_on: str | None = None
     icon_off: str | None = None
+
+
+@dataclass
+class LandroidSelectEntityDescription(SelectEntityDescription):
+    """Describes a Landroid select."""
+
+    value_fn: Callable[[DeviceHandler], bool | str | int | float | None] = None
+    command_fn: Callable[[LandroidAPI, str], None] = None
+
+
+class LandroidSelect(SelectEntity):
+    """Representation of a Landroid select entity."""
+
+    _attr_has_entity_name = True
+
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        description: LandroidSelectEntityDescription,
+        api: LandroidAPI,
+        config: ConfigEntry,
+    ) -> None:
+        """Initialize a Landroid select."""
+        super().__init__()
+
+        self.entity_description = description
+        self.hass = hass
+        self.device = api.device
+
+        self._api = api
+        self._config = config
+
+        self._attr_name = self.entity_description.name
+
+        _LOGGER.debug(
+            "(%s, Setup) Added input_select '%s'",
+            self._api.friendly_name,
+            self._attr_name,
+        )
+
+        self._attr_unique_id = util_slugify(
+            f"{self._attr_name}_{self._config.entry_id}_{self._api.device.serial_number}"
+        )
+        self._attr_should_poll = False
+
+        self._attr_device_info = {
+            "identifiers": {
+                (
+                    DOMAIN,
+                    self._api.unique_id,
+                    self._api.entry_id,
+                    self._api.device.serial_number,
+                )
+            },
+            "name": str(f"{self._api.friendly_name}"),
+            "sw_version": self._api.device.firmware["version"],
+            "manufacturer": self._api.config["type"].capitalize(),
+            "model": self._api.device.model,
+            "serial_number": self._api.device.serial_number,
+        }
+
+        if self.device.mac_address != "__UUID__":
+            _connections = {(dr.CONNECTION_NETWORK_MAC, self.device.mac_address)}
+            self._attr_device_info.update({"connections": _connections})
+
+        self._value = self.entity_description.value_fn(self._api.device) + 1
+
+        async_dispatcher_connect(
+            self.hass,
+            util_slugify(f"{UPDATE_SIGNAL}_{self._api.device.name}"),
+            self.handle_update,
+        )
+
+    async def handle_update(self) -> None:
+        """Handle the updates when recieving an update signal."""
+        try:
+            self._value = self.entity_description.value_fn(self._api.device) + 1
+        except AttributeError:
+            return
+
+        _LOGGER.debug(
+            "(%s, Update signal) Updating select '%s' to '%s'",
+            self._api.friendly_name,
+            self._attr_name,
+            self._value,
+        )
+        try:
+            self.async_write_ha_state()
+        except RuntimeError:
+            pass
+
+    @property
+    def current_option(self) -> str | None:
+        """Return the selected entity option to represent the entity state."""
+        return str(self._value)
+
+    async def async_select_option(self, option: int) -> None:
+        """Change the selected option."""
+        _LOGGER.debug(
+            "(%s, Set value) Setting selected value for '%s' to %s",
+            self._api.friendly_name,
+            self._attr_name,
+            option,
+        )
+
+        self.entity_description.command_fn(self._api, str(option - 1))
 
 
 class LandroidSensor(SensorEntity):
