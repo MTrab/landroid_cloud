@@ -11,8 +11,6 @@ Currently these vendors are supported:<br />
 - Kress
 - LandXcape
 
-<u>NOTE:</u> Landroid Vision and Kress Mission RTK is currently ONLY supported in beta release.
-
 ### Installation:
 
 #### HACS
