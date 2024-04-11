@@ -13,7 +13,7 @@ from .device_base import LandroidSelect, LandroidSelectEntityDescription
 INPUT_SELECT = [
     LandroidSelectEntityDescription(
         key="zoneselect",
-        name="Select next zone",
+        name="Current zone",
         entity_category=EntityCategory.CONFIG,
         device_class=None,
         entity_registry_enabled_default=True,
@@ -23,6 +23,7 @@ INPUT_SELECT = [
         command_fn=lambda api, value: api.cloud.setzone(
             api.device.serial_number, value
         ),
+        icon="mdi:map-clock",
     ),
 ]
 
