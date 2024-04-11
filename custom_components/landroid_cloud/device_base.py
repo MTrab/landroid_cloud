@@ -935,10 +935,9 @@ class LandroidSelect(SelectEntity):
             return
 
         _LOGGER.debug(
-            "(%s, Update signal) Updating select '%s' to '%s'",
+            "(%s, Update signal) Updating select '%s'",
             self._api.friendly_name,
             self._attr_name,
-            self._value,
         )
         try:
             self.async_write_ha_state()
