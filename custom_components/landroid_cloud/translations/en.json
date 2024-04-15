@@ -62,7 +62,7 @@
                     "no_error": "No error",
                     "ota_error": "OTA error",
                     "outside_wire": "Outside wire",
-                    "rain_delay": "Raid delay active",
+                    "rain_delay": "Rain delay active",
                     "reverse_wire": "Wire is reversed",
                     "rfid_reader_error": "RFID reader error",
                     "timeout_finding_home": "Timed out while finding home",
