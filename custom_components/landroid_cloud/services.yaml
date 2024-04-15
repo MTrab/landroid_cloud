@@ -1,17 +1,3 @@
-restart:
-  description: Restart device
-  target:
-    entity:
-      integration: landroid_cloud
-      domain: lawn_mower
-
-edgecut:
-  description: Start edgecut (if supported)
-  target:
-    entity:
-      integration: landroid_cloud
-      domain: lawn_mower
-
 config:
   description: Set device config parameters
   target:

@@ -6,7 +6,6 @@ import inspect
 from dataclasses import dataclass
 from enum import IntEnum
 
-from homeassistant.backports.enum import StrEnum
 from homeassistant.components.lawn_mower import LawnMowerActivity
 from homeassistant.const import STATE_IDLE, STATE_LOCKED, STATE_UNKNOWN
 from pyworxcloud.clouds import CloudType
@@ -48,15 +47,10 @@ REDACT_TITLE = "title"
 
 # Service consts
 SERVICE_CONFIG = "config"
-SERVICE_PARTYMODE = "partymode"
 SERVICE_SETZONE = "setzone"
-SERVICE_LOCK = "lock"
-SERVICE_RESTART = "restart"
-SERVICE_EDGECUT = "edgecut"
 SERVICE_OTS = "ots"
 SERVICE_SCHEDULE = "schedule"
 SERVICE_SEND_RAW = "send_raw"
-SERVICE_TORQUE = "torque"
 
 # Extra states
 STATE_BATTERY_LOW = "battery_low"
@@ -251,27 +245,6 @@ ERROR_MAP = {
     116: STATE_HEIGHT_BLOCKED,
 }
 
-# Remap the zones to be more "human-readable"
-ZONE_MAP = {
-    1: 0,
-    2: 1,
-    3: 2,
-    4: 3,
-}
-
-
-class LandroidButtonTypes(StrEnum):
-    """Defines different button types for Landroid Cloud integration."""
-
-    RESTART = SERVICE_RESTART
-    EDGECUT = SERVICE_EDGECUT
-
-
-class LandroidSelectTypes(StrEnum):
-    """Defines different button types for Landroid Cloud integration."""
-
-    NEXT_ZONE = ATTR_NEXT_ZONE
-
 
 @dataclass
 class ScheduleDays(IntEnum):
@@ -292,11 +265,6 @@ SCHEDULE_TYPE_MAP = {
     "secondary": "dd",
 }
 
-# Map button type to service
-BUTTONTYPE_TO_SERVICE = {
-    LandroidButtonTypes.RESTART: SERVICE_RESTART,
-    LandroidButtonTypes.EDGECUT: SERVICE_EDGECUT,
-}
 
 # Map schedule days
 SCHEDULE_TO_DAY = {

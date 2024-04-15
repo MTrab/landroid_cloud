@@ -20,23 +20,12 @@ from .const import (
     DOMAIN,
     LOGLEVEL,
     SERVICE_CONFIG,
-    SERVICE_EDGECUT,
     SERVICE_OTS,
-    SERVICE_RESTART,
     SERVICE_SCHEDULE,
     SERVICE_SEND_RAW,
-    SERVICE_SETZONE,
-    SERVICE_TORQUE,
     LandroidFeatureSupport,
 )
-from .scheme import (
-    CONFIG_SCHEMA,
-    EMPTY_SCHEME,
-    OTS_SCHEME,
-    RAW_SCHEME,
-    SCHEDULE_SCHEME,
-    TORQUE_SCHEME,
-)
+from .scheme import CONFIG_SCHEMA, EMPTY_SCHEME, OTS_SCHEME, RAW_SCHEME, SCHEDULE_SCHEME
 from .utils.logger import LandroidLogger, LoggerType
 
 
@@ -53,12 +42,6 @@ class LandroidServiceDescription:
 SUPPORTED_SERVICES = [
     LandroidServiceDescription(
         key=SERVICE_CONFIG, schema=CONFIG_SCHEMA, feature=LandroidFeatureSupport.CONFIG
-    ),
-    LandroidServiceDescription(
-        key=SERVICE_RESTART, feature=LandroidFeatureSupport.RESTART
-    ),
-    LandroidServiceDescription(
-        key=SERVICE_EDGECUT, feature=LandroidFeatureSupport.EDGECUT
     ),
     LandroidServiceDescription(
         key=SERVICE_OTS, schema=OTS_SCHEME, feature=LandroidFeatureSupport.OTS

@@ -20,11 +20,7 @@ from ..const import (
     ATTR_TIMEEXTENSION,
     LandroidFeatureSupport,
 )
-from ..device_base import (
-    SUPPORT_LANDROID_BASE,
-    LandroidCloudButtonBase,
-    LandroidCloudMowerBase,
-)
+from ..device_base import SUPPORT_LANDROID_BASE, LandroidCloudMowerBase
 from ..utils.logger import LoggerType
 
 # from homeassistant.helpers.dispatcher import dispatcher_send
@@ -61,24 +57,6 @@ CONFIG_SCHEME = vol.Schema(
     }
 )
 
-
-class Button(LandroidCloudButtonBase, ButtonEntity):
-    """Definition of Aldi Ferrex button."""
-
-    def __init__(
-        self,
-        description: ButtonEntityDescription,
-        hass: HomeAssistant,
-        api: LandroidAPI,
-    ) -> None:
-        """Initialize a Aldi Ferrex button."""
-        super().__init__(description, hass, api)
-        self.log(
-            LoggerType.BUTTON,
-            "Adding %s",
-            description.key,
-        )
-        self.device: WorxCloud = self.api.device
 
 class MowerDevice(LandroidCloudMowerBase, LawnMowerEntity):
     """Definition of KreAldi Ferrexss device."""
