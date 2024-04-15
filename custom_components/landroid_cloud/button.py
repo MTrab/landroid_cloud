@@ -56,7 +56,7 @@ async def async_setup_entry(
         logger = LandroidLogger(name=__name__, api=api, log_level=LOGLEVEL)
 
         for button in BUTTONS:
-            if (api.features & button.required_feature):
+            if api.features & button.required_feature:
                 logger.log(LoggerType.FEATURE, "Adding %s button", button.key)
                 entity = LandroidButton(hass, button, api, config)
 
