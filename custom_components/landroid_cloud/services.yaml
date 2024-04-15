@@ -1,23 +1,16 @@
-setzone:
-  description: Set which zone to be mowed next
+restart:
+  description: Restart device
   target:
     entity:
       integration: landroid_cloud
       domain: lawn_mower
-  fields:
-    zone:
-      name: Zone
-      description: Sets the zone number, ranging from 0 to 3, to be mowed next
-      example: 1
-      required: true
-      default: "0"
-      selector:
-        select:
-          options:
-            - "0"
-            - "1"
-            - "2"
-            - "3"
+
+edgecut:
+  description: Start edgecut (if supported)
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: lawn_mower
 
 config:
   description: Set device config parameters

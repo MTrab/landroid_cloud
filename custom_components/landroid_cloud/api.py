@@ -22,7 +22,7 @@ from .const import (
     UPDATE_SIGNAL,
     LandroidFeatureSupport,
 )
-from .utils.logger import LandroidLogger, LoggerType, LogLevel
+from .utils.logger import LandroidLogger, LoggerType
 
 
 class LandroidAPI:
@@ -50,6 +50,8 @@ class LandroidAPI:
         self.device_id = None
         self.features = 0
         self.features_loaded = False
+
+        self.device_name = device_name
 
         self.cloud.update(self.device.serial_number)
         self.cloud._decode_data(self.device)

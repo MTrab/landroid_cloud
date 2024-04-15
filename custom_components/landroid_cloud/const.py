@@ -30,7 +30,15 @@ https://github.com/mtrab/landroid_cloud/issues
 DEFAULT_NAME = "landroid"
 DOMAIN = "landroid_cloud"
 PLATFORMS_SECONDARY = []
-PLATFORMS_PRIMARY = ["lawn_mower", "sensor", "switch", "binary_sensor", "number", "button"]
+PLATFORMS_PRIMARY = [
+    "lawn_mower",
+    "sensor",
+    "switch",
+    "binary_sensor",
+    "number",
+    "button",
+    "select",
+]
 UPDATE_SIGNAL = "landroid_cloud_update"
 LOGLEVEL = LogLevel.DEBUG
 ENTITY_ID_FORMAT = DOMAIN + ".{}"
