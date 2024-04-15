@@ -1122,8 +1122,6 @@ class LandroidNumber(NumberEntity):
         self._api = api
         self._config = config
 
-        self._value = None
-
         self._attr_name = self.entity_description.name
 
         _LOGGER.debug(
@@ -1157,6 +1155,8 @@ class LandroidNumber(NumberEntity):
             _connections = {(dr.CONNECTION_NETWORK_MAC, self.device.mac_address)}
             self._attr_device_info.update({"connections": _connections})
 
+        self._value = None #self.entity_description.value_fn(self._api)
+
         async_dispatcher_connect(
             self.hass,
             util_slugify(f"{UPDATE_SIGNAL}_{self._api.device.name}"),
@@ -1171,27 +1171,19 @@ class LandroidNumber(NumberEntity):
     @property
     def native_value(self) -> float | None:
         """Return the entity value to represent the entity state."""
-        val = self.entity_description.value_fn(self._api)
-        _LOGGER.debug(
-            "(%s, Show Value) Returning number '%s' with value '%s'",
-            self._api.friendly_name,
-            self._attr_name,
-            val,
-        )
-
-        return val
+        return self._value
 
     async def async_added_to_hass(self) -> None:
         """Set state on adding to home assistant."""
-        # await self.handle_update()
+        await self.handle_update()
         return await super().async_added_to_hass()
 
     async def handle_update(self) -> None:
         """Handle the updates when recieving an update signal."""
         try:
-            self._value = self.entity_description.value_fn(self.device)
+            self._value = self.entity_description.value_fn(self._api)
         except AttributeError:
-            return
+            pass
 
         _LOGGER.debug(
             "(%s, Update signal) Updating number '%s'",
