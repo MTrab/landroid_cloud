@@ -48,21 +48,9 @@
                 "multizone_probabilities": {
                     "description": "Stel de meerzonekansenarray in. Formaat: 50, 10, 20, 20",
                     "name": "Meerzonekansen"
-                },
-                "raindelay": {
-                    "description": "Regenvertraging instellen. Tijd in minuten, variërend van 0 tot 300. 0 = Uitgeschakeld",
-                    "name": "Regenvertraging"
-                },
-                "timeextension": {
-                    "description": "Werktijd instellen. Uitbreiding in % variërend van -100 tot 100",
-                    "name": "Werktijd"
                 }
             },
             "name": "Zone instellen"
-        },
-        "edgecut": {
-            "description": "Start randroutine (indien ondersteund)",
-            "name": "Randroutine"
         },
         "ots": {
             "description": "Eenmalig schema starten (indien ondersteund)",
@@ -77,10 +65,6 @@
                 }
             },
             "name": "Eenmalig schema"
-        },
-        "restart": {
-            "description": "Apparaat herstarten of opnieuw opstarten",
-            "name": "Herstart apparaat"
         },
         "schedule": {
             "description": "Het schema van de maaier instellen of wijzigen",
@@ -195,16 +179,6 @@
                 }
             },
             "name": "Zone instellen"
-        },
-        "torque": {
-            "description": "Wielkoppel instellen (indien ondersteund)",
-            "fields": {
-                "torque": {
-                    "description": "Wielkoppel instellen. Variërend van -50% tot 50%",
-                    "name": "Wielkoppel"
-                }
-            },
-            "name": "Koppel"
         }
     }
 }
