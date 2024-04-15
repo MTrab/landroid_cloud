@@ -15,5 +15,6 @@
         "--profile",
         "black"
     ],
-    "python.formatting.provider": "black"
+    "python.formatting.provider": "black",
+    "python.analysis.autoImportCompletions": true
 }
