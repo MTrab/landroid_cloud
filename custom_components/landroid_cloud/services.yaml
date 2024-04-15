@@ -19,28 +19,6 @@ config:
       integration: landroid_cloud
       domain: lawn_mower
   fields:
-    raindelay:
-      name: Rain delay
-      description: Set rain delay. Time in minutes ranging from 0 to 300. 0 = Disabled
-      example: 30
-      selector:
-        number:
-          min: 0
-          max: 300
-          step: 1
-          unit_of_measurement: "minutes"
-          mode: slider
-    timeextension:
-      name: Time extension
-      description: Set time extension. Extension in % ranging from -100 to 100
-      example: -23
-      selector:
-        number:
-          min: -100
-          max: 100
-          step: 1
-          unit_of_measurement: "%"
-          mode: slider
     multizone_distances:
       name: Multi zone distances
       description: 'Set multizone distance array in meters. 0 = Disabled. Format: 15, 80, 120, 155'
@@ -227,27 +205,6 @@ schedule:
       example: false
       selector:
         boolean:
-
-torque:
-  description: Set wheel torque
-  target:
-    entity:
-      integration: landroid_cloud
-      domain: lawn_mower
-  fields:
-    torque:
-      name: Wheel torque
-      description: Set wheel torque. Ranging from -50% to 50%
-      example: 22
-      required: true
-      default: 0
-      selector:
-        number:
-          min: -50
-          max: 50
-          step: 1
-          unit_of_measurement: "%"
-          mode: slider
 
 send_raw:
   description: Send a raw JSON command to the device

@@ -23,6 +23,7 @@ from homeassistant.components.lawn_mower import (
     LawnMowerEntity,
     LawnMowerEntityFeature,
 )
+from homeassistant.components.number import NumberEntity, NumberEntityDescription
 from homeassistant.components.select import SelectEntity, SelectEntityDescription
 from homeassistant.components.sensor import SensorEntity, SensorEntityDescription
 from homeassistant.components.switch import SwitchEntity, SwitchEntityDescription
@@ -34,7 +35,7 @@ from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.dispatcher import async_dispatcher_connect, dispatcher_send
 from homeassistant.helpers.entity_registry import EntityRegistry
 from homeassistant.util import slugify as util_slugify
-from pyworxcloud import WorxCloud
+from pyworxcloud import DeviceCapability, WorxCloud
 from pyworxcloud.exceptions import (
     NoOneTimeScheduleError,
     NoPartymodeError,
@@ -492,6 +493,8 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
 
         self.register_services()
 
+        self._attributes.update({"protocol": self.api.device.protocol})
+
         await self.hass.config_entries.async_forward_entry_setups(
             self.api.entry, PLATFORMS_SECONDARY
         )
@@ -743,23 +746,6 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
         tmpdata = {}
         device: WorxCloud = self.api.device
 
-        if "raindelay" in data:
-            self.log(
-                LoggerType.SERVICE_CALL,
-                "Setting raindelayto %s minutes",
-                data["raindelay"],
-            )
-            tmpdata["rd"] = int(data["raindelay"])
-
-        if "timeextension" in data:
-            self.log(
-                LoggerType.SERVICE_CALL,
-                "Setting timeextension to %s%%",
-                data["timeextension"],
-            )
-            tmpdata["sc"] = {}
-            tmpdata["sc"]["p"] = int(data["timeextension"])
-
         if "multizone_distances" in data:
             self.log(
                 LoggerType.SERVICE_CALL,
@@ -829,6 +815,14 @@ class LandroidBaseEntityDescriptionMixin:
 
 
 @dataclass
+class LandroidButtonEntityDescription(ButtonEntityDescription):
+    """Describes a Landroid button entity."""
+
+    press_action: Callable[[LandroidAPI, str], None] = (None,)
+    required_feature: LandroidFeatureSupport | None = None
+
+
+@dataclass
 class LandroidSensorEntityDescription(
     SensorEntityDescription, LandroidBaseEntityDescriptionMixin
 ):
@@ -843,6 +837,16 @@ class LandroidBinarySensorEntityDescription(
     BinarySensorEntityDescription, LandroidBaseEntityDescriptionMixin
 ):
     """Describes a Landroid binary_sensor."""
+
+
+@dataclass
+class LandroidNumberEntityDescription(NumberEntityDescription):
+    """Describes a Landroid number."""
+
+    value_fn: Callable[[LandroidAPI], bool | str | int | float | None] = None
+    command_fn: Callable[[LandroidAPI, str], None] = None
+    required_protocol: int | None = None
+    required_capability: DeviceCapability | None = None
 
 
 @dataclass
@@ -959,6 +963,70 @@ class LandroidSelect(SelectEntity):
         )
 
         self.entity_description.command_fn(self._api, str(option - 1))
+
+
+class LandroidButton(ButtonEntity):
+    """Representation of a Landroid button."""
+
+    _attr_has_entity_name = True
+
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        description: LandroidButtonEntityDescription,
+        api: LandroidAPI,
+        config: ConfigEntry,
+    ) -> None:
+        """Initialize a Landroid button."""
+        super().__init__()
+
+        self.entity_description = description
+        self.hass = hass
+        self.device = api.device
+        self._api = api
+        self._config = config
+
+        self._attr_name = self.entity_description.name
+
+        _LOGGER.debug(
+            "(%s, Setup) Added sensor '%s'", self._api.friendly_name, self._attr_name
+        )
+
+        self._attr_unique_id = util_slugify(
+            f"{self._attr_name}_{self._config.entry_id}_{self._api.device.serial_number}"
+        )
+        self._attr_should_poll = False
+
+        self._attr_device_info = {
+            "identifiers": {
+                (
+                    DOMAIN,
+                    self._api.unique_id,
+                    self._api.entry_id,
+                    self._api.device.serial_number,
+                )
+            },
+            "name": str(f"{self._api.friendly_name}"),
+            "sw_version": self._api.device.firmware["version"],
+            "manufacturer": self._api.config["type"].capitalize(),
+            "model": self._api.device.model,
+            "serial_number": self._api.device.serial_number,
+        }
+
+        if self.device.mac_address != "__UUID__":
+            _connections = {(dr.CONNECTION_NETWORK_MAC, self.device.mac_address)}
+            self._attr_device_info.update({"connections": _connections})
+
+        self._attr_extra_state_attributes = {}
+
+    @property
+    def available(self) -> bool:
+        """Return if the entity is available."""
+        return self._api.device.online
+
+    def press(self) -> None:
+        """Press the button."""
+        self.entity_description.press_action(self._api, self.device.serial_number)
 
 
 class LandroidSensor(SensorEntity):
@@ -1105,6 +1173,121 @@ class LandroidSensor(SensorEntity):
                 self.async_write_ha_state()
             except RuntimeError:
                 pass
+
+
+class LandroidNumber(NumberEntity):
+    """Representation of a Landroid number."""
+
+    _attr_has_entity_name = True
+
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        description: LandroidNumberEntityDescription,
+        api: LandroidAPI,
+        config: ConfigEntry,
+    ) -> None:
+        """Initialize a Landroid number entity."""
+        super().__init__()
+
+        self.entity_description = description
+        self.hass = hass
+        self.device = api.device
+
+        self._api = api
+        self._config = config
+
+        self._value = None
+
+        self._attr_name = self.entity_description.name
+
+        _LOGGER.debug(
+            "(%s, Setup) Added switch '%s'",
+            self._api.friendly_name,
+            self._attr_name,
+        )
+
+        self._attr_unique_id = util_slugify(
+            f"{self._attr_name}_{self._config.entry_id}_{self._api.device.serial_number}"
+        )
+        self._attr_should_poll = False
+
+        self._attr_device_info = {
+            "identifiers": {
+                (
+                    DOMAIN,
+                    self._api.unique_id,
+                    self._api.entry_id,
+                    self._api.device.serial_number,
+                )
+            },
+            "name": str(f"{self._api.friendly_name}"),
+            "sw_version": self._api.device.firmware["version"],
+            "manufacturer": self._api.config["type"].capitalize(),
+            "model": self._api.device.model,
+            "serial_number": self._api.device.serial_number,
+        }
+
+        if self.device.mac_address != "__UUID__":
+            _connections = {(dr.CONNECTION_NETWORK_MAC, self.device.mac_address)}
+            self._attr_device_info.update({"connections": _connections})
+
+        async_dispatcher_connect(
+            self.hass,
+            util_slugify(f"{UPDATE_SIGNAL}_{self._api.device.name}"),
+            self.handle_update,
+        )
+
+    @property
+    def available(self) -> bool:
+        """Return if the entity is available."""
+        return self._api.device.online
+
+    @property
+    def native_value(self) -> float | None:
+        """Return the entity value to represent the entity state."""
+        val = self.entity_description.value_fn(self._api)
+        _LOGGER.debug(
+            "(%s, Show Value) Returning number '%s' with value '%s'",
+            self._api.friendly_name,
+            self._attr_name,
+            val,
+        )
+
+        return val
+
+    async def async_added_to_hass(self) -> None:
+        """Set state on adding to home assistant."""
+        # await self.handle_update()
+        return await super().async_added_to_hass()
+
+    async def handle_update(self) -> None:
+        """Handle the updates when recieving an update signal."""
+        try:
+            self._value = self.entity_description.value_fn(self.device)
+        except AttributeError:
+            return
+
+        _LOGGER.debug(
+            "(%s, Update signal) Updating number '%s'",
+            self._api.friendly_name,
+            self._attr_name,
+        )
+        try:
+            self.async_write_ha_state()
+        except RuntimeError:
+            pass
+
+    def set_native_value(self, value: float) -> None:
+        """Set number value"""
+        _LOGGER.debug(
+            "(%s, Set value) Setting number value for '%s' to %s",
+            self._api.friendly_name,
+            self._attr_name,
+            value,
+        )
+
+        self.entity_description.command_fn(self._api, value)
 
 
 class LandroidSwitch(SwitchEntity):

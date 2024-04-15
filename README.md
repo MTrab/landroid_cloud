@@ -11,8 +11,6 @@ Currently these vendors are supported:<br />
 - Kress
 - LandXcape
 
-<u>NOTE:</u> Landroid Vision and Kress Mission RTK is currently ONLY supported in beta release.
-
 ### Installation:
 
 #### HACS
@@ -29,25 +27,10 @@ Currently these vendors are supported:<br />
 - Restart Home Assistant.
 - Go to Integrations and add the Landroid Cloud integration
 
-### Entities & Services
+### Landroid Card
 
-Once installed, the following entities are created in Home Assistant:
-
-```
-lawn_mower.[NAME_FROM_APP]
-```
-
-In addition, the following services are created:
-Service name | Description
----|---
-landroid_cloud.configure | Change configuration settings of device
-landroid_cloud.partymode | Toggle PartyMode if supported by device
-landroid_cloud.setzone | Set next zone to be mowed
-landroid_cloud.lock | Toggle device lock
-landroid_cloud.restart | Restart device baseboard OS
-landroid_cloud.edgecut | Start edgecut routine if supported by device
-
-You can simply add these to your Lovelace setup by adding an entity card or using [Barma-lej halandroid package](https://github.com/Barma-lej/halandroid)
+[Barma-lej](https://github.com/barma-lej) has created a custom card for the Landroid Cloud integration.<br/>
+You can find installation instructions on [this Github repo](https://github.com/Barma-lej/landroid-card)
 
 ### Translation
 
