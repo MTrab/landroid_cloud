@@ -20,11 +20,7 @@ from ..const import (
     ATTR_TIMEEXTENSION,
     LandroidFeatureSupport,
 )
-from ..device_base import (
-    SUPPORT_LANDROID_BASE,
-    LandroidCloudButtonBase,
-    LandroidCloudMowerBase,
-)
+from ..device_base import SUPPORT_LANDROID_BASE, LandroidCloudMowerBase
 from ..utils.logger import LoggerType
 
 # from homeassistant.helpers.dispatcher import dispatcher_send
@@ -60,25 +56,6 @@ DEVICE_FEATURES = (
     | LandroidFeatureSupport.SETZONE
     | LandroidFeatureSupport.SCHEDULES
 )
-
-
-class Button(LandroidCloudButtonBase, ButtonEntity):
-    """Definition of Landxcape button."""
-
-    def __init__(
-        self,
-        description: ButtonEntityDescription,
-        hass: HomeAssistant,
-        api: LandroidAPI,
-    ) -> None:
-        """Initialize a Landxcape button."""
-        super().__init__(description, hass, api)
-        self.device: WorxCloud = self.api.device
-        self.log(
-            LoggerType.SELECT,
-            "Adding %s",
-            description.key,
-        )
 
 
 class MowerDevice(LandroidCloudMowerBase, LawnMowerEntity):

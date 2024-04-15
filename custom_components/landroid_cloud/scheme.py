@@ -14,7 +14,6 @@ from .const import (
     ATTR_MONDAY_BOUNDARY,
     ATTR_MONDAY_END,
     ATTR_MONDAY_START,
-    ATTR_PARTYMODE,
     ATTR_SATURDAY_BOUNDARY,
     ATTR_SATURDAY_END,
     ATTR_SATURDAY_START,
@@ -24,7 +23,6 @@ from .const import (
     ATTR_THURSDAY_BOUNDARY,
     ATTR_THURSDAY_END,
     ATTR_THURSDAY_START,
-    ATTR_TORQUE,
     ATTR_TUESDAY_BOUNDARY,
     ATTR_TUESDAY_END,
     ATTR_TUESDAY_START,
@@ -32,7 +30,6 @@ from .const import (
     ATTR_WEDNESDAY_BOUNDARY,
     ATTR_WEDNESDAY_END,
     ATTR_WEDNESDAY_START,
-    ATTR_ZONE,
     CLOUDS,
     DOMAIN,
 )
@@ -87,18 +84,6 @@ SCHEDULE_SCHEME = vol.Schema(
     extra=vol.ALLOW_EXTRA,
 )
 
-TORQUE_SCHEME = vol.Schema(
-    {
-        vol.Required(ATTR_TORQUE): vol.All(vol.Coerce(int), vol.Range(-50, 50)),
-    },
-    extra=vol.ALLOW_EXTRA,
-)
-
-SET_ZONE_SCHEME = vol.Schema(
-    {vol.Required(ATTR_ZONE): vol.All(vol.Coerce(int), vol.Range(0, 3))},
-    extra=vol.ALLOW_EXTRA,
-)
-
 RAW_SCHEME = vol.Schema(
     {
         vol.Required(ATTR_JSON): str,
@@ -106,12 +91,4 @@ RAW_SCHEME = vol.Schema(
     extra=vol.ALLOW_EXTRA,
 )
 
-
 OTS_SCHEME = ""
-
-PARTYMODE_SCHEME = vol.Schema(
-    {
-        vol.Optional(ATTR_PARTYMODE): bool,
-    },
-    extra=vol.ALLOW_EXTRA,
-)

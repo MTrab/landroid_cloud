@@ -55,22 +55,16 @@ from .const import (
     ATTR_LONGITUDE,
     ATTR_RUNTIME,
     ATTR_SERVICE,
-    BUTTONTYPE_TO_SERVICE,
     DOMAIN,
     ENTITY_ID_FORMAT,
     PLATFORMS_SECONDARY,
     SCHEDULE_TO_DAY,
     SCHEDULE_TYPE_MAP,
     SERVICE_CONFIG,
-    SERVICE_EDGECUT,
-    SERVICE_LOCK,
     SERVICE_OTS,
-    SERVICE_PARTYMODE,
-    SERVICE_RESTART,
     SERVICE_SCHEDULE,
     SERVICE_SEND_RAW,
     SERVICE_SETZONE,
-    SERVICE_TORQUE,
     STATE_INITIALIZING,
     STATE_MAP,
     STATE_OFFLINE,
@@ -279,31 +273,6 @@ class LandroidCloudBaseEntity(LandroidLogger):
             self.api.features,
         )
 
-        if self.api.features & LandroidFeatureSupport.EDGECUT:
-            self.api.services[SERVICE_EDGECUT] = {
-                ATTR_SERVICE: self.async_edgecut,
-            }
-
-        if self.api.features & LandroidFeatureSupport.LOCK:
-            self.api.services[SERVICE_LOCK] = {
-                ATTR_SERVICE: self.async_toggle_lock,
-            }
-
-        if self.api.features & LandroidFeatureSupport.PARTYMODE:
-            self.api.services[SERVICE_PARTYMODE] = {
-                ATTR_SERVICE: self.async_toggle_partymode,
-            }
-
-        if self.api.features & LandroidFeatureSupport.SETZONE:
-            self.api.services[SERVICE_SETZONE] = {
-                ATTR_SERVICE: self.async_set_zone,
-            }
-
-        if self.api.features & LandroidFeatureSupport.RESTART:
-            self.api.services[SERVICE_RESTART] = {
-                ATTR_SERVICE: self.async_restart,
-            }
-
         if self.api.features & LandroidFeatureSupport.CONFIG:
             self.api.services[SERVICE_CONFIG] = {
                 ATTR_SERVICE: self.async_config,
@@ -319,10 +288,6 @@ class LandroidCloudBaseEntity(LandroidLogger):
                 ATTR_SERVICE: self.async_set_schedule,
             }
 
-        if self.api.features & LandroidFeatureSupport.TORQUE:
-            self.api.services[SERVICE_TORQUE] = {
-                ATTR_SERVICE: self.async_set_torque,
-            }
         if self.api.features & LandroidFeatureSupport.RAW:
             self.api.services[SERVICE_SEND_RAW] = {
                 ATTR_SERVICE: self.async_send_raw,
@@ -421,46 +386,6 @@ class LandroidCloudBaseEntity(LandroidLogger):
         self.hass.async_add_executor_job(self.api.device.update)
         dispatcher_send(
             self.hass, util_slugify(f"{UPDATE_SIGNAL}_{self.api.device.name}")
-        )
-
-
-class LandroidCloudButtonBase(LandroidCloudBaseEntity, ButtonEntity):
-    """Define a Landroid Cloud button class."""
-
-    def __init__(
-        self,
-        description: ButtonEntityDescription,
-        hass: HomeAssistant,
-        api: LandroidAPI,
-    ) -> None:
-        """Init a new Landroid Cloud button."""
-        super().__init__(hass, api)
-        self._api = api
-        self.entity_description = description
-        self._attr_unique_id = (
-            f"{api.name}_button_{description.key}_{api.device.serial_number}"
-        )
-        self.entity_id = ENTITY_ID_FORMAT.format(f"{api.name} {description.key}")
-
-    @property
-    def available(self) -> bool:
-        """Return if the entity is available."""
-        return self._api.device.online
-
-    @property
-    def device_class(self) -> str:
-        """Return the ID of the capability, to identify the entity for translations."""
-        return f"{DOMAIN}__button_{self.entity_description.key}"
-
-    async def async_press(
-        self, **kwargs: Any  # pylint: disable=unused-argument
-    ) -> None:
-        """Press the button."""
-        target = {"device_id": self.api.device_id}
-        await self.hass.services.async_call(
-            DOMAIN,
-            BUTTONTYPE_TO_SERVICE[self.entity_description.key],
-            target=target,
         )
 
 
@@ -829,7 +754,7 @@ class LandroidSensorEntityDescription(
     """Describes a Landroid sensor."""
 
     unit_fn: Callable[[WorxCloud], None] = None
-    attributes: [] | None = None  # pylance: disable=reportInvalidTypeForm
+    attributes: [] | None = None  # type: ignore
 
 
 @dataclass
