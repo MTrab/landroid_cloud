@@ -48,21 +48,9 @@
                 "multizone_probabilities": {
                     "description": "Définir un tableau de probabilités multi-zones. Format : 50, 10, 20, 20",
                     "name": "Probabilités multi-zones"
-                },
-                "raindelay": {
-                    "description": "Régler le retard de pluviosité. Temps en minutes compris entre 0 et 300. 0 = Désactivé",
-                    "name": "Retard pluviosité"
-                },
-                "timeextension": {
-                    "description": "Définir la prolongation du temps de travail. Prolongation en % allant de -100 à 100",
-                    "name": "Temps de travail supplémentaire"
                 }
             },
             "name": "Définir la zone"
-        },
-        "edgecut": {
-            "description": "Démarrer la coupe de bord (si supporté)",
-            "name": "Bordure/Coupe-bord"
         },
         "ots": {
             "description": "Démarrer programmation unique (si supporté)",
@@ -77,10 +65,6 @@
                 }
             },
             "name": "Programmation unique"
-        },
-        "restart": {
-            "description": "Redémarrage ou réinitialisation de l'appareil",
-            "name": "Redémarrer l’appareil"
         },
         "schedule": {
             "description": "Définir ou modifier la programmation de la tondeuse",
@@ -195,16 +179,6 @@
                 }
             },
             "name": "Définir la zone"
-        },
-        "torque": {
-            "description": "Réglage du couple de roue (si supporté)",
-            "fields": {
-                "torque": {
-                    "description": "Réglage du couple de roue. De -50% à 50%",
-                    "name": "Couple de roue"
-                }
-            },
-            "name": "Couple"
         }
     }
 }
