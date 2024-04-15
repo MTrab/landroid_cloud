@@ -61,12 +61,6 @@ SUPPORTED_SERVICES = [
         feature=LandroidFeatureSupport.SETZONE,
     ),
     LandroidServiceDescription(
-        key=SERVICE_RESTART, feature=LandroidFeatureSupport.RESTART
-    ),
-    LandroidServiceDescription(
-        key=SERVICE_EDGECUT, feature=LandroidFeatureSupport.EDGECUT
-    ),
-    LandroidServiceDescription(
         key=SERVICE_OTS, schema=OTS_SCHEME, feature=LandroidFeatureSupport.OTS
     ),
     LandroidServiceDescription(

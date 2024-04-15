@@ -909,6 +909,13 @@ class LandroidBaseEntityDescriptionMixin:
 
     value_fn: Callable[[WorxCloud], bool | str | int | float]
 
+@dataclass
+class LandroidButtonEntityDescription(ButtonEntityDescription):
+    """Describes a Landroid button entity."""
+
+    press_action: Callable[[LandroidAPI, str], None] = None,
+    required_feature: LandroidFeatureSupport | None = None
+
 
 @dataclass
 class LandroidSensorEntityDescription(
@@ -937,6 +944,68 @@ class LandroidSwitchEntityDescription(
     icon_on: str | None = None
     icon_off: str | None = None
 
+class LandroidButton(ButtonEntity):
+    """Representation of a Landroid button."""
+
+    _attr_has_entity_name = True
+
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        description: LandroidButtonEntityDescription,
+        api: LandroidAPI,
+        config: ConfigEntry
+    ) -> None:
+        """Initialize a Landroid button."""
+        super().__init__()
+
+        self.entity_description = description
+        self.hass = hass
+        self.device = api.device
+        self._api = api
+        self._config = config
+
+        self._attr_name = self.entity_description.name
+
+        _LOGGER.debug(
+            "(%s, Setup) Added sensor '%s'", self._api.friendly_name, self._attr_name
+        )
+
+        self._attr_unique_id = util_slugify(
+            f"{self._attr_name}_{self._config.entry_id}_{self._api.device.serial_number}"
+        )
+        self._attr_should_poll = False
+
+        self._attr_device_info = {
+            "identifiers": {
+                (
+                    DOMAIN,
+                    self._api.unique_id,
+                    self._api.entry_id,
+                    self._api.device.serial_number,
+                )
+            },
+            "name": str(f"{self._api.friendly_name}"),
+            "sw_version": self._api.device.firmware["version"],
+            "manufacturer": self._api.config["type"].capitalize(),
+            "model": self._api.device.model,
+            "serial_number": self._api.device.serial_number,
+        }
+
+        if self.device.mac_address != "__UUID__":
+            _connections = {(dr.CONNECTION_NETWORK_MAC, self.device.mac_address)}
+            self._attr_device_info.update({"connections": _connections})
+
+        self._attr_extra_state_attributes = {}
+
+    @property
+    def available(self) -> bool:
+        """Return if the entity is available."""
+        return self._api.device.online
+
+    def press(self) -> None:
+        """Press the button."""
+        self.entity_description.press_action(self._api, self.device.serial_number)
 
 class LandroidSensor(SensorEntity):
     """Representation of a Landroid sensor."""
