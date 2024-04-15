@@ -26,7 +26,7 @@ INPUT_NUMBERS = [
         native_max_value=100,
         native_step=1,
         mode=NumberMode.SLIDER,
-        value_fn=lambda api: api.cloud.device.schedules["time_extension"],
+        value_fn=lambda api: api.cloud.devices[api.device_name].schedules["time_extension"],
         command_fn=lambda api, value: api.cloud.send(
             api.device.serial_number, json.dumps({"sc": {"p": value}})
         ),
@@ -43,7 +43,7 @@ INPUT_NUMBERS = [
         native_max_value=50,
         native_step=1,
         mode=NumberMode.SLIDER,
-        value_fn=lambda api: api.device.torque,
+        value_fn=lambda api: api.cloud.devices[api.device_name].torque,
         command_fn=lambda api, value: api.cloud.send(
             api.device.serial_number, json.dumps({"tq": value})
         ),
