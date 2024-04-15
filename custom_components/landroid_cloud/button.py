@@ -12,20 +12,14 @@ from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .api import LandroidAPI
-from .const import (
-    ATTR_DEVICES,
-    DOMAIN,
-    LOGLEVEL,
-    LandroidButtonTypes,
-    LandroidFeatureSupport,
-)
+from .const import ATTR_DEVICES, DOMAIN, LOGLEVEL, LandroidFeatureSupport
 from .device_base import LandroidButton, LandroidButtonEntityDescription
 from .utils.logger import LandroidLogger, LoggerType
 
 # Tuple containing buttons to create
 BUTTONS = [
     LandroidButtonEntityDescription(
-        key=LandroidButtonTypes.RESTART,
+        key="restart",
         name="Restart baseboard",
         icon="mdi:restart",
         entity_category=EntityCategory.CONFIG,
@@ -34,7 +28,7 @@ BUTTONS = [
         press_action=lambda api, serial: api.cloud.restart(serial),
     ),
     LandroidButtonEntityDescription(
-        key=LandroidButtonTypes.EDGECUT,
+        key="edgecut",
         name="Start cutting edge",
         icon="mdi:map-marker-path",
         entity_category=None,
