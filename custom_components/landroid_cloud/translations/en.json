@@ -91,21 +91,9 @@
                 "multizone_probabilities": {
                     "description": "Set multizone probabilities array. Format: 50, 10, 20, 20",
                     "name": "Multi zone probabilities"
-                },
-                "raindelay": {
-                    "description": "Set rain delay. Time in minutes ranging from 0 to 300. 0 = Disabled",
-                    "name": "Rain delay"
-                },
-                "timeextension": {
-                    "description": "Set time extension. Extension in % ranging from -100 to 100",
-                    "name": "Time extension"
                 }
             },
-            "name": "Set zone"
-        },
-        "edgecut": {
-            "description": "Start edgecut (if supported)",
-            "name": "Border-/Edgecut"
+            "name": "Configuration"
         },
         "ots": {
             "description": "Start One-Time-Schedule (if supported)",
@@ -120,10 +108,6 @@
                 }
             },
             "name": "One-Time-Schedule"
-        },
-        "restart": {
-            "description": "Restarts or reboots device",
-            "name": "Restart device"
         },
         "schedule": {
             "description": "Set or change the schedule of the mower",
@@ -238,16 +222,6 @@
                 }
             },
             "name": "Set zone"
-        },
-        "torque": {
-            "description": "Set wheel torque (if supported)",
-            "fields": {
-                "torque": {
-                    "description": "Set wheel torque. Ranging from -50% to 50%",
-                    "name": "Wheel torque"
-                }
-            },
-            "name": "Torque"
         }
     }
 }
