@@ -44,6 +44,7 @@ class InvalidAuth(exceptions.HomeAssistantError):
 class CannotConnect(exceptions.HomeAssistantError):
     """Error to indicate we cannot connect."""
 
+
 class TooManyRequests(exceptions.HomeAssistantError):
     """Error to indicate we made too many requests."""
 
