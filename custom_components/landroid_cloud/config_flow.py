@@ -5,7 +5,7 @@ from __future__ import annotations
 from homeassistant import config_entries, core, exceptions
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
 from pyworxcloud import WorxCloud
-from pyworxcloud.exceptions import AuthorizationError
+from pyworxcloud.exceptions import AuthorizationError, TooManyRequestsError
 
 from .const import DOMAIN, LOGLEVEL
 from .scheme import DATA_SCHEMA
@@ -26,6 +26,8 @@ async def validate_input(hass: core.HomeAssistant, data):
     )
     try:
         auth = await hass.async_add_executor_job(worx.authenticate)
+    except TooManyRequestsError:
+        raise TooManyRequests from None
     except AuthorizationError:
         raise InvalidAuth from None
 
@@ -41,6 +43,9 @@ class InvalidAuth(exceptions.HomeAssistantError):
 
 class CannotConnect(exceptions.HomeAssistantError):
     """Error to indicate we cannot connect."""
+
+class TooManyRequests(exceptions.HomeAssistantError):
+    """Error to indicate we made too many requests."""
 
 
 class LandroidCloudConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
@@ -79,6 +84,8 @@ class LandroidCloudConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 self._errors["base"] = "cannot_connect"
             except InvalidAuth:
                 self._errors["base"] = "invalid_auth"
+            except TooManyRequests:
+                self._errors["base"] = "too_many_requests"
             except Exception as ex:  # pylint: disable=broad-except
                 LOGGER.log(
                     LoggerType.CONFIG,
