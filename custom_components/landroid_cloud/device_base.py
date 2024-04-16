@@ -887,7 +887,7 @@ class LandroidSelect(SelectEntity):
             option,
         )
 
-        self.entity_description.command_fn(self._api, str(option - 1))
+        self.entity_description.command_fn(self._api, str(int(option) - 1))
 
 
 class LandroidButton(ButtonEntity):
