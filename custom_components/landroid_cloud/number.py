@@ -16,8 +16,8 @@ from .device_base import LandroidNumber, LandroidNumberEntityDescription
 
 INPUT_NUMBERS = [
     LandroidNumberEntityDescription(
-        key="timeextention",
-        name="Time extention",
+        key="timeextension",
+        name="Time extension",
         entity_category=EntityCategory.CONFIG,
         device_class=None,
         entity_registry_enabled_default=True,
