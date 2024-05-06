@@ -115,7 +115,7 @@ SENSORS = [
         suggested_display_precision=0,
         value_fn=lambda landroid: (
             round(landroid.blades["reset_at"] / 60, 2)
-            if "reset_at" in landroid.blades
+            if "reset_at" in landroid.blades and not landroid.blades["reset_at"] is None
             else None
         ),
         icon="mdi:history",
