@@ -3,9 +3,8 @@
 # pylint: disable=unused-argument,relative-beyond-top-level
 from __future__ import annotations
 
+import enum
 import logging
-
-from homeassistant.backports.enum import StrEnum
 
 try:
     from ..api import LandroidAPI
@@ -13,7 +12,7 @@ except:  # pylint: disable=bare-except
     pass
 
 
-class LoggerType(StrEnum):
+class LoggerType(enum.StrEnum):
     """Defines the available logger types."""
 
     NONE = "None"
@@ -38,7 +37,7 @@ class LoggerType(StrEnum):
     DEVELOP = "DEVELOPER INFO"
 
 
-class LogLevel(StrEnum):
+class LogLevel(enum.StrEnum):
     """Define loglevels."""
 
     CRITICAL = "critical"
