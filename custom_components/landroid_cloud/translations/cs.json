@@ -48,9 +48,21 @@
                 "multizone_probabilities": {
                     "description": "Nastavení pole pravděpodobností pro více zón. Formát: 50, 10, 20, 20",
                     "name": "Pravděpodobnosti pro více zón"
+                },
+                "raindelay": {
+                    "description": "Nastavení délky prodlevy po dešti. Čas v minutách od 0 do 300. 0 = Zakázáno",
+                    "name": "Prodleva po dešti"
+                },
+                "timeextension": {
+                    "description": "Nastavení prodloužení času. Prodloužení v % v rozmezí od -100 do 100",
+                    "name": "Prodloužení času"
                 }
             },
             "name": "Nastavit zónu"
+        },
+        "edgecut": {
+            "description": "Spustit sekání okraje (je-li podporováno)",
+            "name": "Sekání okraje"
         },
         "ots": {
             "description": "Spuštění jednorázového harmonogramu (je-li podporován)",
@@ -65,6 +77,10 @@
                 }
             },
             "name": "Jednorázový harmonogram"
+        },
+        "restart": {
+            "description": "Restartuje zařízení",
+            "name": "Restart zařízení"
         },
         "schedule": {
             "description": "Nastavení nebo změna časového plánu sekačky",
@@ -179,6 +195,16 @@
                 }
             },
             "name": "Nastavení zóny"
+        },
+        "torque": {
+            "description": "Nastavení síly pohonu (je-li podporováno)",
+            "fields": {
+                "torque": {
+                    "description": "Nastavení síly pohonu. V rozmezí od -50 % do 50 %",
+                    "name": "Síla pohonu"
+                }
+            },
+            "name": "Síla"
         }
     }
 }

@@ -47,9 +47,21 @@
                 "multizone_probabilities": {
                     "description": "Définir le tableau de probabilités multi zones. Format: 50, 10, 20, 20",
                     "name": "Probabilités multi zones"
+                },
+                "raindelay": {
+                    "description": "Réglez le retard de pluie. Temps en minutes allant de 0 à 300. 0 = Désactivé",
+                    "name": "Retard de pluie"
+                },
+                "timeextension": {
+                    "description": "Définir l'augmentation ou la diminution du temps de travail. S'exprime en % allant de -100 à 100",
+                    "name": "Augmentation/diminution du temps de travail"
                 }
             },
             "name": "Définir la zone"
+        },
+        "edgecut": {
+            "description": "Démarrer la routine de bord (si pris en charge)",
+            "name": "Routine de bord"
         },
         "ots": {
             "description": "Démarrer un programme unique (si pris en charge)",
@@ -64,6 +76,10 @@
                 }
             },
             "name": "Programme unique"
+        },
+        "restart": {
+            "description": "Redémarre l'appareil",
+            "name": "Redémarrer l'appareil"
         },
         "schedule": {
             "description": "Définir ou modifier le programme de la tondeuse",
