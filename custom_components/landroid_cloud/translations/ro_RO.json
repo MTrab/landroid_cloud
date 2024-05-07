@@ -48,9 +48,21 @@
                 "multizone_probabilities": {
                     "description": "Setează matricea de probabilități multi-zonă. Format: 50, 10, 20, 20",
                     "name": "Probabilități multi-zonă"
+                },
+                "raindelay": {
+                    "description": "Setează întârzierea cauzată de ploaie. Interval între 0 și 300 de minute. 0 = Dezactivat",
+                    "name": "Întârziere din cauza ploii"
+                },
+                "timeextension": {
+                    "description": "Setează extensia de timp. Extensia este un procent între -100 și 100",
+                    "name": "Extensie de timp"
                 }
             },
             "name": "Setează zona"
+        },
+        "edgecut": {
+            "description": "Pornește tunderea perimetrului (dacă dispozivul permite)",
+            "name": "Tunderea perimetrului"
         },
         "ots": {
             "description": "Pornește programarea unică (dacă dispozitivul permite)",
@@ -65,6 +77,10 @@
                 }
             },
             "name": "Programare unică"
+        },
+        "restart": {
+            "description": "Repornește dispozitivul",
+            "name": "Repornește dispozitivul"
         },
         "schedule": {
             "description": "Setează sau schimbă programul robotului de tuns iarba",
@@ -179,6 +195,16 @@
                 }
             },
             "name": "Setează zona"
+        },
+        "torque": {
+            "description": "Setează cuplul roților (dacă dispozitivul permite)",
+            "fields": {
+                "torque": {
+                    "description": "Setează cuplul roților. De la -50% la 50%",
+                    "name": "Cuplul la roată"
+                }
+            },
+            "name": "Cuplu"
         }
     }
 }

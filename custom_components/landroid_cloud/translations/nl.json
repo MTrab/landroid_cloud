@@ -6,6 +6,7 @@
         "error": {
             "cannot_connect": "Kan geen verbinding maken",
             "invalid_auth": "Fout in authenticatie",
+            "too_many_requests": "Te veel verzoeken aan de API - Probeer het opnieuw binnen 24 uur",
             "unknown": "Onverwachtse fout"
         },
         "step": {
@@ -35,6 +36,49 @@
                     "zoning": "Zone instellen"
                 }
             }
+        },
+        "sensor": {
+            "landroid_cloud_error": {
+                "state": {
+                    "battery_low": "Batterij bijna leeg",
+                    "battery_temperature_error": "Fout met batterijtemperatuur",
+                    "battery_trunk_open_timeout": "Time-out voor open batterijkofferbak",
+                    "blade_height_adjustment_blocked": "Hoogte-instelling mes geblokkeerd",
+                    "blade_motor_blocked": "Motor mes is geblokkeerd",
+                    "camera_error": "Camerafout",
+                    "charge_error": "Fout bij opladen",
+                    "charging_station_docking_error": "Dockingfout bij laadstation",
+                    "close_door_to_go_home": "Sluit de deur om naar laadstation te gaan",
+                    "close_door_to_mow": "Sluit de deur om te maaien",
+                    "excessive_slope": "Er is een te grote helling gedetecteerd",
+                    "hbi_error": "HBI fout",
+                    "headlight_error": "Koplampfout",
+                    "insufficient_sensor_data": "Onvoldoende sensorgegevens",
+                    "lifted": "Opgetild",
+                    "locked": "Maaier is vergrendeld",
+                    "map_error": "Kaart fout",
+                    "mapping_exploration_failed": "Kaartverkenning mislukt",
+                    "mapping_exploration_required": "Verkenning in kaart brengen vereist",
+                    "missing_charging_station": "Laadstation ontbreekt",
+                    "no_error": "Geen fout",
+                    "ota_error": "OTA fout",
+                    "outside_wire": "Buiten de draad",
+                    "rain_delay": "Regenvertraging actief",
+                    "reverse_wire": "Draad is omgekeerd",
+                    "rfid_reader_error": "Fout met RFID-lezer",
+                    "timeout_finding_home": "Time-out tijdens het vinden van laadstation",
+                    "training_start_disallowed": "Trainingsstart afgekeurd",
+                    "trapped": "Vast",
+                    "trapped_timeout": "Time-out terwijl hij vastzit",
+                    "unknown": "Onbekend",
+                    "unreachable_charging_station": "Laadstation onbereikbaar",
+                    "unreachable_zone": "Onbereikbare zone",
+                    "upside_down": "Maaier staat ondersteboven",
+                    "wheel_motor_blocked": "Motor wiel is geblokkeerd",
+                    "wire_missing": "Draad ontbreekt",
+                    "wire_sync": "Draad synchronisatie"
+                }
+            }
         }
     },
     "services": {
@@ -48,9 +92,21 @@
                 "multizone_probabilities": {
                     "description": "Stel de meerzonekansenarray in. Formaat: 50, 10, 20, 20",
                     "name": "Meerzonekansen"
+                },
+                "raindelay": {
+                    "description": "Regenvertraging instellen. Tijd in minuten, variërend van 0 tot 300. 0 = Uitgeschakeld",
+                    "name": "Regenvertraging"
+                },
+                "timeextension": {
+                    "description": "Werktijd instellen. Uitbreiding in % variërend van -100 tot 100",
+                    "name": "Werktijd"
                 }
             },
             "name": "Zone instellen"
+        },
+        "edgecut": {
+            "description": "Start randroutine (indien ondersteund)",
+            "name": "Randroutine"
         },
         "ots": {
             "description": "Eenmalig schema starten (indien ondersteund)",
@@ -65,6 +121,10 @@
                 }
             },
             "name": "Eenmalig schema"
+        },
+        "restart": {
+            "description": "Apparaat herstarten of opnieuw opstarten",
+            "name": "Herstart apparaat"
         },
         "schedule": {
             "description": "Het schema van de maaier instellen of wijzigen",
@@ -127,7 +187,7 @@
                 },
                 "thursday_start": {
                     "description": "Starttijd voor donderdag",
-                    "name": "Woensdag, Begin"
+                    "name": "Donderdag, begin"
                 },
                 "tuesday_boundary": {
                     "description": "Moeten we dit schema beginnen met de randroutine?",
@@ -179,6 +239,16 @@
                 }
             },
             "name": "Zone instellen"
+        },
+        "torque": {
+            "description": "Wielkoppel instellen (indien ondersteund)",
+            "fields": {
+                "torque": {
+                    "description": "Wielkoppel instellen. Variërend van -50% tot 50%",
+                    "name": "Wielkoppel"
+                }
+            },
+            "name": "Koppel"
         }
     }
 }

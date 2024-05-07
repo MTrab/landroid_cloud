@@ -48,9 +48,21 @@
                 "multizone_probabilities": {
                     "description": "Legen Sie das Multizonen-Wahrscheinlichkeits-Array fest. Format: 50, 10, 20, 20",
                     "name": "Multizonen Wahrscheinlichkeit"
+                },
+                "raindelay": {
+                    "description": "Regenverzögerung einstellen. Zeit zwischen 0 und 300 Minuten. 0 = Deaktiviert",
+                    "name": "Regenverzögerung"
+                },
+                "timeextension": {
+                    "description": "Zeitverlängerung einstellen in % im Bereich von -100 bis 100",
+                    "name": "Zeitverlängerung"
                 }
             },
             "name": "Zone setzen"
+        },
+        "edgecut": {
+            "description": "Kantenschnitt starten (falls unterstützt)",
+            "name": "Rand-/Kantenschnitt"
         },
         "ots": {
             "description": "Einmalplan starten (falls unterstützt)",
@@ -65,6 +77,10 @@
                 }
             },
             "name": "Einmaliger Zeitplan"
+        },
+        "restart": {
+            "description": "Startet das Gerät neu oder startet es neu",
+            "name": "Gerät neustarten"
         },
         "schedule": {
             "description": "Zeitplan des Mähers einstellen oder ändern.",
@@ -179,6 +195,16 @@
                 }
             },
             "name": "Zone setzen"
+        },
+        "torque": {
+            "description": "Raddrehmoment einstellen (falls unterstützt)",
+            "fields": {
+                "torque": {
+                    "description": "Raddrehmoment einstellen. Im Bereich von -50 % bis 50 %",
+                    "name": "Drehmoment"
+                }
+            },
+            "name": "Drehmoment"
         }
     }
 }

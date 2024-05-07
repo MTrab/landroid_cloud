@@ -33,5 +33,14 @@
                 }
             }
         }
+    },
+    "services": {
+        "config": {
+            "fields": {
+                "raindelay": {
+                    "name": "Fördröjning av regn"
+                }
+            }
+        }
     }
 }

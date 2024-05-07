@@ -6,8 +6,8 @@
         "error": {
             "cannot_connect": "Failed to connect",
             "invalid_auth": "Error in authentication",
-            "unknown": "Unexpected error",
-            "too_many_requests": "Too many requests to the API - Try again in 24 hours"
+            "too_many_requests": "Too many requests to the API - Try again in 24 hours",
+            "unknown": "Unexpected error"
         },
         "step": {
             "user": {

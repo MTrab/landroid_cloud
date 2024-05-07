@@ -89,9 +89,17 @@
                 "multizone_probabilities": {
                     "description": "Imposta l'array delle probabilità multizona. Formato: 50, 10, 20, 20",
                     "name": "Probabilità multizona"
+                },
+                "raindelay": {
+                    "description": "Imposta il ritardo per la pioggia. Tempo in minuti compreso tra 0 e 300. 0 = Disabilitato",
+                    "name": "Ritardo pioggia"
                 }
             },
             "name": "Imposta zona"
+        },
+        "edgecut": {
+            "description": "Avvia taglio bordo (se supportato)",
+            "name": "Taglio bordo"
         },
         "ots": {
             "description": "Avvia il programma una tantum (se supportato)",
@@ -106,6 +114,10 @@
                 }
             },
             "name": "Programma una tantum"
+        },
+        "restart": {
+            "description": "Riavvia il dispositivo",
+            "name": "Riavvia il dispositivo"
         },
         "schedule": {
             "description": "Modifica il programma del tagliaerba",
@@ -219,6 +231,16 @@
                 }
             },
             "name": "Imposta zona"
+        },
+        "torque": {
+            "description": "Imposta la coppia delle ruote (se supportato)",
+            "fields": {
+                "torque": {
+                    "description": "Imposta la coppia delle ruote. Da -50% a 50%",
+                    "name": "Coppia delle ruote"
+                }
+            },
+            "name": "Coppia"
         }
     }
 }
