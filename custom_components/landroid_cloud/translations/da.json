@@ -6,6 +6,7 @@
         "error": {
             "cannot_connect": "Kunne ikke forbinde",
             "invalid_auth": "Fejl i brugernavn og/eller password",
+            "too_many_requests": "For mange forespørgsler mod API - Prøv igen om 24 timer",
             "unknown": "Ukendt fejl"
         },
         "step": {
@@ -91,9 +92,21 @@
                 "multizone_probabilities": {
                     "description": "Indstil multi zone sandsynligheder. Format: 50, 10, 20, 20",
                     "name": "Multi zone sandsynlighed"
+                },
+                "raindelay": {
+                    "description": "Indstil regnforsinkelse. Tid i minutter fra 0 til 300. 0 = Deaktiveret",
+                    "name": "Regn forsinkelse"
+                },
+                "timeextension": {
+                    "description": "Indstil tidsforlængelse. Forlængelse angives i % fra -100 til 100",
+                    "name": "Tidsforlængelse"
                 }
             },
             "name": "Konfiguration"
+        },
+        "edgecut": {
+            "description": "Start kantklip (hvis understøttet)",
+            "name": "Kantklip"
         },
         "ots": {
             "description": "Start engangs kørsel (hvis understøttet)",
@@ -108,6 +121,10 @@
                 }
             },
             "name": "Engangs kørsel"
+        },
+        "restart": {
+            "description": "Genstarter enheden",
+            "name": "Genstart enhed"
         },
         "schedule": {
             "description": "Indstil eller rediger planen for græsslåning",
@@ -222,6 +239,16 @@
                 }
             },
             "name": "Indstil zone"
+        },
+        "torque": {
+            "description": "Indstil moment på hjulene (hvis understøttet)",
+            "fields": {
+                "torque": {
+                    "description": "Indstil moment leveret til hjulene. Fra -50% til 50%",
+                    "name": "Moment"
+                }
+            },
+            "name": "Moment"
         }
     }
 }
