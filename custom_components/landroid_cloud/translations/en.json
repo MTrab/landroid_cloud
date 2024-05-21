@@ -33,7 +33,10 @@
                     "returning": "Returning to charger",
                     "searching_zone": "Searching for zone",
                     "starting": "Starting",
-                    "zoning": "Zone training"
+                    "zoning": "Zone training",
+                    "idle": "Idle",
+                    "locked": "Locked",
+                    "unknown": "Unknown"
                 }
             }
         },
