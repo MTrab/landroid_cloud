@@ -26,17 +26,17 @@
                 "state": {
                     "edgecut": "Cutting edge",
                     "escaped_digital_fence": "Escaped digital fence",
+                    "idle": "Idle",
                     "initializing": "Initializing",
+                    "locked": "Locked",
                     "mowing": "Mowing",
                     "offline": "Offline",
                     "rain_delay": "Rain delay",
                     "returning": "Returning to charger",
                     "searching_zone": "Searching for zone",
                     "starting": "Starting",
-                    "zoning": "Zone training",
-                    "idle": "Idle",
-                    "locked": "Locked",
-                    "unknown": "Unknown"
+                    "unknown": "Unknown",
+                    "zoning": "Zone training"
                 }
             }
         },

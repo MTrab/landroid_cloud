@@ -26,13 +26,16 @@
                 "state": {
                     "edgecut": "Klipper kant",
                     "escaped_digital_fence": "Udenfor digitalt hegn",
+                    "idle": "Afventer",
                     "initializing": "Initialiserer",
+                    "locked": "Låst",
                     "mowing": "Slår græs",
                     "offline": "Afbrudt",
                     "rain_delay": "Regn forsinkelse",
                     "returning": "Returnerer til lader",
                     "searching_zone": "Søger efter zone",
                     "starting": "Starter",
+                    "unknown": "Ukendt status",
                     "zoning": "Zone træning"
                 }
             }

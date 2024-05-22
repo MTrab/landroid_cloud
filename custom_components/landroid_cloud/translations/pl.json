@@ -6,6 +6,7 @@
         "error": {
             "cannot_connect": "Nieudane połączenie",
             "invalid_auth": "Błąd autoryzacji",
+            "too_many_requests": "Zbyt wiele zapytań do API - spróbuj ponownie za 24 godziny.",
             "unknown": "Niespodziewany błąd"
         },
         "step": {
@@ -24,12 +25,38 @@
             "landroid_cloud": {
                 "state": {
                     "edgecut": "Przycinanie obrzeży",
+                    "escaped_digital_fence": "Poza cyfrowym płotem",
                     "initializing": "Inicjalizacja",
+                    "locked": "Zablokowany",
                     "mowing": "Koszenie",
                     "offline": "Niedostępny",
                     "rain_delay": "Opóźnienie po deszczu",
+                    "returning": "Powró do bazy",
                     "starting": "Rozpoczynanie",
+                    "unknown": "Nieznany",
                     "zoning": "Przyuczanie strefy"
+                }
+            }
+        },
+        "sensor": {
+            "landroid_cloud_error": {
+                "state": {
+                    "battery_low": "Niski poziom baterii",
+                    "blade_height_adjustment_blocked": "Zablokowana regulacja wysokości koszenia",
+                    "blade_motor_blocked": "Zablokowany silnik ostrzy",
+                    "camera_error": "Błąd kamery",
+                    "charge_error": "Błąd ładowania",
+                    "lifted": "Podniesiona",
+                    "locked": "Kosiarka zablokowana",
+                    "missing_charging_station": "Pominięta stacja bazowa",
+                    "outside_wire": "Poza przewodem",
+                    "rain_delay": "Aktywne opóźnienie z powodu deszczu",
+                    "rfid_reader_error": "Błąd czytnika RFID",
+                    "trapped": "Uwięziona",
+                    "unknown": "Nieznany",
+                    "upside_down": "Kosiarka podniesiona",
+                    "wheel_motor_blocked": "Zablokowany silnik koła",
+                    "wire_missing": "Brak przewodu"
                 }
             }
         }
@@ -39,8 +66,19 @@
             "fields": {
                 "raindelay": {
                     "name": "Opóźnienie po deszczu"
+                },
+                "timeextension": {
+                    "name": "Przedłużenie czasu"
                 }
             }
+        },
+        "edgecut": {
+            "description": "Rozpocznij cięcie krawędzi (o ile wspierane)",
+            "name": "Cięcie krawędzi"
+        },
+        "restart": {
+            "description": "Restartuje urządzenie",
+            "name": "Restart urządzenia"
         }
     }
 }

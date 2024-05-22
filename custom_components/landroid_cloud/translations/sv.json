@@ -6,6 +6,7 @@
         "error": {
             "cannot_connect": "Misslyckades med att ansluta",
             "invalid_auth": "Fel vid autentisering",
+            "too_many_requests": "För många API-förfrågningar. Försök igen om 24 timmar",
             "unknown": "Oväntat fel"
         },
         "step": {
@@ -24,12 +25,52 @@
             "landroid_cloud": {
                 "state": {
                     "edgecut": "Kantklippning",
+                    "idle": "Inaktiv",
                     "initializing": "Initierar",
-                    "mowing": "Gräsklippning",
+                    "locked": "Låst",
+                    "mowing": "Klipper",
                     "offline": "Offline",
-                    "rain_delay": "Fördröjning av regn",
+                    "rain_delay": "Regnfördröjning",
+                    "returning": "Återvänder hem",
                     "starting": "Startar",
+                    "unknown": "Okänt",
                     "zoning": "Zonträning"
+                }
+            }
+        },
+        "sensor": {
+            "landroid_cloud_error": {
+                "state": {
+                    "battery_low": "Låg batterinivå",
+                    "battery_temperature_error": "Fel på batteriets temperatur",
+                    "blade_height_adjustment_blocked": "Justering av bladhöjd blockerad",
+                    "blade_motor_blocked": "Bladmotorn är blockerad",
+                    "camera_error": "Fel på kameran",
+                    "charge_error": "Fel vid laddning",
+                    "close_door_to_go_home": "Stäng dörren för att köra hem",
+                    "close_door_to_mow": "Stäng dörren för att klippa",
+                    "excessive_slope": "För stor lutning upptäckt",
+                    "headlight_error": "Fel på strålkastare",
+                    "insufficient_sensor_data": "Otillräcklig sensordata",
+                    "lifted": "Gräsklipparen har lyfts",
+                    "locked": "Gräsklipparen är låst",
+                    "map_error": "Fel på kartan",
+                    "mapping_exploration_failed": "Kartläggning misslyckades",
+                    "mapping_exploration_required": "Kartläggning krävs",
+                    "missing_charging_station": "Saknar laddstation",
+                    "no_error": "Inget fel",
+                    "ota_error": "Fel på trådlös uppdatering",
+                    "outside_wire": "Utanför begränsningskabeln",
+                    "rain_delay": "Regnfördröjning aktiv",
+                    "reverse_wire": "Begränsningskabeln är felvänd",
+                    "rfid_reader_error": "RFID läsfel",
+                    "timeout_finding_home": "Kunde inte återvända hem inom tidsgränsen",
+                    "trapped": "Instängd",
+                    "trapped_timeout": "Instängd längre än tidsgränsen",
+                    "unknown": "Okänt",
+                    "upside_down": "Gräsklipparen är upp och ner",
+                    "wheel_motor_blocked": "Hjulmotorn är blockerad",
+                    "wire_missing": "Begränsningskabel saknas"
                 }
             }
         }
@@ -38,9 +79,32 @@
         "config": {
             "fields": {
                 "raindelay": {
-                    "name": "Fördröjning av regn"
+                    "description": "Ställ in regnfördröjning. Tid i minuter från 0 till 300. 0 = Inaktiverad",
+                    "name": "Regnfördröjning"
+                },
+                "timeextension": {
+                    "description": "Ställ in förlängning av arbetstiden. Förlängning i % från -100 till 100",
+                    "name": "Förlängning av arbetstiden."
                 }
             }
+        },
+        "edgecut": {
+            "description": "Starta kantklippning (om det stöds)",
+            "name": "Kantklippning"
+        },
+        "restart": {
+            "description": "Startar om enheten",
+            "name": "Starta om enheten"
+        },
+        "torque": {
+            "description": "Ställ in hjulens vridmoment (om det stöds)",
+            "fields": {
+                "torque": {
+                    "description": "Ställ in hjulens vridmoment. Från -50 % till 50 %",
+                    "name": "Hjulens vridmoment"
+                }
+            },
+            "name": "Vridmoment"
         }
     }
 }
