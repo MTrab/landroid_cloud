@@ -25,6 +25,7 @@
                 "state": {
                     "edgecut": "Bordure de coupe",
                     "initializing": "Initialisation",
+                    "locked": "Verrouillé",
                     "mowing": "Tonte",
                     "offline": "Hors ligne",
                     "rain_delay": "Retard de pluie",
@@ -194,6 +195,9 @@
                 }
             },
             "name": "Définir la zone"
+        },
+        "torque": {
+            "name": "Couple"
         }
     }
 }

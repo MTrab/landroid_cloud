@@ -1,7 +1,7 @@
 {
     "config": {
         "abort": {
-            "already_exists": "Denne konto er allere konfigureret"
+            "already_exists": "Denne konto er allerede konfigureret"
         },
         "error": {
             "cannot_connect": "Kunne ikke forbinde",
@@ -12,7 +12,7 @@
         "step": {
             "user": {
                 "data": {
-                    "email": "Email",
+                    "email": "E-mail",
                     "password": "Kodeord",
                     "type": "Mærke"
                 },
@@ -31,7 +31,7 @@
                     "locked": "Låst",
                     "mowing": "Slår græs",
                     "offline": "Afbrudt",
-                    "rain_delay": "Regn forsinkelse",
+                    "rain_delay": "Regnforsinkelse",
                     "returning": "Returnerer til lader",
                     "searching_zone": "Søger efter zone",
                     "starting": "Starter",
@@ -48,7 +48,7 @@
                     "battery_trunk_open_timeout": "Klap til batterirummet åben",
                     "blade_height_adjustment_blocked": "Klipper højdejustering blokeret",
                     "blade_motor_blocked": "Klippemotor blokeret",
-                    "camera_error": "Kamera fejl",
+                    "camera_error": "Kamerafejl",
                     "charge_error": "Fejl ved opladning",
                     "charging_station_docking_error": "Fejl ved docking til ladestation",
                     "close_door_to_go_home": "Luk låget for at køre hjem",
@@ -66,7 +66,7 @@
                     "no_error": "Ingen fejl",
                     "ota_error": "Fejl ved OTA",
                     "outside_wire": "Udenfor kanttråden",
-                    "rain_delay": "Regn udsættelse aktivt",
+                    "rain_delay": "Regnforsinkelse aktivt",
                     "reverse_wire": "Kanttråd påsat omvendt",
                     "rfid_reader_error": "Fejl på RFID læser",
                     "timeout_finding_home": "Timede ud på vej hjem",
@@ -98,14 +98,14 @@
                 },
                 "raindelay": {
                     "description": "Indstil regnforsinkelse. Tid i minutter fra 0 til 300. 0 = Deaktiveret",
-                    "name": "Regn forsinkelse"
+                    "name": "Regnforsinkelse"
                 },
                 "timeextension": {
                     "description": "Indstil tidsforlængelse. Forlængelse angives i % fra -100 til 100",
                     "name": "Tidsforlængelse"
                 }
             },
-            "name": "Konfiguration"
+            "name": "Indstil zone"
         },
         "edgecut": {
             "description": "Start kantklip (hvis understøttet)",
@@ -137,11 +137,11 @@
                     "name": "Fredag, Kant"
                 },
                 "friday_end": {
-                    "description": "Klokslet for stop om fredagen",
+                    "description": "Klokkeslæt for stop om fredagen",
                     "name": "Fredag, Slut"
                 },
                 "friday_start": {
-                    "description": "Klokslet for start om fredagen",
+                    "description": "Klokkeslæt for start om fredagen",
                     "name": "Fredag, Start"
                 },
                 "monday_boundary": {
@@ -149,11 +149,11 @@
                     "name": "Mandag, Kant"
                 },
                 "monday_end": {
-                    "description": "Klokslet for stop om mandagen",
+                    "description": "Klokkeslæt for stop om mandagen",
                     "name": "Mandag, Slut"
                 },
                 "monday_start": {
-                    "description": "Klokslet for start om mandagen",
+                    "description": "Klokkeslæt for start om mandagen",
                     "name": "Mandag, Start"
                 },
                 "saturday_boundary": {
@@ -161,11 +161,11 @@
                     "name": "Lørdag, Kant"
                 },
                 "saturday_end": {
-                    "description": "Klokslet for stop om lørdagen?",
+                    "description": "Klokkeslæt for stop om lørdagen?",
                     "name": "Lørdag, Slut"
                 },
                 "saturday_start": {
-                    "description": "Klokslet for start om lørdagen",
+                    "description": "Klokkeslæt for start om lørdagen",
                     "name": "Lørdag, Start"
                 },
                 "sunday_boundary": {
@@ -173,11 +173,11 @@
                     "name": "Søndag, Kant"
                 },
                 "sunday_end": {
-                    "description": "Klokslet for stop om søndagen?",
+                    "description": "Klokkeslæt for stop om søndagen?",
                     "name": "Søndag, Slut"
                 },
                 "sunday_start": {
-                    "description": "Klokslet for start om søndagen",
+                    "description": "Klokkeslæt for start om søndagen",
                     "name": "Søndag, Start"
                 },
                 "thursday_boundary": {
@@ -185,11 +185,11 @@
                     "name": "Torsdag, Kant"
                 },
                 "thursday_end": {
-                    "description": "Klokslet for stop om torsdagen",
+                    "description": "Klokkeslæt for stop om torsdagen",
                     "name": "Torsdag, Slut"
                 },
                 "thursday_start": {
-                    "description": "Klokslet for start om torsdagen",
+                    "description": "Klokkeslæt for start om torsdagen",
                     "name": "Torsdag, Start"
                 },
                 "tuesday_boundary": {
@@ -197,11 +197,11 @@
                     "name": "Tirsdag, Kant"
                 },
                 "tuesday_end": {
-                    "description": "Klokslet for stop om tirsdagen",
+                    "description": "Klokkeslæt for stop om tirsdagen",
                     "name": "Tirsdag, Slut"
                 },
                 "tuesday_start": {
-                    "description": "Klokslet for start om tirsdagen",
+                    "description": "Klokkeslæt for start om tirsdagen",
                     "name": "Tirsdag, Start"
                 },
                 "type": {
@@ -213,11 +213,11 @@
                     "name": "Onsdag, Kant"
                 },
                 "wednesday_end": {
-                    "description": "Klokslet for stop om onsdagen",
+                    "description": "Klokkeslæt for stop om onsdagen",
                     "name": "Onsdag, Slut"
                 },
                 "wednesday_start": {
-                    "description": "Klokslet for start om onsdagen",
+                    "description": "Klokkeslæt for start om onsdagen",
                     "name": "Onsdag, Start"
                 }
             },

@@ -6,6 +6,7 @@
         "error": {
             "cannot_connect": "Verbindung ist nicht möglich",
             "invalid_auth": "Fehler bei der Authentifizierung",
+            "too_many_requests": "Zu viele API-Anfragen - In 24 Stunden erneut versuchen",
             "unknown": "Unerwarteter Fehler"
         },
         "step": {
@@ -25,14 +26,33 @@
                 "state": {
                     "edgecut": "Kantenschnitt",
                     "escaped_digital_fence": "Außerhalb der Begrenzung",
+                    "idle": "Untätig",
                     "initializing": "Initialisierung",
+                    "locked": "Gesperrt",
                     "mowing": "Mähen",
                     "offline": "Offline",
                     "rain_delay": "Regenverzögerung",
                     "returning": "Rückkehr zur Ladestation",
                     "searching_zone": "Zone suchen",
                     "starting": "Startet",
+                    "unknown": "Unbekannt",
                     "zoning": "Zonentraining"
+                }
+            }
+        },
+        "sensor": {
+            "landroid_cloud_error": {
+                "state": {
+                    "battery_low": "Batterie schwach",
+                    "lifted": "Angehoben",
+                    "mapping_exploration_failed": "Kartierung fehlgeschlagen",
+                    "mapping_exploration_required": "Kartierung erforderlich",
+                    "no_error": "Kein Fehler",
+                    "outside_wire": "Außerhalb des Begrenzungskabels",
+                    "rain_delay": "Regenverzögerung aktiv",
+                    "unknown": "Unbekannt",
+                    "unreachable_charging_station": "Ladestation nicht erreichbar",
+                    "wire_missing": "Kabel fehlt"
                 }
             }
         }
