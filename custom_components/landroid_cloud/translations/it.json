@@ -6,6 +6,7 @@
         "error": {
             "cannot_connect": "Impossibile connettersi",
             "invalid_auth": "Errore di autenticazione",
+            "too_many_requests": "Troppe richieste alle API - Riprova tra 24 ore",
             "unknown": "Errore inaspettato"
         },
         "step": {
@@ -25,7 +26,9 @@
                 "state": {
                     "edgecut": "Taglio bordo",
                     "escaped_digital_fence": "Landroid fuori area di lavoro",
+                    "idle": "In attesa",
                     "initializing": "Inizializzazione in corso",
+                    "locked": "Bloccato",
                     "mowing": "Taglio in corso",
                     "offline": "Offline",
                     "rain_delay": "Ritardo pioggia",
@@ -94,6 +97,10 @@
                 "raindelay": {
                     "description": "Imposta il ritardo per la pioggia. Tempo in minuti compreso tra 0 e 300. 0 = Disabilitato",
                     "name": "Ritardo pioggia"
+                },
+                "timeextension": {
+                    "description": "Imposta il tempo di lavoro in percentuale, da -100 a 100",
+                    "name": "Tempo di lavoro"
                 }
             },
             "name": "Imposta zona"
@@ -218,7 +225,8 @@
             "description": "Invia un comando JSON raw al dispositivo",
             "fields": {
                 "json": {
-                    "description": "Dati da inviare (formattati in JSON)"
+                    "description": "Dati da inviare (formattati in JSON)",
+                    "name": "Dati JSON"
                 }
             },
             "name": "Invia comando RAW"
