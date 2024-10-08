@@ -1,0 +1,257 @@
+{
+    "config": {
+        "abort": {
+            "already_exists": "Ez a felhasználói fiók már be van állítva"
+        },
+        "error": {
+            "cannot_connect": "Kapcsolódási hiba",
+            "invalid_auth": "Hitelesítési hiba",
+            "too_many_requests": "Túl sok API hívás. Próbálja meg 24 óra múlva",
+            "unknown": "Váratlan hiba"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "email": "E-mail",
+                    "password": "Jelszó",
+                    "type": "Létrehoz"
+                },
+                "title": "Csatlakozás a Landroid Cloud fiókhoz"
+            }
+        }
+    },
+    "entity": {
+        "lawn_mower": {
+            "landroid_cloud": {
+                "state": {
+                    "edgecut": "Szélvágás",
+                    "escaped_digital_fence": "A digitális kerítésen kívül",
+                    "idle": "Tétlen",
+                    "initializing": "Inicializálás",
+                    "locked": "Lezárva",
+                    "mowing": "Fűvágás",
+                    "offline": "Offline",
+                    "rain_delay": "Eső késleltetés",
+                    "returning": "Visszatérés a töltőhöz",
+                    "searching_zone": "Zóna keresése",
+                    "starting": "Indulás",
+                    "unknown": "Ismeretlen",
+                    "zoning": "Zóna betanítás"
+                }
+            }
+        },
+        "sensor": {
+            "landroid_cloud_error": {
+                "state": {
+                    "battery_low": "Az akkumulátor lemerült",
+                    "battery_temperature_error": "Akkumulátor hőmérsékleti hiba",
+                    "battery_trunk_open_timeout": "Az akkutartó túl sokáig van nyitva",
+                    "blade_height_adjustment_blocked": "A penge magasság állítása meghiúsult.",
+                    "blade_motor_blocked": "A vágómotor blokkolva van",
+                    "camera_error": "Kamera hiba",
+                    "charge_error": "Töltési hiba",
+                    "charging_station_docking_error": "Töltőállomás dokkolási hiba",
+                    "close_door_to_go_home": "Csukja be az ajtót a haza induláshoz",
+                    "close_door_to_mow": "Csukja be az ajtót a fűnyíráshoz",
+                    "excessive_slope": "A lejtő túl meredek",
+                    "hbi_error": "HBI hiba",
+                    "headlight_error": "Fényszóró hiba",
+                    "insufficient_sensor_data": "Nincs elegendő érzékelő adat",
+                    "lifted": "Felemelve",
+                    "locked": "A fűnyíró le van zárva",
+                    "map_error": "Térképhiba",
+                    "mapping_exploration_failed": "Térképfelderítés sikertelen",
+                    "mapping_exploration_required": "Térképfelderítés szükséges",
+                    "missing_charging_station": "A töltőállomás hiányzik",
+                    "no_error": "Nincs hiba",
+                    "ota_error": "OTA hiba",
+                    "outside_wire": "Vezetődróton kívül",
+                    "rain_delay": "Az eső késleltetése aktív",
+                    "reverse_wire": "A vezetődrót fodított irányú",
+                    "rfid_reader_error": "RFID olvasó hiba",
+                    "timeout_finding_home": "Időtúllépés dokkoló keresése közben",
+                    "training_start_disallowed": "A betanítás elindítása nem engedélyezett",
+                    "trapped": "Megakadt",
+                    "trapped_timeout": "Időtúllépés megakadás közben",
+                    "unknown": "Ismeretlen",
+                    "unreachable_charging_station": "A töltőállomás nem elérhető",
+                    "unreachable_zone": "Elérhetetlen zóna",
+                    "upside_down": "A fűnyíró fejjel lefelé van",
+                    "wheel_motor_blocked": "A kerékmotor blokkolva van",
+                    "wire_missing": "Hiányzó vezetődrót",
+                    "wire_sync": "Vezetődrót szinkronizálás"
+                }
+            }
+        }
+    },
+    "services": {
+        "config": {
+            "description": "Eszközkonfigurációs paraméterek beállítása",
+            "fields": {
+                "multizone_distances": {
+                    "description": "Zóna kezdési távolságok megadása méterben. 0=kikapcsol, Formátum: 15, 80, 120, 155",
+                    "name": "Zóna kezdési távolságok"
+                },
+                "multizone_probabilities": {
+                    "description": "Zónák közötti arányok beállítása. Formátum: 50, 10, 20, 20",
+                    "name": "Zónák közötti arányok"
+                },
+                "raindelay": {
+                    "description": "Az eső késleltetés beállítása  percekben 0 és 300 között. 0 = kikapcsolva",
+                    "name": "Eső késleltetés"
+                },
+                "timeextension": {
+                    "description": "A vágási idő hosszabbítása -100% és +100% között",
+                    "name": "Időhosszabbítás"
+                }
+            },
+            "name": "Zóna beállítása"
+        },
+        "edgecut": {
+            "description": "Szélvágás indítása (ha támogatott)",
+            "name": "Szélvágás"
+        },
+        "ots": {
+            "description": "Egyszeri indítás (ha támogatott)",
+            "fields": {
+                "boundary": {
+                    "description": "Végezzen szélvágást",
+                    "name": "Szélvágás"
+                },
+                "runtime": {
+                    "description": "A töltőállomásra visszatérésig eltelt futási idő",
+                    "name": "Futási idő"
+                }
+            },
+            "name": "Egyszeri indítás"
+        },
+        "restart": {
+            "description": "Újraindítja az eszközt",
+            "name": "Eszköz újraindítása"
+        },
+        "schedule": {
+            "description": "Állítsa be vagy módosítsa a fűnyíró ütemezését",
+            "fields": {
+                "friday_boundary": {
+                    "description": "Az ütemezés előtt legyen szélvágás?",
+                    "name": "Péntek, szélvágás"
+                },
+                "friday_end": {
+                    "description": "Mikor érjen véget az ütemezés péntekenként?",
+                    "name": "Péntek, vége"
+                },
+                "friday_start": {
+                    "description": "Ütemezés kezdete péntekenként",
+                    "name": "Péntek, kezdés"
+                },
+                "monday_boundary": {
+                    "description": "Az ütemezés előtt legyen szélvágás?",
+                    "name": "Hétfő, szélvágás"
+                },
+                "monday_end": {
+                    "description": "Mikor érjen véget az ütemezés hétfőnként?",
+                    "name": "Hétfő, vége"
+                },
+                "monday_start": {
+                    "description": "Ütemezés kezdete hétfőnként",
+                    "name": "Hétfő, kezdés"
+                },
+                "saturday_boundary": {
+                    "description": "Az ütemezés előtt legyen szélvágás?",
+                    "name": "Szombat, szélvágás"
+                },
+                "saturday_end": {
+                    "description": "Mikor érjen véget az ütemezés szombatonként?",
+                    "name": "szombat, vége"
+                },
+                "saturday_start": {
+                    "description": "Ütemezés kezdete szombatonként",
+                    "name": "Szombat, kezdés"
+                },
+                "sunday_boundary": {
+                    "description": "Az ütemezés előtt legyen szélvágás?",
+                    "name": "Vasárnap, szélvágáa"
+                },
+                "sunday_end": {
+                    "description": "Mikor érjen véget az ütemezés vasárnaponként?",
+                    "name": "Vasárnap, vége"
+                },
+                "sunday_start": {
+                    "description": "Ütemezés kezdete vasárnaponként",
+                    "name": "Vasárnap, kezdés"
+                },
+                "thursday_boundary": {
+                    "description": "Az ütemezés előtt legyen szélvágás?",
+                    "name": "Csütörtök, szélvágás"
+                },
+                "thursday_end": {
+                    "description": "Mikor érjen véget az ütemezés csütörtökönként?",
+                    "name": "Csütörtök, vége"
+                },
+                "thursday_start": {
+                    "description": "Ütemezés kezdete csütörtökönként",
+                    "name": "Csütörtök, kezdés"
+                },
+                "tuesday_boundary": {
+                    "description": "Az ütemezés előtt legyen szélvágás?",
+                    "name": "Kedd, szélvágás"
+                },
+                "tuesday_end": {
+                    "description": "Mikor érjen véget az ütemezés keddenként?",
+                    "name": "Kedd, vége"
+                },
+                "tuesday_start": {
+                    "description": "Ütemezés kezdete keddenként",
+                    "name": "Kedd, kezdés"
+                },
+                "type": {
+                    "description": "Módosítja az elsődleges vagy másodlagos ütemezést?",
+                    "name": "Ütemezés típusa"
+                },
+                "wednesday_boundary": {
+                    "description": "Az ütemezés előtt legyen szélvágás?",
+                    "name": "Szerda, szélvágás"
+                },
+                "wednesday_end": {
+                    "description": "Mikor érjen véget az ütemezés szerdánként?",
+                    "name": "Szerda, vége"
+                },
+                "wednesday_start": {
+                    "description": "Ütemezés kezdete szerdánként",
+                    "name": "Szerda, kezdés"
+                }
+            },
+            "name": "Ütemezés beállítása vagy frissítése"
+        },
+        "send_raw": {
+            "description": " Nyers JSON-parancs küldése az eszközre",
+            "fields": {
+                "json": {
+                    "description": "Elküldendő adatok, érvényes JSON formátumban",
+                    "name": "JSON adat"
+                }
+            },
+            "name": "Nyers parancs küldése"
+        },
+        "setzone": {
+            "description": "A következő zóna megadása",
+            "fields": {
+                "zone": {
+                    "description": "A következő vágási zóna számának megadása 0 és 3 között",
+                    "name": "Zóna"
+                }
+            },
+            "name": "Zóna megadása"
+        },
+        "torque": {
+            "description": "Keréknyomaték beállítása. (ha támogatott)",
+            "fields": {
+                "torque": {
+                    "description": "Keréknyomaték beálltása -50% és +50% között.",
+                    "name": "Keréknyomaték"
+                }
+            },
+            "name": "Nyomaték"
+        }
+    }
+}
