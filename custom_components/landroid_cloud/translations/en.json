@@ -224,7 +224,7 @@
             "name": "Set or update schedule"
         },
         "send_raw": {
-            "description": " Send a raw JSON command to the device",
+            "description": "Send a raw JSON command to the device",
             "fields": {
                 "json": {
                     "description": "Data to send, formatted as valid JSON",
