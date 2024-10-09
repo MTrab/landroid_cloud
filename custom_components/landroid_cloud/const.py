@@ -7,7 +7,8 @@ from dataclasses import dataclass
 from enum import IntEnum
 
 from homeassistant.components.lawn_mower import LawnMowerActivity
-from homeassistant.const import STATE_IDLE, STATE_LOCKED, STATE_UNKNOWN
+from homeassistant.components.lock import LockState
+from homeassistant.const import STATE_IDLE, STATE_UNKNOWN
 from pyworxcloud.clouds import CloudType
 from pyworxcloud.utils import DeviceCapability
 
@@ -223,7 +224,7 @@ ERROR_MAP = {
     13: STATE_REVERSE_WIRE,
     14: STATE_CHARGING_ERROR,
     15: STATE_TIMEOUT_HOME,
-    16: STATE_LOCKED,
+    16: LockState.LOCKED,
     17: STATE_BATTERY_TEMPERATURE_ERROR,
     19: STATE_BATTERY_OPEN,
     20: STATE_WIRE_SYNC,
