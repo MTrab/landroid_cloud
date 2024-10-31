@@ -123,9 +123,9 @@ class LandroidAPI:
             self.logger.log(LoggerType.FEATURE_ASSESSMENT, "OTS capable")
             features = features | LandroidFeatureSupport.OTS
 
-        if self.has_feature(DeviceCapability.EDGE_CUT):
-            self.logger.log(LoggerType.FEATURE_ASSESSMENT, "Edge Cut capable")
-            features = features | LandroidFeatureSupport.EDGECUT
+        # if self.has_feature(DeviceCapability.EDGE_CUT):
+        #     self.logger.log(LoggerType.FEATURE_ASSESSMENT, "Edge Cut capable")
+        features = features | LandroidFeatureSupport.EDGECUT
 
         if self.has_feature(DeviceCapability.TORQUE):
             self.logger.log(LoggerType.FEATURE_ASSESSMENT, "Torque capable")
