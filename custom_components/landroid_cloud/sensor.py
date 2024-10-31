@@ -218,9 +218,9 @@ SENSORS = [
         name="Total Worktime",
         entity_category=EntityCategory.DIAGNOSTIC,
         state_class=SensorStateClass.MEASUREMENT,
-        device_class=None,
+        device_class=SensorDeviceClass.DURATION,
         entity_registry_enabled_default=True,
-        native_unit_of_measurement="hours",
+        native_unit_of_measurement="h",
         suggested_display_precision=0,
         value_fn=lambda landroid: (
             round(landroid.statistics["worktime_total"] / 60, 2)
