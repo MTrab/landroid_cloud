@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import asyncio
 from datetime import datetime, timedelta
-from logging import Logger
 from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
@@ -53,11 +52,6 @@ class LandroidAPI:
         self.features_loaded = False
 
         self.device_name = device_name
-
-        # self.cloud.update(self.device.serial_number)
-        # self.cloud._decode_data(self.device)
-
-        # self._last_state = self.device.online
 
         self.name = util_slugify(f"{device_name}")
         self.friendly_name = device_name
@@ -113,8 +107,6 @@ class LandroidAPI:
         self.logger.log(LoggerType.FEATURE_ASSESSMENT, "Assessing available features")
         if isinstance(features, type(None)):
             features = self.features
-
-        # capabilities: Capability = self.device.capabilities
 
         if self.has_feature(DeviceCapability.PARTY_MODE):
             self.logger.log(LoggerType.FEATURE_ASSESSMENT, "Party mode capable")

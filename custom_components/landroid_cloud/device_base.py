@@ -33,6 +33,7 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.dispatcher import async_dispatcher_connect, dispatcher_send
+from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.entity_registry import EntityRegistry
 from homeassistant.util import slugify as util_slugify
 from pyworxcloud import DeviceCapability, WorxCloud
@@ -87,6 +88,68 @@ SUPPORT_LANDROID_BASE = (
 _LOGGER = logging.getLogger(__name__)
 
 SCAN_INTERVAL = timedelta(minutes=5)
+
+
+@dataclass
+class LandroidBaseEntityDescriptionMixin:
+    """Describes a basic Landroid entity."""
+
+    # value_fn: Callable[[DeviceHandler], bool | str | int | float]
+    value_fn: Callable[[WorxCloud], bool | str | int | float]
+
+
+@dataclass
+class LandroidButtonEntityDescription(ButtonEntityDescription):
+    """Describes a Landroid button entity."""
+
+    press_action: Callable[[LandroidAPI, str], None] = (None,)
+    required_feature: LandroidFeatureSupport | None = None
+
+
+@dataclass
+class LandroidSensorEntityDescription(
+    SensorEntityDescription, LandroidBaseEntityDescriptionMixin
+):
+    """Describes a Landroid sensor."""
+
+    unit_fn: Callable[[WorxCloud], None] = None
+    attributes: [] | None = None  # type: ignore
+
+
+@dataclass
+class LandroidBinarySensorEntityDescription(
+    BinarySensorEntityDescription, LandroidBaseEntityDescriptionMixin
+):
+    """Describes a Landroid binary_sensor."""
+
+
+@dataclass
+class LandroidNumberEntityDescription(NumberEntityDescription):
+    """Describes a Landroid number."""
+
+    value_fn: Callable[[LandroidAPI], bool | str | int | float | None] = None
+    command_fn: Callable[[LandroidAPI, str], None] = None
+    required_protocol: int | None = None
+    required_capability: DeviceCapability | None = None
+
+
+@dataclass
+class LandroidSwitchEntityDescription(
+    SwitchEntityDescription, LandroidBaseEntityDescriptionMixin
+):
+    """Describes a Landroid switch."""
+
+    command_fn: Callable[[WorxCloud], None] = None
+    icon_on: str | None = None
+    icon_off: str | None = None
+
+
+@dataclass
+class LandroidSelectEntityDescription(SelectEntityDescription):
+    """Describes a Landroid select."""
+
+    value_fn: Callable[[WorxCloud], bool | str | int | float | None] = None
+    command_fn: Callable[[LandroidAPI, str], None] = None
 
 
 class LandroidCloudBaseEntity(LandroidLogger):
@@ -389,6 +452,49 @@ class LandroidCloudBaseEntity(LandroidLogger):
         dispatcher_send(
             self.hass, util_slugify(f"{UPDATE_SIGNAL}_{self.api.device.name}")
         )
+
+
+# class LandroidBase(Entity):
+#     """Define a base for all Landroid entities."""
+
+#     def __init__(
+#         self,
+#         api: LandroidAPI,
+#         entity_description,
+#         config: ConfigEntry,
+#     ) -> None:
+#         """Initialize the base class."""
+#         super().__init__()
+#         self._api = api
+#         self._config = config
+#         self.entity_description = entity_description
+
+#         self._attr_unique_id = util_slugify(
+#             f"{self._attr_name}_{self._config.entry_id}_{self._api.device.serial_number}"
+#         )
+#         self._attr_should_poll = False
+
+#         self._attr_device_info = {
+#             "identifiers": {
+#                 (
+#                     DOMAIN,
+#                     self._api.unique_id,
+#                     self._api.entry_id,
+#                     self._api.device.serial_number,
+#                 )
+#             },
+#             "name": str(f"{self._api.friendly_name}"),
+#             "sw_version": self._api.device.firmware["version"],
+#             "manufacturer": self._api.config["type"].capitalize(),
+#             "model": self._api.device.model,
+#             "serial_number": self._api.device.serial_number,
+#         }
+
+#         if self._api.device.mac_address != "__UUID__":
+#             _connections = {(dr.CONNECTION_NETWORK_MAC, self._api.device.mac_address)}
+#             self._attr_device_info.update({"connections": _connections})
+
+#         self._attr_available = self._api.device.online
 
 
 class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
@@ -734,68 +840,6 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
             )
 
 
-@dataclass
-class LandroidBaseEntityDescriptionMixin:
-    """Describes a basic Landroid entity."""
-
-    # value_fn: Callable[[DeviceHandler], bool | str | int | float]
-    value_fn: Callable[[WorxCloud], bool | str | int | float]
-
-
-@dataclass
-class LandroidButtonEntityDescription(ButtonEntityDescription):
-    """Describes a Landroid button entity."""
-
-    press_action: Callable[[LandroidAPI, str], None] = (None,)
-    required_feature: LandroidFeatureSupport | None = None
-
-
-@dataclass
-class LandroidSensorEntityDescription(
-    SensorEntityDescription, LandroidBaseEntityDescriptionMixin
-):
-    """Describes a Landroid sensor."""
-
-    unit_fn: Callable[[WorxCloud], None] = None
-    attributes: [] | None = None  # type: ignore
-
-
-@dataclass
-class LandroidBinarySensorEntityDescription(
-    BinarySensorEntityDescription, LandroidBaseEntityDescriptionMixin
-):
-    """Describes a Landroid binary_sensor."""
-
-
-@dataclass
-class LandroidNumberEntityDescription(NumberEntityDescription):
-    """Describes a Landroid number."""
-
-    value_fn: Callable[[LandroidAPI], bool | str | int | float | None] = None
-    command_fn: Callable[[LandroidAPI, str], None] = None
-    required_protocol: int | None = None
-    required_capability: DeviceCapability | None = None
-
-
-@dataclass
-class LandroidSwitchEntityDescription(
-    SwitchEntityDescription, LandroidBaseEntityDescriptionMixin
-):
-    """Describes a Landroid switch."""
-
-    command_fn: Callable[[WorxCloud], None] = None
-    icon_on: str | None = None
-    icon_off: str | None = None
-
-
-@dataclass
-class LandroidSelectEntityDescription(SelectEntityDescription):
-    """Describes a Landroid select."""
-
-    value_fn: Callable[[WorxCloud], bool | str | int | float | None] = None
-    command_fn: Callable[[LandroidAPI, str], None] = None
-
-
 class LandroidSelect(SelectEntity):
     """Representation of a Landroid select entity."""
 
@@ -925,7 +969,7 @@ class LandroidButton(ButtonEntity):
         self._attr_name = self.entity_description.name
 
         _LOGGER.debug(
-            "(%s, Setup) Added sensor '%s'", self._api.friendly_name, self._attr_name
+            "(%s, Setup) Added button '%s'", self._api.friendly_name, self._attr_name
         )
 
         self._attr_unique_id = util_slugify(
@@ -953,7 +997,9 @@ class LandroidButton(ButtonEntity):
             _connections = {(dr.CONNECTION_NETWORK_MAC, self._api.device.mac_address)}
             self._attr_device_info.update({"connections": _connections})
         self._attr_extra_state_attributes = {}
+
         self._attr_available = self._api.device.online
+
         async_dispatcher_connect(
             self.hass,
             util_slugify(f"{UPDATE_SIGNAL}_{self._api.device.name}"),
@@ -1044,7 +1090,9 @@ class LandroidSensor(SensorEntity):
 
     async def handle_update(self) -> None:
         """Handle the updates when recieving an update signal."""
+        write = False
         if self._attr_available != self._api.device.online:
+            write = True
             self._attr_available = self._api.device.online
             _LOGGER.debug(
                 "(%s, Update) Setting availability to '%s' for '%s'",
@@ -1056,7 +1104,6 @@ class LandroidSensor(SensorEntity):
         old_val = self._attr_native_value
         old_attrib = self._attr_extra_state_attributes
         new_attrib = {}
-        write = False
         try:
             new_val = self.entity_description.value_fn(self._api.device)
         except AttributeError:
