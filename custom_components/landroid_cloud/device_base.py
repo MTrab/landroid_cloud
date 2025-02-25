@@ -33,6 +33,7 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.dispatcher import async_dispatcher_connect, dispatcher_send
+from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.entity_registry import EntityRegistry
 from homeassistant.util import slugify as util_slugify
 from pyworxcloud import DeviceCapability, WorxCloud
@@ -43,6 +44,7 @@ from pyworxcloud.exceptions import (
     ZoneNotDefined,
 )
 from pyworxcloud.utils import DeviceHandler
+from sqlalchemy import true
 
 from .api import LandroidAPI
 from .attribute_map import ATTR_MAP
@@ -88,6 +90,68 @@ _LOGGER = logging.getLogger(__name__)
 SCAN_INTERVAL = timedelta(minutes=5)
 
 
+@dataclass
+class LandroidBaseEntityDescriptionMixin:
+    """Describes a basic Landroid entity."""
+
+    # value_fn: Callable[[DeviceHandler], bool | str | int | float]
+    value_fn: Callable[[WorxCloud], bool | str | int | float]
+
+
+@dataclass
+class LandroidButtonEntityDescription(ButtonEntityDescription):
+    """Describes a Landroid button entity."""
+
+    press_action: Callable[[LandroidAPI, str], None] = (None,)
+    required_feature: LandroidFeatureSupport | None = None
+
+
+@dataclass
+class LandroidSensorEntityDescription(
+    SensorEntityDescription, LandroidBaseEntityDescriptionMixin
+):
+    """Describes a Landroid sensor."""
+
+    unit_fn: Callable[[WorxCloud], None] = None
+    attributes: [] | None = None  # type: ignore
+
+
+@dataclass
+class LandroidBinarySensorEntityDescription(
+    BinarySensorEntityDescription, LandroidBaseEntityDescriptionMixin
+):
+    """Describes a Landroid binary_sensor."""
+
+
+@dataclass
+class LandroidNumberEntityDescription(NumberEntityDescription):
+    """Describes a Landroid number."""
+
+    value_fn: Callable[[LandroidAPI], bool | str | int | float | None] = None
+    command_fn: Callable[[LandroidAPI, str], None] = None
+    required_protocol: int | None = None
+    required_capability: DeviceCapability | None = None
+
+
+@dataclass
+class LandroidSwitchEntityDescription(
+    SwitchEntityDescription, LandroidBaseEntityDescriptionMixin
+):
+    """Describes a Landroid switch."""
+
+    command_fn: Callable[[WorxCloud], None] = None
+    icon_on: str | None = None
+    icon_off: str | None = None
+
+
+@dataclass
+class LandroidSelectEntityDescription(SelectEntityDescription):
+    """Describes a Landroid select."""
+
+    value_fn: Callable[[WorxCloud], bool | str | int | float | None] = None
+    command_fn: Callable[[LandroidAPI, str], None] = None
+
+
 class LandroidCloudBaseEntity(LandroidLogger):
     """
     Define a base Landroid Cloud entity class.\n
@@ -115,7 +179,6 @@ class LandroidCloudBaseEntity(LandroidLogger):
         self.entity_id = ENTITY_ID_FORMAT.format(f"{api.name}")
 
         self._attributes = {}
-        self._available = False
         self._unique_id = f"{api.device.serial_number}_{api.name}"
         self._serialnumber = api.device.serial_number
         self._icon = None
@@ -123,7 +186,7 @@ class LandroidCloudBaseEntity(LandroidLogger):
         self._mac = api.device.mac_address
         self._connections = {(dr.CONNECTION_NETWORK_MAC, self._mac)}
         self._features_known = 0
-
+        self._attr_available = self.api.device.online
         super().__init__()
 
     @property
@@ -297,12 +360,14 @@ class LandroidCloudBaseEntity(LandroidLogger):
 
     def data_update(self):
         """Update the device."""
+        self._attr_available = self.api.device.online
         self.log_set_name(__name__)
         self.log_set_api(self.api)
         self.log(LoggerType.DATA_UPDATE, "Updating")
         self.log(LoggerType.DATA_UPDATE, "Device data: \n%s", vars(self.api.device))
 
-        device: WorxCloud = self.api.device
+        device: DeviceHandler = self.api.device
+        # device: WorxCloud = self.api.device
 
         data = {}
         old_data = self._attributes
@@ -389,6 +454,49 @@ class LandroidCloudBaseEntity(LandroidLogger):
         )
 
 
+# class LandroidBase(Entity):
+#     """Define a base for all Landroid entities."""
+
+#     def __init__(
+#         self,
+#         api: LandroidAPI,
+#         entity_description,
+#         config: ConfigEntry,
+#     ) -> None:
+#         """Initialize the base class."""
+#         super().__init__()
+#         self._api = api
+#         self._config = config
+#         self.entity_description = entity_description
+
+#         self._attr_unique_id = util_slugify(
+#             f"{self._attr_name}_{self._config.entry_id}_{self._api.device.serial_number}"
+#         )
+#         self._attr_should_poll = False
+
+#         self._attr_device_info = {
+#             "identifiers": {
+#                 (
+#                     DOMAIN,
+#                     self._api.unique_id,
+#                     self._api.entry_id,
+#                     self._api.device.serial_number,
+#                 )
+#             },
+#             "name": str(f"{self._api.friendly_name}"),
+#             "sw_version": self._api.device.firmware["version"],
+#             "manufacturer": self._api.config["type"].capitalize(),
+#             "model": self._api.device.model,
+#             "serial_number": self._api.device.serial_number,
+#         }
+
+#         if self._api.device.mac_address != "__UUID__":
+#             _connections = {(dr.CONNECTION_NETWORK_MAC, self._api.device.mac_address)}
+#             self._attr_device_info.update({"connections": _connections})
+
+#         self._attr_available = self._api.device.online
+
+
 class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
     """Define a base Landroid Cloud mower class."""
 
@@ -447,7 +555,7 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
     @property
     def available(self) -> bool:
         """Return True if entity is available."""
-        return self._available
+        return self.api.device.online
 
     @property
     def name(self) -> str:
@@ -469,7 +577,7 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
         """Get new data and update state."""
         self.data_update()
         self.api.features_loaded = True
-        self.schedule_update_ha_state(True)
+        self.schedule_update_ha_state()
 
     async def async_start_mowing(self) -> None:
         """Start or resume the task."""
@@ -732,67 +840,6 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
             )
 
 
-@dataclass
-class LandroidBaseEntityDescriptionMixin:
-    """Describes a basic Landroid entity."""
-
-    value_fn: Callable[[WorxCloud], bool | str | int | float]
-
-
-@dataclass
-class LandroidButtonEntityDescription(ButtonEntityDescription):
-    """Describes a Landroid button entity."""
-
-    press_action: Callable[[LandroidAPI, str], None] = (None,)
-    required_feature: LandroidFeatureSupport | None = None
-
-
-@dataclass
-class LandroidSensorEntityDescription(
-    SensorEntityDescription, LandroidBaseEntityDescriptionMixin
-):
-    """Describes a Landroid sensor."""
-
-    unit_fn: Callable[[WorxCloud], None] = None
-    attributes: [] | None = None  # type: ignore
-
-
-@dataclass
-class LandroidBinarySensorEntityDescription(
-    BinarySensorEntityDescription, LandroidBaseEntityDescriptionMixin
-):
-    """Describes a Landroid binary_sensor."""
-
-
-@dataclass
-class LandroidNumberEntityDescription(NumberEntityDescription):
-    """Describes a Landroid number."""
-
-    value_fn: Callable[[LandroidAPI], bool | str | int | float | None] = None
-    command_fn: Callable[[LandroidAPI, str], None] = None
-    required_protocol: int | None = None
-    required_capability: DeviceCapability | None = None
-
-
-@dataclass
-class LandroidSwitchEntityDescription(
-    SwitchEntityDescription, LandroidBaseEntityDescriptionMixin
-):
-    """Describes a Landroid switch."""
-
-    command_fn: Callable[[WorxCloud], None] = None
-    icon_on: str | None = None
-    icon_off: str | None = None
-
-
-@dataclass
-class LandroidSelectEntityDescription(SelectEntityDescription):
-    """Describes a Landroid select."""
-
-    value_fn: Callable[[DeviceHandler], bool | str | int | float | None] = None
-    command_fn: Callable[[LandroidAPI, str], None] = None
-
-
 class LandroidSelect(SelectEntity):
     """Representation of a Landroid select entity."""
 
@@ -810,7 +857,6 @@ class LandroidSelect(SelectEntity):
 
         self.entity_description = description
         self.hass = hass
-        self.device = api.device
 
         self._api = api
         self._config = config
@@ -844,12 +890,12 @@ class LandroidSelect(SelectEntity):
             "serial_number": self._api.device.serial_number,
         }
 
-        if self.device.mac_address != "__UUID__":
-            _connections = {(dr.CONNECTION_NETWORK_MAC, self.device.mac_address)}
+        if self._api.device.mac_address != "__UUID__":
+            _connections = {(dr.CONNECTION_NETWORK_MAC, self._api.device.mac_address)}
             self._attr_device_info.update({"connections": _connections})
 
         self._value = self.entity_description.value_fn(self._api.device) + 1
-
+        self._attr_available = self._api.device.online
         async_dispatcher_connect(
             self.hass,
             util_slugify(f"{UPDATE_SIGNAL}_{self._api.device.name}"),
@@ -858,15 +904,19 @@ class LandroidSelect(SelectEntity):
 
     async def handle_update(self) -> None:
         """Handle the updates when recieving an update signal."""
+        if self._attr_available != self._api.device.online:
+            self._attr_available = self._api.device.online
+
         try:
             self._value = self.entity_description.value_fn(self._api.device) + 1
         except AttributeError:
             return
 
         _LOGGER.debug(
-            "(%s, Update signal) Updating select '%s'",
+            "(%s, Update signal) Updating select '%s' to '%s'",
             self._api.friendly_name,
             self._attr_name,
+            self._value,
         )
         try:
             self.async_write_ha_state()
@@ -907,14 +957,13 @@ class LandroidButton(ButtonEntity):
 
         self.entity_description = description
         self.hass = hass
-        self.device = api.device
         self._api = api
         self._config = config
 
         self._attr_name = self.entity_description.name
 
         _LOGGER.debug(
-            "(%s, Setup) Added sensor '%s'", self._api.friendly_name, self._attr_name
+            "(%s, Setup) Added button '%s'", self._api.friendly_name, self._attr_name
         )
 
         self._attr_unique_id = util_slugify(
@@ -938,20 +987,29 @@ class LandroidButton(ButtonEntity):
             "serial_number": self._api.device.serial_number,
         }
 
-        if self.device.mac_address != "__UUID__":
-            _connections = {(dr.CONNECTION_NETWORK_MAC, self.device.mac_address)}
+        if self._api.device.mac_address != "__UUID__":
+            _connections = {(dr.CONNECTION_NETWORK_MAC, self._api.device.mac_address)}
             self._attr_device_info.update({"connections": _connections})
-
         self._attr_extra_state_attributes = {}
 
-    @property
-    def available(self) -> bool:
-        """Return if the entity is available."""
-        return self._api.device.online
+        self._attr_available = self._api.device.online
+
+        async_dispatcher_connect(
+            self.hass,
+            util_slugify(f"{UPDATE_SIGNAL}_{self._api.device.name}"),
+            self.handle_update,
+        )
+
+    async def handle_update(self) -> None:
+        """Handle updates."""
+        if self._attr_available != self._api.device.online:
+            self._attr_available = self._api.device.online
+
+        self.async_write_ha_state()
 
     def press(self) -> None:
         """Press the button."""
-        self.entity_description.press_action(self._api, self.device.serial_number)
+        self.entity_description.press_action(self._api, self._api.device.serial_number)
 
 
 class LandroidSensor(SensorEntity):
@@ -971,8 +1029,6 @@ class LandroidSensor(SensorEntity):
 
         self.entity_description = description
         self.hass = hass
-        self.device = api.device
-
         self._api = api
         self._config = config
 
@@ -1003,10 +1059,10 @@ class LandroidSensor(SensorEntity):
             "serial_number": self._api.device.serial_number,
         }
 
-        if self.device.mac_address != "__UUID__":
-            _connections = {(dr.CONNECTION_NETWORK_MAC, self.device.mac_address)}
+        if self._api.device.mac_address != "__UUID__":
+            _connections = {(dr.CONNECTION_NETWORK_MAC, self._api.device.mac_address)}
             self._attr_device_info.update({"connections": _connections})
-
+        self._attr_available = self._api.device.online
         self._attr_extra_state_attributes = {}
 
         async_dispatcher_connect(
@@ -1015,11 +1071,6 @@ class LandroidSensor(SensorEntity):
             self.handle_update,
         )
 
-    @property
-    def available(self) -> bool:
-        """Return if the entity is available."""
-        return self._api.device.online
-
     async def async_added_to_hass(self) -> None:
         """Set state on adding to home assistant."""
         await self.handle_update()
@@ -1027,12 +1078,17 @@ class LandroidSensor(SensorEntity):
 
     async def handle_update(self) -> None:
         """Handle the updates when recieving an update signal."""
+        write = False
+        if self._attr_available != self._api.device.online:
+            write = True
+            self._attr_available = self._api.device.online
+
+
         old_val = self._attr_native_value
         old_attrib = self._attr_extra_state_attributes
         new_attrib = {}
-        write = False
         try:
-            new_val = self.entity_description.value_fn(self.device)
+            new_val = self.entity_description.value_fn(self._api.device)
         except AttributeError:
             new_val = None
 
@@ -1045,40 +1101,42 @@ class LandroidSensor(SensorEntity):
         if not isinstance(self.entity_description.attributes, type(None)):
             if self.entity_description.key == "battery_state":
                 for key in self.entity_description.attributes:
-                    new_attrib.update({key: self.device.battery[key]})
+                    new_attrib.update({key: self._api.device.battery[key]})
             elif self.entity_description.key == "error":
                 for key in self.entity_description.attributes:
-                    new_attrib.update({key: self.device.error[key]})
+                    new_attrib.update({key: self._api.device.error[key]})
             elif self.entity_description.key == "next_start":
-                self._attr_extra_state_attributes.update(self.device.schedules)
+                self._attr_extra_state_attributes.update(self._api.device.schedules)
                 self._attr_extra_state_attributes.pop("daily_progress")
                 self._attr_extra_state_attributes.pop("next_schedule_start")
             elif self.entity_description.key == "distance":
-                new_attrib.update({"meters": self.device.statistics["distance"]})
+                new_attrib.update({"meters": self._api.device.statistics["distance"]})
             elif self.entity_description.key == "worktime_total":
                 (
                     new_attrib.update(
-                        {"minutes": self.device.statistics["worktime_total"]}
+                        {"minutes": self._api.device.statistics["worktime_total"]}
                     )
-                    if "worktime_total" in self.device.statistics
+                    if "worktime_total" in self._api.device.statistics
                     else None
                 )
             elif self.entity_description.key == "blades_current_on":
                 (
-                    new_attrib.update({"minutes": self.device.blades["current_on"]})
-                    if "current_on" in self.device.blades
+                    new_attrib.update(
+                        {"minutes": self._api.device.blades["current_on"]}
+                    )
+                    if "current_on" in self._api.device.blades
                     else None
                 )
             elif self.entity_description.key == "blades_total_on":
                 (
-                    new_attrib.update({"minutes": self.device.blades["total_on"]})
-                    if "total_on" in self.device.blades
+                    new_attrib.update({"minutes": self._api.device.blades["total_on"]})
+                    if "total_on" in self._api.device.blades
                     else None
                 )
             elif self.entity_description.key == "reset_at":
                 (
-                    new_attrib.update({"minutes": self.device.blades["reset_at"]})
-                    if "reset_at" in self.device.blades
+                    new_attrib.update({"minutes": self._api.device.blades["reset_at"]})
+                    if "reset_at" in self._api.device.blades
                     else None
                 )
 
@@ -1117,7 +1175,6 @@ class LandroidNumber(NumberEntity):
 
         self.entity_description = description
         self.hass = hass
-        self.device = api.device
 
         self._api = api
         self._config = config
@@ -1151,22 +1208,17 @@ class LandroidNumber(NumberEntity):
             "serial_number": self._api.device.serial_number,
         }
 
-        if self.device.mac_address != "__UUID__":
-            _connections = {(dr.CONNECTION_NETWORK_MAC, self.device.mac_address)}
+        if self._api.device.mac_address != "__UUID__":
+            _connections = {(dr.CONNECTION_NETWORK_MAC, self._api.device.mac_address)}
             self._attr_device_info.update({"connections": _connections})
 
         self._value = None  # self.entity_description.value_fn(self._api)
-
+        self._attr_available = self._api.device.online
         async_dispatcher_connect(
             self.hass,
             util_slugify(f"{UPDATE_SIGNAL}_{self._api.device.name}"),
             self.handle_update,
         )
-
-    @property
-    def available(self) -> bool:
-        """Return if the entity is available."""
-        return self._api.device.online
 
     @property
     def native_value(self) -> float | None:
@@ -1180,15 +1232,19 @@ class LandroidNumber(NumberEntity):
 
     async def handle_update(self) -> None:
         """Handle the updates when recieving an update signal."""
+        if self._attr_available != self._api.device.online:
+            self._attr_available = self._api.device.online
+
         try:
             self._value = self.entity_description.value_fn(self._api)
         except AttributeError:
             pass
 
         _LOGGER.debug(
-            "(%s, Update signal) Updating number '%s'",
+            "(%s, Update signal) Updating number '%s' to '%s'",
             self._api.friendly_name,
             self._attr_name,
+            self._value,
         )
         try:
             self.async_write_ha_state()
@@ -1224,7 +1280,6 @@ class LandroidSwitch(SwitchEntity):
 
         self.entity_description = description
         self.hass = hass
-        self.device = api.device
 
         self._api = api
         self._config = config
@@ -1258,22 +1313,17 @@ class LandroidSwitch(SwitchEntity):
             "serial_number": self._api.device.serial_number,
         }
 
-        if self.device.mac_address != "__UUID__":
-            _connections = {(dr.CONNECTION_NETWORK_MAC, self.device.mac_address)}
+        if self._api.device.mac_address != "__UUID__":
+            _connections = {(dr.CONNECTION_NETWORK_MAC, self._api.device.mac_address)}
             self._attr_device_info.update({"connections": _connections})
 
         self._attr_extra_state_attributes = {}
-
+        self._attr_available = self._api.device.online
         async_dispatcher_connect(
             self.hass,
             util_slugify(f"{UPDATE_SIGNAL}_{self._api.device.name}"),
             self.handle_update,
         )
-
-    @property
-    def available(self) -> bool:
-        """Return if the entity is available."""
-        return self._api.device.online
 
     async def async_added_to_hass(self) -> None:
         """Set state on adding to home assistant."""
@@ -1282,15 +1332,20 @@ class LandroidSwitch(SwitchEntity):
 
     async def handle_update(self) -> None:
         """Handle the updates when recieving an update signal."""
+        if self._attr_available != self._api.device.online:
+            self._attr_available = self._api.device.online
+
+
         try:
-            self._attr_is_on = self.entity_description.value_fn(self.device)
+            self._attr_is_on = self.entity_description.value_fn(self._api.device)
         except AttributeError:
             return
 
         _LOGGER.debug(
-            "(%s, Update signal) Updating switch '%s'",
+            "(%s, Update signal) Updating switch '%s' to '%s'",
             self._api.friendly_name,
             self._attr_name,
+            self._attr_is_on,
         )
         try:
             self.async_write_ha_state()
@@ -1345,7 +1400,6 @@ class LandroidBinarySensor(BinarySensorEntity):
 
         self.entity_description = description
         self.hass = hass
-        self.device = api.device
 
         self._api = api
         self._config = config
@@ -1379,22 +1433,22 @@ class LandroidBinarySensor(BinarySensorEntity):
             "serial_number": self._api.device.serial_number,
         }
 
-        if self.device.mac_address != "__UUID__":
-            _connections = {(dr.CONNECTION_NETWORK_MAC, self.device.mac_address)}
+        if self._api.device.mac_address != "__UUID__":
+            _connections = {(dr.CONNECTION_NETWORK_MAC, self._api.device.mac_address)}
             self._attr_device_info.update({"connections": _connections})
 
         self._attr_extra_state_attributes = {}
+
+        if self.entity_description.key == "online":
+            self._attr_available = True
+        else:
+            self._attr_available = self._api.device.online
 
         async_dispatcher_connect(
             self.hass,
             util_slugify(f"{UPDATE_SIGNAL}_{self._api.device.name}"),
             self.handle_update,
         )
-
-    @property
-    def available(self) -> bool:
-        """Return if the entity is available."""
-        return self._api.device.online
 
     async def async_added_to_hass(self) -> None:
         """Set state on adding to home assistant."""
@@ -1403,15 +1457,22 @@ class LandroidBinarySensor(BinarySensorEntity):
 
     async def handle_update(self) -> None:
         """Handle the updates when recieving an update signal."""
+        if self._attr_available != self._api.device.online:
+            if self.entity_description.key == "online":
+                self._attr_available = True
+            else:
+                self._attr_available = self._api.device.online
+
         try:
-            self._attr_is_on = self.entity_description.value_fn(self.device)
+            self._attr_is_on = self.entity_description.value_fn(self._api.device)
         except AttributeError:
             return
 
         _LOGGER.debug(
-            "(%s, Update signal) Updating binary_sensor '%s'",
+            "(%s, Update signal) Updating binary_sensor '%s' to '%s'",
             self._api.friendly_name,
             self._attr_name,
+            self._attr_is_on,
         )
         try:
             self.async_write_ha_state()

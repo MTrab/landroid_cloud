@@ -53,11 +53,6 @@ class LandroidAPI:
 
         self.device_name = device_name
 
-        self.cloud.update(self.device.serial_number)
-        self.cloud._decode_data(self.device)
-
-        self._last_state = self.device.online
-
         self.name = util_slugify(f"{device_name}")
         self.friendly_name = device_name
 
@@ -70,7 +65,7 @@ class LandroidAPI:
         self.logger = LandroidLogger(name=__name__, api=self)
         self.cloud.set_callback(LandroidEvent.DATA_RECEIVED, self.receive_data)
 
-        self.logger.log(LoggerType.API, "Device: %s", self.cloud.devices[device_name])
+        self.logger.log(LoggerType.API, "Device: %s", vars(self.device))
 
     def mqtt_conn_check(self, state: bool) -> None:
         """Check connection state."""
@@ -113,8 +108,6 @@ class LandroidAPI:
         if isinstance(features, type(None)):
             features = self.features
 
-        # capabilities: Capability = self.device.capabilities
-
         if self.has_feature(DeviceCapability.PARTY_MODE):
             self.logger.log(LoggerType.FEATURE_ASSESSMENT, "Party mode capable")
             features = features | LandroidFeatureSupport.PARTYMODE
@@ -154,6 +147,7 @@ class LandroidAPI:
         self, name: str, device: DeviceHandler  # pylint: disable=unused-argument
     ) -> None:
         """Callback function when the MQTT broker sends new data."""
+        self.device = device
         self.logger.log(
             LoggerType.DATA_UPDATE,
             "Received new data from MQTT to %s, dispatching %s",
@@ -162,3 +156,4 @@ class LandroidAPI:
             device=name,
         )
         dispatcher_send(self.hass, util_slugify(f"{UPDATE_SIGNAL}_{name}"))
+        self.logger.log(LoggerType.API, "Device object:\n%s", vars(device))
