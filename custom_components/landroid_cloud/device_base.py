@@ -906,12 +906,6 @@ class LandroidSelect(SelectEntity):
         """Handle the updates when recieving an update signal."""
         if self._attr_available != self._api.device.online:
             self._attr_available = self._api.device.online
-            _LOGGER.debug(
-                "(%s, Update) Setting availability to '%s' for '%s'",
-                self._api.friendly_name,
-                self._api.device.online,
-                self._attr_name,
-            )
 
         try:
             self._value = self.entity_description.value_fn(self._api.device) + 1
@@ -1010,12 +1004,6 @@ class LandroidButton(ButtonEntity):
         """Handle updates."""
         if self._attr_available != self._api.device.online:
             self._attr_available = self._api.device.online
-            _LOGGER.debug(
-                "(%s, Update) Setting availability to '%s' for '%s'",
-                self._api.friendly_name,
-                self._api.device.online,
-                self._attr_name,
-            )
 
         self.async_write_ha_state()
 
@@ -1094,12 +1082,7 @@ class LandroidSensor(SensorEntity):
         if self._attr_available != self._api.device.online:
             write = True
             self._attr_available = self._api.device.online
-            _LOGGER.debug(
-                "(%s, Update) Setting availability to '%s' for '%s'",
-                self._api.friendly_name,
-                self._api.device.online,
-                self._attr_name,
-            )
+
 
         old_val = self._attr_native_value
         old_attrib = self._attr_extra_state_attributes
@@ -1251,12 +1234,6 @@ class LandroidNumber(NumberEntity):
         """Handle the updates when recieving an update signal."""
         if self._attr_available != self._api.device.online:
             self._attr_available = self._api.device.online
-            _LOGGER.debug(
-                "(%s, Update) Setting availability to '%s' for '%s'",
-                self._api.friendly_name,
-                self._api.device.online,
-                self._attr_name,
-            )
 
         try:
             self._value = self.entity_description.value_fn(self._api)
@@ -1357,12 +1334,7 @@ class LandroidSwitch(SwitchEntity):
         """Handle the updates when recieving an update signal."""
         if self._attr_available != self._api.device.online:
             self._attr_available = self._api.device.online
-            _LOGGER.debug(
-                "(%s, Update) Setting availability to '%s' for '%s'",
-                self._api.friendly_name,
-                self._api.device.online,
-                self._attr_name,
-            )
+
 
         try:
             self._attr_is_on = self.entity_description.value_fn(self._api.device)
@@ -1490,12 +1462,6 @@ class LandroidBinarySensor(BinarySensorEntity):
                 self._attr_available = True
             else:
                 self._attr_available = self._api.device.online
-                _LOGGER.debug(
-                    "(%s, Update) Setting availability to '%s' for '%s'",
-                    self._api.friendly_name,
-                    self._api.device.online,
-                    self._attr_name,
-                )
 
         try:
             self._attr_is_on = self.entity_description.value_fn(self._api.device)
