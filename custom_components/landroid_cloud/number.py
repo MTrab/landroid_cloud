@@ -34,23 +34,23 @@ INPUT_NUMBERS = [
         ),
         required_protocol=0,
     ),
-    # LandroidNumberEntityDescription(
-    #     key="torque",
-    #     name="Torque",
-    #     entity_category=EntityCategory.CONFIG,
-    #     device_class=NumberDeviceClass.POWER_FACTOR,
-    #     entity_registry_enabled_default=True,
-    #     native_unit_of_measurement=None,
-    #     native_min_value=-50,
-    #     native_max_value=50,
-    #     native_step=1,
-    #     mode=NumberMode.SLIDER,
-    #     value_fn=lambda api: api.cloud.devices[api.device_name].torque,
-    #     command_fn=lambda api, value: api.cloud.send(
-    #         api.device.serial_number, json.dumps({"tq": value})
-    #     ),
-    #     required_capability=DeviceCapability.TORQUE,
-    # ),
+    LandroidNumberEntityDescription(
+        key="torque",
+        name="Torque",
+        entity_category=EntityCategory.CONFIG,
+        device_class=NumberDeviceClass.POWER_FACTOR,
+        entity_registry_enabled_default=True,
+        native_unit_of_measurement=None,
+        native_min_value=-50,
+        native_max_value=50,
+        native_step=1,
+        mode=NumberMode.SLIDER,
+        value_fn=lambda api: api.cloud.devices[api.device_name].torque,
+        command_fn=lambda api, value: api.cloud.send(
+            api.device.serial_number, json.dumps({"tq": value})
+        ),
+        required_capability=DeviceCapability.TORQUE,
+    ),
     LandroidNumberEntityDescription(
         key="raindelay",
         name="Raindelay",
