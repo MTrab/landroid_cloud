@@ -101,7 +101,7 @@ async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
 
 
 async def _async_setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Setup the integration using a config entry."""
+    """Handle setup of the integration, using a config entry."""
     integration = await async_get_integration(hass, DOMAIN)
     LOGGER.log(
         None,
@@ -227,7 +227,7 @@ async def _async_setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
 
 async def async_init_device(hass, entry, name, device) -> None:
-    """Initialize a device"""
+    """Initialize a device."""
     LOGGER.log(
         LoggerType.SETUP,
         "Setting up device '%s' on account '%s'",

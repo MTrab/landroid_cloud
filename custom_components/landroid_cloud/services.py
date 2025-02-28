@@ -93,7 +93,7 @@ async def async_setup_services(hass: HomeAssistant) -> None:
                     f"Failed to call service '{service_call.service}'. Config entry for target not found"
                 )
 
-            if not service in api.services:
+            if service not in api.services:
                 raise HomeAssistantError(
                     f"Failed to call service '{service_call.service}'. "
                     "Service is not supported by this device."
@@ -129,7 +129,7 @@ async def async_match_api(
 
     logger.log(LoggerType.SERVICE_CALL, "Trying to match ID '%s'", device.id)
     for possible_entry in hass.data[DOMAIN].values():
-        if not ATTR_DEVICEIDS in possible_entry:
+        if ATTR_DEVICEIDS not in possible_entry:
             continue
         device_ids = possible_entry[ATTR_DEVICEIDS]
         logger.log(

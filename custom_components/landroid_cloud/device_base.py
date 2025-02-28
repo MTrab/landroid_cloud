@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import json
 import logging
 import time
@@ -33,7 +34,6 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.dispatcher import async_dispatcher_connect, dispatcher_send
-from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.entity_registry import EntityRegistry
 from homeassistant.util import slugify as util_slugify
 from pyworxcloud import DeviceCapability, WorxCloud
@@ -44,7 +44,6 @@ from pyworxcloud.exceptions import (
     ZoneNotDefined,
 )
 from pyworxcloud.utils import DeviceHandler
-from sqlalchemy import true
 
 from .api import LandroidAPI
 from .attribute_map import ATTR_MAP
@@ -66,7 +65,6 @@ from .const import (
     SERVICE_OTS,
     SERVICE_SCHEDULE,
     SERVICE_SEND_RAW,
-    SERVICE_SETZONE,
     STATE_INITIALIZING,
     STATE_MAP,
     STATE_OFFLINE,
@@ -153,19 +151,18 @@ class LandroidSelectEntityDescription(SelectEntityDescription):
 
 
 class LandroidCloudBaseEntity(LandroidLogger):
-    """
-    Define a base Landroid Cloud entity class.\n
-    \n
-    Override these functions as needed by the specific device integration:\n
-    async def async_edgecut(self,  data: dict|None = None) -> None:\n
-    async def async_toggle_lock(self,  data: dict|None = None) -> None:\n
-    async def async_toggle_partymode(self,  data: dict|None = None) -> None:\n
-    async def async_restart(self,  data: dict|None = None) -> None:\n
-    async def async_set_zone(self,  data: dict|None = None) -> None:\n
-    async def async_config(self,  data: dict|None = None) -> None:\n
-    async def async_ots(self,  data: dict|None = None) -> None:\n
-    async def async_set_schedule(self,  data: dict|None = None) -> None:\n
-    async def async_set_torque(self,  data: dict|None = None) -> None:\n
+    """Define a base Landroid Cloud entity class.
+
+    Override these functions as needed by the specific device integration:
+    async def async_edgecut(self,  data: dict|None = None) -> None:
+    async def async_toggle_lock(self,  data: dict|None = None) -> None:
+    async def async_toggle_partymode(self,  data: dict|None = None) -> None:
+    async def async_restart(self,  data: dict|None = None) -> None:
+    async def async_set_zone(self,  data: dict|None = None) -> None:
+    async def async_config(self,  data: dict|None = None) -> None:
+    async def async_ots(self,  data: dict|None = None) -> None:
+    async def async_set_schedule(self,  data: dict|None = None) -> None:
+    async def async_set_torque(self,  data: dict|None = None) -> None:
     """
 
     _battery_level: int | None = None
@@ -191,11 +188,11 @@ class LandroidCloudBaseEntity(LandroidLogger):
 
     @property
     def base_features(self) -> int:
-        """Called to get the base features."""
+        """Call to get the base features."""
         return None
 
     async def async_edgecut(self, data: dict | None = None) -> None:
-        """Called to start edge cut task."""
+        """Call to start edge cut task."""
         return None
 
     async def async_toggle_lock(self, data: dict | None = None) -> None:
@@ -246,7 +243,7 @@ class LandroidCloudBaseEntity(LandroidLogger):
 
     @property
     def device_info(self):
-        """Return device info"""
+        """Return device info."""
         info = {
             "identifiers": {
                 (
@@ -277,10 +274,10 @@ class LandroidCloudBaseEntity(LandroidLogger):
             entry = entity_reg.async_get(self.entity_id)
             self.api.device_id = entry.device_id
             if (
-                not self.hass.data[DOMAIN][self.api.entry_id][ATTR_DEVICEIDS][
+                self.hass.data[DOMAIN][self.api.entry_id][ATTR_DEVICEIDS][
                     self.api.device.name
                 ]
-                == entry.device_id
+                != entry.device_id
             ):
                 self.hass.data[DOMAIN][self.api.entry_id][ATTR_DEVICEIDS].update(
                     {self.api.device.name: entry.device_id}
@@ -299,16 +296,16 @@ class LandroidCloudBaseEntity(LandroidLogger):
 
     @callback
     def update_callback(self):
-        """Base update callback function"""
+        """Handle base update callback."""
         return False
 
     @callback
     def update_selected_zone(self):
-        """Update zone selections in select entity"""
+        """Update zone selections in select entity."""
         return False
 
     async def async_update(self):
-        """Default async_update"""
+        """Handle default async_update actions."""
         return
 
     @callback
@@ -367,10 +364,8 @@ class LandroidCloudBaseEntity(LandroidLogger):
         self.log(LoggerType.DATA_UPDATE, "Device data: \n%s", vars(self.api.device))
 
         device: DeviceHandler = self.api.device
-        # device: WorxCloud = self.api.device
 
         data = {}
-        old_data = self._attributes
 
         for key, value in ATTR_MAP.items():
             if hasattr(device, key):
@@ -505,6 +500,7 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
     _attr_translation_key = DOMAIN
 
     async def async_added_to_hass(self):
+        """Check data and register services when added to hass."""
         await super().async_added_to_hass()
         logger = LandroidLogger(name=__name__, api=self.api, log_level=LogLevel.DEBUG)
         logger.log(
@@ -618,7 +614,7 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
                 await asyncio.sleep(1)
                 if self.state in [STATE_RETURNING, LawnMowerActivity.DOCKED]:
                     break
-            if not self.state in [STATE_RETURNING, LawnMowerActivity.DOCKED]:
+            if self.state not in [STATE_RETURNING, LawnMowerActivity.DOCKED]:
                 await self.hass.async_add_executor_job(
                     self.api.cloud.home, device.serial_number
                 )
@@ -661,7 +657,7 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
             day = day[1]
             if day["start"] in data:
                 # Found day in dataset, generating an update to the schedule
-                if not day["end"] in data:
+                if day["end"] not in data:
                     raise HomeAssistantError(
                         f"No end time specified for {day['clear']}"
                     )
@@ -817,7 +813,7 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
                 raise HomeAssistantError(
                     "Incorrect format for multizone probabilities array"
                 )
-            if not sum(sections) in [100, 0]:
+            if sum(sections) not in [100, 0]:
                 raise HomeAssistantError(
                     "Sum of zone probabilities array MUST be 100"
                     f"or 0 (disabled), request was: {sum(sections)}"
@@ -921,7 +917,7 @@ class LandroidSelect(SelectEntity):
         try:
             self.async_write_ha_state()
         except RuntimeError:
-            pass
+            contextlib.suppress(RuntimeError)
 
     @property
     def current_option(self) -> str | None:
@@ -1083,7 +1079,6 @@ class LandroidSensor(SensorEntity):
             write = True
             self._attr_available = self._api.device.online
 
-
         old_val = self._attr_native_value
         old_attrib = self._attr_extra_state_attributes
         new_attrib = {}
@@ -1155,7 +1150,7 @@ class LandroidSensor(SensorEntity):
             try:
                 self.async_write_ha_state()
             except RuntimeError:
-                pass
+                contextlib.suppress(RuntimeError)
 
 
 class LandroidNumber(NumberEntity):
@@ -1238,7 +1233,7 @@ class LandroidNumber(NumberEntity):
         try:
             self._value = self.entity_description.value_fn(self._api)
         except AttributeError:
-            pass
+            contextlib.suppress(AttributeError)
 
         _LOGGER.debug(
             "(%s, Update signal) Updating number '%s' to '%s'",
@@ -1249,10 +1244,10 @@ class LandroidNumber(NumberEntity):
         try:
             self.async_write_ha_state()
         except RuntimeError:
-            pass
+            contextlib.suppress(RuntimeError)
 
     def set_native_value(self, value: float) -> None:
-        """Set number value"""
+        """Set number value."""
         _LOGGER.debug(
             "(%s, Set value) Setting number value for '%s' to %s",
             self._api.friendly_name,
@@ -1335,7 +1330,6 @@ class LandroidSwitch(SwitchEntity):
         if self._attr_available != self._api.device.online:
             self._attr_available = self._api.device.online
 
-
         try:
             self._attr_is_on = self.entity_description.value_fn(self._api.device)
         except AttributeError:
@@ -1350,7 +1344,7 @@ class LandroidSwitch(SwitchEntity):
         try:
             self.async_write_ha_state()
         except RuntimeError:
-            pass
+            contextlib.suppress(RuntimeError)
 
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Turn on the switch."""
@@ -1477,4 +1471,4 @@ class LandroidBinarySensor(BinarySensorEntity):
         try:
             self.async_write_ha_state()
         except RuntimeError:
-            pass
+            contextlib.suppress(RuntimeError)

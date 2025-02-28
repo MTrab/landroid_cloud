@@ -34,11 +34,7 @@ BINARYSENSORS = [
         entity_category=EntityCategory.DIAGNOSTIC,
         device_class=BinarySensorDeviceClass.MOISTURE,
         entity_registry_enabled_default=True,
-        value_fn=lambda landroid: (
-            landroid.rainsensor["triggered"]
-            if "triggered" in landroid.rainsensor
-            else None
-        ),
+        value_fn=lambda landroid: landroid.rainsensor.get("triggered", None),
     ),
 ]
 

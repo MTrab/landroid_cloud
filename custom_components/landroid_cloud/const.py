@@ -177,7 +177,7 @@ ATTR_FEATUREBITS = "feature_bits"
 # Available cloud vendors
 CLOUDS = []
 for name, cloud in inspect.getmembers(CloudType):
-    if inspect.isclass(cloud) and not "__" in name:
+    if inspect.isclass(cloud) and "__" not in name:
         CLOUDS.append(name.capitalize())
 
 # State mapping

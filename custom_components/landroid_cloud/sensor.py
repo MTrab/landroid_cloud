@@ -21,9 +21,7 @@ SENSORS = [
         device_class=SensorDeviceClass.BATTERY,
         entity_registry_enabled_default=True,
         native_unit_of_measurement="%",
-        value_fn=lambda landroid: (
-            landroid.battery["percent"] if "percent" in landroid.battery else None
-        ),
+        value_fn=lambda landroid: landroid.battery.get("percent", None),
         attributes=["charging"],
     ),
     LandroidSensorEntityDescription(
@@ -34,11 +32,7 @@ SENSORS = [
         device_class=SensorDeviceClass.TEMPERATURE,
         entity_registry_enabled_default=True,
         native_unit_of_measurement="°C",
-        value_fn=lambda landroid: (
-            landroid.battery["temperature"]
-            if "temperature" in landroid.battery
-            else None
-        ),
+        value_fn=lambda landroid: landroid.battery.get("temperature", None),
     ),
     LandroidSensorEntityDescription(
         key="battery_cycles_total",
@@ -63,9 +57,7 @@ SENSORS = [
         device_class=SensorDeviceClass.VOLTAGE,
         entity_registry_enabled_default=False,
         native_unit_of_measurement="V",
-        value_fn=lambda landroid: (
-            landroid.battery["voltage"] if "voltage" in landroid.battery else None
-        ),
+        value_fn=lambda landroid: landroid.battery.get("voltage", None),
     ),
     LandroidSensorEntityDescription(
         key="blades_total_on",
@@ -112,7 +104,7 @@ SENSORS = [
         suggested_display_precision=0,
         value_fn=lambda landroid: (
             round(landroid.blades["reset_at"] / 60, 2)
-            if "reset_at" in landroid.blades and not landroid.blades["reset_at"] is None
+            if "reset_at" in landroid.blades and landroid.blades["reset_at"] is not None
             else None
         ),
         icon="mdi:history",
@@ -126,9 +118,7 @@ SENSORS = [
         device_class=SensorDeviceClass.TIMESTAMP,
         entity_registry_enabled_default=False,
         native_unit_of_measurement="",
-        value_fn=lambda landroid: (
-            landroid.blades["reset_time"] if "reset_time" in landroid.blades else None
-        ),
+        value_fn=lambda landroid: landroid.blades.get("reset_time", None),
     ),
     LandroidSensorEntityDescription(
         key="error",
@@ -187,11 +177,7 @@ SENSORS = [
         device_class=SensorDeviceClass.DURATION,
         entity_registry_enabled_default=False,
         native_unit_of_measurement="min",
-        value_fn=lambda landroid: (
-            landroid.rainsensor["remaining"]
-            if "remaining" in landroid.rainsensor
-            else None
-        ),
+        value_fn=lambda landroid: landroid.rainsensor.get("remaining", None),
         icon="mdi:weather-rainy",
     ),
     LandroidSensorEntityDescription(
