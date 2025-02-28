@@ -18,7 +18,7 @@ async def async_setup_entry(
 ) -> None:
     """Set up the mower device."""
     mowers = []
-    for name, info in hass.data[DOMAIN][config.entry_id][ATTR_DEVICES].items():
+    for _name, info in hass.data[DOMAIN][config.entry_id][ATTR_DEVICES].items():
         api: LandroidAPI = info["api"]
         device = vendor_to_device(api.config["type"])
         constructor = device.MowerDevice(hass, api)

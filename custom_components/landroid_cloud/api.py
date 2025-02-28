@@ -33,9 +33,9 @@ class LandroidAPI:
 
         Args:
             hass (HomeAssistant): Home Assistant object
-            index (int): Device number to connect to. 0 is the first device associated.
-            device (WorxCloud): pyWorxlandroid object for the connection.
+            device_name (str): Name of the mower device.
             entry (ConfigEntry): Home Assistant configuration entry for the cloud account.
+
         """
         self.hass = hass
         self.entry_id = entry.entry_id
@@ -75,7 +75,7 @@ class LandroidAPI:
             ).result()
 
     async def async_await_features(self, timeout: int = 10) -> None:
-        """Used to await feature checks."""
+        """Await feature checks."""
         timeout_at = datetime.now() + timedelta(seconds=timeout)
 
         while not self.features_loaded:
@@ -103,6 +103,7 @@ class LandroidAPI:
             callback_func (_type_, optional):
                 Function to be called when the features
                 have been assessed. Defaults to None.
+
         """
         self.logger.log(LoggerType.FEATURE_ASSESSMENT, "Assessing available features")
         if isinstance(features, type(None)):
@@ -146,7 +147,7 @@ class LandroidAPI:
     def receive_data(
         self, name: str, device: DeviceHandler  # pylint: disable=unused-argument
     ) -> None:
-        """Callback function when the MQTT broker sends new data."""
+        """Handle data when the MQTT broker sends new data."""
         self.device = device
         self.logger.log(
             LoggerType.DATA_UPDATE,

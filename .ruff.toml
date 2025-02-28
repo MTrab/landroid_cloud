@@ -36,6 +36,7 @@ ignore = [
     "D411",  # Missing blank line before section
     "E501",  # line too long
     "E731",  # do not assign a lambda expression, use a def
+    "E722",  # do not use bare `except`
 ]
 
 [flake8-pytest-style]

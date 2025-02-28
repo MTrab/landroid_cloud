@@ -3,13 +3,14 @@
 # pylint: disable=unused-argument,relative-beyond-top-level
 from __future__ import annotations
 
+import contextlib
 import enum
 import logging
 
 try:
     from ..api import LandroidAPI
 except:  # pylint: disable=bare-except
-    pass
+    contextlib.suppress(Exception) #pass
 
 
 class LoggerType(enum.StrEnum):
@@ -81,7 +82,7 @@ class LandroidLogger:
         logger = logging.getLogger(self.logname)
 
         prefix = ""
-        if not log_type in [LoggerType.NONE, None]:
+        if log_type not in [LoggerType.NONE, None]:
             if not device and not isinstance(device, type(None)):
                 prefix = (
                     "(" + log_type + ") "
@@ -135,5 +136,5 @@ class LandroidLogger:
         self.logdevicename = api.friendly_name
 
     def log_set_name(self, name: str) -> None:
-        """Sets the namespace name used in logging."""
+        """Set the namespace name used in logging."""
         self.logname = name
