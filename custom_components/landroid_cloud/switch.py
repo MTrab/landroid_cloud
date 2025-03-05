@@ -8,8 +8,9 @@ from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
 
 from .api import LandroidAPI
-from .const import ATTR_DEVICES, DOMAIN
+from .const import ATTR_DEVICES, DOMAIN, LOGLEVEL, LandroidFeatureSupport
 from .device_base import LandroidSwitch, LandroidSwitchEntityDescription
+from .utils.logger import LandroidLogger, LoggerType
 
 SWITCHES = [
     LandroidSwitchEntityDescription(
@@ -35,6 +36,32 @@ SWITCHES = [
         icon_on="mdi:lock",
         icon_off="mdi:lock-open",
     ),
+    LandroidSwitchEntityDescription(
+        key="offlimits",
+        name="Off limits",
+        entity_category=EntityCategory.CONFIG,
+        device_class=SwitchDeviceClass.SWITCH,
+        entity_registry_enabled_default=True,
+        value_fn=lambda landroid: landroid.offlimit,
+        command_fn=lambda landroid, serial, state: landroid.set_offlimits(
+            serial, state
+        ),
+        icon="mdi:border-none-variant",
+        required_feature=LandroidFeatureSupport.OFFLIMITS,
+    ),
+    LandroidSwitchEntityDescription(
+        key="offlimits_shortcut",
+        name="Shortcuts",
+        entity_category=EntityCategory.CONFIG,
+        device_class=SwitchDeviceClass.SWITCH,
+        entity_registry_enabled_default=True,
+        value_fn=lambda landroid: landroid.offlimit_shortcut,
+        command_fn=lambda landroid, serial, state: landroid.set_offlimits_shortcut(
+            serial, state
+        ),
+        icon="mdi:transit-detour",
+        required_feature=LandroidFeatureSupport.OFFLIMITS,
+    ),
 ]
 
 
@@ -47,9 +74,19 @@ async def async_setup_entry(
     switches = []
     for _, info in hass.data[DOMAIN][config.entry_id][ATTR_DEVICES].items():
         api: LandroidAPI = info["api"]
+        logger = LandroidLogger(name=__name__, api=api, log_level=LOGLEVEL)
         for sens in SWITCHES:
-            entity = LandroidSwitch(hass, sens, api, config)
+            logger.log(
+                LoggerType.API,
+                "API features: %s, Required feature: %s",
+                api.features,
+                sens.required_feature,
+            )
+            if isinstance(sens.required_feature, type(None)) or (
+                api.features & sens.required_feature
+            ):
+                entity = LandroidSwitch(hass, sens, api, config)
 
-            switches.append(entity)
+                switches.append(entity)
 
     async_add_devices(switches)

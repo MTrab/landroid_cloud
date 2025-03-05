@@ -125,6 +125,10 @@ class LandroidAPI:
             self.logger.log(LoggerType.FEATURE_ASSESSMENT, "Torque capable")
             features = features | LandroidFeatureSupport.TORQUE
 
+        if self.has_feature(DeviceCapability.OFF_LIMITS):
+            self.logger.log(LoggerType.FEATURE_ASSESSMENT, "Off limits module available")
+            features = features | LandroidFeatureSupport.OFFLIMITS
+
         old_feature = self.features
         self.features = features
 
