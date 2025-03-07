@@ -10,7 +10,7 @@ import logging
 try:
     from ..api import LandroidAPI
 except:  # pylint: disable=bare-except
-    contextlib.suppress(Exception) #pass
+    contextlib.suppress(Exception)  # pass
 
 
 class LoggerType(enum.StrEnum):

@@ -886,7 +886,10 @@ class LandroidSelect(SelectEntity):
             "serial_number": self._api.device.serial_number,
         }
 
-        if not isinstance(self._api.device.mac_address, type(None)) and self._api.device.mac_address != "__UUID__":
+        if (
+            not isinstance(self._api.device.mac_address, type(None))
+            and self._api.device.mac_address != "__UUID__"
+        ):
             _connections = {(dr.CONNECTION_NETWORK_MAC, self._api.device.mac_address)}
             self._attr_device_info.update({"connections": _connections})
 
@@ -983,7 +986,10 @@ class LandroidButton(ButtonEntity):
             "serial_number": self._api.device.serial_number,
         }
 
-        if not isinstance(self._api.device.mac_address, type(None)) and self._api.device.mac_address != "__UUID__":
+        if (
+            not isinstance(self._api.device.mac_address, type(None))
+            and self._api.device.mac_address != "__UUID__"
+        ):
             _connections = {(dr.CONNECTION_NETWORK_MAC, self._api.device.mac_address)}
             self._attr_device_info.update({"connections": _connections})
         self._attr_extra_state_attributes = {}
@@ -1055,7 +1061,10 @@ class LandroidSensor(SensorEntity):
             "serial_number": self._api.device.serial_number,
         }
 
-        if not isinstance(self._api.device.mac_address, type(None)) and self._api.device.mac_address != "__UUID__":
+        if (
+            not isinstance(self._api.device.mac_address, type(None))
+            and self._api.device.mac_address != "__UUID__"
+        ):
             _connections = {(dr.CONNECTION_NETWORK_MAC, self._api.device.mac_address)}
             self._attr_device_info.update({"connections": _connections})
         self._attr_available = self._api.device.online
@@ -1203,7 +1212,10 @@ class LandroidNumber(NumberEntity):
             "serial_number": self._api.device.serial_number,
         }
 
-        if not isinstance(self._api.device.mac_address, type(None)) and self._api.device.mac_address != "__UUID__":
+        if (
+            not isinstance(self._api.device.mac_address, type(None))
+            and self._api.device.mac_address != "__UUID__"
+        ):
             _connections = {(dr.CONNECTION_NETWORK_MAC, self._api.device.mac_address)}
             self._attr_device_info.update({"connections": _connections})
 
@@ -1308,7 +1320,10 @@ class LandroidSwitch(SwitchEntity):
             "serial_number": self._api.device.serial_number,
         }
 
-        if not isinstance(self._api.device.mac_address, type(None)) and self._api.device.mac_address != "__UUID__":
+        if (
+            not isinstance(self._api.device.mac_address, type(None))
+            and self._api.device.mac_address != "__UUID__"
+        ):
             _connections = {(dr.CONNECTION_NETWORK_MAC, self._api.device.mac_address)}
             self._attr_device_info.update({"connections": _connections})
 
@@ -1427,7 +1442,10 @@ class LandroidBinarySensor(BinarySensorEntity):
             "serial_number": self._api.device.serial_number,
         }
 
-        if not isinstance(self._api.device.mac_address, type(None)) and self._api.device.mac_address != "__UUID__":
+        if (
+            not isinstance(self._api.device.mac_address, type(None))
+            and self._api.device.mac_address != "__UUID__"
+        ):
             _connections = {(dr.CONNECTION_NETWORK_MAC, self._api.device.mac_address)}
             self._attr_device_info.update({"connections": _connections})
 
