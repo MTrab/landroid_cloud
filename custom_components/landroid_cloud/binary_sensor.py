@@ -18,7 +18,7 @@ BINARYSENSORS = [
         entity_category=EntityCategory.DIAGNOSTIC,
         device_class=BinarySensorDeviceClass.BATTERY_CHARGING,
         entity_registry_enabled_default=True,
-        value_fn=lambda landroid: landroid.battery["charging"],
+        value_fn=lambda landroid: landroid.battery.get("charging", False),
     ),
     LandroidBinarySensorEntityDescription(
         key="online",
