@@ -140,6 +140,7 @@ class LandroidSwitchEntityDescription(
     command_fn: Callable[[WorxCloud], None] = None
     icon_on: str | None = None
     icon_off: str | None = None
+    required_feature: LandroidFeatureSupport | None = None
 
 
 @dataclass
