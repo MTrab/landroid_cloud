@@ -337,6 +337,7 @@ class LandroidFeatureSupport(IntEnum):
     SCHEDULES = 1024
     TORQUE = 2048
     RAW = 4096
+    OFFLIMITS = 8192
 
 
 API_TO_INTEGRATION_FEATURE_MAP = {
@@ -344,4 +345,5 @@ API_TO_INTEGRATION_FEATURE_MAP = {
     DeviceCapability.ONE_TIME_SCHEDULE: LandroidFeatureSupport.OTS,
     DeviceCapability.PARTY_MODE: LandroidFeatureSupport.PARTYMODE,
     DeviceCapability.TORQUE: LandroidFeatureSupport.TORQUE,
+    DeviceCapability.OFF_LIMITS: LandroidFeatureSupport.OFFLIMITS,
 }
