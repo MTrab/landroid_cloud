@@ -32,6 +32,14 @@ BUTTONS = [
         required_feature=LandroidFeatureSupport.EDGECUT,
         press_action=lambda api, serial: api.cloud.ots(serial, True, 0),
     ),
+    LandroidButtonEntityDescription(
+        key="reset_blade_time",
+        name="Reset blade time",
+        icon="mdi:battery-sync",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        required_feature=None,
+        press_action=lambda api, serial: api.cloud.reset_blade_counter(serial),
+    ),
 ]
 
 
