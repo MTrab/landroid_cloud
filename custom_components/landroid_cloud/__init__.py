@@ -7,6 +7,7 @@ import asyncio
 from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.loader import async_get_integration
 from pyworxcloud import WorxCloud, exceptions
 
@@ -204,7 +205,11 @@ async def _async_setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         )
         return False
 
-    await hass.async_add_executor_job(cloud.connect)
+    try:
+        async with asyncio.timeout(10):
+            await hass.async_add_executor_job(cloud.connect)
+    except TimeoutError:
+        raise ConfigEntryNotReady(f"Timed out connecting to account {cloud_email}")
 
     hass.data[DOMAIN][entry.entry_id] = {
         ATTR_CLOUD: cloud,
