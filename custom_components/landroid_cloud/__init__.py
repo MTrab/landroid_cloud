@@ -132,78 +132,28 @@ async def _async_setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     try:
         auth = await hass.async_add_executor_job(cloud.authenticate)
     except exceptions.RequestError:
-        LOGGER.log(
-            LoggerType.API,
-            "Request for %s was malformed.",
-            cloud_email,
-            log_level=LogLevel.ERROR,
-        )
-        return False
+        raise ConfigEntryNotReady(f"Request for {cloud_email} was malformed.")
     except exceptions.AuthorizationError:
-        LOGGER.log(
-            LoggerType.API,
-            "Unauthorized - please check your credentials for %s at Landroid Cloud",
-            cloud_email,
-            log_level=LogLevel.ERROR,
-        )
-        return False
+        raise ConfigEntryNotReady("Unauthorized - please check your credentials")
     except exceptions.ForbiddenError:
-        LOGGER.log(
-            LoggerType.API,
-            "Server rejected access for %s at Landroid Cloud - this might be "
-            "temporary due to high numbers of API requests from this IP address.",
-            cloud_email,
-            log_level=LogLevel.ERROR,
-        )
-        return False
+        raise ConfigEntryNotReady(f"Server rejected access for {cloud_email}")
     except exceptions.NotFoundError:
-        LOGGER.log(
-            LoggerType.API,
-            "Endpoint for %s was not found.",
-            cloud_email,
-            log_level=LogLevel.ERROR,
-        )
-        return False
+        raise ConfigEntryNotReady("No API endpoint was found")
     except exceptions.TooManyRequestsError:
-        LOGGER.log(
-            LoggerType.API,
-            "Too many requests for %s at Landroid Cloud. IP address temporary banned.",
-            cloud_email,
-            log_level=LogLevel.ERROR,
+        raise ConfigEntryNotReady(
+            f"Too many requests for {cloud_email} - IP address temporary banned."
         )
-        return False
     except exceptions.InternalServerError:
-        LOGGER.log(
-            LoggerType.API,
-            "Internal server error happend for the request to %s at Landroid Cloud.",
-            cloud_email,
-            log_level=LogLevel.ERROR,
+        raise ConfigEntryNotReady(
+            f"Internal server error happend for the request to {cloud_email}"
         )
-        return False
     except exceptions.ServiceUnavailableError:
-        LOGGER.log(
-            LoggerType.API,
-            "Service at Landroid Cloud was unavailable.",
-            log_level=LogLevel.ERROR,
-        )
-        return False
+        raise ConfigEntryNotReady("Cloud service unavailable")
     except exceptions.APIException as ex:
-        LOGGER.log(
-            LoggerType.API,
-            "%s",
-            ex,
-            log_level=LogLevel.ERROR,
-        )
-        return False
+        raise ConfigEntryNotReady("Error connecting to the API") from ex
 
     if not auth:
-        LOGGER.log(
-            LoggerType.AUTHENTICATION,
-            "Error in authentication for %s",
-            cloud_email,
-            log_level=LogLevel.WARNING,
-        )
-        return False
+        raise ConfigEntryNotReady(f"Authentication error for {cloud_email}")
 
     try:
         async with asyncio.timeout(10):
