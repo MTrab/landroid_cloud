@@ -209,6 +209,7 @@ async def _async_setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         async with asyncio.timeout(10):
             await hass.async_add_executor_job(cloud.connect)
     except TimeoutError:
+        await hass.async_add_executor_job(cloud.disconnect)
         raise ConfigEntryNotReady(f"Timed out connecting to account {cloud_email}")
 
     hass.data[DOMAIN][entry.entry_id] = {
