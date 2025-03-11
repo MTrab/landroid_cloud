@@ -35,6 +35,7 @@ from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.dispatcher import async_dispatcher_connect, dispatcher_send
 from homeassistant.helpers.entity_registry import EntityRegistry
+from homeassistant.util import dt as dt_utils
 from homeassistant.util import slugify as util_slugify
 from pyworxcloud import DeviceCapability, WorxCloud
 from pyworxcloud.exceptions import (
@@ -1096,24 +1097,29 @@ class LandroidSensor(SensorEntity):
 
     async def handle_update(self) -> None:
         """Handle the updates when recieving an update signal."""
-        write = False
         if self._attr_available != self._api.device.online:
-            write = True
             self._attr_available = self._api.device.online
 
         old_val = self._attr_native_value
         old_attrib = self._attr_extra_state_attributes
         new_attrib = {}
+
         try:
             new_val = self.entity_description.value_fn(self._api.device)
         except AttributeError:
             new_val = None
 
         if old_val != new_val:
-            write = True
             self._attr_native_value = new_val
 
         self._attr_extra_state_attributes = {}
+
+        if self.entity_description.key in ["last_update", "blades_reset_time"]:
+            if self._attr_native_value.hour > dt_utils.utcnow().hour:
+                diff = (dt_utils.utcnow() - self._attr_native_value).total_seconds()
+                hours = divmod(diff, 3600)[0]
+                _LOGGER.debug("Corrigating timezone error by %s hours", hours)
+                self._attr_native_value += timedelta(hours=hours)
 
         if not isinstance(self.entity_description.attributes, type(None)):
             if self.entity_description.key == "battery_state":
@@ -1158,21 +1164,19 @@ class LandroidSensor(SensorEntity):
                 )
 
         if old_attrib != new_attrib:
-            write = True
             self._attr_extra_state_attributes = new_attrib
 
-        if write:
-            _LOGGER.debug(
-                "(%s, Update signal) Updating sensor '%s' to new value '%s' with attributes '%s'",
-                self._api.friendly_name,
-                self._attr_name,
-                self._attr_native_value,
-                self._attr_extra_state_attributes,
-            )
-            try:
-                self.async_write_ha_state()
-            except RuntimeError:
-                contextlib.suppress(RuntimeError)
+        _LOGGER.debug(
+            "(%s, Update signal) Updating sensor '%s' to new value '%s' with attributes '%s'",
+            self._api.friendly_name,
+            self._attr_name,
+            self._attr_native_value,
+            self._attr_extra_state_attributes,
+        )
+        try:
+            self.async_write_ha_state()
+        except RuntimeError:
+            contextlib.suppress(RuntimeError)
 
 
 class LandroidNumber(NumberEntity):
