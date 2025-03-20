@@ -618,9 +618,9 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
         if self.state not in [LawnMowerActivity.DOCKED, STATE_RETURNING]:
             device: WorxCloud = self.api.device
             self.log(LoggerType.SERVICE_CALL, "Going back to dock")
-            # Try calling safehome
+            # Try calling home (keep knives on while going home)
             await self.hass.async_add_executor_job(
-                self.api.cloud.safehome, device.serial_number
+                self.api.cloud.home, device.serial_number
             )
             # Ensure we are going home, in case the safehome wasn't successful
             wait_start = time.time()
@@ -628,9 +628,13 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
                 await asyncio.sleep(1)
                 if self.state in [STATE_RETURNING, LawnMowerActivity.DOCKED]:
                     break
+
+            # Mower didn't start homing routine
+            # Possibly the mower doesn't support homing with blades on
+            # Issue safehome command
             if self.state not in [STATE_RETURNING, LawnMowerActivity.DOCKED]:
                 await self.hass.async_add_executor_job(
-                    self.api.cloud.home, device.serial_number
+                    self.api.cloud.safehome, device.serial_number
                 )
 
     async def async_stop(self, **kwargs: Any) -> None:
