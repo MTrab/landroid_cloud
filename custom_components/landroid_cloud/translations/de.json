@@ -1,22 +1,22 @@
 {
     "config": {
         "abort": {
-            "already_exists": "Dieses Benutzerkonto wurde bereits konfiguriert"
+            "already_exists": "Det här användarkontot har redan konfigurerats"
         },
         "error": {
-            "cannot_connect": "Verbindung ist nicht möglich",
-            "invalid_auth": "Fehler bei der Authentifizierung",
-            "too_many_requests": "Zu viele API-Anfragen - In 24 Stunden erneut versuchen",
-            "unknown": "Unerwarteter Fehler"
+            "cannot_connect": "Misslyckades med att ansluta",
+            "invalid_auth": "Fel vid autentisering",
+            "too_many_requests": "För många API-förfrågningar. Försök igen om 24 timmar",
+            "unknown": "Oväntat fel"
         },
         "step": {
             "user": {
                 "data": {
-                    "email": "E-Mail",
-                    "password": "Passwort",
-                    "type": "Marke"
+                    "email": "E-post",
+                    "password": "Lösenord",
+                    "type": "Modell"
                 },
-                "title": "Verbinden Sie sich mit Ihrem Landroid Cloud-Konto"
+                "title": "Anslut till ditt Landroid Cloud-konto"
             }
         }
     },
@@ -24,217 +24,87 @@
         "lawn_mower": {
             "landroid_cloud": {
                 "state": {
-                    "edgecut": "Kantenschnitt",
-                    "escaped_digital_fence": "Außerhalb der Begrenzung",
-                    "idle": "Untätig",
-                    "initializing": "Initialisierung",
-                    "locked": "Gesperrt",
-                    "mowing": "Mähen",
+                    "edgecut": "Kantklippning",
+                    "idle": "Inaktiv",
+                    "initializing": "Initierar",
+                    "locked": "Låst",
+                    "mowing": "Klipper",
                     "offline": "Offline",
-                    "rain_delay": "Regenverzögerung",
-                    "returning": "Rückkehr zur Ladestation",
-                    "searching_zone": "Zone suchen",
-                    "starting": "Startet",
-                    "unknown": "Unbekannt",
-                    "zoning": "Zonentraining"
+                    "rain_delay": "Regnfördröjning",
+                    "returning": "Återvänder hem",
+                    "starting": "Startar",
+                    "unknown": "Okänt",
+                    "zoning": "Zonträning"
                 }
             }
         },
         "sensor": {
             "landroid_cloud_error": {
                 "state": {
-                    "battery_low": "Batterie schwach",
-                    "blade_height_adjustment_blocked": "Klingenhöhenverstellung blockiert",
-                    "blade_motor_blocked": "Klingenmotor ist blockiert",
-                    "camera_error": "Kamerafehler",
-                    "charging_station_docking_error": "Fehler beim Andocken der Ladestation",
-                    "headlight_error": "Kein Fehler",
-                    "insufficient_sensor_data": "Unzureichende Sensordaten",
-                    "lifted": "Angehoben",
-                    "mapping_exploration_failed": "Kartierung fehlgeschlagen",
-                    "mapping_exploration_required": "Kartierung erforderlich",
-                    "missing_charging_station": "Ladestation nicht erreichbar",
-                    "no_error": "Kein Fehler",
-                    "outside_wire": "Außerhalb des Begrenzungskabels",
-                    "rain_delay": "Regenverzögerung aktiv",
-                    "rfid_reader_error": "Fehler im RFID-Lesegerät",
-                    "trapped": "Gefangen",
-                    "unknown": "Unbekannt",
-                    "unreachable_charging_station": "Ladestation nicht erreichbar",
-                    "wheel_motor_blocked": "Radmotor ist blockiert",
-                    "wire_missing": "Kabel fehlt"
+                    "battery_low": "Låg batterinivå",
+                    "battery_temperature_error": "Fel på batteriets temperatur",
+                    "blade_height_adjustment_blocked": "Justering av bladhöjd blockerad",
+                    "blade_motor_blocked": "Bladmotorn är blockerad",
+                    "camera_error": "Fel på kameran",
+                    "charge_error": "Fel vid laddning",
+                    "close_door_to_go_home": "Stäng dörren för att köra hem",
+                    "close_door_to_mow": "Stäng dörren för att klippa",
+                    "excessive_slope": "För stor lutning upptäckt",
+                    "headlight_error": "Fel på strålkastare",
+                    "insufficient_sensor_data": "Otillräcklig sensordata",
+                    "lifted": "Gräsklipparen har lyfts",
+                    "locked": "Gräsklipparen är låst",
+                    "map_error": "Fel på kartan",
+                    "mapping_exploration_failed": "Kartläggning misslyckades",
+                    "mapping_exploration_required": "Kartläggning krävs",
+                    "missing_charging_station": "Saknar laddstation",
+                    "no_error": "Inget fel",
+                    "ota_error": "Fel på trådlös uppdatering",
+                    "outside_wire": "Utanför begränsningskabeln",
+                    "rain_delay": "Regnfördröjning aktiv",
+                    "reverse_wire": "Begränsningskabeln är felvänd",
+                    "rfid_reader_error": "RFID läsfel",
+                    "timeout_finding_home": "Kunde inte återvända hem inom tidsgränsen",
+                    "trapped": "Instängd",
+                    "trapped_timeout": "Instängd längre än tidsgränsen",
+                    "unknown": "Okänt",
+                    "upside_down": "Gräsklipparen är upp och ner",
+                    "wheel_motor_blocked": "Hjulmotorn är blockerad",
+                    "wire_missing": "Begränsningskabel saknas"
                 }
             }
         }
     },
     "services": {
         "config": {
-            "description": "Gerätekonfigurationsparameter festlegen",
             "fields": {
-                "multizone_distances": {
-                    "description": "Legen Sie das Multizonen-Entfernungsabstand in Metern fest. 0 = Deaktiviert. Format: 15, 80, 120, 155",
-                    "name": "Multizonen Abstände"
-                },
-                "multizone_probabilities": {
-                    "description": "Legen Sie das Multizonen-Wahrscheinlichkeits-Array fest. Format: 50, 10, 20, 20",
-                    "name": "Multizonen Wahrscheinlichkeit"
-                },
                 "raindelay": {
-                    "description": "Regenverzögerung einstellen. Zeit zwischen 0 und 300 Minuten. 0 = Deaktiviert",
-                    "name": "Regenverzögerung"
+                    "description": "Ställ in regnfördröjning. Tid i minuter från 0 till 300. 0 = Inaktiverad",
+                    "name": "Regnfördröjning"
                 },
                 "timeextension": {
-                    "description": "Zeitverlängerung einstellen in % im Bereich von -100 bis 100",
-                    "name": "Zeitverlängerung"
+                    "description": "Ställ in förlängning av arbetstiden. Förlängning i % från -100 till 100",
+                    "name": "Förlängning av arbetstiden."
                 }
-            },
-            "name": "Zone setzen"
+            }
         },
         "edgecut": {
-            "description": "Kantenschnitt starten (falls unterstützt)",
-            "name": "Rand-/Kantenschnitt"
-        },
-        "ots": {
-            "description": "Einmalplan starten (falls unterstützt)",
-            "fields": {
-                "boundary": {
-                    "description": "Rasenkannte schneiden",
-                    "name": "Kantenschnitt"
-                },
-                "runtime": {
-                    "description": "Laufzeit in Minuten bis zur Rückkehr zur Ladestation",
-                    "name": "Laufzeit"
-                }
-            },
-            "name": "Einmaliger Zeitplan"
+            "description": "Starta kantklippning (om det stöds)",
+            "name": "Kantklippning"
         },
         "restart": {
-            "description": "Startet das Gerät neu oder startet es neu",
-            "name": "Gerät neustarten"
-        },
-        "schedule": {
-            "description": "Zeitplan des Mähers einstellen oder ändern.",
-            "fields": {
-                "friday_boundary": {
-                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
-                    "name": "Freitag, Kantenschnitt"
-                },
-                "friday_end": {
-                    "description": "Wann soll der Zeitplan freitags enden?",
-                    "name": "Freitag, Ende"
-                },
-                "friday_start": {
-                    "description": "Startzeit für Freitage",
-                    "name": "Freitag, Beginn"
-                },
-                "monday_boundary": {
-                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
-                    "name": "Montag, Kantenschnitt"
-                },
-                "monday_end": {
-                    "description": "Wann soll der Zeitplan montags enden?",
-                    "name": "Montag, Ende"
-                },
-                "monday_start": {
-                    "description": "Startzeit für Montage",
-                    "name": "Montag, Beginn"
-                },
-                "saturday_boundary": {
-                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
-                    "name": "Samstag, Kantenschnitt"
-                },
-                "saturday_end": {
-                    "description": "Wann soll der Zeitplan samstags enden?",
-                    "name": "Samstag, Ende"
-                },
-                "saturday_start": {
-                    "description": "Startzeit für Samstage",
-                    "name": "Samstag, Beginn"
-                },
-                "sunday_boundary": {
-                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
-                    "name": "Sonntag, Kantenschnitt"
-                },
-                "sunday_end": {
-                    "description": "Wann soll der Zeitplan sonntags enden?",
-                    "name": "Sonntag, Ende"
-                },
-                "sunday_start": {
-                    "description": "Startzeit für Sonntage",
-                    "name": "Sonntag, Beginn"
-                },
-                "thursday_boundary": {
-                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
-                    "name": "Donnerstag, Kantenschnitt"
-                },
-                "thursday_end": {
-                    "description": "Wann soll der Zeitplan donnerstags enden?",
-                    "name": "Donnerstag, Ende"
-                },
-                "thursday_start": {
-                    "description": "Startzeit für Donnerstage",
-                    "name": "Mittwochs, Beginn"
-                },
-                "tuesday_boundary": {
-                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
-                    "name": "Dienstag, Kantenschnitt"
-                },
-                "tuesday_end": {
-                    "description": "Wann soll der Zeitplan dienstags enden?",
-                    "name": "Dienstag, Ende"
-                },
-                "tuesday_start": {
-                    "description": "Startzeit für Dienstage",
-                    "name": "Dienstag, Beginn"
-                },
-                "type": {
-                    "description": "Primären oder sekundären Zeitplan ändern?",
-                    "name": "Zeitplantyp"
-                },
-                "wednesday_boundary": {
-                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
-                    "name": "Mittwoch, Kantenschnitt"
-                },
-                "wednesday_end": {
-                    "description": "Wann soll der Zeitplan mittwochs enden?",
-                    "name": "Mittwoch, Ende"
-                },
-                "wednesday_start": {
-                    "description": "Startzeit für Mittwoche",
-                    "name": "Mittwoch, Beginn"
-                }
-            },
-            "name": "Zeitplan festlegen oder aktualisieren"
-        },
-        "send_raw": {
-            "description": "Senden eines JSON-Befehls an das Gerät",
-            "fields": {
-                "json": {
-                    "description": "Zu sendende Daten, formatiert als gültiges JSON",
-                    "name": "JSON Daten"
-                }
-            },
-            "name": "RAW-Befehl senden"
-        },
-        "setzone": {
-            "description": "Zone setzen, die als nächstes gemäht werden soll",
-            "fields": {
-                "zone": {
-                    "description": "Legt die Zone im Bereich von 0 bis 3 fest, die als nächstes gemäht werden soll",
-                    "name": "Zone"
-                }
-            },
-            "name": "Zone setzen"
+            "description": "Startar om enheten",
+            "name": "Starta om enheten"
         },
         "torque": {
-            "description": "Raddrehmoment einstellen (falls unterstützt)",
+            "description": "Ställ in hjulens vridmoment (om det stöds)",
             "fields": {
                 "torque": {
-                    "description": "Raddrehmoment einstellen. Im Bereich von -50 % bis 50 %",
-                    "name": "Drehmoment"
+                    "description": "Ställ in hjulens vridmoment. Från -50 % till 50 %",
+                    "name": "Hjulens vridmoment"
                 }
             },
-            "name": "Drehmoment"
+            "name": "Vridmoment"
         }
     }
 }
