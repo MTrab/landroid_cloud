@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import asyncio
 
-from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
@@ -25,36 +25,10 @@ from .const import (
     PLATFORMS_SECONDARY,
     STARTUP,
 )
-from .scheme import CONFIG_SCHEMA  # Used for validating YAML config - DO NOT DELETE!
 from .services import async_setup_services
 from .utils.logger import LandroidLogger, LoggerType, LogLevel
 
 LOGGER = LandroidLogger(name=__name__, log_level=LOGLEVEL)
-
-
-async def async_setup(hass: HomeAssistant, config: dict):
-    """Set up the component."""
-
-    hass.data.setdefault(DOMAIN, {})
-
-    if DOMAIN not in config:
-        return True
-
-    for conf in config[DOMAIN]:
-        LOGGER.log(
-            LoggerType.SETUP_IMPORT,
-            "Importing configuration for %s from configuration.yaml",
-            conf["email"],
-        )
-        hass.async_create_task(
-            hass.config_entries.flow.async_init(
-                DOMAIN,
-                context={"source": SOURCE_IMPORT},
-                data=conf,
-            )
-        )
-
-    return True
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
