@@ -2,6 +2,10 @@
 
 set -e
 
+curl -L https://github.com/AlexxIT/go2rtc/releases/download/v1.9.9/go2rtc_linux_amd64 --output /bin/go2rtc
+chmod a+x /bin/go2rtc
+pip3 install uv==0.6.8
+
 cd "$(dirname "$0")/.."
 
 python3 -m pip install --requirement requirements.txt
