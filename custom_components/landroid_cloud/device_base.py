@@ -1118,22 +1118,6 @@ class LandroidSensor(SensorEntity):
 
         self._attr_extra_state_attributes = {}
 
-        if self.entity_description.key in ["last_update", "blades_reset_time"]:
-            if (
-                not isinstance(self._attr_native_value, type(None))
-                and self._attr_native_value.hour > dt_utils.utcnow().hour
-            ):
-                diff = (dt_utils.utcnow() - self._attr_native_value).total_seconds()
-                hours = divmod(diff, 3600)[0]
-                old = self._attr_native_value
-                self._attr_native_value += timedelta(hours=hours)
-                _LOGGER.debug(
-                    "Corrigating timezone error by %s hours from '%s' to '%s'",
-                    hours,
-                    old,
-                    self._attr_native_value,
-                )
-
         if not isinstance(self.entity_description.attributes, type(None)):
             if self.entity_description.key == "battery_state":
                 for key in self.entity_description.attributes:
