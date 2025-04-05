@@ -6,6 +6,7 @@ body:
     attributes:
       value: |
         This issue form is for reporting bugs only!
+        KEEP THE LANGUAGE AT ENGLISH PLEASE!
   - type: textarea
     validations:
       required: true
