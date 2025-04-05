@@ -1,5 +1,5 @@
 name: Report a bug / issue
-description: Report an issue with the integration
+description: Report an issue with the integration - PLEASE KEEP IT IN ENGLISH!
 labels: ["bug"]
 body:
   - type: markdown
