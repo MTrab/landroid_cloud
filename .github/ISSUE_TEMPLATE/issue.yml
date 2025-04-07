@@ -5,8 +5,11 @@ body:
   - type: markdown
     attributes:
       value: |
+        Note:
         This issue form is for reporting bugs only!
         KEEP THE LANGUAGE AT ENGLISH PLEASE!
+
+        PLEASE MAKE SURE YOU HAVE INSTALLED THE LATEST VERSION BEFORE SUBMITTING A NEW ISSUE!
   - type: textarea
     validations:
       required: true
