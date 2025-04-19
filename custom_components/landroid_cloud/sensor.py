@@ -97,7 +97,7 @@ SENSORS = [
         key="blades_reset_at",
         name="Blades Reset At Hours",
         entity_category=EntityCategory.DIAGNOSTIC,
-        state_class=SensorStateClass.MEASUREMENT,
+        state_class=None,
         device_class=SensorDeviceClass.DURATION,
         entity_registry_enabled_default=False,
         native_unit_of_measurement="h",
@@ -117,7 +117,7 @@ SENSORS = [
         state_class=None,
         device_class=SensorDeviceClass.TIMESTAMP,
         entity_registry_enabled_default=False,
-        native_unit_of_measurement="",
+        native_unit_of_measurement=None,
         value_fn=lambda landroid: landroid.blades.get("reset_time", None),
     ),
     LandroidSensorEntityDescription(
