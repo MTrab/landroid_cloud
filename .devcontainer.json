@@ -5,6 +5,7 @@
 	"appPort": [
 		"9123:8123"
 	],
+	"containerEnv": { "TZ": "Europe/Copenhagen" },
 	"portsAttributes": {
 		"8123": {
 			"label": "Home Assistant - Landroid Cloud",
