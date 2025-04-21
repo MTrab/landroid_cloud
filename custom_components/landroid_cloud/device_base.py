@@ -30,15 +30,17 @@ from homeassistant.components.sensor import SensorEntity, SensorEntityDescriptio
 from homeassistant.components.switch import SwitchEntity, SwitchEntityDescription
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
-from homeassistant.exceptions import HomeAssistantError
+from homeassistant.exceptions import ConfigEntryNotReady, HomeAssistantError
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.dispatcher import async_dispatcher_connect, dispatcher_send
 from homeassistant.helpers.entity_registry import EntityRegistry
+from homeassistant.helpers.event import async_call_later
 from homeassistant.util import dt as dt_utils
 from homeassistant.util import slugify as util_slugify
 from pyworxcloud import DeviceCapability, WorxCloud
 from pyworxcloud.exceptions import (
+    NoConnectionError,
     NoOneTimeScheduleError,
     NoPartymodeError,
     ZoneNoProbability,
@@ -593,49 +595,61 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
         """Start or resume the task."""
         device: WorxCloud = self.api.device
         self.log(LoggerType.SERVICE_CALL, "Starting")
-        await self.hass.async_add_executor_job(
-            self.api.cloud.start, device.serial_number
-        )
+        try:
+            await self.hass.async_add_executor_job(
+                self.api.cloud.start, device.serial_number
+            )
+        except NoConnectionError as exc:
+            raise ConfigEntryNotReady() from exc
 
     async def async_pause(self) -> None:
         """Pause the mowing cycle."""
         device: WorxCloud = self.api.device
         self.log(LoggerType.SERVICE_CALL, "Pausing")
-        await self.hass.async_add_executor_job(
-            self.api.cloud.pause, device.serial_number
-        )
+        try:
+            await self.hass.async_add_executor_job(
+                self.api.cloud.pause, device.serial_number
+            )
+        except NoConnectionError as exc:
+            raise ConfigEntryNotReady() from exc
 
     async def async_start_pause(self) -> None:
         """Toggle the state of the mower."""
         self.log(LoggerType.SERVICE_CALL, "Toggeling state")
-        if LawnMowerActivity.MOWING in self.state:
-            await self.async_pause()
-        else:
-            await self.async_start_mowing()
+        try:
+            if LawnMowerActivity.MOWING in self.state:
+                await self.async_pause()
+            else:
+                await self.async_start_mowing()
+        except NoConnectionError as exc:
+            raise ConfigEntryNotReady() from exc
 
     async def async_dock(self, **kwargs: Any) -> None:
         """Set the device to return to the dock."""
         if self.state not in [LawnMowerActivity.DOCKED, STATE_RETURNING]:
             device: WorxCloud = self.api.device
             self.log(LoggerType.SERVICE_CALL, "Going back to dock")
-            # Try calling home (keep knives on while going home)
-            await self.hass.async_add_executor_job(
-                self.api.cloud.home, device.serial_number
-            )
-            # Ensure we are going home, in case the safehome wasn't successful
-            wait_start = time.time()
-            while time.time() < wait_start + 15:
-                await asyncio.sleep(1)
-                if self.state in [STATE_RETURNING, LawnMowerActivity.DOCKED]:
-                    break
-
-            # Mower didn't start homing routine
-            # Possibly the mower doesn't support homing with blades on
-            # Issue safehome command
-            if self.state not in [STATE_RETURNING, LawnMowerActivity.DOCKED]:
+            try:
+                # Try calling home (keep knives on while going home)
                 await self.hass.async_add_executor_job(
-                    self.api.cloud.safehome, device.serial_number
+                    self.api.cloud.home, device.serial_number
                 )
+                # Ensure we are going home, in case the safehome wasn't successful
+                wait_start = time.time()
+                while time.time() < wait_start + 15:
+                    await asyncio.sleep(1)
+                    if self.state in [STATE_RETURNING, LawnMowerActivity.DOCKED]:
+                        break
+
+                # Mower didn't start homing routine
+                # Possibly the mower doesn't support homing with blades on
+                # Issue safehome command
+                if self.state not in [STATE_RETURNING, LawnMowerActivity.DOCKED]:
+                    await self.hass.async_add_executor_job(
+                        self.api.cloud.safehome, device.serial_number
+                    )
+            except NoConnectionError as exc:
+                raise ConfigEntryNotReady() from exc
 
     async def async_stop(self, **kwargs: Any) -> None:
         """Alias for return to base function."""
@@ -656,63 +670,77 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
             raise HomeAssistantError(
                 "The requested zone has no probability set"
             ) from None
+        except NoConnectionError as exc:
+            raise ConfigEntryNotReady() from exc
 
     async def async_set_schedule(self, data: dict | None = None) -> None:
         """Set or change the schedule."""
         device: WorxCloud = self.api.device
-        schedule_type = data["type"]
-        schedule = {}
-        if schedule_type == "secondary":
-            # We are handling a secondary schedule
-            # Insert primary schedule in dataset befor generating secondary
-            schedule[SCHEDULE_TYPE_MAP["primary"]] = pass_thru(
-                device.schedules["primary"]
-            )
+        try:
+            schedule_type = data["type"]
+            schedule = {}
+            if schedule_type == "secondary":
+                # We are handling a secondary schedule
+                # Insert primary schedule in dataset befor generating secondary
+                schedule[SCHEDULE_TYPE_MAP["primary"]] = pass_thru(
+                    device.schedules["primary"]
+                )
 
-        schedule[SCHEDULE_TYPE_MAP[schedule_type]] = []
-        self.log(LoggerType.SERVICE_CALL, "Generating %s schedule", schedule_type)
-        for day in SCHEDULE_TO_DAY.items():
-            day = day[1]
-            if day["start"] in data:
-                # Found day in dataset, generating an update to the schedule
-                if day["end"] not in data:
-                    raise HomeAssistantError(
-                        f"No end time specified for {day['clear']}"
+            schedule[SCHEDULE_TYPE_MAP[schedule_type]] = []
+            self.log(LoggerType.SERVICE_CALL, "Generating %s schedule", schedule_type)
+            for day in SCHEDULE_TO_DAY.items():
+                day = day[1]
+                if day["start"] in data:
+                    # Found day in dataset, generating an update to the schedule
+                    if day["end"] not in data:
+                        raise HomeAssistantError(
+                            f"No end time specified for {day['clear']}"
+                        )
+                    schedule[SCHEDULE_TYPE_MAP[schedule_type]].append(
+                        parseday(day, data)
                     )
-                schedule[SCHEDULE_TYPE_MAP[schedule_type]].append(parseday(day, data))
-            else:
-                # Didn't find day in dataset, parsing existing thru
-                current = []
-                current.append(device.schedules[schedule_type][day["clear"]]["start"])
-                current.append(
-                    device.schedules[schedule_type][day["clear"]]["duration"]
-                )
-                current.append(
-                    int(device.schedules[schedule_type][day["clear"]]["boundary"])
-                )
-                schedule[SCHEDULE_TYPE_MAP[schedule_type]].append(current)
+                else:
+                    # Didn't find day in dataset, parsing existing thru
+                    current = []
+                    current.append(
+                        device.schedules[schedule_type][day["clear"]]["start"]
+                    )
+                    current.append(
+                        device.schedules[schedule_type][day["clear"]]["duration"]
+                    )
+                    current.append(
+                        int(device.schedules[schedule_type][day["clear"]]["boundary"])
+                    )
+                    schedule[SCHEDULE_TYPE_MAP[schedule_type]].append(current)
 
-        if schedule_type == "primary" and "secondary" in device.schedules:
-            # We are generating a primary schedule
-            # To keep a secondary schedule we need to pass this thru to the dataset
-            schedule[SCHEDULE_TYPE_MAP["secondary"]] = pass_thru(
-                device.schedules["secondary"]
+            if schedule_type == "primary" and "secondary" in device.schedules:
+                # We are generating a primary schedule
+                # To keep a secondary schedule we need to pass this thru to the dataset
+                schedule[SCHEDULE_TYPE_MAP["secondary"]] = pass_thru(
+                    device.schedules["secondary"]
+                )
+
+            data = json.dumps({"sc": schedule})
+            self.log(
+                LoggerType.SERVICE_CALL, "New %s schedule, %s", schedule_type, data
             )
-
-        data = json.dumps({"sc": schedule})
-        self.log(LoggerType.SERVICE_CALL, "New %s schedule, %s", schedule_type, data)
-        await self.hass.async_add_executor_job(
-            partial(self.api.cloud.send, device.serial_number, data)
-        )
+            await self.hass.async_add_executor_job(
+                partial(self.api.cloud.send, device.serial_number, data)
+            )
+        except NoConnectionError as exc:
+            raise ConfigEntryNotReady() from exc
 
     async def async_toggle_lock(self, data: dict | None = None) -> None:
         """Toggle device lock state."""
         device: WorxCloud = self.api.device
         set_lock = not bool(device.locked)
         self.log(LoggerType.SERVICE_CALL, "Setting locked state to %s", set_lock)
-        await self.hass.async_add_executor_job(
-            partial(self.api.cloud.set_lock, device.serial_number, set_lock)
-        )
+        try:
+            await self.hass.async_add_executor_job(
+                partial(self.api.cloud.set_lock, device.serial_number, set_lock)
+            )
+        except NoConnectionError as exc:
+            raise ConfigEntryNotReady() from exc
 
     async def async_edgecut(self, data: dict | None = None) -> None:
         """Start edgecut routine."""
@@ -731,6 +759,8 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
                 "This device does not support Edge-Cut-OnDemand",
                 log_level=LogLevel.ERROR,
             )
+        except NoConnectionError as exc:
+            raise ConfigEntryNotReady() from exc
 
     async def async_toggle_partymode(self, data: dict | None = None) -> None:
         """Toggle partymode state."""
@@ -752,14 +782,19 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
             self.log(
                 LoggerType.SERVICE_CALL, "%s", ex.args[0], log_level=LogLevel.ERROR
             )
+        except NoConnectionError as exc:
+            raise ConfigEntryNotReady() from exc
 
     async def async_restart(self, data: dict | None = None):
         """Restart mower baseboard OS."""
         device: WorxCloud = self.api.device
         self.log(LoggerType.SERVICE_CALL, "Restarting")
-        await self.hass.async_add_executor_job(
-            self.api.cloud.restart, device.serial_number
-        )
+        try:
+            await self.hass.async_add_executor_job(
+                self.api.cloud.restart, device.serial_number
+            )
+        except NoConnectionError as exc:
+            raise ConfigEntryNotReady() from exc
 
     async def async_ots(self, data: dict | None = None) -> None:
         """Begin OTS routine."""
@@ -770,88 +805,97 @@ class LandroidCloudMowerBase(LandroidCloudBaseEntity, LawnMowerEntity):
             data[ATTR_BOUNDARY],
             data[ATTR_RUNTIME],
         )
-        await self.hass.async_add_executor_job(
-            partial(
-                self.api.cloud.ots,
-                device.serial_number,
-                data[ATTR_BOUNDARY],
-                data[ATTR_RUNTIME],
+        try:
+            await self.hass.async_add_executor_job(
+                partial(
+                    self.api.cloud.ots,
+                    device.serial_number,
+                    data[ATTR_BOUNDARY],
+                    data[ATTR_RUNTIME],
+                )
             )
-        )
+        except NoConnectionError as exc:
+            raise ConfigEntryNotReady() from exc
 
     async def async_send_raw(self, data: dict | None = None) -> None:
         """Send a raw command to the device."""
         device: WorxCloud = self.api.device
 
         self.log(LoggerType.SERVICE_CALL, "Data being sent: %s", data[ATTR_JSON])
-        await self.hass.async_add_executor_job(
-            partial(self.api.cloud.send, device.serial_number, data[ATTR_JSON])
-        )
+        try:
+            await self.hass.async_add_executor_job(
+                partial(self.api.cloud.send, device.serial_number, data[ATTR_JSON])
+            )
+        except NoConnectionError as exc:
+            raise ConfigEntryNotReady() from exc
 
     async def async_config(self, data: dict | None = None) -> None:
         """Set config parameters."""
         tmpdata = {}
         device: WorxCloud = self.api.device
 
-        if "multizone_distances" in data:
-            self.log(
-                LoggerType.SERVICE_CALL,
-                "Setting multizone distances to %s",
-                data["multizone_distances"],
-            )
-            sections = [
-                int(x)
-                for x in data["multizone_distances"]
-                .replace("[", "")
-                .replace("]", "")
-                .split(",")
-            ]
-            if len(sections) != 4:
-                raise HomeAssistantError(
-                    "Incorrect format for multizone distances array"
+        try:
+            if "multizone_distances" in data:
+                self.log(
+                    LoggerType.SERVICE_CALL,
+                    "Setting multizone distances to %s",
+                    data["multizone_distances"],
                 )
+                sections = [
+                    int(x)
+                    for x in data["multizone_distances"]
+                    .replace("[", "")
+                    .replace("]", "")
+                    .split(",")
+                ]
+                if len(sections) != 4:
+                    raise HomeAssistantError(
+                        "Incorrect format for multizone distances array"
+                    )
 
-            tmpdata["mz"] = sections
+                tmpdata["mz"] = sections
 
-        if "multizone_probabilities" in data:
-            self.log(
-                LoggerType.SERVICE_CALL,
-                "Setting multizone probabilities to %s",
-                data["multizone_probabilities"],
-            )
-            tmpdata["mzv"] = []
-            sections = [
-                int(x)
-                for x in data["multizone_probabilities"]
-                .replace("[", "")
-                .replace("]", "")
-                .split(",")
-            ]
-            if len(sections) != 4:
-                raise HomeAssistantError(
-                    "Incorrect format for multizone probabilities array"
+            if "multizone_probabilities" in data:
+                self.log(
+                    LoggerType.SERVICE_CALL,
+                    "Setting multizone probabilities to %s",
+                    data["multizone_probabilities"],
                 )
-            if sum(sections) not in [100, 0]:
-                raise HomeAssistantError(
-                    "Sum of zone probabilities array MUST be 100"
-                    f"or 0 (disabled), request was: {sum(sections)}"
+                tmpdata["mzv"] = []
+                sections = [
+                    int(x)
+                    for x in data["multizone_probabilities"]
+                    .replace("[", "")
+                    .replace("]", "")
+                    .split(",")
+                ]
+                if len(sections) != 4:
+                    raise HomeAssistantError(
+                        "Incorrect format for multizone probabilities array"
+                    )
+                if sum(sections) not in [100, 0]:
+                    raise HomeAssistantError(
+                        "Sum of zone probabilities array MUST be 100"
+                        f"or 0 (disabled), request was: {sum(sections)}"
+                    )
+
+                if sum(sections) == 0:
+                    for _ in range(10):
+                        tmpdata["mzv"].append(0)
+                else:
+                    for idx, val in enumerate(sections):
+                        share = int(int(val) / 10)
+                        for _ in range(share):
+                            tmpdata["mzv"].append(idx)
+
+            if tmpdata:
+                data = json.dumps(tmpdata)
+                self.log(LoggerType.SERVICE_CALL, "New config: %s", data)
+                await self.hass.async_add_executor_job(
+                    partial(self.api.cloud.send, device.serial_number, data)
                 )
-
-            if sum(sections) == 0:
-                for _ in range(10):
-                    tmpdata["mzv"].append(0)
-            else:
-                for idx, val in enumerate(sections):
-                    share = int(int(val) / 10)
-                    for _ in range(share):
-                        tmpdata["mzv"].append(idx)
-
-        if tmpdata:
-            data = json.dumps(tmpdata)
-            self.log(LoggerType.SERVICE_CALL, "New config: %s", data)
-            await self.hass.async_add_executor_job(
-                partial(self.api.cloud.send, device.serial_number, data)
-            )
+        except NoConnectionError as exc:
+            raise ConfigEntryNotReady() from exc
 
 
 class LandroidSelect(SelectEntity):
@@ -953,8 +997,10 @@ class LandroidSelect(SelectEntity):
             self._attr_name,
             option,
         )
-
-        self.entity_description.command_fn(self._api, str(int(option) - 1))
+        try:
+            self.entity_description.command_fn(self._api, str(int(option) - 1))
+        except NoConnectionError as exc:
+            raise ConfigEntryNotReady() from exc
 
 
 class LandroidButton(ButtonEntity):
@@ -1014,6 +1060,9 @@ class LandroidButton(ButtonEntity):
 
         self._attr_available = self._api.device.online
 
+        if self.entity_description.key == "request_update":
+            self._available = True
+
         async_dispatcher_connect(
             self.hass,
             util_slugify(f"{UPDATE_SIGNAL}_{self._api.device.name}"),
@@ -1022,14 +1071,24 @@ class LandroidButton(ButtonEntity):
 
     async def handle_update(self) -> None:
         """Handle updates."""
-        if self._attr_available != self._api.device.online:
+        if (
+            self._attr_available != self._api.device.online
+            and self.entity_description.key != "request_update"
+        ):
             self._attr_available = self._api.device.online
+        elif self.entity_description.key == "request_update":
+            self._attr_available = self._available if self._api.device.online else False
 
         self.async_write_ha_state()
 
     def press(self) -> None:
         """Press the button."""
-        self.entity_description.press_action(self._api, self._api.device.serial_number)
+        try:
+            self.entity_description.press_action(
+                self._api, self._api.device.serial_number
+            )
+        except NoConnectionError as exc:
+            raise ConfigEntryNotReady() from exc
 
 
 class LandroidSensor(SensorEntity):
@@ -1281,7 +1340,10 @@ class LandroidNumber(NumberEntity):
             value,
         )
 
-        self.entity_description.command_fn(self._api, value)
+        try:
+            self.entity_description.command_fn(self._api, value)
+        except NoConnectionError as exc:
+            raise ConfigEntryNotReady() from exc
 
 
 class LandroidSwitch(SwitchEntity):
@@ -1377,21 +1439,27 @@ class LandroidSwitch(SwitchEntity):
 
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Turn on the switch."""
-        await self.hass.async_add_executor_job(
-            self.entity_description.command_fn,
-            self._api.cloud,
-            self._api.device.serial_number,
-            True,
-        )
+        try:
+            await self.hass.async_add_executor_job(
+                self.entity_description.command_fn,
+                self._api.cloud,
+                self._api.device.serial_number,
+                True,
+            )
+        except NoConnectionError as exc:
+            raise ConfigEntryNotReady() from exc
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Turn off the switch."""
-        await self.hass.async_add_executor_job(
-            self.entity_description.command_fn,
-            self._api.cloud,
-            self._api.device.serial_number,
-            False,
-        )
+        try:
+            await self.hass.async_add_executor_job(
+                self.entity_description.command_fn,
+                self._api.cloud,
+                self._api.device.serial_number,
+                False,
+            )
+        except NoConnectionError as exc:
+            raise ConfigEntryNotReady() from exc
 
     @property
     def icon(self) -> str | None:
