@@ -1093,7 +1093,7 @@ class LandroidButton(ButtonEntity):
                 self.hass.add_job(
                     async_call_later,
                     self.hass,
-                    timedelta(minutes=5),
+                    timedelta(minutes=15),
                     self._set_available,
                 )
 
