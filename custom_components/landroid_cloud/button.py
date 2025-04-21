@@ -48,6 +48,15 @@ BUTTONS = [
         required_feature=None,
         press_action=lambda api, serial: api.cloud.reset_blade_counter(serial),
     ),
+    LandroidButtonEntityDescription(
+        key="request_update",
+        name="Request update",
+        icon="mdi:refresh",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        required_feature=None,
+        entity_registry_enabled_default=False,
+        press_action=lambda api, serial: api.cloud.update(serial),
+    ),
 ]
 
 

@@ -1087,9 +1087,31 @@ class LandroidButton(ButtonEntity):
             self.entity_description.press_action(
                 self._api, self._api.device.serial_number
             )
+            if self.entity_description.key == "request_update":
+                self._available = False
+                self._attr_available = False
+                self.hass.add_job(
+                    async_call_later,
+                    self.hass,
+                    timedelta(minutes=15),
+                    self._set_available,
+                )
+
         except NoConnectionError as exc:
             raise ConfigEntryNotReady() from exc
 
+    def _set_available(self, *args, **kwargs) -> None:
+        """Reenable button."""
+        if self.entity_description.key == "request_update":
+            self._available = True
+            self._attr_available = self._available if self._api.device.online else False
+            _LOGGER.debug(
+                "(%s, Set available) Setting button '%s' availability to '%s'",
+                self._api.friendly_name,
+                self._attr_name,
+                self._attr_available,
+            )
+            self.schedule_update_ha_state()
 
 class LandroidSensor(SensorEntity):
     """Representation of a Landroid sensor."""
