@@ -375,7 +375,6 @@ class LandroidCloudBaseEntity(LandroidLogger):
         self.log_set_name(__name__)
         self.log_set_api(self.api)
         self.log(LoggerType.DATA_UPDATE, "Updating")
-        self.log(LoggerType.DATA_UPDATE, "Device data: \n%s", vars(self.api.device))
 
         device: DeviceHandler = self.api.device
 
@@ -1112,6 +1111,7 @@ class LandroidButton(ButtonEntity):
                 self._attr_available,
             )
             self.schedule_update_ha_state()
+
 
 class LandroidSensor(SensorEntity):
     """Representation of a Landroid sensor."""
