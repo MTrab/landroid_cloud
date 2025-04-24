@@ -79,11 +79,11 @@ INPUT_NUMBERS = [
         native_max_value=60,
         native_step=5,
         mode=NumberMode.SLIDER,
-        value_fn=lambda api: api.cloud.devices[api.device_name].torque,
-        command_fn=lambda api, value: api.cloud.send(
-            api.device.serial_number, json.dumps({"tq": value})
+        value_fn=lambda api: api.cloud.get_cutting_height(api.device.serial_number),
+        command_fn=lambda api, value: api.cloud.set_cutting_height(
+            api.device.serial_number, value
         ),
-        required_capability=DeviceCapability.TORQUE,
+        required_capability=DeviceCapability.CUTTING_HEIGHT,
     ),
 ]
 
