@@ -68,6 +68,23 @@ INPUT_NUMBERS = [
         ),
         icon="mdi:weather-rainy",
     ),
+    LandroidNumberEntityDescription(
+        key="cutting_height",
+        name="Cutting height",
+        entity_category=EntityCategory.CONFIG,
+        device_class=NumberDeviceClass.DISTANCE,
+        entity_registry_enabled_default=True,
+        native_unit_of_measurement="mm",
+        native_min_value=30,
+        native_max_value=60,
+        native_step=5,
+        mode=NumberMode.SLIDER,
+        value_fn=lambda api: api.cloud.devices[api.device_name].torque,
+        command_fn=lambda api, value: api.cloud.send(
+            api.device.serial_number, json.dumps({"tq": value})
+        ),
+        required_capability=DeviceCapability.TORQUE,
+    ),
 ]
 
 
