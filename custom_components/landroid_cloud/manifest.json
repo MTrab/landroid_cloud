@@ -15,7 +15,7 @@
         "pyworxcloud"
     ],
     "requirements": [
-        "pyworxcloud@git+https://github.com/mtrab/pyworxcloud.git@Add-API-callback"
+        "pyworxcloud==4.1.34"
     ],
     "version": "5.2.3"
 }
