@@ -1070,7 +1070,8 @@ class LandroidButton(ButtonEntity):
         elif self.entity_description.key == "request_update":
             self._attr_available = self._available if self._device.online else False
 
-        self.async_write_ha_state()
+        if not isinstance(self.hass, type(None)):
+            self.async_write_ha_state()
 
     def press(self) -> None:
         """Press the button."""
