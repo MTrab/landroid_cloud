@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import voluptuous as vol
 from homeassistant.components.lawn_mower import LawnMowerEntity
-from pyworxcloud import WorxCloud
+from pyworxcloud import DeviceHandler
 
 from ..const import (
     ATTR_BOUNDARY,
@@ -59,7 +59,7 @@ class MowerDevice(LandroidCloudMowerBase, LawnMowerEntity):
     def __init__(self, hass, api):
         """Initialize mower entity."""
         super().__init__(hass, api)
-        self.device: WorxCloud = self.api.device
+        self.device: DeviceHandler = self._device
 
     @property
     def base_features(self):
