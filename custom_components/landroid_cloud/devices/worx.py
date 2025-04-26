@@ -7,7 +7,7 @@ import json
 
 import voluptuous as vol
 from homeassistant.components.lawn_mower import LawnMowerEntity
-from pyworxcloud import WorxCloud
+from pyworxcloud import DeviceHandler
 
 from ..const import (
     ATTR_BOUNDARY,
@@ -64,7 +64,7 @@ class MowerDevice(LandroidCloudMowerBase, LawnMowerEntity):
     def __init__(self, hass, api):
         """Initialize mower entity."""
         super().__init__(hass, api)
-        self.device: WorxCloud = self.api.device
+        self.device: DeviceHandler = self._device
 
     @property
     def base_features(self):
@@ -88,7 +88,7 @@ class MowerDevice(LandroidCloudMowerBase, LawnMowerEntity):
 
     async def async_set_torque(self, data: dict | None = None) -> None:
         """Set wheel torque."""
-        device: WorxCloud = self.api.device
+        device: DeviceHandler = self._device
         self.log(
             LoggerType.SERVICE_CALL,
             "Setting wheel torque to %s",
@@ -96,5 +96,5 @@ class MowerDevice(LandroidCloudMowerBase, LawnMowerEntity):
         )
         tmpdata = {"tq": data[ATTR_TORQUE]}
         await self.hass.async_add_executor_job(
-            self.api.cloud.send, device.serial_number, json.dumps(tmpdata)
+            self._api.cloud.send, device.serial_number, json.dumps(tmpdata)
         )

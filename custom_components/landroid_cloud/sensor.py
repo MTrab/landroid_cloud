@@ -7,9 +7,10 @@ from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
+from pyworxcloud import WorxCloud
 
 from .api import LandroidAPI
-from .const import ATTR_DEVICES, DOMAIN, ERROR_MAP
+from .const import ATTR_CLOUD, ATTR_DEVICES, DOMAIN, ERROR_MAP
 from .device_base import LandroidSensor, LandroidSensorEntityDescription
 
 SENSORS = [
@@ -267,8 +268,11 @@ async def async_setup_entry(
 ) -> None:
     """Set up the sensor platform."""
     sensors = []
-    for _, info in hass.data[DOMAIN][config.entry_id][ATTR_DEVICES].items():
-        api: LandroidAPI = info["api"]
+    cloud: WorxCloud = hass.data[DOMAIN][config.entry_id][ATTR_CLOUD]
+    for _, mower in cloud.devices.items():
+        api = LandroidAPI(hass, mower.name, config)
+    # for _, info in hass.data[DOMAIN][config.entry_id][ATTR_DEVICES].items():
+        # api: LandroidAPI = info["api"]
         for sens in SENSORS:
             entity = LandroidSensor(hass, sens, api, config)
 

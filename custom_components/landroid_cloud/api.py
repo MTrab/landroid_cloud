@@ -17,7 +17,10 @@ from pyworxcloud.utils import DeviceCapability, DeviceHandler
 
 from .const import (
     API_TO_INTEGRATION_FEATURE_MAP,
+    ATTR_API,
     ATTR_CLOUD,
+    ATTR_DEVICE,
+    ATTR_DEVICES,
     DOMAIN,
     UPDATE_SIGNAL,
     LandroidFeatureSupport,
@@ -64,15 +67,9 @@ class LandroidAPI:
 
         self.logger = LandroidLogger(name=__name__, api=self)
         self.cloud.set_callback(LandroidEvent.DATA_RECEIVED, self.receive_data)
+        self.cloud.set_callback(LandroidEvent.API, self.receive_data)
 
         self.logger.log(LoggerType.API, "Device: %s", vars(self.device))
-
-    def mqtt_conn_check(self, state: bool) -> None:
-        """Check connection state."""
-        if state is False:
-            asyncio.run_coroutine_threadsafe(
-                self.cloud.connect(), self.hass.loop
-            ).result()
 
     async def async_await_features(self, timeout: int = 10) -> None:
         """Await feature checks."""
@@ -153,14 +150,12 @@ class LandroidAPI:
     def receive_data(
         self, name: str, device: DeviceHandler  # pylint: disable=unused-argument
     ) -> None:
-        """Handle data when the MQTT broker sends new data."""
-        self.device = device
+        """Handle data when the MQTT broker sends new data or API is updated."""
         self.logger.log(
             LoggerType.DATA_UPDATE,
-            "Received new data from MQTT to %s, dispatching %s",
+            "Received new data for %s",
             name,
-            util_slugify(f"{UPDATE_SIGNAL}_{name}"),
             device=name,
         )
+
         dispatcher_send(self.hass, util_slugify(f"{UPDATE_SIGNAL}_{name}"))
-        self.logger.log(LoggerType.API, "Device object:\n%s", vars(device))
