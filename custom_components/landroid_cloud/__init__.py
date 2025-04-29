@@ -151,12 +151,15 @@ async def _async_setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         CONF_TYPE: cloud_type,
     }
 
-    await asyncio.gather(
-        *[
-            async_init_device(hass, entry, name, device)
-            for name, device in cloud.devices.items()
-        ]
-    )
+    # await asyncio.gather(
+    #     *[
+    #         async_init_device(hass, entry, name, device)
+    #         for name, device in cloud.devices.items()
+    #     ]
+    # )
+
+    for name, device in cloud.devices.items():
+        await async_init_device(hass, entry, name, device)
 
     return True
 
