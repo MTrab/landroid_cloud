@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import inspect
-from curses import ACS_BBSS
 from dataclasses import dataclass
 from enum import IntEnum
 
