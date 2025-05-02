@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import inspect
+from curses import ACS_BBSS
 from dataclasses import dataclass
 from enum import IntEnum
 
@@ -338,6 +339,7 @@ class LandroidFeatureSupport(IntEnum):
     TORQUE = 2048
     RAW = 4096
     OFFLIMITS = 8192
+    ACS = 16384
 
 
 API_TO_INTEGRATION_FEATURE_MAP = {
@@ -346,4 +348,5 @@ API_TO_INTEGRATION_FEATURE_MAP = {
     DeviceCapability.PARTY_MODE: LandroidFeatureSupport.PARTYMODE,
     DeviceCapability.TORQUE: LandroidFeatureSupport.TORQUE,
     DeviceCapability.OFF_LIMITS: LandroidFeatureSupport.OFFLIMITS,
+    DeviceCapability.ACS: LandroidFeatureSupport.ACS,
 }

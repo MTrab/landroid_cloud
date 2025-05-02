@@ -62,6 +62,19 @@ SWITCHES = [
         icon="mdi:transit-detour",
         required_feature=LandroidFeatureSupport.OFFLIMITS,
     ),
+    LandroidSwitchEntityDescription(
+        key="acs",
+        name="ACS",
+        entity_category=EntityCategory.CONFIG,
+        device_class=SwitchDeviceClass.SWITCH,
+        entity_registry_enabled_default=True,
+        value_fn=lambda landroid: landroid.acs_enabled,
+        command_fn=lambda landroid, serial, state: landroid.set_acs(
+            serial, state
+        ),
+        icon="mdi:transit-connection-variant",
+        required_feature=LandroidFeatureSupport.ACS,
+    ),
 ]
 
 
