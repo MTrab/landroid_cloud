@@ -1199,6 +1199,8 @@ class LandroidSensor(SensorEntity):
                 for key in self.entity_description.attributes:
                     new_attrib.update({key: self._device.battery[key]})
             elif self.entity_description.key == "error":
+                if self._device.error["id"] != 0:
+                    self._attr_available = True
                 for key in self.entity_description.attributes:
                     new_attrib.update({key: self._device.error[key]})
             elif self.entity_description.key == "next_start":
