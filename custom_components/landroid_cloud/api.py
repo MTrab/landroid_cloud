@@ -128,6 +128,12 @@ class LandroidAPI:
             )
             features = features | LandroidFeatureSupport.OFFLIMITS
 
+        if self.has_feature(DeviceCapability.ACS):
+            self.logger.log(
+                LoggerType.FEATURE_ASSESSMENT, "ACS module available"
+            )
+            features = features | LandroidFeatureSupport.ACS
+
         old_feature = self.features
         self.features = features
 
