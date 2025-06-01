@@ -271,7 +271,7 @@ async def async_setup_entry(
     cloud: WorxCloud = hass.data[DOMAIN][config.entry_id][ATTR_CLOUD]
     for _, mower in cloud.devices.items():
         api = LandroidAPI(hass, mower.name, config)
-    # for _, info in hass.data[DOMAIN][config.entry_id][ATTR_DEVICES].items():
+        # for _, info in hass.data[DOMAIN][config.entry_id][ATTR_DEVICES].items():
         # api: LandroidAPI = info["api"]
         for sens in SENSORS:
             entity = LandroidSensor(hass, sens, api, config)
