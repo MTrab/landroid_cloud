@@ -71,7 +71,7 @@ class LandroidAPI:
 
         self.logger.log(LoggerType.API, "Device: %s", vars(self.device))
 
-    async def async_await_features(self, timeout: int = 10) -> None:
+    async def async_await_features(self, timeout: int = 30) -> None:
         """Await feature checks."""
         timeout_at = datetime.now() + timedelta(seconds=timeout)
 

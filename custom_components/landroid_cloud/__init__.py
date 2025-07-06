@@ -130,7 +130,7 @@ async def _async_setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         raise ConfigEntryNotReady(f"Authentication error for {cloud_email}")
 
     try:
-        async with asyncio.timeout(10):
+        async with asyncio.timeout(30):
             await hass.async_add_executor_job(cloud.connect)
 
         while not cloud.mqtt.connected:
