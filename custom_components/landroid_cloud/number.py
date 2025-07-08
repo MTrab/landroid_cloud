@@ -24,7 +24,7 @@ INPUT_NUMBERS = [
         native_unit_of_measurement="%",
         native_min_value=-100,
         native_max_value=100,
-        native_step=1,
+        native_step=10,
         mode=NumberMode.SLIDER,
         value_fn=lambda api: api.cloud.devices[api.device_name].schedules[
             "time_extension"
