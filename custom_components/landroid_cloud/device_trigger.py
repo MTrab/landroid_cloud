@@ -22,6 +22,8 @@ from homeassistant.helpers.typing import ConfigType
 
 from .const import DOMAIN
 
+MOWER_DOMAIN = "lawn_mower"
+
 TRIGGER_TYPES = {"mowing", "docked"}
 
 TRIGGER_SCHEMA = DEVICE_TRIGGER_BASE_SCHEMA.extend(
@@ -42,7 +44,7 @@ async def async_get_triggers(
 
     # Get all the integrations entities for this device
     for entry in er.async_entries_for_device(registry, device_id):
-        if entry.domain != DOMAIN:
+        if entry.domain != MOWER_DOMAIN:
             continue
 
         triggers += [
