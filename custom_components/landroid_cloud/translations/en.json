@@ -1,4 +1,13 @@
 {
+    "device_automation": {
+        "trigger_type": {
+            "mowing": "{entity_name} started mowing",
+            "docked": "{entity_name} returned to dock"
+        },
+        "extra_fields": {
+            "for": "[%key:common::device_automation::extra_fields::for%]"
+        }
+    },
     "config": {
         "abort": {
             "already_exists": "This user account have already been configured"
