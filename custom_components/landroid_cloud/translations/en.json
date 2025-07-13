@@ -6,6 +6,14 @@
             "is_edgecut": "{entity_name} is cutting the border",
             "has_error": "{entity_name} is in error state",
             "is_returning": "{entity_name} is returning to the charging station"
+        "trigger_type": {
+            "mowing": "{entity_name} started mowing",
+            "docked": "{entity_name} returned to dock",
+            "edgecut": "{entity_name} started cutting border",
+            "error": "{entity_name} entered error state"
+        },
+        "extra_fields": {
+            "for": "[%key:common::device_automation::extra_fields::for%]"
         }
     },
     "config": {
