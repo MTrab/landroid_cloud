@@ -20,11 +20,11 @@ from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.trigger import TriggerActionType, TriggerInfo
 from homeassistant.helpers.typing import ConfigType
 
-from .const import DOMAIN
+from .const import DOMAIN, STATE_EDGECUT
 
 MOWER_DOMAIN = "lawn_mower"
 
-TRIGGER_TYPES = {"mowing", "docked"}
+TRIGGER_TYPES = {"mowing", "docked", "edgecut", "error"}
 
 TRIGGER_SCHEMA = DEVICE_TRIGGER_BASE_SCHEMA.extend(
     {
@@ -81,8 +81,12 @@ async def async_attach_trigger(
     """Attach a trigger."""
     if config[CONF_TYPE] == "mowing":
         to_state = LawnMowerActivity.MOWING
-    else:
+    elif config[CONF_TYPE] == "docked":
         to_state = LawnMowerActivity.DOCKED
+    elif config[CONF_TYPE] == "edgecut":
+        to_state = STATE_EDGECUT
+    elif config[CONF_TYPE] == "error":
+        to_state = LawnMowerActivity.ERROR
 
     state_config = {
         CONF_PLATFORM: "state",
