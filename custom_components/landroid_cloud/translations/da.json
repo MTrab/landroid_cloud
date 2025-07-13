@@ -20,6 +20,29 @@
             }
         }
     },
+    "device_automation": {
+        "action_type": {
+            "dock": "Send {entity_name} retur til ladestationen",
+            "mow": "Send {entity_name} ud og slå græs",
+            "pause": "Sæt {entity_name} på pause"
+        },
+        "condition_type": {
+            "has_error": "{entity_name} har en fejl",
+            "is_docked": "{entity_name} er i ladestationen",
+            "is_edgecut": "{entity_name} klipper kanten",
+            "is_mowing": "{entity_name} klipper græs",
+            "is_returning": "{entity_name} returnerer til ladestationen"
+        },
+        "extra_fields": {
+            "for": "[%key:common::device_automation::extra_fields::for%]"
+        },
+        "trigger_type": {
+            "docked": "{entity_name} returnerede til ladestationen",
+            "edgecut": "{entity_name} begynder at klippe kanten",
+            "error": "Der er opstået en fejl på{entity_name} ",
+            "mowing": "{entity_name} begyndte at klippe græsset"
+        }
+    },
     "entity": {
         "lawn_mower": {
             "landroid_cloud": {
