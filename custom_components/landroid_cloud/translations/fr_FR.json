@@ -109,13 +109,13 @@
         },
         "edgecut": {
             "description": "Démarrer la coupe de bord (si supporté)",
-            "name": "Bordure/Coupe-bord"
+            "name": "Bordure\/Coupe-bord"
         },
         "ots": {
             "description": "Démarrer programmation unique (si supporté)",
             "fields": {
                 "boundary": {
-                    "description": "Couper les bordures (coupe de bord/bordure)",
+                    "description": "Couper les bordures (coupe de bord\/bordure)",
                     "name": "Bordures"
                 },
                 "runtime": {
@@ -133,7 +133,7 @@
             "description": "Définir ou modifier la programmation de la tondeuse",
             "fields": {
                 "friday_boundary": {
-                    "description": "Devrions-nous commencer cette programmation en coupant la bordure (coupe bord/bordure) ?",
+                    "description": "Devrions-nous commencer cette programmation en coupant la bordure (coupe bord\/bordure) ?",
                     "name": "Vendredi, Bordure"
                 },
                 "friday_end": {
@@ -145,7 +145,7 @@
                     "name": "Vendredi, Début"
                 },
                 "monday_boundary": {
-                    "description": "Devrions-nous commencer cette programmation en coupant la bordure (coupe bord/bordure) ?",
+                    "description": "Devrions-nous commencer cette programmation en coupant la bordure (coupe bord\/bordure) ?",
                     "name": "Lundi, Bordure"
                 },
                 "monday_end": {
@@ -157,7 +157,7 @@
                     "name": "Lundi, Début"
                 },
                 "saturday_boundary": {
-                    "description": "Devrions-nous commencer cette programmation en coupant la bordure (coupe bord/bordure) ?",
+                    "description": "Devrions-nous commencer cette programmation en coupant la bordure (coupe bord\/bordure) ?",
                     "name": "Samedi, Bordure"
                 },
                 "saturday_end": {
@@ -169,7 +169,7 @@
                     "name": "Samedi, Début"
                 },
                 "sunday_boundary": {
-                    "description": "Devrions-nous commencer cette programmation en coupant la bordure (coupe bord/bordure) ?",
+                    "description": "Devrions-nous commencer cette programmation en coupant la bordure (coupe bord\/bordure) ?",
                     "name": "Dimanche, Bordure"
                 },
                 "sunday_end": {
@@ -181,7 +181,7 @@
                     "name": "Dimanche, Début"
                 },
                 "thursday_boundary": {
-                    "description": "Devrions-nous commencer cette programmation en coupant la bordure (coupe bord/bordure) ?",
+                    "description": "Devrions-nous commencer cette programmation en coupant la bordure (coupe bord\/bordure) ?",
                     "name": "Jeudi, Bordure"
                 },
                 "thursday_end": {
@@ -193,7 +193,7 @@
                     "name": "Mercredi, Début"
                 },
                 "tuesday_boundary": {
-                    "description": "Devrions-nous commencer cette programmation en coupant la bordure (coupe bord/bordure) ?",
+                    "description": "Devrions-nous commencer cette programmation en coupant la bordure (coupe bord\/bordure) ?",
                     "name": "Mardi, Bordure"
                 },
                 "tuesday_end": {
@@ -209,7 +209,7 @@
                     "name": "Type de programmation"
                 },
                 "wednesday_boundary": {
-                    "description": "Devrions-nous commencer cette programmation en coupant la bordure (coupe bord/bordure) ?",
+                    "description": "Devrions-nous commencer cette programmation en coupant la bordure (coupe bord\/bordure) ?",
                     "name": "Mercredi, Bordure"
                 },
                 "wednesday_end": {

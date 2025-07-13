@@ -5,7 +5,7 @@
         },
         "error": {
             "cannot_connect": "Kunne ikke forbinde",
-            "invalid_auth": "Fejl i brugernavn og/eller password",
+            "invalid_auth": "Fejl i brugernavn og\/eller password",
             "too_many_requests": "For mange forespørgsler mod API - Prøv igen om 24 timer",
             "unknown": "Ukendt fejl"
         },
@@ -56,7 +56,7 @@
                     "excessive_slope": "For stor hældning registreret",
                     "hbi_error": "HBI fejl",
                     "headlight_error": "Fejl på forlygte",
-                    "insufficient_sensor_data": "Utilstrækkelige sensordata",
+                    "insufficient_sensor_data": "Utilstrækkelige sensor data",
                     "lifted": "Løftet",
                     "locked": "Klipperen er låst",
                     "map_error": "Kortfejl",
@@ -224,14 +224,14 @@
             "name": "Indstil eller rediger plan"
         },
         "send_raw": {
-            "description": "Send en RAW JSON kommando til enheden",
+            "description": "Send en JSON kommando til enheden",
             "fields": {
                 "json": {
                     "description": "Data der skal sendes, formateret som gyldig JSON",
                     "name": "JSON data"
                 }
             },
-            "name": "Send RAW kommando"
+            "name": "Send kommando"
         },
         "setzone": {
             "description": "Indstil hvilken zone der skal slås næste gang",

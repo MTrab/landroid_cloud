@@ -26,12 +26,14 @@
                 "state": {
                     "edgecut": "Przycinanie obrzeży",
                     "escaped_digital_fence": "Poza cyfrowym płotem",
+                    "idle": "Bezczynny",
                     "initializing": "Inicjalizacja",
                     "locked": "Zablokowany",
                     "mowing": "Koszenie",
                     "offline": "Niedostępny",
                     "rain_delay": "Opóźnienie po deszczu",
                     "returning": "Powrót do bazy",
+                    "searching_zone": "Szukanie strefy",
                     "starting": "Rozpoczynanie",
                     "unknown": "Nieznany",
                     "zoning": "Przyuczanie strefy"
@@ -42,43 +44,214 @@
             "landroid_cloud_error": {
                 "state": {
                     "battery_low": "Niski poziom baterii",
+                    "battery_temperature_error": "Błąd temperatury akumulatora",
+                    "battery_trunk_open_timeout": "Przekroczenie limitu czasu otwarcia pokrywy akumulatora",
                     "blade_height_adjustment_blocked": "Zablokowana regulacja wysokości koszenia",
                     "blade_motor_blocked": "Zablokowany silnik ostrzy",
                     "camera_error": "Błąd kamery",
                     "charge_error": "Błąd ładowania",
+                    "charging_station_docking_error": "Błąd dokowania stacji ładującej",
+                    "close_door_to_go_home": "Zamknij drzwi, żeby wrócić do domu",
+                    "close_door_to_mow": "Zamknij drzwi, żeby zacząć kosić",
+                    "excessive_slope": "Wykryto nadmierne nachylenie",
+                    "hbi_error": "Błąd HBI",
+                    "headlight_error": "Błąd reflektora",
+                    "insufficient_sensor_data": "Niewystarczające dane czujnika",
                     "lifted": "Podniesiona",
                     "locked": "Kosiarka zablokowana",
+                    "map_error": "Błąd mapy",
+                    "mapping_exploration_failed": "Nieudane mapowanie",
+                    "mapping_exploration_required": "Mapowanie wymagane",
                     "missing_charging_station": "Pominięta stacja bazowa",
+                    "no_error": "Brak błędów",
+                    "ota_error": "Błąd OTA",
                     "outside_wire": "Poza przewodem",
                     "rain_delay": "Aktywne opóźnienie z powodu deszczu",
+                    "reverse_wire": "Przewód jest odwrócony",
                     "rfid_reader_error": "Błąd czytnika RFID",
+                    "timeout_finding_home": "Przekroczenie limitu czasu szukania bazy",
+                    "training_start_disallowed": "Rozpoczęcie treningu niedozwolone",
                     "trapped": "Uwięziona",
+                    "trapped_timeout": "Upłynął limit czasu od zablokowania",
                     "unknown": "Nieznany",
+                    "unreachable_charging_station": "Stacja ładująca niedostępna",
+                    "unreachable_zone": "Strefa niedostępna",
                     "upside_down": "Kosiarka podniesiona",
                     "wheel_motor_blocked": "Zablokowany silnik koła",
-                    "wire_missing": "Brak przewodu"
+                    "wire_missing": "Brak przewodu",
+                    "wire_sync": "Synchronizacja przewodowa"
                 }
             }
         }
     },
     "services": {
         "config": {
+            "description": "Ustaw parametry konfiguracji urządzenia",
             "fields": {
+                "multizone_distances": {
+                    "description": "Ustaw tablicę odległości wielostrefowej w metrach. 0 = Wyłączone. Format: 15, 80, 120, 155",
+                    "name": "Odległości wielostrefowe"
+                },
+                "multizone_probabilities": {
+                    "description": "Ustaw tablicę prawdopodobieństw wielostrefowych. Format: 50, 10, 20, 20",
+                    "name": "Prawdopodobieństwa wielostrefowe"
+                },
                 "raindelay": {
+                    "description": "Ustaw opóźnienie po deszczu. Czas w minutach w przedziale od 0 do 300. 0 = Wyłączone",
                     "name": "Opóźnienie po deszczu"
                 },
                 "timeextension": {
+                    "description": "Ustaw wydłużenie czasu. Wydłużenie w % w zakresie od -100 do 100",
                     "name": "Przedłużenie czasu"
                 }
-            }
+            },
+            "name": "Ustaw strefę"
         },
         "edgecut": {
             "description": "Rozpocznij cięcie krawędzi (o ile wspierane)",
-            "name": "Cięcie krawędzi"
+            "name": "Cięcie krawędzi\/brzegów"
+        },
+        "ots": {
+            "description": "Rozpocznij harmonogram jednorazowy (jeśli jest obsługiwany)",
+            "fields": {
+                "boundary": {
+                    "description": "Wykonaj granicę (cięcie krawędzi\/brzegu)",
+                    "name": "Granice"
+                },
+                "runtime": {
+                    "description": "Czas pracy w minutach przed powrotem do stacji ładującej",
+                    "name": "Czas pracy"
+                }
+            },
+            "name": "Harmonogram jednorazowy"
         },
         "restart": {
             "description": "Restartuje urządzenie",
             "name": "Restart urządzenia"
+        },
+        "schedule": {
+            "description": "Ustaw lub zmień harmonogram kosiarki",
+            "fields": {
+                "friday_boundary": {
+                    "description": "Czy powinniśmy rozpocząć ten harmonogram od cięcia granicy (cięcia krawędzi\/brzegu)?",
+                    "name": "Piątek, Granica"
+                },
+                "friday_end": {
+                    "description": "O której godzinie harmonogram powinien się kończyć w piątek?",
+                    "name": "Piątek, Zakończenie"
+                },
+                "friday_start": {
+                    "description": "Godzina rozpoczęcia w piątki",
+                    "name": "Piątek, Rozpoczęcie"
+                },
+                "monday_boundary": {
+                    "description": "Czy powinniśmy rozpocząć ten harmonogram od cięcia granicy (cięcia krawędzi\/brzegu)?",
+                    "name": "Poniedziałek, Granica"
+                },
+                "monday_end": {
+                    "description": "O której godzinie harmonogram powinien się kończyć w poniedziałek?",
+                    "name": "Poniedziałek, Zakończenie"
+                },
+                "monday_start": {
+                    "description": "Godziny rozpoczęcia w poniedziałki",
+                    "name": "Poniedziałek, Rozpoczęcie"
+                },
+                "saturday_boundary": {
+                    "description": "Czy powinniśmy rozpocząć ten harmonogram od cięcia granicy (cięcia krawędzi\/brzegu)?",
+                    "name": "Sobota, Granica"
+                },
+                "saturday_end": {
+                    "description": "O której godzinie harmonogram powinien się kończyć w sobotę?",
+                    "name": "Sobota, Zakończenie"
+                },
+                "saturday_start": {
+                    "description": "Godzina rozpoczęcia w soboty",
+                    "name": "Sobota, Rozpoczęcie"
+                },
+                "sunday_boundary": {
+                    "description": "Czy powinniśmy rozpocząć ten harmonogram od cięcia granicy (cięcia krawędzi\/brzegu)?",
+                    "name": "Niedziela, Granica"
+                },
+                "sunday_end": {
+                    "description": "O której godzinie harmonogram powinien się kończyć w niedziele?",
+                    "name": "Niedziela, Zakończenie"
+                },
+                "sunday_start": {
+                    "description": "Godzina rozpoczęcia w niedziele",
+                    "name": "Niedziela, Rozpoczęcie"
+                },
+                "thursday_boundary": {
+                    "description": "Czy powinniśmy rozpocząć ten harmonogram od cięcia granicy (cięcia krawędzi\/brzegu)?",
+                    "name": "Czwartek, Granica"
+                },
+                "thursday_end": {
+                    "description": "O której godzinie harmonogram powinien się kończyć w czwartek?",
+                    "name": "Czwartek, Zakończenie"
+                },
+                "thursday_start": {
+                    "description": "Godzina rozpoczęcia w czwartki",
+                    "name": "Czwartek, Rozpoczęcie"
+                },
+                "tuesday_boundary": {
+                    "description": "Czy powinniśmy rozpocząć ten harmonogram od cięcia granicy (cięcia krawędzi\/brzegu)?",
+                    "name": "Wtorek, Granica"
+                },
+                "tuesday_end": {
+                    "description": "O której godzinie harmonogram powinien się kończyć we wtorek?",
+                    "name": "Wtorek, Zakończenie"
+                },
+                "tuesday_start": {
+                    "description": "Godzina rozpoczęcia we wtorki",
+                    "name": "Wtorek, Rozpoczęcie"
+                },
+                "type": {
+                    "description": "Zmienić harmonogram główny lub dodatkowy?",
+                    "name": "Typ harmonogramu"
+                },
+                "wednesday_boundary": {
+                    "description": "Czy powinniśmy rozpocząć ten harmonogram od cięcia granicy (cięcia krawędzi\/brzegu)?",
+                    "name": "Środa, Granica"
+                },
+                "wednesday_end": {
+                    "description": "O której godzinie harmonogram powinien się kończyć w środę?",
+                    "name": "Środa, Zakończenie"
+                },
+                "wednesday_start": {
+                    "description": "Godzina rozpoczęcia w środy",
+                    "name": "Środa, Rozpoczęcie"
+                }
+            },
+            "name": "Ustaw lub zaktualizuj harmonogram"
+        },
+        "send_raw": {
+            "description": "Wyślij surowe komendy JSON do urządzenia",
+            "fields": {
+                "json": {
+                    "description": "Dane do wysłania, sformatowane jako prawidłowy JSON",
+                    "name": "Dane JSON"
+                }
+            },
+            "name": "Wyślij komendę RAW"
+        },
+        "setzone": {
+            "description": "Ustaw, która strefa będzie koszona jako następna",
+            "fields": {
+                "zone": {
+                    "description": "Ustawia numer strefy, w zakresie od 0 do 3, która ma zostać skoszona jako następna",
+                    "name": "Strefa"
+                }
+            },
+            "name": "Ustaw strefę"
+        },
+        "torque": {
+            "description": "Ustaw moment obrotowy koła (jeśli jest obsługiwany)",
+            "fields": {
+                "torque": {
+                    "description": "Ustaw moment obrotowy koła. Zakres od -50% do 50%.",
+                    "name": "Moment na kołach"
+                }
+            },
+            "name": "Moment"
         }
     }
 }

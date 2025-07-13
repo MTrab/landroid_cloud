@@ -44,13 +44,18 @@
             "landroid_cloud_error": {
                 "state": {
                     "battery_low": "Batterie schwach",
+                    "battery_temperature_error": "Batterietemperaturfehler",
                     "blade_height_adjustment_blocked": "Klingenhöhenverstellung blockiert",
                     "blade_motor_blocked": "Klingenmotor ist blockiert",
                     "camera_error": "Kamerafehler",
                     "charging_station_docking_error": "Fehler beim Andocken der Ladestation",
+                    "close_door_to_go_home": "Schließe die Klappe zum Fahren zur Ladestation",
+                    "close_door_to_mow": "Schließe die Klappe zum Mähen",
                     "headlight_error": "Kein Fehler",
                     "insufficient_sensor_data": "Unzureichende Sensordaten",
                     "lifted": "Angehoben",
+                    "locked": "Mäher ist gesperrt",
+                    "map_error": "Kartenfehler",
                     "mapping_exploration_failed": "Kartierung fehlgeschlagen",
                     "mapping_exploration_required": "Kartierung erforderlich",
                     "missing_charging_station": "Ladestation nicht erreichbar",
@@ -61,6 +66,8 @@
                     "trapped": "Gefangen",
                     "unknown": "Unbekannt",
                     "unreachable_charging_station": "Ladestation nicht erreichbar",
+                    "unreachable_zone": "Unerreichbare Zone",
+                    "upside_down": "Mäher liegt auf dem Kopf",
                     "wheel_motor_blocked": "Radmotor ist blockiert",
                     "wire_missing": "Kabel fehlt"
                 }
@@ -92,7 +99,7 @@
         },
         "edgecut": {
             "description": "Kantenschnitt starten (falls unterstützt)",
-            "name": "Rand-/Kantenschnitt"
+            "name": "Rand-\/Kantenschnitt"
         },
         "ots": {
             "description": "Einmalplan starten (falls unterstützt)",
@@ -116,7 +123,7 @@
             "description": "Zeitplan des Mähers einstellen oder ändern.",
             "fields": {
                 "friday_boundary": {
-                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
+                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-\/Randschnitt) beginnen?",
                     "name": "Freitag, Kantenschnitt"
                 },
                 "friday_end": {
@@ -128,7 +135,7 @@
                     "name": "Freitag, Beginn"
                 },
                 "monday_boundary": {
-                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
+                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-\/Randschnitt) beginnen?",
                     "name": "Montag, Kantenschnitt"
                 },
                 "monday_end": {
@@ -140,7 +147,7 @@
                     "name": "Montag, Beginn"
                 },
                 "saturday_boundary": {
-                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
+                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-\/Randschnitt) beginnen?",
                     "name": "Samstag, Kantenschnitt"
                 },
                 "saturday_end": {
@@ -152,7 +159,7 @@
                     "name": "Samstag, Beginn"
                 },
                 "sunday_boundary": {
-                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
+                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-\/Randschnitt) beginnen?",
                     "name": "Sonntag, Kantenschnitt"
                 },
                 "sunday_end": {
@@ -164,7 +171,7 @@
                     "name": "Sonntag, Beginn"
                 },
                 "thursday_boundary": {
-                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
+                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-\/Randschnitt) beginnen?",
                     "name": "Donnerstag, Kantenschnitt"
                 },
                 "thursday_end": {
@@ -176,7 +183,7 @@
                     "name": "Mittwochs, Beginn"
                 },
                 "tuesday_boundary": {
-                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
+                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-\/Randschnitt) beginnen?",
                     "name": "Dienstag, Kantenschnitt"
                 },
                 "tuesday_end": {
@@ -192,7 +199,7 @@
                     "name": "Zeitplantyp"
                 },
                 "wednesday_boundary": {
-                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
+                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-\/Randschnitt) beginnen?",
                     "name": "Mittwoch, Kantenschnitt"
                 },
                 "wednesday_end": {

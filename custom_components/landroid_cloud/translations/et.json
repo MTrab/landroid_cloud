@@ -107,13 +107,13 @@
         },
         "edgecut": {
             "description": "Alusta servalõikust (kui seda toetatakse)",
-            "name": "Ääre-/servalõige"
+            "name": "Ääre-\/servalõige"
         },
         "ots": {
             "description": "Ühekordse ajakava käivitamine (kui see on toetatud)",
             "fields": {
                 "boundary": {
-                    "description": "Niida piiri (ääre/serva lõikamine)",
+                    "description": "Niida piiri (ääre\/serva lõikamine)",
                     "name": "Piirid"
                 },
                 "runtime": {
@@ -131,7 +131,7 @@
             "description": "Niiduki ajakava seadmine või muutmine",
             "fields": {
                 "friday_boundary": {
-                    "description": "Kas me peaksime alustama seda ajakava piiri lõikamisega (serva/piiri lõikamine)?",
+                    "description": "Kas me peaksime alustama seda ajakava piiri lõikamisega (serva\/piiri lõikamine)?",
                     "name": "Reede, piir"
                 },
                 "friday_end": {
@@ -143,7 +143,7 @@
                     "name": "Reede, algus"
                 },
                 "monday_boundary": {
-                    "description": "Kas peaksime seda graafikut alustama piiri lõikamisega (serva/piiri lõikamine)?",
+                    "description": "Kas peaksime seda graafikut alustama piiri lõikamisega (serva\/piiri lõikamine)?",
                     "name": "Esmaspäev, piir"
                 },
                 "monday_end": {
@@ -155,7 +155,7 @@
                     "name": "Esmaspäev, algus"
                 },
                 "saturday_boundary": {
-                    "description": "Kas me peaksime alustama seda ajakava piiri lõikamisega (serva/piiri lõikamine)?",
+                    "description": "Kas me peaksime alustama seda ajakava piiri lõikamisega (serva\/piiri lõikamine)?",
                     "name": "Laupäev, piir"
                 },
                 "saturday_end": {
@@ -167,7 +167,7 @@
                     "name": "Laupäev, algus"
                 },
                 "sunday_boundary": {
-                    "description": "Kas me peaksime alustama seda ajakava piiri lõikamisega (serva/piiri lõikamine)?",
+                    "description": "Kas me peaksime alustama seda ajakava piiri lõikamisega (serva\/piiri lõikamine)?",
                     "name": "Pühapäev, piir"
                 },
                 "sunday_end": {
@@ -179,7 +179,7 @@
                     "name": "Pühapäev, algus"
                 },
                 "thursday_boundary": {
-                    "description": "Kas me peaksime alustama seda ajakava piiri lõikamisega (serva/piiri lõikamine)?",
+                    "description": "Kas me peaksime alustama seda ajakava piiri lõikamisega (serva\/piiri lõikamine)?",
                     "name": "Neljapäev, piir"
                 },
                 "thursday_end": {
@@ -191,7 +191,7 @@
                     "name": "Neljapäev, algus"
                 },
                 "tuesday_boundary": {
-                    "description": "Kas peaksime seda graafikut alustama piiri lõikamisega (serva/piiri lõikamine)?",
+                    "description": "Kas peaksime seda graafikut alustama piiri lõikamisega (serva\/piiri lõikamine)?",
                     "name": "Teisipäev, piir"
                 },
                 "tuesday_end": {
@@ -207,7 +207,7 @@
                     "name": "Ajakava tüüp"
                 },
                 "wednesday_boundary": {
-                    "description": "Kas peaksime seda graafikut alustama piiri lõikamisega (serva/piiri lõikamine)?",
+                    "description": "Kas peaksime seda graafikut alustama piiri lõikamisega (serva\/piiri lõikamine)?",
                     "name": "Kolmapäev, piir"
                 },
                 "wednesday_end": {
