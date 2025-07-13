@@ -224,7 +224,7 @@
             "name": "Ütemezés beállítása vagy frissítése"
         },
         "send_raw": {
-            "description": " Nyers JSON-parancs küldése az eszközre",
+            "description": "Nyers JSON-parancs küldése az eszközre",
             "fields": {
                 "json": {
                     "description": "Elküldendő adatok, érvényes JSON formátumban",
