@@ -1,0 +1,204 @@
+{
+    "config": {
+        "abort": {
+            "already_exists": "Ce compte d'utilisateur a déjà été configuré"
+        },
+        "error": {
+            "cannot_connect": "Échec de la connexion",
+            "invalid_auth": "Erreur d'authentification",
+            "unknown": "Erreur inattendue"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "email": "Email",
+                    "password": "Mot de passe",
+                    "type": "Faire"
+                },
+                "title": "Connectez-vous à votre compte Landroid Cloud"
+            }
+        }
+    },
+    "entity": {
+        "lawn_mower": {
+            "landroid_cloud": {
+                "state": {
+                    "edgecut": "Bordure de coupe",
+                    "initializing": "Initialisation",
+                    "locked": "Verrouillé",
+                    "mowing": "Tonte",
+                    "offline": "Hors ligne",
+                    "rain_delay": "Retard de pluie",
+                    "returning": "Retour au chargeur",
+                    "searching_zone": "Recherche de zone",
+                    "starting": "Démarrage",
+                    "unknown": "Inconnu",
+                    "zoning": "Formation en zone"
+                }
+            }
+        }
+    },
+    "services": {
+        "config": {
+            "description": "Définir les paramètres de configuration de l'appareil",
+            "fields": {
+                "multizone_distances": {
+                    "description": "Définissez le tableau de distance multi zone en mètres. 0 = Désactivé. Formats: 15, 80, 120, 155",
+                    "name": "Distances multi zones"
+                },
+                "multizone_probabilities": {
+                    "description": "Définir le tableau de probabilités multi zones. Format: 50, 10, 20, 20",
+                    "name": "Probabilités multi zones"
+                },
+                "raindelay": {
+                    "description": "Réglez le retard de pluie. Temps en minutes allant de 0 à 300. 0 = Désactivé",
+                    "name": "Retard de pluie"
+                },
+                "timeextension": {
+                    "description": "Définir l'augmentation ou la diminution du temps de travail. S'exprime en % allant de -100 à 100",
+                    "name": "Augmentation\/diminution du temps de travail"
+                }
+            },
+            "name": "Définir la zone"
+        },
+        "edgecut": {
+            "description": "Démarrer la routine de bord (si pris en charge)",
+            "name": "Routine de bord"
+        },
+        "ots": {
+            "description": "Démarrer un programme unique (si pris en charge)",
+            "fields": {
+                "boundary": {
+                    "description": "Faire le bord (routine de bord)",
+                    "name": "Bord"
+                },
+                "runtime": {
+                    "description": "Durée de fonctionnement en minutes avant de retourner à la station de recharge",
+                    "name": "Durée de fonctionnement"
+                }
+            },
+            "name": "Programme unique"
+        },
+        "restart": {
+            "description": "Redémarre l'appareil",
+            "name": "Redémarrer l'appareil"
+        },
+        "schedule": {
+            "description": "Définir ou modifier le programme de la tondeuse",
+            "fields": {
+                "friday_boundary": {
+                    "description": "Faut-il commencer le programme par couper la bordure (routine de bord) ?",
+                    "name": "Vendredi, Bord"
+                },
+                "friday_end": {
+                    "description": "Quand le programme doit-il s'arrêter le vendredi ?",
+                    "name": "Vendredi, Fin"
+                },
+                "friday_start": {
+                    "description": "Heure de départ le vendredi",
+                    "name": "Vendredi, Début"
+                },
+                "monday_boundary": {
+                    "description": "Faut-il commencer le programme par couper la bordure (routine de bord) ?",
+                    "name": "Lundi, Bord"
+                },
+                "monday_end": {
+                    "description": "Quand le programme doit-il s'arrêter le lundi ?",
+                    "name": "Lundi, Fin"
+                },
+                "monday_start": {
+                    "description": "Heure de départ le lundi",
+                    "name": "Lundi, Début"
+                },
+                "saturday_boundary": {
+                    "description": "Faut-il commencer le programme par couper la bordure (routine de bord) ?",
+                    "name": "Samedi, Bord"
+                },
+                "saturday_end": {
+                    "description": "Quand le programme doit-il s'arrêter le samedi ?",
+                    "name": "Samedi, Fin"
+                },
+                "saturday_start": {
+                    "description": "Heure de départ le samedi",
+                    "name": "Samedi, Début"
+                },
+                "sunday_boundary": {
+                    "description": "Faut-il commencer le programme par couper la bordure (routine de bord) ?",
+                    "name": "Dimanche, Bord"
+                },
+                "sunday_end": {
+                    "description": "Quand le programme doit-il s'arrêter le dimanche ?",
+                    "name": "Dimanche, Fin"
+                },
+                "sunday_start": {
+                    "description": "Heure de départ le dimanche",
+                    "name": "Dimanche, Début"
+                },
+                "thursday_boundary": {
+                    "description": "Faut-il commencer le programme par couper la bordure (routine de bord) ?",
+                    "name": "Jeudi, Bord"
+                },
+                "thursday_end": {
+                    "description": "Quand le programme doit-il s'arrêter le jeudi ?",
+                    "name": "Jeudi, Fin"
+                },
+                "thursday_start": {
+                    "description": "Heure de départ le jeudi",
+                    "name": "Mercredi, Début"
+                },
+                "tuesday_boundary": {
+                    "description": "Faut-il commencer le programme par couper la bordure (routine de bord) ?",
+                    "name": "Mardi, Bord"
+                },
+                "tuesday_end": {
+                    "description": "Quand le programme doit-il s'arrêter le mardi ?",
+                    "name": "Mardi, Fin"
+                },
+                "tuesday_start": {
+                    "description": "Heure de départ le mardi",
+                    "name": "Mardi, Début"
+                },
+                "type": {
+                    "description": "Changer le programme principal ou secondaire ?",
+                    "name": "Type de programme"
+                },
+                "wednesday_boundary": {
+                    "description": "Faut-il commencer le programme par couper la bordure (routine de bord) ?",
+                    "name": "Mercredi, Bord"
+                },
+                "wednesday_end": {
+                    "description": "Quand le programme doit-il s'arrêter le mercredi ?",
+                    "name": "Mercredi, Fin"
+                },
+                "wednesday_start": {
+                    "description": "Heure de départ le mercredi",
+                    "name": "Mercredi, Début"
+                }
+            },
+            "name": "Définir ou modifier le programme"
+        },
+        "send_raw": {
+            "description": "Envoyer une commande JSON brute à l'appareil",
+            "fields": {
+                "json": {
+                    "description": "Données à envoyer, formatées en JSON valide",
+                    "name": "Données JSON"
+                }
+            },
+            "name": "Envoyer la commande RAW"
+        },
+        "setzone": {
+            "description": "Définir la zone à tondre ensuite",
+            "fields": {
+                "zone": {
+                    "description": "Définit le numéro de zone, allant de 0 à 3, à tondre ensuite",
+                    "name": "Zone"
+                }
+            },
+            "name": "Définir la zone"
+        },
+        "torque": {
+            "name": "Couple"
+        }
+    }
+}

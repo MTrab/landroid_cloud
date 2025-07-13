@@ -1,0 +1,255 @@
+{
+    "config": {
+        "abort": {
+            "already_exists": "Questo account è già stato configurato"
+        },
+        "error": {
+            "cannot_connect": "Impossibile connettersi",
+            "invalid_auth": "Errore di autenticazione",
+            "too_many_requests": "Troppe richieste alle API - Riprova tra 24 ore",
+            "unknown": "Errore inaspettato"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "email": "Email",
+                    "password": "Password",
+                    "type": "Marca"
+                },
+                "title": "Connettiti al tuo account Landroid Cloud"
+            }
+        }
+    },
+    "entity": {
+        "lawn_mower": {
+            "landroid_cloud": {
+                "state": {
+                    "edgecut": "Taglio bordo",
+                    "escaped_digital_fence": "Landroid fuori area di lavoro",
+                    "idle": "In attesa",
+                    "initializing": "Inizializzazione in corso",
+                    "locked": "Bloccato",
+                    "mowing": "Taglio in corso",
+                    "offline": "Offline",
+                    "rain_delay": "Ritardo pioggia",
+                    "returning": "Ritorno alla base",
+                    "searching_zone": "Ricerca zona",
+                    "starting": "Partenza",
+                    "unknown": "Errore sconosciuto",
+                    "zoning": "Apprendimento zone"
+                }
+            }
+        },
+        "sensor": {
+            "landroid_cloud_error": {
+                "state": {
+                    "battery_low": "Batteria scarica",
+                    "battery_temperature_error": "Errore di temperatura della batteria",
+                    "battery_trunk_open_timeout": "Timeout apertura sportello batteria",
+                    "blade_height_adjustment_blocked": "Regolazione altezza lama bloccata",
+                    "blade_motor_blocked": "Il motore della lama è bloccato",
+                    "camera_error": "Errore della camera",
+                    "charge_error": "Errore durante la ricarica",
+                    "charging_station_docking_error": "Errore di aggancio alla base",
+                    "close_door_to_go_home": "Chiudere la porta per tornare alla base",
+                    "close_door_to_mow": "Chiudere la porta per tagliare",
+                    "excessive_slope": "Rilevata pendenza eccessiva",
+                    "headlight_error": "Errore fari",
+                    "insufficient_sensor_data": "Dati dei sensori insufficienti",
+                    "lifted": "Landroid sollevato",
+                    "locked": "Il robot è bloccato",
+                    "map_error": "Errore della mappa",
+                    "mapping_exploration_failed": "Esplorazione di mappatura fallita",
+                    "mapping_exploration_required": "Richiesta esplorazione di mappatura",
+                    "missing_charging_station": "Stazione di ricarica mancante",
+                    "no_error": "Nessun errore",
+                    "ota_error": "Errore OTA",
+                    "outside_wire": "Landroid fuori area di lavoro",
+                    "rain_delay": "Ritardo pioggia",
+                    "reverse_wire": "Il filo perimetrale è invertito",
+                    "rfid_reader_error": "Errore del lettore RFID",
+                    "timeout_finding_home": "Timeout durante la ricerca della base",
+                    "training_start_disallowed": "Inizio addestramento non consentito",
+                    "trapped": "Incastrato",
+                    "trapped_timeout": "Timeout mentre Landroid era incastrato",
+                    "unknown": "Errore sconosciuto",
+                    "unreachable_charging_station": "Stazione di ricarica non raggiungibile",
+                    "unreachable_zone": "Zona non raggiungibile",
+                    "upside_down": "Il robot è capovolto",
+                    "wheel_motor_blocked": "Il motore della ruota è bloccato",
+                    "wire_missing": "Filo perimetrale assente"
+                }
+            }
+        }
+    },
+    "services": {
+        "config": {
+            "description": "Imposta i parametri di configurazione del dispositivo",
+            "fields": {
+                "multizone_distances": {
+                    "description": "Imposta la distanza multizona in metri. 0 = Disabilitato. Formato: 15, 80, 120, 155",
+                    "name": "Distanze multizona"
+                },
+                "multizone_probabilities": {
+                    "description": "Imposta l'array delle probabilità multizona. Formato: 50, 10, 20, 20",
+                    "name": "Probabilità multizona"
+                },
+                "raindelay": {
+                    "description": "Imposta il ritardo per la pioggia. Tempo in minuti compreso tra 0 e 300. 0 = Disabilitato",
+                    "name": "Ritardo pioggia"
+                },
+                "timeextension": {
+                    "description": "Imposta il tempo di lavoro in percentuale, da -100 a 100",
+                    "name": "Tempo di lavoro"
+                }
+            },
+            "name": "Imposta zona"
+        },
+        "edgecut": {
+            "description": "Avvia taglio bordo (se supportato)",
+            "name": "Taglio bordo"
+        },
+        "ots": {
+            "description": "Avvia il programma una tantum (se supportato)",
+            "fields": {
+                "boundary": {
+                    "description": "Esegui un taglio del bordo",
+                    "name": "Taglio bordo"
+                },
+                "runtime": {
+                    "description": "Tempo in minuti prima che il robot torni alla stazione di ricarica",
+                    "name": "Durata del programma"
+                }
+            },
+            "name": "Programma una tantum"
+        },
+        "restart": {
+            "description": "Riavvia il dispositivo",
+            "name": "Riavvia il dispositivo"
+        },
+        "schedule": {
+            "description": "Modifica il programma del tagliaerba",
+            "fields": {
+                "friday_boundary": {
+                    "description": "Avviare questo programma tagliando il bordo?",
+                    "name": "Venerdì - Taglio bordo"
+                },
+                "friday_end": {
+                    "description": "Ora di fine programma",
+                    "name": "Venerdì - Fine programma"
+                },
+                "friday_start": {
+                    "description": "Ora di inizio programma",
+                    "name": "Venerdì - Inizio programma"
+                },
+                "monday_boundary": {
+                    "description": "Avviare questo programma tagliando il bordo?",
+                    "name": "Lunedì - Taglio bordo"
+                },
+                "monday_end": {
+                    "description": "Ora di fine programma",
+                    "name": "Lunedì - Fine programma"
+                },
+                "monday_start": {
+                    "description": "Ora di inizio programma",
+                    "name": "Lunedì - Inizio programma"
+                },
+                "saturday_boundary": {
+                    "description": "Avviare questo programma tagliando il bordo?",
+                    "name": "Sabato - Taglio bordo"
+                },
+                "saturday_end": {
+                    "description": "Ora di fine programma",
+                    "name": "Sabato - Fine programma"
+                },
+                "saturday_start": {
+                    "description": "Ora di inizio programma",
+                    "name": "Sabato - Inizio programma"
+                },
+                "sunday_boundary": {
+                    "description": "Avviare questo programma tagliando il bordo?",
+                    "name": "Domenica - Taglio bordo"
+                },
+                "sunday_end": {
+                    "description": "Ora di fine programma",
+                    "name": "Domenica - Fine programma"
+                },
+                "sunday_start": {
+                    "description": "Ora di inizio programma",
+                    "name": "Domenica - Inizio programma"
+                },
+                "thursday_boundary": {
+                    "description": "Avviare questo programma tagliando il bordo?",
+                    "name": "Giovedì - Taglio bordo"
+                },
+                "thursday_end": {
+                    "description": "Ora di fine programma",
+                    "name": "Giovedì - Fine programma"
+                },
+                "thursday_start": {
+                    "description": "Ora di inizio programma",
+                    "name": "Giovedì - Inizio programma"
+                },
+                "tuesday_boundary": {
+                    "description": "Avviare questo programma tagliando il bordo?",
+                    "name": "Martedì - Taglio bordo"
+                },
+                "tuesday_end": {
+                    "description": "Ora di fine programma",
+                    "name": "Martedì - Fine programma"
+                },
+                "tuesday_start": {
+                    "description": "Ora di inizio programma",
+                    "name": "Martedì - Inizio programma"
+                },
+                "type": {
+                    "description": "Modificare il programma primario o secondario?",
+                    "name": "Tipo di programma"
+                },
+                "wednesday_boundary": {
+                    "description": "Avviare questo programma tagliando il bordo?",
+                    "name": "Mercoledì - Taglio bordo"
+                },
+                "wednesday_end": {
+                    "description": "Ora di fine programma",
+                    "name": "Mercoledì - Fine programma"
+                },
+                "wednesday_start": {
+                    "description": "Ora di inizio programma",
+                    "name": "Mercoledì - Inizio programma"
+                }
+            },
+            "name": "Modifica il programma"
+        },
+        "send_raw": {
+            "description": "Invia un comando JSON raw al dispositivo",
+            "fields": {
+                "json": {
+                    "description": "Dati da inviare (formattati in JSON)",
+                    "name": "Dati JSON"
+                }
+            },
+            "name": "Invia comando RAW"
+        },
+        "setzone": {
+            "description": "Imposta la prossima zona da tagliare",
+            "fields": {
+                "zone": {
+                    "description": "Imposta il prossimo numero della zona da tagliare, da 0 a 3",
+                    "name": "Zona"
+                }
+            },
+            "name": "Imposta zona"
+        },
+        "torque": {
+            "description": "Imposta la coppia delle ruote (se supportato)",
+            "fields": {
+                "torque": {
+                    "description": "Imposta la coppia delle ruote. Da -50% a 50%",
+                    "name": "Coppia delle ruote"
+                }
+            },
+            "name": "Coppia"
+        }
+    }
+}

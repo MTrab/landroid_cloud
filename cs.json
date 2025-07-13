@@ -1,0 +1,257 @@
+{
+    "config": {
+        "abort": {
+            "already_exists": "Tento uživatelský účet již byl nastaven"
+        },
+        "error": {
+            "cannot_connect": "Chyba připojení",
+            "invalid_auth": "Chyba přihlášení",
+            "too_many_requests": "Příliš mnoho požadavků na API – Zkuste to znovu za 24 hodin.",
+            "unknown": "Neočekávaná chyba"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "email": "Email",
+                    "password": "Heslo",
+                    "type": "Model"
+                },
+                "title": "Přihlášení k Landroid Cloud účtu"
+            }
+        }
+    },
+    "entity": {
+        "lawn_mower": {
+            "landroid_cloud": {
+                "state": {
+                    "edgecut": "Sekání podél okraje",
+                    "escaped_digital_fence": "Sekačka překročila virtuální plot",
+                    "idle": "Nečinný",
+                    "initializing": "Inicializace",
+                    "locked": "Uzamknuto",
+                    "mowing": "Sekání",
+                    "offline": "Offline",
+                    "rain_delay": "Prodleva po dešti",
+                    "returning": "Návrat k nabíjecí stanici",
+                    "searching_zone": "Vyhledávání zóny",
+                    "starting": "Začínání",
+                    "unknown": "Neznámý",
+                    "zoning": "Učení zóny"
+                }
+            }
+        },
+        "sensor": {
+            "landroid_cloud_error": {
+                "state": {
+                    "battery_low": "Vybitá baterie",
+                    "battery_temperature_error": "Chyba teploty baterie",
+                    "battery_trunk_open_timeout": "Vypršel časový limit otevření přihrádky na baterii",
+                    "blade_height_adjustment_blocked": "Zablokované nastavení výšky nožů",
+                    "blade_motor_blocked": "Nože jsou zablokovány",
+                    "camera_error": "Chyba kamery",
+                    "charge_error": "Chyba nabíjení",
+                    "charging_station_docking_error": "Chyba dokování nabíjecí stanice",
+                    "close_door_to_go_home": "Zavřete dvířka pro návrat do doku",
+                    "close_door_to_mow": "Zavřete dvířka pro sekání",
+                    "excessive_slope": "Zjištěn nadměrný sklon",
+                    "hbi_error": "Chyba HBI (rozpoznání okraje)",
+                    "headlight_error": "Chyba světlometu",
+                    "insufficient_sensor_data": "Nedostatek dat ze senzorů",
+                    "lifted": "Zvednuto",
+                    "locked": "Sekačka je uzamčena",
+                    "map_error": "Chyba mapy",
+                    "mapping_exploration_failed": "Průzkumné mapování selhalo",
+                    "mapping_exploration_required": "Je vyžadováno průzkumné mapování",
+                    "missing_charging_station": "Chybí nabíjecí stanice",
+                    "no_error": "Žádná chyba",
+                    "ota_error": "Chyba OTA",
+                    "outside_wire": "Mimo sekací prostor",
+                    "rain_delay": "Zpoždění po dešti je aktivní",
+                    "reverse_wire": "Drát je obrácený",
+                    "rfid_reader_error": "Chyba čtečky RFID",
+                    "timeout_finding_home": "Vypršel časový limit při hledání doku",
+                    "training_start_disallowed": "Spuštění učení nepovoleno",
+                    "trapped": "Uváznutí",
+                    "trapped_timeout": "Vypršel časový limit při uváznutí",
+                    "unknown": "Neznámý",
+                    "unreachable_charging_station": "Nedosažitelná nabíjecí stanice",
+                    "unreachable_zone": "Nedosažitelná zóna",
+                    "upside_down": "Sekačka je vzhůru nohama",
+                    "wheel_motor_blocked": "Pohon kol je zablokován",
+                    "wire_missing": "Chybí ohraničující drát",
+                    "wire_sync": "Synchronizace kabelem"
+                }
+            }
+        }
+    },
+    "services": {
+        "config": {
+            "description": "Nastavení konfiguračních parametrů zařízení",
+            "fields": {
+                "multizone_distances": {
+                    "description": "Nastavení pole vzdáleností pro více zón. V metrech. 0 = Zakázáno. Formát: 15, 80, 120, 155",
+                    "name": "Vzdálenosti ve více zónách"
+                },
+                "multizone_probabilities": {
+                    "description": "Nastavení pole pravděpodobností pro více zón. Formát: 50, 10, 20, 20",
+                    "name": "Pravděpodobnosti pro více zón"
+                },
+                "raindelay": {
+                    "description": "Nastavení délky prodlevy po dešti. Čas v minutách od 0 do 300. 0 = Zakázáno",
+                    "name": "Prodleva po dešti"
+                },
+                "timeextension": {
+                    "description": "Nastavení prodloužení času. Prodloužení v % v rozmezí od -100 do 100",
+                    "name": "Prodloužení času"
+                }
+            },
+            "name": "Nastavit zónu"
+        },
+        "edgecut": {
+            "description": "Spustit sekání okraje (je-li podporováno)",
+            "name": "Sekání okraje"
+        },
+        "ots": {
+            "description": "Spuštění jednorázového harmonogramu (je-li podporován)",
+            "fields": {
+                "boundary": {
+                    "description": "Sekání okraje",
+                    "name": "Okraj"
+                },
+                "runtime": {
+                    "description": "Doba provozu v minutách před návratem do nabíjecí stanice",
+                    "name": "Doba provozu"
+                }
+            },
+            "name": "Jednorázový harmonogram"
+        },
+        "restart": {
+            "description": "Restartuje zařízení",
+            "name": "Restart zařízení"
+        },
+        "schedule": {
+            "description": "Nastavení nebo změna časového plánu sekačky",
+            "fields": {
+                "friday_boundary": {
+                    "description": "Má páteční plán začít sekáním okraje?",
+                    "name": "Pátek, sekání okraje"
+                },
+                "friday_end": {
+                    "description": "Kdy má páteční plán skončit?",
+                    "name": "Pátek, konec"
+                },
+                "friday_start": {
+                    "description": "Kdy má páteční plán začít?",
+                    "name": "Pátek, začátek"
+                },
+                "monday_boundary": {
+                    "description": "Má pondělní plán začít sekáním okraje?",
+                    "name": "Pondělí, sekání okraje"
+                },
+                "monday_end": {
+                    "description": "Kdy má pondělní plán skončit?",
+                    "name": "Pondělí, konec"
+                },
+                "monday_start": {
+                    "description": "Kdy má pondělní plán začít?",
+                    "name": "Pondělí, začátek"
+                },
+                "saturday_boundary": {
+                    "description": "Má sobotní plán začít sekáním okraje?",
+                    "name": "Sobota, sekání okraje"
+                },
+                "saturday_end": {
+                    "description": "Kdy má sobotní plán skončit?",
+                    "name": "Sobota, konec"
+                },
+                "saturday_start": {
+                    "description": "Kdy má sobotní plán začít?",
+                    "name": "Sobota, začátek"
+                },
+                "sunday_boundary": {
+                    "description": "Má nedělní plán začít sekáním okraje?",
+                    "name": "Neděle, sekání okraje"
+                },
+                "sunday_end": {
+                    "description": "Kdy má nedělní plán skončit?",
+                    "name": "Neděle, konec"
+                },
+                "sunday_start": {
+                    "description": "Kdy má nedělní plán začít?",
+                    "name": "Neděle, začátek"
+                },
+                "thursday_boundary": {
+                    "description": "Má čtvrteční plán začít sekáním okraje?",
+                    "name": "Čtvrtek, sekání okraje"
+                },
+                "thursday_end": {
+                    "description": "Kdy má čtvrteční plán skončit?",
+                    "name": "Čtvrtek, konec"
+                },
+                "thursday_start": {
+                    "description": "Kdy má čtvrteční plán začít?",
+                    "name": "Čtvrtek, začátek"
+                },
+                "tuesday_boundary": {
+                    "description": "Má úterní plán začít sekáním okraje?",
+                    "name": "Úterý, sekání okraje"
+                },
+                "tuesday_end": {
+                    "description": "Kdy má úterní plán skončit?",
+                    "name": "Úterý, konec"
+                },
+                "tuesday_start": {
+                    "description": "Kdy má úterní plán začít?",
+                    "name": "Úterý, začátek"
+                },
+                "type": {
+                    "description": "Změna primárního nebo sekundárního plánu?",
+                    "name": "Typ plánu"
+                },
+                "wednesday_boundary": {
+                    "description": "Má středeční plán začít sekáním okraje?",
+                    "name": "Středa, sekání okraje"
+                },
+                "wednesday_end": {
+                    "description": "Kdy má středeční plán skončit?",
+                    "name": "Středa, konec"
+                },
+                "wednesday_start": {
+                    "description": "Kdy má středeční plán začít?",
+                    "name": "Středa, začátek"
+                }
+            },
+            "name": "Nastavení nebo aktualizace plánu"
+        },
+        "send_raw": {
+            "description": "Odeslat nezpracovaný JSON příkaz",
+            "fields": {
+                "json": {
+                    "description": "Data k odeslání, formátovaná jako platný JSON",
+                    "name": "JSON data"
+                }
+            },
+            "name": "Odeslat nezpracovaný (RAW) příkaz"
+        },
+        "setzone": {
+            "description": "Nastavení zóny, která se má sekat příště",
+            "fields": {
+                "zone": {
+                    "description": "Nastavení čísla zóny (od 0 do 3), která se bude sekat příště.",
+                    "name": "Zóna"
+                }
+            },
+            "name": "Nastavení zóny"
+        },
+        "torque": {
+            "description": "Nastavení síly pohonu (je-li podporováno)",
+            "fields": {
+                "torque": {
+                    "description": "Nastavení síly pohonu. V rozmezí od -50 % do 50 %",
+                    "name": "Síla pohonu"
+                }
+            },
+            "name": "Síla"
+        }
+    }
+}
