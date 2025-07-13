@@ -1,22 +1,22 @@
 {
     "config": {
         "abort": {
-            "already_exists": "Dieses Benutzerkonto wurde bereits konfiguriert"
+            "already_exists": "Det här användarkontot har redan konfigurerats"
         },
         "error": {
-            "cannot_connect": "Verbindung ist nicht möglich",
-            "invalid_auth": "Fehler bei der Authentifizierung",
-            "too_many_requests": "Zu viele API-Anfragen - In 24 Stunden erneut versuchen",
-            "unknown": "Unerwarteter Fehler"
+            "cannot_connect": "Misslyckades med att ansluta",
+            "invalid_auth": "Fel vid autentisering",
+            "too_many_requests": "För många API-förfrågningar. Försök igen om 24 timmar",
+            "unknown": "Oväntat fel"
         },
         "step": {
             "user": {
                 "data": {
-                    "email": "E-Mail",
-                    "password": "Passwort",
-                    "type": "Marke"
+                    "email": "E-post",
+                    "password": "Lösenord",
+                    "type": "Modell"
                 },
-                "title": "Verbinden Sie sich mit Ihrem Landroid Cloud-Konto"
+                "title": "Anslut till ditt Landroid Cloud-konto"
             }
         }
     },
@@ -24,217 +24,234 @@
         "lawn_mower": {
             "landroid_cloud": {
                 "state": {
-                    "edgecut": "Kantenschnitt",
-                    "escaped_digital_fence": "Außerhalb der Begrenzung",
-                    "idle": "Untätig",
-                    "initializing": "Initialisierung",
-                    "locked": "Gesperrt",
-                    "mowing": "Mähen",
+                    "edgecut": "Kantklippning",
+                    "escaped_digital_fence": "Utanför digital gräns",
+                    "idle": "Inaktiv",
+                    "initializing": "Initierar",
+                    "locked": "Låst",
+                    "mowing": "Klipper",
                     "offline": "Offline",
-                    "rain_delay": "Regenverzögerung",
-                    "returning": "Rückkehr zur Ladestation",
-                    "searching_zone": "Zone suchen",
-                    "starting": "Startet",
-                    "unknown": "Unbekannt",
-                    "zoning": "Zonentraining"
+                    "rain_delay": "Regnfördröjning",
+                    "returning": "Återvänder hem",
+                    "searching_zone": "Söker efter zon",
+                    "starting": "Startar",
+                    "unknown": "Okänt",
+                    "zoning": "Zonträning"
                 }
             }
         },
         "sensor": {
             "landroid_cloud_error": {
                 "state": {
-                    "battery_low": "Batterie schwach",
-                    "blade_height_adjustment_blocked": "Klingenhöhenverstellung blockiert",
-                    "blade_motor_blocked": "Klingenmotor ist blockiert",
-                    "camera_error": "Kamerafehler",
-                    "charging_station_docking_error": "Fehler beim Andocken der Ladestation",
-                    "headlight_error": "Kein Fehler",
-                    "insufficient_sensor_data": "Unzureichende Sensordaten",
-                    "lifted": "Angehoben",
-                    "mapping_exploration_failed": "Kartierung fehlgeschlagen",
-                    "mapping_exploration_required": "Kartierung erforderlich",
-                    "missing_charging_station": "Ladestation nicht erreichbar",
-                    "no_error": "Kein Fehler",
-                    "outside_wire": "Außerhalb des Begrenzungskabels",
-                    "rain_delay": "Regenverzögerung aktiv",
-                    "rfid_reader_error": "Fehler im RFID-Lesegerät",
-                    "trapped": "Gefangen",
-                    "unknown": "Unbekannt",
-                    "unreachable_charging_station": "Ladestation nicht erreichbar",
-                    "wheel_motor_blocked": "Radmotor ist blockiert",
-                    "wire_missing": "Kabel fehlt"
+                    "battery_low": "Låg batterinivå",
+                    "battery_temperature_error": "Fel på batteriets temperatur",
+                    "battery_trunk_open_timeout": "Batterilucka öppen tidsgräns",
+                    "blade_height_adjustment_blocked": "Justering av bladhöjd blockerad",
+                    "blade_motor_blocked": "Bladmotorn är blockerad",
+                    "camera_error": "Fel på kameran",
+                    "charge_error": "Fel vid laddning",
+                    "charging_station_docking_error": "Fel vid dockning av laddstation",
+                    "close_door_to_go_home": "Stäng dörren för att köra hem",
+                    "close_door_to_mow": "Stäng dörren för att klippa",
+                    "excessive_slope": "För stor lutning upptäckt",
+                    "hbi_error": "HBI fel",
+                    "headlight_error": "Fel på strålkastare",
+                    "insufficient_sensor_data": "Otillräcklig sensordata",
+                    "lifted": "Gräsklipparen har lyfts",
+                    "locked": "Gräsklipparen är låst",
+                    "map_error": "Fel på kartan",
+                    "mapping_exploration_failed": "Kartläggning misslyckades",
+                    "mapping_exploration_required": "Kartläggning krävs",
+                    "missing_charging_station": "Saknar laddstation",
+                    "no_error": "Inget fel",
+                    "ota_error": "Fel på trådlös uppdatering",
+                    "outside_wire": "Utanför begränsningskabeln",
+                    "rain_delay": "Regnfördröjning aktiv",
+                    "reverse_wire": "Begränsningskabeln är felvänd",
+                    "rfid_reader_error": "RFID läsfel",
+                    "timeout_finding_home": "Kunde inte återvända hem inom tidsgränsen",
+                    "training_start_disallowed": "Ej möjligt att starta träning",
+                    "trapped": "Instängd",
+                    "trapped_timeout": "Instängd längre än tidsgränsen",
+                    "unknown": "Okänt",
+                    "unreachable_charging_station": "Laddstation som inte kan nås",
+                    "unreachable_zone": "Zon inte tillgänglig",
+                    "upside_down": "Gräsklipparen är upp och ner",
+                    "wheel_motor_blocked": "Hjulmotorn är blockerad",
+                    "wire_missing": "Begränsningskabel saknas",
+                    "wire_sync": "Trådsynkronisering"
                 }
             }
         }
     },
     "services": {
         "config": {
-            "description": "Gerätekonfigurationsparameter festlegen",
+            "description": "Ställ enhets inställning",
             "fields": {
                 "multizone_distances": {
-                    "description": "Legen Sie das Multizonen-Entfernungsabstand in Metern fest. 0 = Deaktiviert. Format: 15, 80, 120, 155",
-                    "name": "Multizonen Abstände"
+                    "description": "Ställ multizone avstånd i meter. 0=Av. Fortmat: 15, 80, 120, 155",
+                    "name": "Multi zon avstånd"
                 },
                 "multizone_probabilities": {
-                    "description": "Legen Sie das Multizonen-Wahrscheinlichkeits-Array fest. Format: 50, 10, 20, 20",
-                    "name": "Multizonen Wahrscheinlichkeit"
+                    "description": "Ställ multizon sannolikhets upställning. Format: 50, 10, 20, 20",
+                    "name": "Multizon sannolikheter"
                 },
                 "raindelay": {
-                    "description": "Regenverzögerung einstellen. Zeit zwischen 0 und 300 Minuten. 0 = Deaktiviert",
-                    "name": "Regenverzögerung"
+                    "description": "Ställ in regnfördröjning. Tid i minuter från 0 till 300. 0 = Inaktiverad",
+                    "name": "Regnfördröjning"
                 },
                 "timeextension": {
-                    "description": "Zeitverlängerung einstellen in % im Bereich von -100 bis 100",
-                    "name": "Zeitverlängerung"
+                    "description": "Ställ in förlängning av arbetstiden. Förlängning i % från -100 till 100",
+                    "name": "Förlängning av arbetstiden."
                 }
             },
-            "name": "Zone setzen"
+            "name": "Ställ zon"
         },
         "edgecut": {
-            "description": "Kantenschnitt starten (falls unterstützt)",
-            "name": "Rand-/Kantenschnitt"
+            "description": "Starta kantklippning (om det stöds)",
+            "name": "Kantklippning"
         },
         "ots": {
-            "description": "Einmalplan starten (falls unterstützt)",
+            "description": "Starta en gångs schema ( Om stöttad )",
             "fields": {
                 "boundary": {
-                    "description": "Rasenkannte schneiden",
-                    "name": "Kantenschnitt"
+                    "description": "Klipp gränsen",
+                    "name": "Gräns"
                 },
                 "runtime": {
-                    "description": "Laufzeit in Minuten bis zur Rückkehr zur Ladestation",
-                    "name": "Laufzeit"
+                    "description": "Körtid i minuter innan återvänder till laddstationen",
+                    "name": "Kör tid"
                 }
             },
-            "name": "Einmaliger Zeitplan"
+            "name": "Engångsschema"
         },
         "restart": {
-            "description": "Startet das Gerät neu oder startet es neu",
-            "name": "Gerät neustarten"
+            "description": "Startar om enheten",
+            "name": "Starta om enheten"
         },
         "schedule": {
-            "description": "Zeitplan des Mähers einstellen oder ändern.",
+            "description": "Ställ eller ändra schema för klipparen",
             "fields": {
                 "friday_boundary": {
-                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
-                    "name": "Freitag, Kantenschnitt"
+                    "description": "Ska vi börja detta schema med att skära gränsen (kant/gränssnitt)?",
+                    "name": "Fredags gräns"
                 },
                 "friday_end": {
-                    "description": "Wann soll der Zeitplan freitags enden?",
-                    "name": "Freitag, Ende"
+                    "description": "När ska schemat sluta på fredagar?",
+                    "name": "Fredag, Slut"
                 },
                 "friday_start": {
-                    "description": "Startzeit für Freitage",
-                    "name": "Freitag, Beginn"
+                    "description": "Starttid för fredagar",
+                    "name": "Fredag, Start"
                 },
                 "monday_boundary": {
-                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
-                    "name": "Montag, Kantenschnitt"
+                    "description": "Ska vi börja detta schema genom att skära gränsen (kant-/gränssnitt)?",
+                    "name": "Måndag, Gräns"
                 },
                 "monday_end": {
-                    "description": "Wann soll der Zeitplan montags enden?",
-                    "name": "Montag, Ende"
+                    "description": "När ska schemat sluta på måndagar?",
+                    "name": "Måndag, Slut"
                 },
                 "monday_start": {
-                    "description": "Startzeit für Montage",
-                    "name": "Montag, Beginn"
+                    "description": "Starttid för måndagar",
+                    "name": "Måndag, Start"
                 },
                 "saturday_boundary": {
-                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
-                    "name": "Samstag, Kantenschnitt"
+                    "description": "Ska vi starta schemat med att klippa gränsen?",
+                    "name": "Lördags, Gräns"
                 },
                 "saturday_end": {
-                    "description": "Wann soll der Zeitplan samstags enden?",
-                    "name": "Samstag, Ende"
+                    "description": "När ska schemat sluta på Lördagar?",
+                    "name": "Lördags, Slut"
                 },
                 "saturday_start": {
-                    "description": "Startzeit für Samstage",
-                    "name": "Samstag, Beginn"
+                    "description": "Starttid för Lördagar",
+                    "name": "Lördag, Start"
                 },
                 "sunday_boundary": {
-                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
-                    "name": "Sonntag, Kantenschnitt"
+                    "description": "Ska vi starta schemat med att klippa gränsen?",
+                    "name": "Söndags gräns"
                 },
                 "sunday_end": {
-                    "description": "Wann soll der Zeitplan sonntags enden?",
-                    "name": "Sonntag, Ende"
+                    "description": "När ska schemat sluta på söndagar?",
+                    "name": "Söndag, Slut"
                 },
                 "sunday_start": {
-                    "description": "Startzeit für Sonntage",
-                    "name": "Sonntag, Beginn"
+                    "description": "Starttid för Söndagar",
+                    "name": "Söndag, Start"
                 },
                 "thursday_boundary": {
-                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
-                    "name": "Donnerstag, Kantenschnitt"
+                    "description": "Ska vi börja detta schema med att skära gränsen (kant/gränssnitt)?",
+                    "name": "Torsdag, Gräns"
                 },
                 "thursday_end": {
-                    "description": "Wann soll der Zeitplan donnerstags enden?",
-                    "name": "Donnerstag, Ende"
+                    "description": "När ska schemat sluta på torsdagar?",
+                    "name": "Torsdag, Slut"
                 },
                 "thursday_start": {
-                    "description": "Startzeit für Donnerstage",
-                    "name": "Mittwochs, Beginn"
+                    "description": "Starttid för torsdagar",
+                    "name": "Torsdag, Start"
                 },
                 "tuesday_boundary": {
-                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
-                    "name": "Dienstag, Kantenschnitt"
+                    "description": "Ska vi börja detta schema genom att skära gränsen (kant-/gränssnitt)?",
+                    "name": "Tisdag, Gräns"
                 },
                 "tuesday_end": {
-                    "description": "Wann soll der Zeitplan dienstags enden?",
-                    "name": "Dienstag, Ende"
+                    "description": "När ska schemat sluta på tisdagar?",
+                    "name": "Tisdag, Slut"
                 },
                 "tuesday_start": {
-                    "description": "Startzeit für Dienstage",
-                    "name": "Dienstag, Beginn"
+                    "description": "Starttid för tisdagar",
+                    "name": "Tisdag, Start"
                 },
                 "type": {
-                    "description": "Primären oder sekundären Zeitplan ändern?",
-                    "name": "Zeitplantyp"
+                    "description": "Ändra primär eller sekundär schema?",
+                    "name": "Schematyp"
                 },
                 "wednesday_boundary": {
-                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
-                    "name": "Mittwoch, Kantenschnitt"
+                    "description": "Ska vi börja detta schema genom att skära gränsen (kant-/gränssnitt)?",
+                    "name": "Onsdag, Gräns"
                 },
                 "wednesday_end": {
-                    "description": "Wann soll der Zeitplan mittwochs enden?",
-                    "name": "Mittwoch, Ende"
+                    "description": "När ska schemat sluta på onsdagar?",
+                    "name": "Onsdag, Slut"
                 },
                 "wednesday_start": {
-                    "description": "Startzeit für Mittwoche",
-                    "name": "Mittwoch, Beginn"
+                    "description": "Starttid för onsdagar",
+                    "name": "Onsdag, Start"
                 }
             },
-            "name": "Zeitplan festlegen oder aktualisieren"
+            "name": "Ställ eller uppdatera schema"
         },
         "send_raw": {
-            "description": "Senden eines JSON-Befehls an das Gerät",
+            "description": "Skicka ett JSON kommando till enheten",
             "fields": {
                 "json": {
-                    "description": "Zu sendende Daten, formatiert als gültiges JSON",
-                    "name": "JSON Daten"
+                    "description": "Skicka data, Korrekt JSON format",
+                    "name": "JSON information"
                 }
             },
-            "name": "RAW-Befehl senden"
+            "name": "Skicka RAW kommando"
         },
         "setzone": {
-            "description": "Zone setzen, die als nächstes gemäht werden soll",
+            "description": "Ställ vilken zon som ska bli klippt härnäst",
             "fields": {
                 "zone": {
-                    "description": "Legt die Zone im Bereich von 0 bis 3 fest, die als nächstes gemäht werden soll",
-                    "name": "Zone"
+                    "description": "Sätt zon nummer, från 0 till 3, som ska bli klippt härnäst",
+                    "name": "Zon"
                 }
             },
-            "name": "Zone setzen"
+            "name": "Sätt zon"
         },
         "torque": {
-            "description": "Raddrehmoment einstellen (falls unterstützt)",
+            "description": "Ställ in hjulens vridmoment (om det stöds)",
             "fields": {
                 "torque": {
-                    "description": "Raddrehmoment einstellen. Im Bereich von -50 % bis 50 %",
-                    "name": "Drehmoment"
+                    "description": "Ställ in hjulens vridmoment. Från -50 % till 50 %",
+                    "name": "Hjulens vridmoment"
                 }
             },
-            "name": "Drehmoment"
+            "name": "Vridmoment"
         }
     }
 }
