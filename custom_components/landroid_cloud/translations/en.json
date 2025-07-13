@@ -1,4 +1,11 @@
 {
+    "device_automation": {
+        "action_type": {
+            "mow": "Let {entity_name} mow",
+            "dock": "Let {entity_name} return to the dock",
+            "pause": "Pause {entity_name}"
+        }
+    },
     "config": {
         "abort": {
             "already_exists": "This user account have already been configured"
