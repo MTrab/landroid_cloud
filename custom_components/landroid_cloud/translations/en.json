@@ -2,7 +2,7 @@
     "device_automation": {
         "action_type": {
             "mow": "Let {entity_name} mow",
-            "dock": "Let {entity_name} return to the dock",
+            "dock": "Let {entity_name} return to the charging station",
             "pause": "Pause {entity_name}"
         }
     },
