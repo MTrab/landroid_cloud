@@ -1,22 +1,22 @@
 {
     "config": {
         "abort": {
-            "already_exists": "Tento uživatelský účet již byl nastaven"
+            "already_exists": "Dieses Benutzerkonto wurde bereits konfiguriert"
         },
         "error": {
-            "cannot_connect": "Chyba připojení",
-            "invalid_auth": "Chyba přihlášení",
-            "too_many_requests": "Příliš mnoho požadavků na API – Zkuste to znovu za 24 hodin.",
-            "unknown": "Neočekávaná chyba"
+            "cannot_connect": "Verbindung ist nicht möglich",
+            "invalid_auth": "Fehler bei der Authentifizierung",
+            "too_many_requests": "Zu viele API-Anfragen - In 24 Stunden erneut versuchen",
+            "unknown": "Unerwarteter Fehler"
         },
         "step": {
             "user": {
                 "data": {
-                    "email": "Email",
-                    "password": "Heslo",
-                    "type": "Model"
+                    "email": "E-Mail",
+                    "password": "Passwort",
+                    "type": "Marke"
                 },
-                "title": "Přihlášení k Landroid Cloud účtu"
+                "title": "Verbinden Sie sich mit Ihrem Landroid Cloud-Konto"
             }
         }
     },
@@ -24,19 +24,19 @@
         "lawn_mower": {
             "landroid_cloud": {
                 "state": {
-                    "edgecut": "Sekání podél okraje",
-                    "escaped_digital_fence": "Sekačka překročila virtuální plot",
-                    "idle": "Nečinný",
-                    "initializing": "Inicializace",
-                    "locked": "Uzamknuto",
-                    "mowing": "Sekání",
+                    "edgecut": "Kantenschnitt",
+                    "escaped_digital_fence": "Außerhalb der Begrenzung",
+                    "idle": "Untätig",
+                    "initializing": "Initialisierung",
+                    "locked": "Gesperrt",
+                    "mowing": "Mähen",
                     "offline": "Offline",
-                    "rain_delay": "Prodleva po dešti",
-                    "returning": "Návrat k nabíjecí stanici",
-                    "searching_zone": "Vyhledávání zóny",
-                    "starting": "Začínání",
-                    "unknown": "Neznámý",
-                    "zoning": "Učení zóny"
+                    "rain_delay": "Regenverzögerung",
+                    "returning": "Rückkehr zur Ladestation",
+                    "searching_zone": "Zone suchen",
+                    "starting": "Startet",
+                    "unknown": "Unbekannt",
+                    "zoning": "Zonentraining"
                 }
             }
         },
@@ -76,172 +76,172 @@
     },
     "services": {
         "config": {
-            "description": "Nastavení konfiguračních parametrů zařízení",
+            "description": "Gerätekonfigurationsparameter festlegen",
             "fields": {
                 "multizone_distances": {
-                    "description": "Nastavení pole vzdáleností pro více zón. V metrech. 0 = Zakázáno. Formát: 15, 80, 120, 155",
-                    "name": "Vzdálenosti ve více zónách"
+                    "description": "Legen Sie das Multizonen-Entfernungsabstand in Metern fest. 0 = Deaktiviert. Format: 15, 80, 120, 155",
+                    "name": "Multizonen Abstände"
                 },
                 "multizone_probabilities": {
-                    "description": "Nastavení pole pravděpodobností pro více zón. Formát: 50, 10, 20, 20",
-                    "name": "Pravděpodobnosti pro více zón"
+                    "description": "Legen Sie das Multizonen-Wahrscheinlichkeits-Array fest. Format: 50, 10, 20, 20",
+                    "name": "Multizonen Wahrscheinlichkeit"
                 },
                 "raindelay": {
-                    "description": "Nastavení délky prodlevy po dešti. Čas v minutách od 0 do 300. 0 = Zakázáno",
-                    "name": "Prodleva po dešti"
+                    "description": "Regenverzögerung einstellen. Zeit zwischen 0 und 300 Minuten. 0 = Deaktiviert",
+                    "name": "Regenverzögerung"
                 },
                 "timeextension": {
-                    "description": "Nastavení prodloužení času. Prodloužení v % v rozmezí od -100 do 100",
-                    "name": "Prodloužení času"
+                    "description": "Zeitverlängerung einstellen in % im Bereich von -100 bis 100",
+                    "name": "Zeitverlängerung"
                 }
             },
-            "name": "Nastavit zónu"
+            "name": "Zone setzen"
         },
         "edgecut": {
-            "description": "Spustit sekání okraje (je-li podporováno)",
-            "name": "Sekání okraje"
+            "description": "Kantenschnitt starten (falls unterstützt)",
+            "name": "Rand-/Kantenschnitt"
         },
         "ots": {
-            "description": "Spuštění jednorázového harmonogramu (je-li podporován)",
+            "description": "Einmalplan starten (falls unterstützt)",
             "fields": {
                 "boundary": {
-                    "description": "Sekání okraje",
-                    "name": "Okraj"
+                    "description": "Rasenkannte schneiden",
+                    "name": "Kantenschnitt"
                 },
                 "runtime": {
-                    "description": "Doba provozu v minutách před návratem do nabíjecí stanice",
-                    "name": "Doba provozu"
+                    "description": "Laufzeit in Minuten bis zur Rückkehr zur Ladestation",
+                    "name": "Laufzeit"
                 }
             },
-            "name": "Jednorázový harmonogram"
+            "name": "Einmaliger Zeitplan"
         },
         "restart": {
-            "description": "Restartuje zařízení",
-            "name": "Restart zařízení"
+            "description": "Startet das Gerät neu oder startet es neu",
+            "name": "Gerät neustarten"
         },
         "schedule": {
-            "description": "Nastavení nebo změna časového plánu sekačky",
+            "description": "Zeitplan des Mähers einstellen oder ändern.",
             "fields": {
                 "friday_boundary": {
-                    "description": "Má páteční plán začít sekáním okraje?",
-                    "name": "Pátek, sekání okraje"
+                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
+                    "name": "Freitag, Kantenschnitt"
                 },
                 "friday_end": {
-                    "description": "Kdy má páteční plán skončit?",
-                    "name": "Pátek, konec"
+                    "description": "Wann soll der Zeitplan freitags enden?",
+                    "name": "Freitag, Ende"
                 },
                 "friday_start": {
-                    "description": "Kdy má páteční plán začít?",
-                    "name": "Pátek, začátek"
+                    "description": "Startzeit für Freitage",
+                    "name": "Freitag, Beginn"
                 },
                 "monday_boundary": {
-                    "description": "Má pondělní plán začít sekáním okraje?",
-                    "name": "Pondělí, sekání okraje"
+                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
+                    "name": "Montag, Kantenschnitt"
                 },
                 "monday_end": {
-                    "description": "Kdy má pondělní plán skončit?",
-                    "name": "Pondělí, konec"
+                    "description": "Wann soll der Zeitplan montags enden?",
+                    "name": "Montag, Ende"
                 },
                 "monday_start": {
-                    "description": "Kdy má pondělní plán začít?",
-                    "name": "Pondělí, začátek"
+                    "description": "Startzeit für Montage",
+                    "name": "Montag, Beginn"
                 },
                 "saturday_boundary": {
-                    "description": "Má sobotní plán začít sekáním okraje?",
-                    "name": "Sobota, sekání okraje"
+                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
+                    "name": "Samstag, Kantenschnitt"
                 },
                 "saturday_end": {
-                    "description": "Kdy má sobotní plán skončit?",
-                    "name": "Sobota, konec"
+                    "description": "Wann soll der Zeitplan samstags enden?",
+                    "name": "Samstag, Ende"
                 },
                 "saturday_start": {
-                    "description": "Kdy má sobotní plán začít?",
-                    "name": "Sobota, začátek"
+                    "description": "Startzeit für Samstage",
+                    "name": "Samstag, Beginn"
                 },
                 "sunday_boundary": {
-                    "description": "Má nedělní plán začít sekáním okraje?",
-                    "name": "Neděle, sekání okraje"
+                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
+                    "name": "Sonntag, Kantenschnitt"
                 },
                 "sunday_end": {
-                    "description": "Kdy má nedělní plán skončit?",
-                    "name": "Neděle, konec"
+                    "description": "Wann soll der Zeitplan sonntags enden?",
+                    "name": "Sonntag, Ende"
                 },
                 "sunday_start": {
-                    "description": "Kdy má nedělní plán začít?",
-                    "name": "Neděle, začátek"
+                    "description": "Startzeit für Sonntage",
+                    "name": "Sonntag, Beginn"
                 },
                 "thursday_boundary": {
-                    "description": "Má čtvrteční plán začít sekáním okraje?",
-                    "name": "Čtvrtek, sekání okraje"
+                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
+                    "name": "Donnerstag, Kantenschnitt"
                 },
                 "thursday_end": {
-                    "description": "Kdy má čtvrteční plán skončit?",
-                    "name": "Čtvrtek, konec"
+                    "description": "Wann soll der Zeitplan donnerstags enden?",
+                    "name": "Donnerstag, Ende"
                 },
                 "thursday_start": {
-                    "description": "Kdy má čtvrteční plán začít?",
-                    "name": "Čtvrtek, začátek"
+                    "description": "Startzeit für Donnerstage",
+                    "name": "Mittwochs, Beginn"
                 },
                 "tuesday_boundary": {
-                    "description": "Má úterní plán začít sekáním okraje?",
-                    "name": "Úterý, sekání okraje"
+                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
+                    "name": "Dienstag, Kantenschnitt"
                 },
                 "tuesday_end": {
-                    "description": "Kdy má úterní plán skončit?",
-                    "name": "Úterý, konec"
+                    "description": "Wann soll der Zeitplan dienstags enden?",
+                    "name": "Dienstag, Ende"
                 },
                 "tuesday_start": {
-                    "description": "Kdy má úterní plán začít?",
-                    "name": "Úterý, začátek"
+                    "description": "Startzeit für Dienstage",
+                    "name": "Dienstag, Beginn"
                 },
                 "type": {
-                    "description": "Změna primárního nebo sekundárního plánu?",
-                    "name": "Typ plánu"
+                    "description": "Primären oder sekundären Zeitplan ändern?",
+                    "name": "Zeitplantyp"
                 },
                 "wednesday_boundary": {
-                    "description": "Má středeční plán začít sekáním okraje?",
-                    "name": "Středa, sekání okraje"
+                    "description": "Sollten wir diesen Zeitplan mit dem Schneiden der Begrenzung (Kanten-/Randschnitt) beginnen?",
+                    "name": "Mittwoch, Kantenschnitt"
                 },
                 "wednesday_end": {
-                    "description": "Kdy má středeční plán skončit?",
-                    "name": "Středa, konec"
+                    "description": "Wann soll der Zeitplan mittwochs enden?",
+                    "name": "Mittwoch, Ende"
                 },
                 "wednesday_start": {
-                    "description": "Kdy má středeční plán začít?",
-                    "name": "Středa, začátek"
+                    "description": "Startzeit für Mittwoche",
+                    "name": "Mittwoch, Beginn"
                 }
             },
-            "name": "Nastavení nebo aktualizace plánu"
+            "name": "Zeitplan festlegen oder aktualisieren"
         },
         "send_raw": {
-            "description": "Odeslat nezpracovaný JSON příkaz",
+            "description": "Senden eines JSON-Befehls an das Gerät",
             "fields": {
                 "json": {
-                    "description": "Data k odeslání, formátovaná jako platný JSON",
-                    "name": "JSON data"
+                    "description": "Zu sendende Daten, formatiert als gültiges JSON",
+                    "name": "JSON Daten"
                 }
             },
-            "name": "Odeslat nezpracovaný (RAW) příkaz"
+            "name": "RAW-Befehl senden"
         },
         "setzone": {
-            "description": "Nastavení zóny, která se má sekat příště",
+            "description": "Zone setzen, die als nächstes gemäht werden soll",
             "fields": {
                 "zone": {
-                    "description": "Nastavení čísla zóny (od 0 do 3), která se bude sekat příště.",
-                    "name": "Zóna"
+                    "description": "Legt die Zone im Bereich von 0 bis 3 fest, die als nächstes gemäht werden soll",
+                    "name": "Zone"
                 }
             },
-            "name": "Nastavení zóny"
+            "name": "Zone setzen"
         },
         "torque": {
-            "description": "Nastavení síly pohonu (je-li podporováno)",
+            "description": "Raddrehmoment einstellen (falls unterstützt)",
             "fields": {
                 "torque": {
-                    "description": "Nastavení síly pohonu. V rozmezí od -50 % do 50 %",
-                    "name": "Síla pohonu"
+                    "description": "Raddrehmoment einstellen. Im Bereich von -50 % bis 50 %",
+                    "name": "Drehmoment"
                 }
             },
-            "name": "Síla"
+            "name": "Drehmoment"
         }
     }
 }
