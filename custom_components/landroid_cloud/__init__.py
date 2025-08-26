@@ -133,11 +133,14 @@ async def _async_setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         async with asyncio.timeout(30):
             await hass.async_add_executor_job(cloud.connect)
 
-        while not cloud.mqtt.connected:
-            await asyncio.sleep(0.1)
+        # while not cloud.mqtt.connected:
+        #     await asyncio.sleep(0.1)
     except TimeoutError:
-        await hass.async_add_executor_job(cloud.disconnect)
-        raise ConfigEntryNotReady(f"Timed out connecting to account {cloud_email}")
+        try:
+            await hass.async_add_executor_job(cloud.disconnect)
+            raise ConfigEntryNotReady(f"Timed out connecting to account {cloud_email}")
+        except asyncio.exceptions.CancelledError:
+            return True
     except ConnectionError:
         await hass.async_add_executor_job(cloud.disconnect)
         raise ConfigEntryNotReady(
