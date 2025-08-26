@@ -30,7 +30,7 @@ BUTTONS = [
         icon="mdi:map-marker-path",
         entity_category=None,
         required_feature=LandroidFeatureSupport.EDGECUT,
-        press_action=lambda api, serial: api.cloud.ots(serial, True, 0),
+        press_action=lambda api, serial: api.cloud.edgecut(serial),
     ),
     LandroidButtonEntityDescription(
         key="reset_charge_cycles",
