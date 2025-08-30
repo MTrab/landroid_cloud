@@ -10,6 +10,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.loader import async_get_integration
 from pyworxcloud import WorxCloud, exceptions
+import requests
 
 from .api import LandroidAPI
 from .const import (
@@ -146,6 +147,16 @@ async def _async_setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         raise ConfigEntryNotReady(
             f"Connection error connecting to account {cloud_email}"
         )
+    except requests.exceptions.ConnectionError:
+        LOGGER.log(
+            LoggerType.API,
+            "Name resolution error connecting to cloud API endpoint - retrying later",
+            log_level=LogLevel.ERROR,
+        )
+        await hass.async_add_executor_job(cloud.disconnect)
+        raise ConfigEntryNotReady(
+            f"Connection error connecting to cloud API endpoint"
+        )
 
     hass.data[DOMAIN][entry.entry_id] = {
         ATTR_CLOUD: cloud,
@@ -156,13 +167,6 @@ async def _async_setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         CONF_PASSWORD: cloud_password,
         CONF_TYPE: cloud_type,
     }
-
-    # await asyncio.gather(
-    #     *[
-    #         async_init_device(hass, entry, name, device)
-    #         for name, device in cloud.devices.items()
-    #     ]
-    # )
 
     for name, device in cloud.devices.items():
         await async_init_device(hass, entry, name, device)
