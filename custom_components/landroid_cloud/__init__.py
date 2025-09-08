@@ -4,13 +4,13 @@ from __future__ import annotations
 
 import asyncio
 
+import requests
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, CONF_TYPE
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.loader import async_get_integration
 from pyworxcloud import WorxCloud, exceptions
-import requests
 
 from .api import LandroidAPI
 from .const import (
@@ -131,11 +131,8 @@ async def _async_setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         raise ConfigEntryNotReady(f"Authentication error for {cloud_email}")
 
     try:
-        async with asyncio.timeout(30):
+        async with asyncio.timeout(15):
             await hass.async_add_executor_job(cloud.connect)
-
-        # while not cloud.mqtt.connected:
-        #     await asyncio.sleep(0.1)
     except TimeoutError:
         try:
             await hass.async_add_executor_job(cloud.disconnect)
@@ -147,16 +144,16 @@ async def _async_setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         raise ConfigEntryNotReady(
             f"Connection error connecting to account {cloud_email}"
         )
-    except requests.exceptions.ConnectionError:
+    except requests.exceptions.ConnectionError as err:
         LOGGER.log(
             LoggerType.API,
-            "Name resolution error connecting to cloud API endpoint - retrying later",
+            "Error connecting to cloud API endpoint - retrying later",
             log_level=LogLevel.ERROR,
         )
         await hass.async_add_executor_job(cloud.disconnect)
         raise ConfigEntryNotReady(
             f"Connection error connecting to cloud API endpoint"
-        )
+        ) from err
 
     hass.data[DOMAIN][entry.entry_id] = {
         ATTR_CLOUD: cloud,
