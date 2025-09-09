@@ -15,7 +15,7 @@
         "pyworxcloud"
     ],
     "requirements": [
-        "pyworxcloud@git+https://github.com/MTrab/pyworxcloud.git@Migrate-Paho-MQTT-to-AwSIoT"
+        "pyworxcloud==5.0.0"
     ],
     "version": "5.3.4"
 }
