@@ -26,6 +26,7 @@ DEFAULT_COMMAND_TIMEOUT = 30.0
 MIN_COMMAND_TIMEOUT = 1.0
 MAX_COMMAND_TIMEOUT = 120.0
 
+
 class CloudProvider(StrEnum):
     """Supported cloud providers."""
 

@@ -21,7 +21,13 @@ from pyworxcloud.exceptions import (
     TooManyRequestsError,
 )
 
-from .const import CONF_CLOUD, CONF_COMMAND_TIMEOUT, DEFAULT_COMMAND_TIMEOUT, DOMAIN, PLATFORMS
+from .const import (
+    CONF_CLOUD,
+    CONF_COMMAND_TIMEOUT,
+    DEFAULT_COMMAND_TIMEOUT,
+    DOMAIN,
+    PLATFORMS,
+)
 from .coordinator import LandroidCloudCoordinator
 from .models import LandroidRuntimeData
 
@@ -35,7 +41,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: LandroidConfigEntry) -> 
         entry.data[CONF_PASSWORD],
         entry.data[CONF_CLOUD],
         tz=hass.config.time_zone,
-        command_timeout=entry.options.get(CONF_COMMAND_TIMEOUT, DEFAULT_COMMAND_TIMEOUT),
+        command_timeout=entry.options.get(
+            CONF_COMMAND_TIMEOUT, DEFAULT_COMMAND_TIMEOUT
+        ),
     )
 
     try:
@@ -47,7 +55,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: LandroidConfigEntry) -> 
         raise ConfigEntryNotReady("Cloud endpoint rejected setup request") from err
     except TooManyRequestsError as err:
         raise ConfigEntryNotReady("Too many requests to cloud API") from err
-    except (NoConnectionError, ServiceUnavailableError, InternalServerError, TimeoutError) as err:
+    except (
+        NoConnectionError,
+        ServiceUnavailableError,
+        InternalServerError,
+        TimeoutError,
+    ) as err:
         raise ConfigEntryNotReady("Cloud service unavailable") from err
     except APIException as err:
         raise ConfigEntryNotReady("Unexpected API error") from err
