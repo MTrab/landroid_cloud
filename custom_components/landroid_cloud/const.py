@@ -8,9 +8,7 @@ from homeassistant.const import Platform
 
 DOMAIN = "landroid_cloud"
 
-PLATFORMS: list[Platform] = [
-    Platform.SENSOR,
-]
+PLATFORMS: list[Platform] = [Platform.SENSOR]
 
 CONF_CLOUD = "cloud"
 CONF_COMMAND_TIMEOUT = "command_timeout"
@@ -19,6 +17,7 @@ DEFAULT_CLOUD = "worx"
 DEFAULT_COMMAND_TIMEOUT = 30.0
 MIN_COMMAND_TIMEOUT = 1.0
 MAX_COMMAND_TIMEOUT = 120.0
+
 
 class CloudProvider(StrEnum):
     """Supported cloud providers."""

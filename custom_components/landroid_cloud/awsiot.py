@@ -6,7 +6,12 @@ import asyncio
 
 
 def _prime_metrics_sync() -> None:
-    """Initialize AWS IoT SDK metrics string outside the event loop."""
+    """Initialize AWS IoT SDK metrics string outside the event loop.
+
+    The first metrics build in awsiot performs importlib.metadata reads, which
+    are blocking filesystem operations and must not run on Home Assistant's
+    event loop thread.
+    """
     try:
         from awsiot import mqtt_connection_builder
     except Exception:
