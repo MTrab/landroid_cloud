@@ -11,7 +11,11 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import PERCENTAGE, SIGNAL_STRENGTH_DECIBELS_MILLIWATT
+from homeassistant.const import (
+    ATTR_BATTERY_CHARGING,
+    PERCENTAGE,
+    SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+)
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
@@ -21,6 +25,14 @@ from .entity import LandroidBaseEntity
 @dataclass(frozen=True, kw_only=True)
 class LandroidSensorDescription(SensorEntityDescription):
     """Description for Landroid sensors."""
+
+
+def _battery_charging_attribute(device) -> dict[str, bool] | None:
+    """Return Home Assistant battery charging attribute when available."""
+    charging = getattr(device, "battery", {}).get("charging")
+    if isinstance(charging, bool):
+        return {ATTR_BATTERY_CHARGING: charging}
+    return None
 
 
 SENSORS: tuple[LandroidSensorDescription, ...] = (
@@ -123,3 +135,10 @@ class LandroidSensor(LandroidBaseEntity, SensorEntity):
             return device.schedules.get("next_schedule_start")
 
         return None
+
+    @property
+    def extra_state_attributes(self) -> dict[str, bool] | None:
+        """Return battery charging attribute for battery sensor."""
+        if self.entity_description.key != "battery":
+            return None
+        return _battery_charging_attribute(self.device)
