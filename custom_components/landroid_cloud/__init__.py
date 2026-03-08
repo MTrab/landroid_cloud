@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
+from homeassistant.loader import async_get_integration
 from pyworxcloud import WorxCloud
 from pyworxcloud.exceptions import (
     APIException,
@@ -28,15 +30,20 @@ from .const import (
     DEFAULT_COMMAND_TIMEOUT,
     DOMAIN,
     PLATFORMS,
+    STARTUP,
 )
 from .coordinator import LandroidCloudCoordinator
 from .models import LandroidRuntimeData
 
 type LandroidConfigEntry = ConfigEntry[LandroidRuntimeData]
+_LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: LandroidConfigEntry) -> bool:
     """Set up Landroid Cloud from a config entry."""
+    integration = await async_get_integration(hass, DOMAIN)
+    _LOGGER.info(STARTUP, integration.version)
+
     cloud = WorxCloud(
         entry.data[CONF_EMAIL],
         entry.data[CONF_PASSWORD],
