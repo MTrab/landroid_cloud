@@ -19,6 +19,16 @@ from .coordinator import LandroidCloudCoordinator
 T = TypeVar("T")
 
 
+def _firmware_version(device: DeviceHandler) -> str:
+    """Return firmware version from pyworxcloud device payload."""
+    firmware = getattr(device, "firmware", None)
+    if isinstance(firmware, dict):
+        return str(firmware.get("version", "unknown"))
+    if firmware is not None:
+        return str(getattr(firmware, "version", "unknown"))
+    return "unknown"
+
+
 @dataclass(frozen=True, kw_only=True)
 class LandroidEntityDescription(Generic[T]):
     """Generic entity description with value getter."""
@@ -67,7 +77,7 @@ class LandroidBaseEntity(CoordinatorEntity[LandroidCloudCoordinator]):
             "name": str(device.name),
             "manufacturer": cloud_type.capitalize(),
             "model": str(getattr(device, "model", "Unknown")),
-            "sw_version": str(getattr(device.firmware, "version", "unknown")),
+            "sw_version": _firmware_version(device),
             "suggested_area": self._config_entry.data[CONF_EMAIL],
         }
 

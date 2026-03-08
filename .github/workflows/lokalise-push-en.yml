@@ -1,0 +1,53 @@
+name: Push English Translations to Lokalise
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - custom_components/landroid_cloud/translations/en.json
+
+permissions:
+  contents: write
+
+jobs:
+  push-to-lokalise:
+    name: Push en.json to Lokalise
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Check Lokalise secrets
+        id: check_secrets
+        env:
+          LOKALISE_API_TOKEN: ${{ secrets.LOKALISE_API_TOKEN }}
+          LOKALISE_PROJECT_ID: ${{ secrets.LOKALISE_PROJECT_ID }}
+        run: |
+          if [ -z "$LOKALISE_API_TOKEN" ] || [ -z "$LOKALISE_PROJECT_ID" ]; then
+            echo "has_secrets=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_secrets=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Push base language file
+        if: steps.check_secrets.outputs.has_secrets == 'true'
+        uses: lokalise/lokalise-push-action@v5.0.0
+        with:
+          api_token: ${{ secrets.LOKALISE_API_TOKEN }}
+          project_id: ${{ secrets.LOKALISE_PROJECT_ID }}
+          base_lang: en
+          skip_tagging: true
+          translations_path: custom_components/landroid_cloud/translations
+          file_ext: json
+          flat_naming: true
+          name_pattern: en.json
+
+      - name: Explain skipped sync
+        if: steps.check_secrets.outputs.has_secrets == 'false'
+        run: |
+          echo "Skipping Lokalise push because required secrets are missing."
+          echo "Expected secrets: LOKALISE_API_TOKEN and LOKALISE_PROJECT_ID."
