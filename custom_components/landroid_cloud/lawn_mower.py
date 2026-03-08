@@ -39,8 +39,6 @@ STATUS_ACTIVITY_MAP: Final[dict[int, LawnMowerActivity]] = {
     103: LawnMowerActivity.MOWING,
     104: LawnMowerActivity.RETURNING,
 }
-STARTING_STATUS_IDS: Final[set[int]] = {2, 3}
-
 MOWER_DESCRIPTION: Final = LawnMowerEntityEntityDescription(key="mower")
 
 
@@ -82,23 +80,6 @@ class LandroidCloudMowerEntity(LandroidBaseEntity, LawnMowerEntity):
         """Return current mower activity."""
         status_id = int(getattr(self.device.status, "id", -1))
         return STATUS_ACTIVITY_MAP.get(status_id, LawnMowerActivity.ERROR)
-
-    @property
-    def extra_state_attributes(self) -> dict[str, str | int]:
-        """Expose raw status details for automation-friendly matching."""
-        status = getattr(self.device, "status", {})
-        status_id = int(getattr(status, "id", -1))
-        status_description = str(getattr(status, "description", "unknown"))
-        activity_detail = (
-            "starting"
-            if status_id in STARTING_STATUS_IDS
-            else STATUS_ACTIVITY_MAP.get(status_id, LawnMowerActivity.ERROR).value
-        )
-        return {
-            "status_id": status_id,
-            "status_description": status_description,
-            "activity_detail": activity_detail,
-        }
 
     async def async_start_mowing(self) -> None:
         """Handle start command."""
