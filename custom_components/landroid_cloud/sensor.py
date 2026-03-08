@@ -44,10 +44,6 @@ SENSORS: tuple[LandroidSensorDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
     ),
     LandroidSensorDescription(
-        key="status",
-        translation_key="status",
-    ),
-    LandroidSensorDescription(
         key="error",
         translation_key="error",
     ),
@@ -123,8 +119,6 @@ class LandroidSensor(LandroidBaseEntity, SensorEntity):
 
         if key == "battery":
             return device.battery.get("percent")
-        if key == "status":
-            return device.status.get("description")
         if key == "error":
             return device.error.get("description")
         if key == "rssi":
