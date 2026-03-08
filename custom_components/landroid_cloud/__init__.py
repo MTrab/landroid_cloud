@@ -40,6 +40,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: LandroidConfigEntry) -> 
 
     try:
         await cloud.authenticate()
+        await async_prime_awsiot_metrics()
         connected = await asyncio.wait_for(cloud.connect(), timeout=30)
     except AuthorizationError as err:
         raise ConfigEntryAuthFailed("Invalid credentials") from err
