@@ -4,16 +4,18 @@ from __future__ import annotations
 
 from enum import StrEnum
 
+from homeassistant.const import Platform
+
 DOMAIN = "landroid_cloud"
 
-PLATFORMS = [
-    "lawn_mower",
-    "sensor",
-    "binary_sensor",
-    "switch",
-    "button",
-    "number",
-    "select",
+PLATFORMS: list[Platform] = [
+    Platform.LAWN_MOWER,
+    Platform.SENSOR,
+    Platform.BINARY_SENSOR,
+    Platform.SWITCH,
+    Platform.BUTTON,
+    Platform.NUMBER,
+    Platform.SELECT,
 ]
 
 CONF_CLOUD = "cloud"
