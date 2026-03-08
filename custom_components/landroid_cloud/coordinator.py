@@ -41,13 +41,13 @@ class LandroidCloudCoordinator(DataUpdateCoordinator[dict[str, DeviceHandler]]):
     async def async_setup(self) -> None:
         """Attach callbacks for push updates."""
 
-        async def _on_data_received(name: str, device: DeviceHandler) -> None:
+        def _on_data_received(name: str, device: DeviceHandler) -> None:
             del name
-            await self._handle_push_update(device)
+            self._schedule_push_update(device)
 
-        async def _on_api_update(api_data: dict[str, Any]) -> None:
+        def _on_api_update(api_data: dict[str, Any]) -> None:
             del api_data
-            await self._refresh_from_cloud()
+            self._schedule_api_refresh()
 
         self.cloud.set_callback(LandroidEvent.DATA_RECEIVED, _on_data_received)
         self.cloud.set_callback(LandroidEvent.API, _on_api_update)
@@ -74,6 +74,28 @@ class LandroidCloudCoordinator(DataUpdateCoordinator[dict[str, DeviceHandler]]):
         """Refresh local state from cloud cache in a race-safe manner."""
         async with self._event_lock:
             self.async_set_updated_data(_device_map(self.cloud))
+
+    def _schedule_push_update(self, device: DeviceHandler) -> None:
+        """Schedule push update handling on Home Assistant's event loop."""
+        try:
+            self.hass.loop.call_soon_threadsafe(self._create_push_update_task, device)
+        except RuntimeError:
+            _LOGGER.debug("Ignoring push update scheduling after loop shutdown")
+
+    def _schedule_api_refresh(self) -> None:
+        """Schedule API refresh handling on Home Assistant's event loop."""
+        try:
+            self.hass.loop.call_soon_threadsafe(self._create_api_refresh_task)
+        except RuntimeError:
+            _LOGGER.debug("Ignoring API refresh scheduling after loop shutdown")
+
+    def _create_push_update_task(self, device: DeviceHandler) -> None:
+        """Create task for processing a push update."""
+        self.hass.async_create_task(self._handle_push_update(device))
+
+    def _create_api_refresh_task(self) -> None:
+        """Create task for processing an API refresh event."""
+        self.hass.async_create_task(self._refresh_from_cloud())
 
     async def _async_update_data(self) -> dict[str, DeviceHandler]:
         """Return current cloud cache without triggering device updates."""
