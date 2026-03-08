@@ -9,13 +9,7 @@ from homeassistant.const import Platform
 DOMAIN = "landroid_cloud"
 
 PLATFORMS: list[Platform] = [
-    Platform.LAWN_MOWER,
     Platform.SENSOR,
-    Platform.BINARY_SENSOR,
-    Platform.SWITCH,
-    Platform.BUTTON,
-    Platform.NUMBER,
-    Platform.SELECT,
 ]
 
 CONF_CLOUD = "cloud"
