@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 from typing import Final
 
 from homeassistant.components.lawn_mower import (
     LawnMowerActivity,
     LawnMowerEntity,
+    LawnMowerEntityEntityDescription,
     LawnMowerEntityFeature,
 )
 from homeassistant.config_entries import ConfigEntry
@@ -40,15 +40,7 @@ STATUS_ACTIVITY_MAP: Final[dict[int, LawnMowerActivity]] = {
     104: LawnMowerActivity.RETURNING,
 }
 
-
-@dataclass(frozen=True, kw_only=True)
-class LandroidMowerDescription:
-    """Description for mower entity."""
-
-    key: str
-
-
-MOWER_DESCRIPTION = LandroidMowerDescription(key="mower")
+MOWER_DESCRIPTION: Final = LawnMowerEntityEntityDescription(key="mower")
 
 
 async def async_setup_entry(

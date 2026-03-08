@@ -21,6 +21,7 @@ from pyworxcloud.exceptions import (
     TooManyRequestsError,
 )
 
+from .awsiot import async_prime_awsiot_metrics
 from .const import (
     CONF_CLOUD,
     CONF_COMMAND_TIMEOUT,
@@ -52,6 +53,7 @@ async def _validate_input(user_input: dict[str, Any]) -> dict[str, Any]:
 
     try:
         await cloud.authenticate()
+        await async_prime_awsiot_metrics()
         connected = await asyncio.wait_for(cloud.connect(), timeout=30)
         if not connected:
             return {"title": user_input[CONF_EMAIL], "device_count": 0}
