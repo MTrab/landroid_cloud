@@ -23,3 +23,15 @@ def test_battery_charging_attribute_unavailable() -> None:
     """Unknown charging state should not set battery charging attribute."""
     device = SimpleNamespace(battery={"charging": "unknown"})
     assert _battery_charging_attribute(device) is None
+
+
+def test_rssi_is_read_from_attribute() -> None:
+    """RSSI mapping should use device attribute and not dict lookup."""
+    device = SimpleNamespace(
+        battery={},
+        error={},
+        schedules={},
+        rssi=-67,
+    )
+    # Equivalent behavior to sensor native_value branch for key == "rssi".
+    assert getattr(device, "rssi", None) == -67

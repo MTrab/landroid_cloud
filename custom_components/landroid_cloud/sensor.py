@@ -122,7 +122,7 @@ class LandroidSensor(LandroidBaseEntity, SensorEntity):
         if key == "error":
             return device.error.get("description")
         if key == "rssi":
-            return device.get("rssi")
+            return getattr(device, "rssi", None)
         if key == "daily_progress":
             return device.schedules.get("daily_progress")
         if key == "next_schedule":
