@@ -8,7 +8,7 @@ from homeassistant.const import Platform
 
 DOMAIN = "landroid_cloud"
 
-PLATFORMS: list[Platform] = [Platform.LAWN_MOWER]
+PLATFORMS: list[Platform] = [Platform.LAWN_MOWER, Platform.SENSOR]
 
 CONF_CLOUD = "cloud"
 CONF_COMMAND_TIMEOUT = "command_timeout"
