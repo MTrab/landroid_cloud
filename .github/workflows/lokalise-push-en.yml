@@ -9,7 +9,7 @@ on:
       - custom_components/landroid_cloud/translations/en.json
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   push-to-lokalise:
