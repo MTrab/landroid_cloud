@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Check versions
+echo "Fetching available Home Assistant versions..."
+AVAILABLE_VERSIONS=$(curl -s https://pypi.org/pypi/homeassistant/json | jq -r '.releases | keys | .[]' | sort -V)
+
+if [[ -z "$AVAILABLE_VERSIONS" ]]; then
+  echo "Error: Could not fetch available versions."
+  exit 1
+fi
+
+# Show available versions
+echo "Available versions:"
+echo "$AVAILABLE_VERSIONS"
+
+read -p "What HA Version? " VERSION
+echo "Installing ${my_var}!"
+
+
+cd "$(dirname "$0")/.."
+
+python3 -m pip install homeassistant==$VERSION
+
+echo "Done."

@@ -19,5 +19,31 @@ fi
 ## without resulting to symlinks.
 export PYTHONPATH="${PYTHONPATH}:${PWD}/custom_components"
 
+LOCK_FILE="${PWD}/config/.ha_run.lock"
+if [[ -f "${LOCK_FILE}" ]]; then
+    lock_pid="$(sed -n 's/.*"pid"[[:space:]]*:[[:space:]]*\([0-9]\+\).*/\1/p' "${LOCK_FILE}" | head -n1)"
+    if [[ -n "${lock_pid}" ]] && kill -0 "${lock_pid}" 2>/dev/null; then
+        echo "Stopping running Home Assistant instance (pid ${lock_pid})..."
+        kill "${lock_pid}" 2>/dev/null || true
+
+        # Wait briefly for graceful shutdown.
+        for _ in {1..20}; do
+            if ! kill -0 "${lock_pid}" 2>/dev/null; then
+                break
+            fi
+            sleep 0.5
+        done
+
+        # Force stop if still running.
+        if kill -0 "${lock_pid}" 2>/dev/null; then
+            echo "Force stopping Home Assistant instance (pid ${lock_pid})..."
+            kill -9 "${lock_pid}" 2>/dev/null || true
+        fi
+    fi
+
+    echo "Removing stale Home Assistant lock file: ${LOCK_FILE}"
+    rm -f "${LOCK_FILE}"
+fi
+
 # Start Home Assistant
 hass --config "${PWD}/config" --debug

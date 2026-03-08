@@ -6,6 +6,24 @@
             "type": "shell",
             "command": "scripts/develop",
             "problemMatcher": []
+        },
+        {
+            "label": "Upgrade Home Assistant to latest version",
+            "type": "shell",
+            "command": "scripts/upgrade-dev",
+            "problemMatcher": []
+        },
+        {
+            "label": "Install a specific version of Home Assistant",
+            "type": "shell",
+            "command": "scripts/upgrade-version",
+            "problemMatcher": []
+        },
+        {
+            "label": "Run tests with coverage.xml",
+            "type": "shell",
+            "command": "python3 -m pytest tests --cov=custom_components --cov-report=term-missing --cov-report=xml:coverage.xml",
+            "problemMatcher": []
         }
     ]
 }
