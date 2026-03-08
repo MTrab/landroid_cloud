@@ -1,4 +1,6 @@
 {
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
     "files.associations": {
         "*.yaml": "home-assistant"
     },
@@ -7,11 +9,21 @@
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
             "source.organizeImports": "explicit"
-        },
+        }
     },
-    "isort.args": [
-        "--profile",
-        "black"
+    "isort.args": ["--profile", "black"],
+    "python.formatting.provider": "black",
+    "python.testing.pytestArgs": [
+        "tests",
+        "--cov=custom_components",
+        "--cov-report=term-missing",
+        "--cov-report=xml:coverage.xml"
     ],
-    "python.analysis.autoImportCompletions": true
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "coverage-gutters.coverageFileNames": [
+        "coverage.xml"
+    ],
+    "coverage-gutters.showLineCoverage": true,
+    "coverage-gutters.showGutterCoverage": true
 }

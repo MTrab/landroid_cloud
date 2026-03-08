@@ -2,10 +2,29 @@
 
 set -e
 
-curl -L https://github.com/AlexxIT/go2rtc/releases/download/v1.9.9/go2rtc_linux_amd64 --output /bin/go2rtc
-chmod a+x /bin/go2rtc
-pip3 install uv==0.6.8
+mkdir ~/.codex
+cp /etc/codex/auth.json ~/.codex/auth.json
+
+# Ensure the mounted GitHub CLI config volume is writable by the vscode user.
+sudo mkdir -p /home/vscode/.config/gh
+sudo chown -R vscode:vscode /home/vscode/.config/gh
+chmod 700 /home/vscode/.config/gh
+
+sudo curl -L https://github.com/AlexxIT/go2rtc/releases/download/v1.9.14/go2rtc_linux_amd64 --output /bin/go2rtc
+sudo chmod a+x /bin/go2rtc
 
 cd "$(dirname "$0")/.."
 
 python3 -m pip install --requirement requirements.txt
+python3 -m pip install ffmpeg
+
+(type -p wget >/dev/null || (sudo apt update && sudo apt install wget -y)) \
+	&& sudo mkdir -p -m 755 /etc/apt/keyrings \
+	&& out=$(mktemp) && wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+	&& cat $out | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
+	&& sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+	&& sudo mkdir -p -m 755 /etc/apt/sources.list.d \
+	&& echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+
+sudo apt update
+sudo apt install tcpdump libpcap0.8-dev ffmpeg libturbojpeg0 ripgrep gh -y
