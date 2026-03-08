@@ -21,6 +21,7 @@ from pyworxcloud.exceptions import (
     TooManyRequestsError,
 )
 
+from .awsiot import async_prime_awsiot_metrics
 from .const import (
     CONF_CLOUD,
     CONF_COMMAND_TIMEOUT,
