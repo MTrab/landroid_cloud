@@ -68,7 +68,9 @@ class LandroidCloudMowerEntity(LandroidBaseEntity, LawnMowerEntity):
 
     def __init__(self, coordinator, config_entry, serial_number: str) -> None:
         """Initialize mower entity."""
-        super().__init__(coordinator, config_entry, serial_number, MOWER_DESCRIPTION.key)
+        super().__init__(
+            coordinator, config_entry, serial_number, MOWER_DESCRIPTION.key
+        )
 
     @property
     def name(self) -> str | None:

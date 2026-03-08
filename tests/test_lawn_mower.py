@@ -13,4 +13,6 @@ def test_start_sequence_states_map_to_mowing() -> None:
 
 def test_unknown_state_defaults_to_error() -> None:
     """Unknown status ids should not map to non-standard activities."""
-    assert STATUS_ACTIVITY_MAP.get(999, LawnMowerActivity.ERROR) is LawnMowerActivity.ERROR
+    assert (
+        STATUS_ACTIVITY_MAP.get(999, LawnMowerActivity.ERROR) is LawnMowerActivity.ERROR
+    )
