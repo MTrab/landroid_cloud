@@ -21,6 +21,7 @@ from pyworxcloud.exceptions import (
     TooManyRequestsError,
 )
 
+from .awsiot import async_prime_awsiot_metrics
 from .const import CONF_CLOUD, CONF_COMMAND_TIMEOUT, DEFAULT_COMMAND_TIMEOUT, DOMAIN, PLATFORMS
 from .coordinator import LandroidCloudCoordinator
 from .models import LandroidRuntimeData
@@ -40,6 +41,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: LandroidConfigEntry) -> 
 
     try:
         await cloud.authenticate()
+        await async_prime_awsiot_metrics()
         connected = await asyncio.wait_for(cloud.connect(), timeout=30)
     except AuthorizationError as err:
         raise ConfigEntryAuthFailed("Invalid credentials") from err

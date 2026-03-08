@@ -4,17 +4,11 @@ from __future__ import annotations
 
 from enum import StrEnum
 
+from homeassistant.const import Platform
+
 DOMAIN = "landroid_cloud"
 
-PLATFORMS = [
-    "lawn_mower",
-    "sensor",
-    "binary_sensor",
-    "switch",
-    "button",
-    "number",
-    "select",
-]
+PLATFORMS: list[Platform] = [Platform.LAWN_MOWER]
 
 CONF_CLOUD = "cloud"
 CONF_COMMAND_TIMEOUT = "command_timeout"
