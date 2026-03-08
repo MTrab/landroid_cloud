@@ -60,6 +60,12 @@ class LandroidBaseEntity(CoordinatorEntity[LandroidCloudCoordinator]):
         """Return Home Assistant device info."""
         device = self.device
         cloud_type = self._config_entry.data[CONF_CLOUD]
+        firmware = getattr(device, "firmware", None)
+        firmware_version = "unknown"
+        if isinstance(firmware, dict):
+            firmware_version = str(firmware.get("version", "unknown"))
+        elif firmware is not None:
+            firmware_version = str(getattr(firmware, "version", "unknown"))
 
         info = {
             "identifiers": {(DOMAIN, str(device.serial_number))},
@@ -67,7 +73,7 @@ class LandroidBaseEntity(CoordinatorEntity[LandroidCloudCoordinator]):
             "name": str(device.name),
             "manufacturer": cloud_type.capitalize(),
             "model": str(getattr(device, "model", "Unknown")),
-            "sw_version": str(getattr(device.firmware, "version", "unknown")),
+            "sw_version": firmware_version,
             "suggested_area": self._config_entry.data[CONF_EMAIL],
         }
 
