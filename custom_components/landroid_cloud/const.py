@@ -11,6 +11,7 @@ DOMAIN = "landroid_cloud"
 PLATFORMS: list[Platform] = [
     Platform.LAWN_MOWER,
     Platform.SENSOR,
+    Platform.SWITCH,
     Platform.BINARY_SENSOR,
 ]
 
