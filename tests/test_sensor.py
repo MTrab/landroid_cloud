@@ -69,6 +69,16 @@ def test_error_and_rssi_are_diagnostic_entities() -> None:
     assert rssi.entity_category is EntityCategory.DIAGNOSTIC
 
 
+def test_selected_sensors_expose_specific_icons() -> None:
+    """Sensors with ambiguous defaults should expose explicit icons."""
+    descriptions = {description.key: description for description in SENSORS}
+
+    assert descriptions["daily_progress"].icon == "mdi:progress-clock"
+    assert descriptions["battery_charge_cycles_total"].icon == "mdi:battery-sync"
+    assert descriptions["battery_charge_cycles_current"].icon == "mdi:battery-sync"
+    assert descriptions["error"].icon == "mdi:alert-circle-outline"
+
+
 def test_next_schedule_is_timestamp_sensor() -> None:
     """Next schedule should be modeled as a timestamp sensor."""
     next_schedule = next(

@@ -115,6 +115,7 @@ SENSORS: tuple[LandroidSensorDescription, ...] = (
         key="error",
         translation_key="error",
         entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:alert-circle-outline",
     ),
     LandroidSensorDescription(
         key="rssi",
@@ -131,6 +132,7 @@ SENSORS: tuple[LandroidSensorDescription, ...] = (
         native_unit_of_measurement=PERCENTAGE,
         state_class=SensorStateClass.MEASUREMENT,
         entity_registry_enabled_default=False,
+        icon="mdi:progress-clock",
     ),
     LandroidSensorDescription(
         key="next_schedule",
@@ -151,12 +153,14 @@ SENSORS: tuple[LandroidSensorDescription, ...] = (
         translation_key="battery_charge_cycles_total",
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
+        icon="mdi:battery-sync",
     ),
     LandroidSensorDescription(
         key="battery_charge_cycles_current",
         translation_key="battery_charge_cycles_current",
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
+        icon="mdi:battery-sync",
     ),
     LandroidSensorDescription(
         key="battery_temperature",
