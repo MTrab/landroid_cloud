@@ -113,6 +113,7 @@ SENSORS: tuple[LandroidSensorDescription, ...] = (
     LandroidSensorDescription(
         key="next_schedule",
         translation_key="next_schedule",
+        device_class=SensorDeviceClass.TIMESTAMP,
         entity_registry_enabled_default=False,
     ),
     LandroidSensorDescription(

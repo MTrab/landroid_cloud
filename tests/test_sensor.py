@@ -2,6 +2,7 @@
 
 from types import SimpleNamespace
 
+from homeassistant.components.sensor import SensorDeviceClass
 from homeassistant.const import ATTR_BATTERY_CHARGING
 from homeassistant.helpers.entity import EntityCategory
 
@@ -65,6 +66,15 @@ def test_error_and_rssi_are_diagnostic_entities() -> None:
 
     assert error.entity_category is EntityCategory.DIAGNOSTIC
     assert rssi.entity_category is EntityCategory.DIAGNOSTIC
+
+
+def test_next_schedule_is_timestamp_sensor() -> None:
+    """Next schedule should be modeled as a timestamp sensor."""
+    next_schedule = next(
+        description for description in SENSORS if description.key == "next_schedule"
+    )
+
+    assert next_schedule.device_class is SensorDeviceClass.TIMESTAMP
 
 
 def test_battery_cycle_value_returns_integer() -> None:
