@@ -6,10 +6,11 @@ from custom_components.landroid_cloud.const import PLATFORMS
 
 
 def test_platforms_use_home_assistant_platform_enum() -> None:
-    """Merged branch should expose mower, sensor, number, button, switch, and binary sensor."""
+    """Merged branch should expose every currently supported platform."""
     assert PLATFORMS == [
         Platform.LAWN_MOWER,
         Platform.SENSOR,
+        Platform.SELECT,
         Platform.NUMBER,
         Platform.BUTTON,
         Platform.SWITCH,
