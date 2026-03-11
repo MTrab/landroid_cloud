@@ -133,7 +133,10 @@ feature/<name> - for introducing new features
 fix/<name> - fixing bugs
 enhancement/<name> - for code or stability enhancements
 chore/<name> - for repository and code chores
+translation/<name> - for translation purposes
 ```
+
+All new branches MUST be based on `master`, unless the user explicitly instructs otherwise.
 
 Each PR must include:
 
@@ -142,6 +145,7 @@ Each PR must include:
 - Known limitations
 - Any required configuration changes
 - If the PR resolves an issue, include the text `Fixes #<issue-id>`
+- A shout, descriptive and human readable title
 
 The agent must NOT merge a PR without explicit permission
 
