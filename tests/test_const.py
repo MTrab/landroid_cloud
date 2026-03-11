@@ -6,5 +6,9 @@ from custom_components.landroid_cloud.const import PLATFORMS
 
 
 def test_platforms_use_home_assistant_platform_enum() -> None:
-    """Sensor branch should expose mower + sensor platforms."""
-    assert PLATFORMS == [Platform.LAWN_MOWER, Platform.SENSOR]
+    """Binary sensor branch should expose mower + sensor + binary sensor."""
+    assert PLATFORMS == [
+        Platform.LAWN_MOWER,
+        Platform.SENSOR,
+        Platform.BINARY_SENSOR,
+    ]

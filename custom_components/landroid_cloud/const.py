@@ -8,7 +8,11 @@ from homeassistant.const import Platform
 
 DOMAIN = "landroid_cloud"
 
-PLATFORMS: list[Platform] = [Platform.LAWN_MOWER, Platform.SENSOR]
+PLATFORMS: list[Platform] = [
+    Platform.LAWN_MOWER,
+    Platform.SENSOR,
+    Platform.BINARY_SENSOR,
+]
 
 STARTUP = """
 -------------------------------------------------------------------
