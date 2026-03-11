@@ -21,6 +21,9 @@ categories:
   - title: '🧰 Maintenance'
     label: 'chore'
 
+  - title: '🌐 Translations'
+    label: 'translation'
+
   - title: ":package: Dependencies"
     labels:
       - 'dependencies'
@@ -58,6 +61,9 @@ autolabeler:
   - label: 'chore'
     branch:
       - '/chore\/.+/'
+  - label: 'translation'
+    branch:
+      - '/translation\/.+/'
   - label: 'dependencies'
     branch:
       - '/dependabot\/.+/'
@@ -66,6 +72,7 @@ autolabeler:
       - '/patch\/.+/'
       - '/dependabot\/.+/'
       - '/chore\/.+/'
+      - '/translation\/.+/'
       - '/feature\/.+/'
       - '/fix\/.+/'
       - '/enhancement\/.+/'
