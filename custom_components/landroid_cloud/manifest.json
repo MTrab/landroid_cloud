@@ -13,7 +13,7 @@
         "pyworxcloud"
     ],
     "requirements": [
-        "pyworxcloud@git+https://github.com/MTrab/pyworxcloud.git@enhancement/time-extension-command"
+        "pyworxcloud==6.0.0"
     ],
     "version": "6.0.0"
 }
