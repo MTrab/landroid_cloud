@@ -167,3 +167,12 @@ def test_blade_and_battery_diagnostic_sensors_are_disabled_by_default() -> None:
         and description.entity_registry_enabled_default is False
         for description in sensors
     )
+
+
+def test_rain_delay_remaining_is_disabled_by_default() -> None:
+    """Rain delay remaining should be disabled by default."""
+    rain_delay_remaining = next(
+        description for description in SENSORS if description.key == "rain_delay_remaining"
+    )
+
+    assert rain_delay_remaining.entity_registry_enabled_default is False

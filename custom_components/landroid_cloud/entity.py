@@ -41,6 +41,7 @@ class LandroidBaseEntity(CoordinatorEntity[LandroidCloudCoordinator]):
     """Base class for all Landroid Cloud entities."""
 
     _attr_has_entity_name = True
+    _attr_requires_online = False
 
     def __init__(
         self,
@@ -62,8 +63,14 @@ class LandroidBaseEntity(CoordinatorEntity[LandroidCloudCoordinator]):
 
     @property
     def available(self) -> bool:
-        """Return availability based on cloud-reported online state."""
-        return bool(getattr(self.device, "online", False))
+        """Return availability for the entity."""
+        if not super().available:
+            return False
+        if self._serial_number not in self.coordinator.data:
+            return False
+        if self._attr_requires_online:
+            return bool(getattr(self.device, "online", False))
+        return True
 
     @property
     def device_info(self) -> DeviceInfo:

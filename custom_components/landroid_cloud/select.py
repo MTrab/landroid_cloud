@@ -34,6 +34,7 @@ class LandroidZoneSelect(LandroidBaseEntity, SelectEntity):
 
     _attr_icon = "mdi:map-clock"
     _attr_entity_category = EntityCategory.CONFIG
+    _attr_requires_online = True
     _attr_translation_key = "zone"
 
     def __init__(self, coordinator, config_entry, serial_number: str) -> None:
