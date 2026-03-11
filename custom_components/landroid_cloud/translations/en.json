@@ -51,6 +51,9 @@
       },
       "next_schedule": {
         "name": "Next schedule"
+      },
+      "rain_delay_remaining": {
+        "name": "Rain delay remaining"
       }
     },
     "binary_sensor": {

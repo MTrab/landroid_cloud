@@ -15,8 +15,10 @@ from homeassistant.const import (
     ATTR_BATTERY_CHARGING,
     PERCENTAGE,
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+    UnitOfTime,
 )
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
 from .entity import LandroidBaseEntity
@@ -35,6 +37,14 @@ def _battery_charging_attribute(device) -> dict[str, bool] | None:
     return None
 
 
+def _rain_delay_remaining_value(device) -> int | None:
+    """Return remaining rain delay in minutes when available."""
+    remaining = getattr(device, "rainsensor", {}).get("remaining")
+    if isinstance(remaining, int):
+        return remaining
+    return None
+
+
 SENSORS: tuple[LandroidSensorDescription, ...] = (
     LandroidSensorDescription(
         key="battery",
@@ -46,6 +56,7 @@ SENSORS: tuple[LandroidSensorDescription, ...] = (
     LandroidSensorDescription(
         key="error",
         translation_key="error",
+        entity_category=EntityCategory.DIAGNOSTIC,
     ),
     LandroidSensorDescription(
         key="rssi",
@@ -53,6 +64,7 @@ SENSORS: tuple[LandroidSensorDescription, ...] = (
         native_unit_of_measurement=SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
         device_class=SensorDeviceClass.SIGNAL_STRENGTH,
         state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
     ),
     LandroidSensorDescription(
@@ -66,6 +78,13 @@ SENSORS: tuple[LandroidSensorDescription, ...] = (
         key="next_schedule",
         translation_key="next_schedule",
         entity_registry_enabled_default=False,
+    ),
+    LandroidSensorDescription(
+        key="rain_delay_remaining",
+        translation_key="rain_delay_remaining",
+        native_unit_of_measurement=UnitOfTime.MINUTES,
+        device_class=SensorDeviceClass.DURATION,
+        state_class=SensorStateClass.MEASUREMENT,
     ),
 )
 
@@ -127,6 +146,8 @@ class LandroidSensor(LandroidBaseEntity, SensorEntity):
             return device.schedules.get("daily_progress")
         if key == "next_schedule":
             return device.schedules.get("next_schedule_start")
+        if key == "rain_delay_remaining":
+            return _rain_delay_remaining_value(device)
 
         return None
 
