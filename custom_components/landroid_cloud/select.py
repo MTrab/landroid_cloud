@@ -41,6 +41,11 @@ class LandroidZoneSelect(LandroidBaseEntity, SelectEntity):
         super().__init__(coordinator, config_entry, serial_number, "zone")
 
     @property
+    def entity_registry_enabled_default(self) -> bool:
+        """Disable zone select by default."""
+        return False
+
+    @property
     def options(self) -> list[str]:
         """Return available zone options."""
         starting_points = self.device.zone.get("starting_point", [])
