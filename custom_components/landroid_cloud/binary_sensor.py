@@ -35,7 +35,6 @@ BINARY_SENSORS: tuple[LandroidBinarySensorDescription, ...] = (
         translation_key="charging",
         device_class=BinarySensorDeviceClass.BATTERY_CHARGING,
         entity_category=EntityCategory.DIAGNOSTIC,
-        entity_registry_enabled_default=False,
     ),
 )
 
