@@ -13,6 +13,7 @@ from custom_components.landroid_cloud.sensor import (
     _battery_value,
     _blade_runtime_value,
     _rain_delay_remaining_value,
+    _schedule_attributes,
     _statistics_value,
 )
 
@@ -75,6 +76,33 @@ def test_next_schedule_is_timestamp_sensor() -> None:
     )
 
     assert next_schedule.device_class is SensorDeviceClass.TIMESTAMP
+
+
+def test_schedule_attributes_expose_known_schedule_fields() -> None:
+    """Known schedule fields should be exposed as next schedule attributes."""
+    schedules = {
+        "active": True,
+        "time_extension": 10,
+        "slots": [{"day": "mon", "start": "10:00", "end": "11:00"}],
+        "party_mode_enabled": False,
+        "one_time_schedule": True,
+        "auto_schedule": {"enabled": True, "settings": {"boost": 1}},
+        "daily_progress": 75,
+        "next_schedule_start": "2026-03-12 10:30:00+01:00",
+        "ignored": "value",
+    }
+    device = SimpleNamespace(schedules=schedules)
+
+    assert _schedule_attributes(device) == {
+        "active": True,
+        "time_extension": 10,
+        "slots": [{"day": "mon", "start": "10:00", "end": "11:00"}],
+        "party_mode_enabled": False,
+        "one_time_schedule": True,
+        "auto_schedule": {"enabled": True, "settings": {"boost": 1}},
+        "daily_progress": 75,
+        "next_schedule_start": "2026-03-12 10:30:00+01:00",
+    }
 
 
 def test_battery_cycle_value_returns_integer() -> None:

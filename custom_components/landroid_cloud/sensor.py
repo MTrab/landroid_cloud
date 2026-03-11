@@ -81,6 +81,28 @@ def _statistics_value(device, statistics_key: str) -> int | None:
     return None
 
 
+def _schedule_attributes(device) -> dict[str, object] | None:
+    """Return known schedule fields for the next schedule sensor."""
+    schedules = getattr(device, "schedules", None)
+    if not isinstance(schedules, dict):
+        return None
+
+    known_keys = (
+        "active",
+        "time_extension",
+        "slots",
+        "party_mode_enabled",
+        "one_time_schedule",
+        "auto_schedule",
+        "daily_progress",
+        "next_schedule_start",
+    )
+    attributes = {
+        key: schedules[key] for key in known_keys if key in schedules and schedules[key] is not None
+    }
+    return attributes or None
+
+
 SENSORS: tuple[LandroidSensorDescription, ...] = (
     LandroidSensorDescription(
         key="battery",
@@ -274,8 +296,10 @@ class LandroidSensor(LandroidBaseEntity, SensorEntity):
         return None
 
     @property
-    def extra_state_attributes(self) -> dict[str, bool] | None:
-        """Return battery charging attribute for battery sensor."""
-        if self.entity_description.key != "battery":
-            return None
-        return _battery_charging_attribute(self.device)
+    def extra_state_attributes(self) -> dict[str, object] | None:
+        """Return extra state attributes for sensors that expose them."""
+        if self.entity_description.key == "battery":
+            return _battery_charging_attribute(self.device)
+        if self.entity_description.key == "next_schedule":
+            return _schedule_attributes(self.device)
+        return None
