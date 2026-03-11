@@ -1,0 +1,63 @@
+name: Issue auto labels
+
+on:
+  issues:
+    types:
+      - opened
+
+jobs:
+  add-issue-labels:
+    name: Add issue labels
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Apply labels from issue content
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const body = context.payload.issue.body ?? "";
+            const labels = new Set();
+
+            const mowerMakeLabels = {
+              "Worx Landroid": "Worx Landroid",
+              "Landroid Vision": "Landroid Vision",
+              "Kress": "Kress",
+              "LandXcape": "LandXcape",
+            };
+
+            for (const [fieldValue, label] of Object.entries(mowerMakeLabels)) {
+              const pattern = new RegExp(
+                `### What make of mower does this concern\\?\\s+${fieldValue.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\\\$&")}(?:\\s|$)`,
+                "m",
+              );
+              if (pattern.test(body)) {
+                labels.add(label);
+                break;
+              }
+            }
+
+            const textMatchers = [
+              { pattern: /\bpyworxcloud\b/i, label: "pyworxcloud" },
+            ];
+
+            for (const matcher of textMatchers) {
+              if (matcher.pattern.test(body)) {
+                labels.add(matcher.label);
+              }
+            }
+
+            if (labels.size === 0) {
+              core.info("No additional labels matched.");
+              return;
+            }
+
+            const labelsToAdd = [...labels];
+            core.info(`Adding labels: ${labelsToAdd.join(", ")}`);
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: labelsToAdd,
+            });
