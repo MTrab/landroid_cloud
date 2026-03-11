@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from homeassistant.components.switch import SwitchEntity, SwitchEntityDescription
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from pyworxcloud import DeviceCapability
 
@@ -26,30 +27,35 @@ SWITCHES: tuple[LandroidSwitchDescription, ...] = (
         key="party_mode",
         translation_key="party_mode",
         icon="mdi:party-popper",
+        entity_category=EntityCategory.CONFIG,
         capability=DeviceCapability.PARTY_MODE,
     ),
     LandroidSwitchDescription(
         key="lock",
         translation_key="lock",
         icon="mdi:lock",
+        entity_category=EntityCategory.CONFIG,
         entity_registry_enabled_default=False,
     ),
     LandroidSwitchDescription(
         key="off_limits",
         translation_key="off_limits",
         icon="mdi:border-none-variant",
+        entity_category=EntityCategory.CONFIG,
         capability=DeviceCapability.OFF_LIMITS,
     ),
     LandroidSwitchDescription(
         key="off_limits_shortcut",
         translation_key="off_limits_shortcut",
         icon="mdi:transit-detour",
+        entity_category=EntityCategory.CONFIG,
         capability=DeviceCapability.OFF_LIMITS,
     ),
     LandroidSwitchDescription(
         key="acs",
         translation_key="acs",
         icon="mdi:radar",
+        entity_category=EntityCategory.CONFIG,
         capability=DeviceCapability.ACS,
     ),
 )
