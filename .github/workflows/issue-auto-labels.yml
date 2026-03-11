@@ -19,6 +19,8 @@ jobs:
             const body = context.payload.issue.body ?? "";
             const labels = new Set();
             const diagnosticsMissingLabel = "diagnostics missing";
+            const featureRequestLabel = "feature request";
+            const featureRequestPrefix = "[FR]: ";
 
             function escapeRegExp(value) {
               return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -58,6 +60,22 @@ jobs:
             const textMatchers = [
               { pattern: /\bpyworxcloud\b/i, label: "pyworxcloud" },
             ];
+
+            const existingLabels = (context.payload.issue.labels ?? []).map(
+              (label) => label.name,
+            );
+
+            if (
+              existingLabels.includes(featureRequestLabel) &&
+              !context.payload.issue.title.startsWith(featureRequestPrefix)
+            ) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                title: `${featureRequestPrefix}${context.payload.issue.title}`,
+              });
+            }
 
             for (const matcher of textMatchers) {
               if (matcher.pattern.test(body)) {
