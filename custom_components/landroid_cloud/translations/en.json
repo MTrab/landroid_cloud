@@ -51,6 +51,33 @@
       },
       "next_schedule": {
         "name": "Next schedule"
+      },
+      "rain_delay_remaining": {
+        "name": "Rain delay remaining"
+      },
+      "battery_charge_cycles_total": {
+        "name": "Battery charge cycles total"
+      },
+      "battery_charge_cycles_current": {
+        "name": "Battery charge cycles since reset"
+      },
+      "battery_temperature": {
+        "name": "Battery temperature"
+      },
+      "battery_voltage": {
+        "name": "Battery voltage"
+      },
+      "blade_runtime_total": {
+        "name": "Blade runtime total"
+      },
+      "blade_runtime_current": {
+        "name": "Blade runtime since reset"
+      },
+      "distance_driven_total": {
+        "name": "Distance driven total"
+      },
+      "mower_runtime_total": {
+        "name": "Mower runtime total"
       }
     },
     "binary_sensor": {
@@ -82,12 +109,6 @@
       "edge_cut": {
         "name": "Edge cut"
       },
-      "zone_training": {
-        "name": "Zone training"
-      },
-      "restart": {
-        "name": "Restart"
-      },
       "reset_blade_time": {
         "name": "Reset blade runtime"
       },
@@ -101,6 +122,9 @@
       },
       "cutting_height": {
         "name": "Cutting height"
+      },
+      "time_extension": {
+        "name": "Time extension"
       }
     },
     "select": {

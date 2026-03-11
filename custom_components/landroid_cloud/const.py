@@ -12,6 +12,10 @@ PLATFORMS: list[Platform] = [
     Platform.LAWN_MOWER,
     Platform.SENSOR,
     Platform.SELECT,
+    Platform.NUMBER,
+    Platform.BUTTON,
+    Platform.SWITCH,
+    Platform.BINARY_SENSOR,
 ]
 
 STARTUP = """
