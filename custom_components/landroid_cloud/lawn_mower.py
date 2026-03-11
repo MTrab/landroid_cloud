@@ -60,6 +60,7 @@ class LandroidCloudMowerEntity(LandroidBaseEntity, LawnMowerEntity):
     """Representation of a cloud mower."""
 
     entity_description = MOWER_DESCRIPTION
+    _attr_requires_online = True
     _attr_supported_features = (
         LawnMowerEntityFeature.START_MOWING
         | LawnMowerEntityFeature.PAUSE

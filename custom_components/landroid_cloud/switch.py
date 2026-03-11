@@ -28,6 +28,7 @@ SWITCHES: tuple[LandroidSwitchDescription, ...] = (
         translation_key="party_mode",
         icon="mdi:party-popper",
         entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
         capability=DeviceCapability.PARTY_MODE,
     ),
     LandroidSwitchDescription(
@@ -93,6 +94,7 @@ class LandroidSwitch(LandroidBaseEntity, SwitchEntity):
     """Representation of a Landroid cloud switch."""
 
     entity_description: LandroidSwitchDescription
+    _attr_requires_online = True
 
     def __init__(
         self,

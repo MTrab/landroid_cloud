@@ -27,6 +27,7 @@ BUTTONS: tuple[LandroidButtonDescription, ...] = (
         key="edge_cut",
         translation_key="edge_cut",
         icon="mdi:map-marker-path",
+        entity_registry_enabled_default=False,
         capability=DeviceCapability.EDGE_CUT,
     ),
     LandroidButtonDescription(
@@ -78,6 +79,7 @@ class LandroidButton(LandroidBaseEntity, ButtonEntity):
     """Representation of a Landroid cloud button."""
 
     entity_description: LandroidButtonDescription
+    _attr_requires_online = True
 
     def __init__(
         self,

@@ -147,6 +147,7 @@ SENSORS: tuple[LandroidSensorDescription, ...] = (
         suggested_unit_of_measurement=UnitOfTime.HOURS,
         device_class=SensorDeviceClass.DURATION,
         state_class=SensorStateClass.MEASUREMENT,
+        entity_registry_enabled_default=False,
     ),
     LandroidSensorDescription(
         key="battery_charge_cycles_total",

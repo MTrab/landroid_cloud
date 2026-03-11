@@ -107,6 +107,7 @@ class LandroidNumber(LandroidBaseEntity, NumberEntity):
     """Representation of a Landroid cloud number entity."""
 
     entity_description: LandroidNumberDescription
+    _attr_requires_online = True
 
     def __init__(
         self,

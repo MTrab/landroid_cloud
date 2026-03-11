@@ -22,3 +22,10 @@ def test_reset_buttons_are_configuration_entities() -> None:
         description.entity_category is EntityCategory.CONFIG
         for description in reset_buttons
     )
+
+
+def test_edge_cut_is_disabled_by_default() -> None:
+    """Edge cut should be disabled by default."""
+    edge_cut = next(description for description in BUTTONS if description.key == "edge_cut")
+
+    assert edge_cut.entity_registry_enabled_default is False
