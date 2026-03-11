@@ -29,6 +29,12 @@ def _rain_delay_value(device) -> int | None:
     return None if value is None else int(value)
 
 
+def _time_extension_value(device) -> int | None:
+    """Return schedule time extension percentage when available."""
+    value = getattr(device, "schedules", {}).get("time_extension")
+    return None if value is None else int(value)
+
+
 NUMBERS: tuple[LandroidNumberDescription, ...] = (
     LandroidNumberDescription(
         key="rain_delay",
@@ -53,6 +59,18 @@ NUMBERS: tuple[LandroidNumberDescription, ...] = (
         native_unit_of_measurement="mm",
         mode=NumberMode.SLIDER,
         capability=DeviceCapability.CUTTING_HEIGHT,
+    ),
+    LandroidNumberDescription(
+        key="time_extension",
+        translation_key="time_extension",
+        entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
+        native_min_value=-100,
+        native_max_value=100,
+        native_step=10,
+        native_unit_of_measurement="%",
+        mode=NumberMode.BOX,
+        icon="mdi:timer-edit-outline",
     ),
 )
 
@@ -117,6 +135,9 @@ class LandroidNumber(LandroidBaseEntity, NumberEntity):
             except NoCuttingHeightError:
                 return None
 
+        if self.entity_description.key == "time_extension":
+            return _time_extension_value(self.device)
+
         return None
 
     async def async_set_native_value(self, value: float) -> None:
@@ -130,6 +151,12 @@ class LandroidNumber(LandroidBaseEntity, NumberEntity):
         elif self.entity_description.key == "cutting_height":
             await async_run_cloud_command(
                 lambda: self.coordinator.cloud.set_cutting_height(
+                    serial_number, int(value)
+                )
+            )
+        elif self.entity_description.key == "time_extension":
+            await async_run_cloud_command(
+                lambda: self.coordinator.cloud.set_time_extension(
                     serial_number, int(value)
                 )
             )
