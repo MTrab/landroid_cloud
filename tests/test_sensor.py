@@ -7,8 +7,12 @@ from homeassistant.helpers.entity import EntityCategory
 
 from custom_components.landroid_cloud.sensor import (
     SENSORS,
+    _battery_cycle_value,
     _battery_charging_attribute,
+    _battery_value,
+    _blade_runtime_value,
     _rain_delay_remaining_value,
+    _statistics_value,
 )
 
 
@@ -61,3 +65,57 @@ def test_error_and_rssi_are_diagnostic_entities() -> None:
 
     assert error.entity_category is EntityCategory.DIAGNOSTIC
     assert rssi.entity_category is EntityCategory.DIAGNOSTIC
+
+
+def test_battery_cycle_value_returns_integer() -> None:
+    """Battery cycle values should be exposed when present."""
+    device = SimpleNamespace(battery={"cycles": {"total": 3014, "current": 14}})
+
+    assert _battery_cycle_value(device, "total") == 3014
+    assert _battery_cycle_value(device, "current") == 14
+
+
+def test_blade_runtime_value_returns_minutes() -> None:
+    """Blade runtime values should be exposed in minutes."""
+    device = SimpleNamespace(blades={"total_on": 1200, "current_on": 320})
+
+    assert _blade_runtime_value(device, "total_on") == 1200
+    assert _blade_runtime_value(device, "current_on") == 320
+
+
+def test_battery_value_returns_float() -> None:
+    """Battery telemetry values should be exposed as floats."""
+    device = SimpleNamespace(battery={"temperature": 15.6, "voltage": 20.47})
+
+    assert _battery_value(device, "temperature") == 15.6
+    assert _battery_value(device, "voltage") == 20.47
+
+
+def test_statistics_value_returns_integer() -> None:
+    """Statistics values should be exposed when present."""
+    device = SimpleNamespace(statistics={"distance": 2146986, "worktime_total": 129895})
+
+    assert _statistics_value(device, "distance") == 2146986
+    assert _statistics_value(device, "worktime_total") == 129895
+
+
+def test_blade_and_battery_diagnostic_sensors_are_disabled_by_default() -> None:
+    """Blade and battery diagnostic sensors should be disabled by default."""
+    diagnostic_keys = {
+        "battery_charge_cycles_total",
+        "battery_charge_cycles_current",
+        "battery_temperature",
+        "battery_voltage",
+        "blade_runtime_total",
+        "blade_runtime_current",
+        "distance_driven_total",
+        "mower_runtime_total",
+    }
+    sensors = [description for description in SENSORS if description.key in diagnostic_keys]
+
+    assert len(sensors) == 8
+    assert all(
+        description.entity_category is EntityCategory.DIAGNOSTIC
+        and description.entity_registry_enabled_default is False
+        for description in sensors
+    )

@@ -15,6 +15,9 @@ from homeassistant.const import (
     ATTR_BATTERY_CHARGING,
     PERCENTAGE,
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+    UnitOfLength,
+    UnitOfElectricPotential,
+    UnitOfTemperature,
     UnitOfTime,
 )
 from homeassistant.core import HomeAssistant
@@ -42,6 +45,39 @@ def _rain_delay_remaining_value(device) -> int | None:
     remaining = getattr(device, "rainsensor", {}).get("remaining")
     if isinstance(remaining, int):
         return remaining
+    return None
+
+
+def _battery_cycle_value(device, cycle_key: str) -> int | None:
+    """Return battery cycle information when available."""
+    cycles = getattr(device, "battery", {}).get("cycles", {})
+    value = cycles.get(cycle_key)
+    if isinstance(value, int):
+        return value
+    return None
+
+
+def _battery_value(device, battery_key: str) -> float | None:
+    """Return battery telemetry value when available."""
+    value = getattr(device, "battery", {}).get(battery_key)
+    if isinstance(value, int | float):
+        return float(value)
+    return None
+
+
+def _blade_runtime_value(device, runtime_key: str) -> int | None:
+    """Return blade runtime information in minutes when available."""
+    value = getattr(device, "blades", {}).get(runtime_key)
+    if isinstance(value, int):
+        return value
+    return None
+
+
+def _statistics_value(device, statistics_key: str) -> int | None:
+    """Return device statistics value when available."""
+    value = getattr(device, "statistics", {}).get(statistics_key)
+    if isinstance(value, int):
+        return value
     return None
 
 
@@ -83,8 +119,77 @@ SENSORS: tuple[LandroidSensorDescription, ...] = (
         key="rain_delay_remaining",
         translation_key="rain_delay_remaining",
         native_unit_of_measurement=UnitOfTime.MINUTES,
+        suggested_unit_of_measurement=UnitOfTime.HOURS,
         device_class=SensorDeviceClass.DURATION,
         state_class=SensorStateClass.MEASUREMENT,
+    ),
+    LandroidSensorDescription(
+        key="battery_charge_cycles_total",
+        translation_key="battery_charge_cycles_total",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+    ),
+    LandroidSensorDescription(
+        key="battery_charge_cycles_current",
+        translation_key="battery_charge_cycles_current",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+    ),
+    LandroidSensorDescription(
+        key="battery_temperature",
+        translation_key="battery_temperature",
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+    ),
+    LandroidSensorDescription(
+        key="battery_voltage",
+        translation_key="battery_voltage",
+        native_unit_of_measurement=UnitOfElectricPotential.VOLT,
+        device_class=SensorDeviceClass.VOLTAGE,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+    ),
+    LandroidSensorDescription(
+        key="blade_runtime_total",
+        translation_key="blade_runtime_total",
+        native_unit_of_measurement=UnitOfTime.MINUTES,
+        suggested_unit_of_measurement=UnitOfTime.HOURS,
+        device_class=SensorDeviceClass.DURATION,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+    ),
+    LandroidSensorDescription(
+        key="blade_runtime_current",
+        translation_key="blade_runtime_current",
+        native_unit_of_measurement=UnitOfTime.MINUTES,
+        suggested_unit_of_measurement=UnitOfTime.HOURS,
+        device_class=SensorDeviceClass.DURATION,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+    ),
+    LandroidSensorDescription(
+        key="distance_driven_total",
+        translation_key="distance_driven_total",
+        native_unit_of_measurement=UnitOfLength.METERS,
+        suggested_unit_of_measurement=UnitOfLength.KILOMETERS,
+        device_class=SensorDeviceClass.DISTANCE,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+    ),
+    LandroidSensorDescription(
+        key="mower_runtime_total",
+        translation_key="mower_runtime_total",
+        native_unit_of_measurement=UnitOfTime.MINUTES,
+        suggested_unit_of_measurement=UnitOfTime.HOURS,
+        device_class=SensorDeviceClass.DURATION,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
     ),
 )
 
@@ -148,6 +253,22 @@ class LandroidSensor(LandroidBaseEntity, SensorEntity):
             return device.schedules.get("next_schedule_start")
         if key == "rain_delay_remaining":
             return _rain_delay_remaining_value(device)
+        if key == "battery_charge_cycles_total":
+            return _battery_cycle_value(device, "total")
+        if key == "battery_charge_cycles_current":
+            return _battery_cycle_value(device, "current")
+        if key == "battery_temperature":
+            return _battery_value(device, "temperature")
+        if key == "battery_voltage":
+            return _battery_value(device, "voltage")
+        if key == "blade_runtime_total":
+            return _blade_runtime_value(device, "total_on")
+        if key == "blade_runtime_current":
+            return _blade_runtime_value(device, "current_on")
+        if key == "distance_driven_total":
+            return _statistics_value(device, "distance")
+        if key == "mower_runtime_total":
+            return _statistics_value(device, "worktime_total")
 
         return None
 
