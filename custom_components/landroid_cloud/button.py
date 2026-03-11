@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from homeassistant.components.button import ButtonEntity, ButtonEntityDescription
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from pyworxcloud import DeviceCapability
 
@@ -29,27 +30,17 @@ BUTTONS: tuple[LandroidButtonDescription, ...] = (
         capability=DeviceCapability.EDGE_CUT,
     ),
     LandroidButtonDescription(
-        key="zone_training",
-        translation_key="zone_training",
-        icon="mdi:map-search",
-        entity_registry_enabled_default=False,
-    ),
-    LandroidButtonDescription(
-        key="restart",
-        translation_key="restart",
-        icon="mdi:restart",
-        entity_registry_enabled_default=False,
-    ),
-    LandroidButtonDescription(
         key="reset_blade_time",
         translation_key="reset_blade_time",
         icon="mdi:circular-saw",
+        entity_category=EntityCategory.CONFIG,
         entity_registry_enabled_default=False,
     ),
     LandroidButtonDescription(
         key="reset_battery_cycles",
         translation_key="reset_battery_cycles",
         icon="mdi:battery-sync",
+        entity_category=EntityCategory.CONFIG,
         entity_registry_enabled_default=False,
     ),
 )
@@ -108,14 +99,6 @@ class LandroidButton(LandroidBaseEntity, ButtonEntity):
         if self.entity_description.key == "edge_cut":
             await async_run_cloud_command(
                 lambda: self.coordinator.cloud.edgecut(serial_number)
-            )
-        elif self.entity_description.key == "zone_training":
-            await async_run_cloud_command(
-                lambda: self.coordinator.cloud.zonetraining(serial_number)
-            )
-        elif self.entity_description.key == "restart":
-            await async_run_cloud_command(
-                lambda: self.coordinator.cloud.restart(serial_number)
             )
         elif self.entity_description.key == "reset_blade_time":
             await async_run_cloud_command(

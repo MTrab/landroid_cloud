@@ -85,12 +85,6 @@
       "edge_cut": {
         "name": "Edge cut"
       },
-      "zone_training": {
-        "name": "Zone training"
-      },
-      "restart": {
-        "name": "Restart"
-      },
       "reset_blade_time": {
         "name": "Reset blade runtime"
       },
