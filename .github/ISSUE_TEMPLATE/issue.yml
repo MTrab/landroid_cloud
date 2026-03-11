@@ -89,7 +89,6 @@ body:
         **Please upload the diagnostics JSON file here instead of copy-pasting its content.**
 
         It generally allows pinpointing defects and thus resolving issues faster.
-      multiple: false
   - type: textarea
     attributes:
       label: If you could not provide diagnostics, explain why
