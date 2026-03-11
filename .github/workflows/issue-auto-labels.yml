@@ -1,0 +1,145 @@
+name: Issue auto labels
+
+on:
+  issues:
+    types:
+      - opened
+
+jobs:
+  add-issue-labels:
+    name: Add issue labels
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Apply labels from issue content
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const body = context.payload.issue.body ?? "";
+            const labels = new Set();
+            const diagnosticsMissingLabel = "diagnostics missing";
+            const featureRequestLabel = "feature request";
+            const featureRequestPrefix = "[FR]: ";
+
+            function escapeRegExp(value) {
+              return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+            }
+
+            function getSectionValue(heading) {
+              const pattern = new RegExp(
+                `### ${escapeRegExp(heading)}\\s*([\\s\\S]*?)(?=\\n### |$)`,
+                "m",
+              );
+              const match = body.match(pattern);
+              return match ? match[1].trim() : "";
+            }
+
+            function hasMeaningfulValue(value) {
+              return value !== "" && value !== "_No response_";
+            }
+
+            const mowerMakeLabels = {
+              "Worx Landroid": "Worx Landroid",
+              "Landroid Vision": "Landroid Vision",
+              "Kress": "Kress",
+              "LandXcape": "LandXcape",
+            };
+
+            for (const [fieldValue, label] of Object.entries(mowerMakeLabels)) {
+              const pattern = new RegExp(
+                `### What make of mower does this concern\\?\\s+${escapeRegExp(fieldValue)}(?:\\s|$)`,
+                "m",
+              );
+              if (pattern.test(body)) {
+                labels.add(label);
+                break;
+              }
+            }
+
+            const textMatchers = [
+              { pattern: /\bpyworxcloud\b/i, label: "pyworxcloud" },
+            ];
+
+            const existingLabels = (context.payload.issue.labels ?? []).map(
+              (label) => label.name,
+            );
+
+            if (
+              existingLabels.includes(featureRequestLabel) &&
+              !context.payload.issue.title.startsWith(featureRequestPrefix)
+            ) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                title: `${featureRequestPrefix}${context.payload.issue.title}`,
+              });
+            }
+
+            for (const matcher of textMatchers) {
+              if (matcher.pattern.test(body)) {
+                labels.add(matcher.label);
+              }
+            }
+
+            const diagnosticsFile = getSectionValue("Diagnostics file");
+            const diagnosticsExplanation = getSectionValue(
+              "If you could not provide diagnostics, explain why",
+            );
+
+            const diagnosticsMissing =
+              !hasMeaningfulValue(diagnosticsFile) &&
+              !hasMeaningfulValue(diagnosticsExplanation);
+
+            if (diagnosticsMissing) {
+              labels.add(diagnosticsMissingLabel);
+
+              try {
+                await github.rest.issues.getLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: diagnosticsMissingLabel,
+                });
+              } catch (error) {
+                if (error.status !== 404) {
+                  throw error;
+                }
+
+                await github.rest.issues.createLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: diagnosticsMissingLabel,
+                  color: "B60205",
+                  description: "Issue is missing diagnostics and no reason was provided",
+                });
+              }
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: [
+                  "Thanks for opening this issue.",
+                  "",
+                  "No diagnostics file was attached, and no explanation was provided for why diagnostics could not be included.",
+                  "Please upload the diagnostics JSON file, or reply with the reason you cannot provide it.",
+                  "You can find the official instructions for downloading diagnostics here: https://www.home-assistant.io/docs/configuration/troubleshooting/#download-diagnostics",
+                ].join("\n"),
+              });
+            }
+
+            if (labels.size === 0) {
+              core.info("No additional labels matched.");
+              return;
+            }
+
+            const labelsToAdd = [...labels];
+            core.info(`Adding labels: ${labelsToAdd.join(", ")}`);
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: labelsToAdd,
+            });
