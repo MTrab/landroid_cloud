@@ -122,6 +122,9 @@
       },
       "cutting_height": {
         "name": "Cutting height"
+      },
+      "time_extension": {
+        "name": "Time extension"
       }
     },
     "select": {
