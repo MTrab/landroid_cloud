@@ -23,11 +23,18 @@ class LandroidNumberDescription(NumberEntityDescription):
     capability: DeviceCapability | None = None
 
 
+def _rain_delay_value(device) -> int | None:
+    """Return rain delay as an integer when available."""
+    value = getattr(device, "rainsensor", {}).get("delay")
+    return None if value is None else int(value)
+
+
 NUMBERS: tuple[LandroidNumberDescription, ...] = (
     LandroidNumberDescription(
         key="rain_delay",
         translation_key="rain_delay",
         entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
         native_min_value=0,
         native_max_value=300,
         native_step=1,
@@ -39,6 +46,7 @@ NUMBERS: tuple[LandroidNumberDescription, ...] = (
         key="cutting_height",
         translation_key="cutting_height",
         entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
         native_min_value=20,
         native_max_value=70,
         native_step=1,
@@ -101,8 +109,7 @@ class LandroidNumber(LandroidBaseEntity, NumberEntity):
         serial_number = str(self.device.serial_number)
 
         if self.entity_description.key == "rain_delay":
-            value = self.device.rainsensor.get("delay")
-            return None if value is None else float(value)
+            return _rain_delay_value(self.device)
 
         if self.entity_description.key == "cutting_height":
             try:
