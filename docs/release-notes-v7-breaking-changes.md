@@ -89,7 +89,7 @@ Examples include:
 - lock
 - rain sensor
 - next schedule
-- blade runtime reset at
+- blade runtime at last reset
 - blade runtime reset time
 - most diagnostic sensors
 
