@@ -76,6 +76,22 @@ def _blade_runtime_value(device, runtime_key: str) -> int | None:
     return None
 
 
+def _blade_reset_time_value(device) -> datetime | None:
+    """Return blade reset timestamp when available."""
+    value = getattr(device, "blades", {}).get("reset_time")
+    if isinstance(value, datetime):
+        return value
+    return None
+
+
+def _last_update_value(device) -> datetime | None:
+    """Return last update timestamp in UTC when available."""
+    value = getattr(device, "updated", None)
+    if isinstance(value, datetime):
+        return value.astimezone(timezone.utc)
+    return None
+
+
 def _statistics_value(device, statistics_key: str) -> int | None:
     """Return device statistics value when available."""
     value = getattr(device, "statistics", {}).get(statistics_key)
@@ -208,6 +224,13 @@ SENSORS: tuple[LandroidSensorDescription, ...] = (
         entity_registry_enabled_default=False,
     ),
     LandroidSensorDescription(
+        key="last_update",
+        translation_key="last_update",
+        device_class=SensorDeviceClass.TIMESTAMP,
+        icon="mdi:clock-check",
+        entity_registry_enabled_default=False,
+    ),
+    LandroidSensorDescription(
         key="battery_charge_cycles_total",
         translation_key="battery_charge_cycles_total",
         entity_category=EntityCategory.DIAGNOSTIC,
@@ -254,6 +277,23 @@ SENSORS: tuple[LandroidSensorDescription, ...] = (
         native_unit_of_measurement=UnitOfTime.MINUTES,
         suggested_unit_of_measurement=UnitOfTime.HOURS,
         device_class=SensorDeviceClass.DURATION,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+    ),
+    LandroidSensorDescription(
+        key="blade_runtime_reset_at",
+        translation_key="blade_runtime_reset_at",
+        native_unit_of_measurement=UnitOfTime.MINUTES,
+        suggested_unit_of_measurement=UnitOfTime.HOURS,
+        device_class=SensorDeviceClass.DURATION,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        icon="mdi:history",
+    ),
+    LandroidSensorDescription(
+        key="blade_runtime_reset_time",
+        translation_key="blade_runtime_reset_time",
+        device_class=SensorDeviceClass.TIMESTAMP,
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
     ),
@@ -339,6 +379,8 @@ class LandroidSensor(LandroidBaseEntity, SensorEntity):
             return _next_schedule_value(device)
         if key == "rain_delay_remaining":
             return _rain_delay_remaining_value(device)
+        if key == "last_update":
+            return _last_update_value(device)
         if key == "battery_charge_cycles_total":
             return _battery_cycle_value(device, "total")
         if key == "battery_charge_cycles_current":
@@ -351,6 +393,10 @@ class LandroidSensor(LandroidBaseEntity, SensorEntity):
             return _blade_runtime_value(device, "total_on")
         if key == "blade_runtime_current":
             return _blade_runtime_value(device, "current_on")
+        if key == "blade_runtime_reset_time":
+            return _blade_reset_time_value(device)
+        if key == "blade_runtime_reset_at":
+            return _blade_runtime_value(device, "reset_at")
         if key == "distance_driven_total":
             return _statistics_value(device, "distance")
         if key == "mower_runtime_total":
