@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from homeassistant.components.sensor import (
     SensorDeviceClass,
@@ -23,6 +25,7 @@ from homeassistant.const import (
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
+from pyworxcloud.day_map import DAY_MAP
 
 from .entity import LandroidBaseEntity
 
@@ -98,9 +101,64 @@ def _schedule_attributes(device) -> dict[str, object] | None:
         "next_schedule_start",
     )
     attributes = {
-        key: schedules[key] for key in known_keys if key in schedules and schedules[key] is not None
+        key: schedules[key]
+        for key in known_keys
+        if key in schedules and schedules[key] is not None
     }
+    corrected_next = _next_schedule_value(device)
+    if corrected_next is not None:
+        attributes["next_schedule_start"] = corrected_next
     return attributes or None
+
+
+def _resolve_timezone(device) -> timezone | ZoneInfo:
+    """Return the device timezone or UTC fallback."""
+    tz_name = getattr(device, "time_zone", None)
+    if tz_name is None:
+        return timezone.utc
+    try:
+        return ZoneInfo(tz_name)
+    except ZoneInfoNotFoundError:
+        return timezone.utc
+
+
+def _next_schedule_value(device) -> datetime | None:
+    """Return the next future slot with a non-zero duration."""
+    schedules = getattr(device, "schedules", None)
+    if not isinstance(schedules, dict):
+        return None
+
+    slots = schedules.get("slots", []) or []
+    if not isinstance(slots, list):
+        return schedules.get("next_schedule_start")
+
+    tzinfo = _resolve_timezone(device)
+    now = datetime.now(tzinfo)
+    candidates: list[datetime] = []
+
+    for offset in range(0, 14):
+        target_date = now + timedelta(days=offset)
+        day = DAY_MAP[int(target_date.strftime("%w"))]
+        for slot in slots:
+            if slot.get("day") != day:
+                continue
+            if int(slot.get("duration_extended", 0)) <= 0:
+                continue
+            start_value = slot.get("start")
+            if not isinstance(start_value, str):
+                continue
+            start = datetime.strptime(
+                f"{target_date.strftime('%d/%m/%Y')} {start_value}:00",
+                "%d/%m/%Y %H:%M:%S",
+            ).replace(tzinfo=tzinfo)
+            if offset == 0 and start <= now:
+                continue
+            candidates.append(start)
+
+    if candidates:
+        return min(candidates)
+
+    return schedules.get("next_schedule_start")
 
 
 SENSORS: tuple[LandroidSensorDescription, ...] = (
@@ -278,7 +336,7 @@ class LandroidSensor(LandroidBaseEntity, SensorEntity):
         if key == "daily_progress":
             return device.schedules.get("daily_progress")
         if key == "next_schedule":
-            return device.schedules.get("next_schedule_start")
+            return _next_schedule_value(device)
         if key == "rain_delay_remaining":
             return _rain_delay_remaining_value(device)
         if key == "battery_charge_cycles_total":
