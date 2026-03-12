@@ -14,7 +14,9 @@ from custom_components.landroid_cloud.sensor import (
     _battery_cycle_value,
     _battery_charging_attribute,
     _battery_value,
+    _blade_reset_time_value,
     _blade_runtime_value,
+    _last_update_value,
     _next_schedule_value,
     _rain_delay_remaining_value,
     _schedule_attributes,
@@ -178,6 +180,24 @@ def test_blade_runtime_value_returns_minutes() -> None:
     assert _blade_runtime_value(device, "current_on") == 320
 
 
+def test_blade_reset_time_value_returns_timestamp() -> None:
+    """Blade reset timestamp should be exposed when present."""
+    reset_time = datetime(2026, 3, 12, 11, 45, tzinfo=ZoneInfo("UTC"))
+    device = SimpleNamespace(blades={"reset_time": reset_time})
+
+    assert _blade_reset_time_value(device) == reset_time
+
+
+def test_last_update_value_returns_utc_timestamp() -> None:
+    """Last update should be converted to UTC."""
+    updated = datetime(2026, 3, 12, 13, 45, tzinfo=ZoneInfo("Europe/Copenhagen"))
+    device = SimpleNamespace(updated=updated)
+
+    assert _last_update_value(device) == datetime(
+        2026, 3, 12, 12, 45, tzinfo=ZoneInfo("UTC")
+    )
+
+
 def test_battery_value_returns_float() -> None:
     """Battery telemetry values should be exposed as floats."""
     device = SimpleNamespace(battery={"temperature": 15.6, "voltage": 20.47})
@@ -203,6 +223,8 @@ def test_blade_and_battery_diagnostic_sensors_are_disabled_by_default() -> None:
         "battery_voltage",
         "blade_runtime_total",
         "blade_runtime_current",
+        "blade_runtime_reset_at",
+        "blade_runtime_reset_time",
         "distance_driven_total",
         "mower_runtime_total",
     }
@@ -210,7 +232,7 @@ def test_blade_and_battery_diagnostic_sensors_are_disabled_by_default() -> None:
         description for description in SENSORS if description.key in diagnostic_keys
     ]
 
-    assert len(sensors) == 8
+    assert len(sensors) == 10
     assert all(
         description.entity_category is EntityCategory.DIAGNOSTIC
         and description.entity_registry_enabled_default is False
@@ -227,3 +249,12 @@ def test_rain_delay_remaining_is_disabled_by_default() -> None:
     )
 
     assert rain_delay_remaining.entity_registry_enabled_default is False
+
+
+def test_last_update_is_disabled_by_default() -> None:
+    """Last update should be disabled by default."""
+    last_update = next(
+        description for description in SENSORS if description.key == "last_update"
+    )
+
+    assert last_update.entity_registry_enabled_default is False
