@@ -1,0 +1,197 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Anslut till molntjanster",
+        "description": "Ange dina molnuppgifter och valj din molnleverantor.",
+        "data": {
+          "email": "E-post",
+          "password": "Lösenord",
+          "cloud": "Molnleverantor"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Misslyckades med att ansluta",
+      "invalid_auth": "Fel vid autentisering",
+      "too_many_requests": "För många API-förfrågningar. Försök igen om 24 timmar",
+      "api_error": "Moln-API:t avvisade begaran",
+      "timeout": "Tidsgrans for anslutning overskreds",
+      "unknown": "Oväntat fel"
+    },
+    "abort": {
+      "already_exists": "Det här användarkontot har redan konfigurerats"
+    }
+  },
+  "selector": {
+    "cloud": {
+      "options": {
+        "worx": "Worx",
+        "kress": "Kress",
+        "landxcape": "LandXcape"
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Landroid Cloud-alternativ",
+        "data": {
+          "command_timeout": "Timeout for kommando (sekunder)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "battery": {
+        "name": "Batteri"
+      },
+      "status": {
+        "name": "Status"
+      },
+      "error": {
+        "name": "Fel",
+        "state": {
+          "unknown": "Okänt",
+          "no_error": "Inget fel",
+          "trapped": "Instängd",
+          "lifted": "Gräsklipparen har lyfts",
+          "wire_missing": "Begränsningskabel saknas",
+          "outside_wire": "Utanför begränsningskabeln",
+          "rain_delay": "Regnfördröjning aktiv",
+          "close_door_to_mow": "Stäng dörren för att klippa",
+          "close_door_to_go_home": "Stäng dörren för att köra hem",
+          "blade_motor_blocked": "Bladmotorn är blockerad",
+          "wheel_motor_blocked": "Hjulmotorn är blockerad",
+          "trapped_timeout": "Instängd längre än tidsgränsen",
+          "upside_down": "Gräsklipparen är upp och ner",
+          "battery_low": "Låg batterinivå",
+          "reverse_wire": "Begränsningskabeln är felvänd",
+          "charge_error": "Fel vid laddning",
+          "timeout_finding_home": "Kunde inte återvända hem inom tidsgränsen",
+          "locked": "Gräsklipparen är låst",
+          "battery_temperature_error": "Fel på batteriets temperatur",
+          "battery_trunk_open_timeout": "Batterilucka öppen tidsgräns",
+          "wire_sync": "Trådsynkronisering",
+          "charging_station_docking_error": "Fel vid dockning av laddstation",
+          "hbi_error": "HBI fel",
+          "ota_error": "Fel på trådlös uppdatering",
+          "map_error": "Fel på kartan",
+          "excessive_slope": "För stor lutning upptäckt",
+          "unreachable_zone": "Zon inte tillgänglig",
+          "unreachable_charging_station": "Laddstation som inte kan nås",
+          "insufficient_sensor_data": "Otillräcklig sensordata",
+          "training_start_disallowed": "Ej möjligt att starta träning",
+          "camera_error": "Fel på kameran",
+          "mapping_exploration_required": "Kartläggning krävs",
+          "mapping_exploration_failed": "Kartläggning misslyckades",
+          "rfid_reader_error": "RFID läsfel",
+          "headlight_error": "Fel på strålkastare",
+          "missing_charging_station": "Saknar laddstation",
+          "blade_height_adjustment_blocked": "Justering av bladhöjd blockerad"
+        }
+      },
+      "rssi": {
+        "name": "Signalstyrka"
+      },
+      "daily_progress": {
+        "name": "Daglig framdrift"
+      },
+      "next_schedule": {
+        "name": "Nasta schema"
+      },
+      "rain_delay_remaining": {
+        "name": "Aterstaende regnfordrojning"
+      },
+      "last_update": {
+        "name": "Senaste uppdatering"
+      },
+      "battery_charge_cycles_total": {
+        "name": "Battery charge cycles total"
+      },
+      "battery_charge_cycles_current": {
+        "name": "Battery charge cycles since reset"
+      },
+      "battery_temperature": {
+        "name": "Battery temperature"
+      },
+      "battery_voltage": {
+        "name": "Battery voltage"
+      },
+      "blade_runtime_total": {
+        "name": "Blade runtime total"
+      },
+      "blade_runtime_current": {
+        "name": "Blade runtime since reset"
+      },
+      "blade_runtime_reset_at": {
+        "name": "Blade runtime at last reset"
+      },
+      "blade_runtime_reset_time": {
+        "name": "Blade runtime reset time"
+      },
+      "distance_driven_total": {
+        "name": "Distance driven total"
+      },
+      "mower_runtime_total": {
+        "name": "Mower runtime total"
+      }
+    },
+    "binary_sensor": {
+      "rain_sensor": {
+        "name": "Rain sensor"
+      },
+      "charging": {
+        "name": "Laddar"
+      }
+    },
+    "switch": {
+      "party_mode": {
+        "name": "Festlage"
+      },
+      "lock": {
+        "name": "Las"
+      },
+      "off_limits": {
+        "name": "Off Limits"
+      },
+      "off_limits_shortcut": {
+        "name": "Off Limits shortcuts"
+      },
+      "acs": {
+        "name": "ACS"
+      }
+    },
+    "button": {
+      "edge_cut": {
+        "name": "Kantklippning"
+      },
+      "reset_blade_time": {
+        "name": "Reset blade runtime"
+      },
+      "reset_battery_cycles": {
+        "name": "Reset battery cycles"
+      }
+    },
+    "number": {
+      "rain_delay": {
+        "name": "Regnfördröjning"
+      },
+      "cutting_height": {
+        "name": "Klipphojd"
+      },
+      "time_extension": {
+        "name": "Förlängning av arbetstiden."
+      },
+      "torque": {
+        "name": "Vridmoment"
+      }
+    },
+    "select": {
+      "zone": {
+        "name": "Zon"
+      }
+    }
+  }
+}
