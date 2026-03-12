@@ -117,7 +117,7 @@ The agent must:
 - Implement entities according to Home Assistant entity model conventions (state, availability, device info, unique IDs, and naming).
 - Use `DataUpdateCoordinator` where periodic or shared polling is required.
 - Provide and maintain `config_flow`, diagnostics/repair handling (when relevant), and translations.
-- Integration translations to other languages than English is handled by Lokalise
+- Missing translations may be added directly in this repository, including with AI assistance, as long as the result is consistent with the English source strings and current integration behavior.
 - Keep `manifest.json`, services, and supported features aligned with Home Assistant requirements.
 - Ensure changes target and maintain at least Home Assistant Silver quality expectations, and move toward Gold where feasible.
 - Add or update tests for behavior changes, especially setup, coordinator behavior, and entity state handling.
