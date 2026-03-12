@@ -1,0 +1,197 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Verbinden met cloudservices",
+        "description": "Voer uw cloudgegevens in en selecteer uw cloudprovider.",
+        "data": {
+          "email": "E-mail",
+          "password": "Wachtwoord",
+          "cloud": "Cloudprovider"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Kan geen verbinding maken",
+      "invalid_auth": "Fout in authenticatie",
+      "too_many_requests": "Te veel verzoeken aan de API - Probeer het opnieuw binnen 24 uur",
+      "api_error": "De cloud-API heeft de aanvraag afgewezen",
+      "timeout": "Verbindingstime-out",
+      "unknown": "Onverwachtse fout"
+    },
+    "abort": {
+      "already_exists": "Deze gebruiker is al geconfigureerd"
+    }
+  },
+  "selector": {
+    "cloud": {
+      "options": {
+        "worx": "Worx",
+        "kress": "Kress",
+        "landxcape": "LandXcape"
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Landroid Cloud-opties",
+        "data": {
+          "command_timeout": "Time-out voor opdracht (seconden)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "battery": {
+        "name": "Batterij"
+      },
+      "status": {
+        "name": "Status"
+      },
+      "error": {
+        "name": "Fout",
+        "state": {
+          "unknown": "Onbekend",
+          "no_error": "Geen fout",
+          "trapped": "Vast",
+          "lifted": "Opgetild",
+          "wire_missing": "Draad ontbreekt",
+          "outside_wire": "Buiten de draad",
+          "rain_delay": "Regenvertraging actief",
+          "close_door_to_mow": "Sluit de deur om te maaien",
+          "close_door_to_go_home": "Sluit de deur om naar laadstation te gaan",
+          "blade_motor_blocked": "Motor mes is geblokkeerd",
+          "wheel_motor_blocked": "Motor wiel is geblokkeerd",
+          "trapped_timeout": "Time-out terwijl hij vastzit",
+          "upside_down": "Maaier staat ondersteboven",
+          "battery_low": "Batterij bijna leeg",
+          "reverse_wire": "Draad is omgekeerd",
+          "charge_error": "Fout bij opladen",
+          "timeout_finding_home": "Time-out tijdens het vinden van laadstation",
+          "locked": "Maaier is vergrendeld",
+          "battery_temperature_error": "Fout met batterijtemperatuur",
+          "battery_trunk_open_timeout": "Time-out voor open batterijkofferbak",
+          "wire_sync": "Draad synchronisatie",
+          "charging_station_docking_error": "Dockingfout bij laadstation",
+          "hbi_error": "HBI fout",
+          "ota_error": "OTA fout",
+          "map_error": "Kaart fout",
+          "excessive_slope": "Er is een te grote helling gedetecteerd",
+          "unreachable_zone": "Onbereikbare zone",
+          "unreachable_charging_station": "Laadstation onbereikbaar",
+          "insufficient_sensor_data": "Onvoldoende sensorgegevens",
+          "training_start_disallowed": "Trainingsstart afgekeurd",
+          "camera_error": "Camerafout",
+          "mapping_exploration_required": "Verkenning in kaart brengen vereist",
+          "mapping_exploration_failed": "Kaartverkenning mislukt",
+          "rfid_reader_error": "Fout met RFID-lezer",
+          "headlight_error": "Koplampfout",
+          "missing_charging_station": "Laadstation ontbreekt",
+          "blade_height_adjustment_blocked": "Hoogte-instelling mes geblokkeerd"
+        }
+      },
+      "rssi": {
+        "name": "Signaalsterkte"
+      },
+      "daily_progress": {
+        "name": "Dagelijkse voortgang"
+      },
+      "next_schedule": {
+        "name": "Volgend schema"
+      },
+      "rain_delay_remaining": {
+        "name": "Resterende regenvertraging"
+      },
+      "last_update": {
+        "name": "Laatste update"
+      },
+      "battery_charge_cycles_total": {
+        "name": "Battery charge cycles total"
+      },
+      "battery_charge_cycles_current": {
+        "name": "Battery charge cycles since reset"
+      },
+      "battery_temperature": {
+        "name": "Battery temperature"
+      },
+      "battery_voltage": {
+        "name": "Battery voltage"
+      },
+      "blade_runtime_total": {
+        "name": "Blade runtime total"
+      },
+      "blade_runtime_current": {
+        "name": "Blade runtime since reset"
+      },
+      "blade_runtime_reset_at": {
+        "name": "Blade runtime at last reset"
+      },
+      "blade_runtime_reset_time": {
+        "name": "Blade runtime reset time"
+      },
+      "distance_driven_total": {
+        "name": "Distance driven total"
+      },
+      "mower_runtime_total": {
+        "name": "Mower runtime total"
+      }
+    },
+    "binary_sensor": {
+      "rain_sensor": {
+        "name": "Rain sensor"
+      },
+      "charging": {
+        "name": "Opladen"
+      }
+    },
+    "switch": {
+      "party_mode": {
+        "name": "Partymodus"
+      },
+      "lock": {
+        "name": "Vergrendeling"
+      },
+      "off_limits": {
+        "name": "Off Limits"
+      },
+      "off_limits_shortcut": {
+        "name": "Off Limits shortcuts"
+      },
+      "acs": {
+        "name": "ACS"
+      }
+    },
+    "button": {
+      "edge_cut": {
+        "name": "Randroutine"
+      },
+      "reset_blade_time": {
+        "name": "Reset blade runtime"
+      },
+      "reset_battery_cycles": {
+        "name": "Reset battery cycles"
+      }
+    },
+    "number": {
+      "rain_delay": {
+        "name": "Regenvertraging"
+      },
+      "cutting_height": {
+        "name": "Maaihoogte"
+      },
+      "time_extension": {
+        "name": "Werktijd"
+      },
+      "torque": {
+        "name": "Koppel"
+      }
+    },
+    "select": {
+      "zone": {
+        "name": "Zone"
+      }
+    }
+  }
+}
