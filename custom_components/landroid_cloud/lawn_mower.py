@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Final
 
+import voluptuous as vol
 from homeassistant.components.lawn_mower import (
     LawnMowerActivity,
     LawnMowerEntity,
@@ -12,7 +13,10 @@ from homeassistant.components.lawn_mower import (
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
+from homeassistant.helpers import entity_platform
+from pyworxcloud.exceptions import NoOneTimeScheduleError
 
 from .commands import async_run_cloud_command
 from .entity import LandroidBaseEntity
@@ -40,6 +44,9 @@ STATUS_ACTIVITY_MAP: Final[dict[int, LawnMowerActivity]] = {
     104: LawnMowerActivity.RETURNING,
 }
 MOWER_DESCRIPTION: Final = LawnMowerEntityEntityDescription(key="mower")
+SERVICE_OTS: Final = "ots"
+ATTR_BOUNDARY: Final = "boundary"
+ATTR_RUNTIME: Final = "runtime"
 
 
 async def async_setup_entry(
@@ -49,6 +56,17 @@ async def async_setup_entry(
 ) -> None:
     """Set up Landroid Cloud lawn mower entities."""
     coordinator = entry.runtime_data.coordinator
+    platform = entity_platform.async_get_current_platform()
+    platform.async_register_entity_service(
+        SERVICE_OTS,
+        {
+            vol.Required(ATTR_BOUNDARY): bool,
+            vol.Required(ATTR_RUNTIME): vol.All(
+                vol.Coerce(int), vol.Range(min=10, max=120)
+            ),
+        },
+        "_async_service_ots",
+    )
 
     async_add_entities(
         LandroidCloudMowerEntity(coordinator, entry, serial_number)
@@ -101,3 +119,18 @@ class LandroidCloudMowerEntity(LandroidBaseEntity, LawnMowerEntity):
         await async_run_cloud_command(
             lambda: self.coordinator.cloud.home(str(self.device.serial_number))
         )
+
+    async def _async_service_ots(self, boundary: bool, runtime: int) -> None:
+        """Handle legacy OTS service call."""
+        try:
+            await async_run_cloud_command(
+                lambda: self.coordinator.cloud.ots(
+                    str(self.device.serial_number), boundary, runtime
+                )
+            )
+        except HomeAssistantError as err:
+            if isinstance(err.__cause__, NoOneTimeScheduleError):
+                raise HomeAssistantError(
+                    "Mower does not support one-time schedule"
+                ) from err
+            raise
