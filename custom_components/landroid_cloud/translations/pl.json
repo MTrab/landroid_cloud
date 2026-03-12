@@ -1,0 +1,197 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Połącz z usługami w chmurze",
+        "description": "Wprowadź dane logowania do chmury i wybierz dostawcę chmury.",
+        "data": {
+          "email": "Email",
+          "password": "Hasło",
+          "cloud": "Dostawca chmury"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Nieudane połączenie",
+      "invalid_auth": "Błąd autoryzacji",
+      "too_many_requests": "Zbyt wiele zapytań do API - spróbuj ponownie za 24 godziny.",
+      "api_error": "Cloud API odrzuciło żądanie",
+      "timeout": "Przekroczono limit czasu połączenia",
+      "unknown": "Niespodziewany błąd"
+    },
+    "abort": {
+      "already_exists": "Ta nazwa użytkownika jest już skonfigurowana"
+    }
+  },
+  "selector": {
+    "cloud": {
+      "options": {
+        "worx": "Worx",
+        "kress": "Kress",
+        "landxcape": "LandXcape"
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opcje Landroid Cloud",
+        "data": {
+          "command_timeout": "Limit czasu polecenia (sekundy)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "battery": {
+        "name": "Bateria"
+      },
+      "status": {
+        "name": "Status"
+      },
+      "error": {
+        "name": "Błąd",
+        "state": {
+          "unknown": "Nieznany",
+          "no_error": "Brak błędów",
+          "trapped": "Uwięziona",
+          "lifted": "Podniesiona",
+          "wire_missing": "Brak przewodu",
+          "outside_wire": "Poza przewodem",
+          "rain_delay": "Aktywne opóźnienie z powodu deszczu",
+          "close_door_to_mow": "Zamknij drzwi, żeby zacząć kosić",
+          "close_door_to_go_home": "Zamknij drzwi, żeby wrócić do domu",
+          "blade_motor_blocked": "Zablokowany silnik ostrzy",
+          "wheel_motor_blocked": "Zablokowany silnik koła",
+          "trapped_timeout": "Upłynął limit czasu od zablokowania",
+          "upside_down": "Kosiarka podniesiona",
+          "battery_low": "Niski poziom baterii",
+          "reverse_wire": "Przewód jest odwrócony",
+          "charge_error": "Błąd ładowania",
+          "timeout_finding_home": "Przekroczenie limitu czasu szukania bazy",
+          "locked": "Kosiarka zablokowana",
+          "battery_temperature_error": "Błąd temperatury akumulatora",
+          "battery_trunk_open_timeout": "Przekroczenie limitu czasu otwarcia pokrywy akumulatora",
+          "wire_sync": "Synchronizacja przewodowa",
+          "charging_station_docking_error": "Błąd dokowania stacji ładującej",
+          "hbi_error": "Błąd HBI",
+          "ota_error": "Błąd OTA",
+          "map_error": "Błąd mapy",
+          "excessive_slope": "Wykryto nadmierne nachylenie",
+          "unreachable_zone": "Strefa niedostępna",
+          "unreachable_charging_station": "Stacja ładująca niedostępna",
+          "insufficient_sensor_data": "Niewystarczające dane czujnika",
+          "training_start_disallowed": "Rozpoczęcie treningu niedozwolone",
+          "camera_error": "Błąd kamery",
+          "mapping_exploration_required": "Mapowanie wymagane",
+          "mapping_exploration_failed": "Nieudane mapowanie",
+          "rfid_reader_error": "Błąd czytnika RFID",
+          "headlight_error": "Błąd reflektora",
+          "missing_charging_station": "Pominięta stacja bazowa",
+          "blade_height_adjustment_blocked": "Zablokowana regulacja wysokości koszenia"
+        }
+      },
+      "rssi": {
+        "name": "Siła sygnału"
+      },
+      "daily_progress": {
+        "name": "Dzienny postęp"
+      },
+      "next_schedule": {
+        "name": "Następny harmonogram"
+      },
+      "rain_delay_remaining": {
+        "name": "Pozostałe opóźnienie deszczowe"
+      },
+      "last_update": {
+        "name": "Ostatnia aktualizacja"
+      },
+      "battery_charge_cycles_total": {
+        "name": "Łączna liczba cykli ładowania baterii"
+      },
+      "battery_charge_cycles_current": {
+        "name": "Cykle ładowania baterii od resetu"
+      },
+      "battery_temperature": {
+        "name": "Temperatura baterii"
+      },
+      "battery_voltage": {
+        "name": "Napięcie baterii"
+      },
+      "blade_runtime_total": {
+        "name": "Całkowity czas pracy noży"
+      },
+      "blade_runtime_current": {
+        "name": "Czas pracy noży od resetu"
+      },
+      "blade_runtime_reset_at": {
+        "name": "Czas pracy noży przy ostatnim resecie"
+      },
+      "blade_runtime_reset_time": {
+        "name": "Czas resetu czasu pracy noży"
+      },
+      "distance_driven_total": {
+        "name": "Całkowity pokonany dystans"
+      },
+      "mower_runtime_total": {
+        "name": "Całkowity czas pracy kosiarki"
+      }
+    },
+    "binary_sensor": {
+      "rain_sensor": {
+        "name": "Czujnik deszczu"
+      },
+      "charging": {
+        "name": "Ładowanie"
+      }
+    },
+    "switch": {
+      "party_mode": {
+        "name": "Tryb imprezy"
+      },
+      "lock": {
+        "name": "Blokada"
+      },
+      "off_limits": {
+        "name": "Off Limits"
+      },
+      "off_limits_shortcut": {
+        "name": "Skróty Off Limits"
+      },
+      "acs": {
+        "name": "ACS"
+      }
+    },
+    "button": {
+      "edge_cut": {
+        "name": "Koszenie krawędzi"
+      },
+      "reset_blade_time": {
+        "name": "Resetuj czas pracy noży"
+      },
+      "reset_battery_cycles": {
+        "name": "Resetuj cykle baterii"
+      }
+    },
+    "number": {
+      "rain_delay": {
+        "name": "Opóźnienie deszczowe"
+      },
+      "cutting_height": {
+        "name": "Wysokość koszenia"
+      },
+      "time_extension": {
+        "name": "Wydłużenie czasu"
+      },
+      "torque": {
+        "name": "Moment obrotowy"
+      }
+    },
+    "select": {
+      "zone": {
+        "name": "Strefa"
+      }
+    }
+  }
+}

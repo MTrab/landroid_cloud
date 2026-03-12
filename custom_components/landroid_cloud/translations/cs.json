@@ -1,0 +1,197 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Připojit ke cloudovým službám",
+        "description": "Zadejte své cloudové přihlašovací údaje a vyberte poskytovatele cloudové služby.",
+        "data": {
+          "email": "Email",
+          "password": "Heslo",
+          "cloud": "Poskytovatel cloudu"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Chyba připojení",
+      "invalid_auth": "Chyba přihlášení",
+      "too_many_requests": "Příliš mnoho požadavků na API – Zkuste to znovu za 24 hodin.",
+      "api_error": "Cloud API požadavek odmítlo",
+      "timeout": "Vypršel časový limit připojení",
+      "unknown": "Neočekávaná chyba"
+    },
+    "abort": {
+      "already_exists": "Tento uživatelský účet již byl nastaven"
+    }
+  },
+  "selector": {
+    "cloud": {
+      "options": {
+        "worx": "Worx",
+        "kress": "Kress",
+        "landxcape": "LandXcape"
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Možnosti Landroid Cloud",
+        "data": {
+          "command_timeout": "Časový limit příkazu (sekundy)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "battery": {
+        "name": "Baterie"
+      },
+      "status": {
+        "name": "Stav"
+      },
+      "error": {
+        "name": "Chyba",
+        "state": {
+          "unknown": "Neznámý",
+          "no_error": "Žádná chyba",
+          "trapped": "Uváznutí",
+          "lifted": "Zvednuto",
+          "wire_missing": "Chybí ohraničující drát",
+          "outside_wire": "Mimo sekací prostor",
+          "rain_delay": "Zpoždění po dešti je aktivní",
+          "close_door_to_mow": "Zavřete dvířka pro sekání",
+          "close_door_to_go_home": "Zavřete dvířka pro návrat do doku",
+          "blade_motor_blocked": "Nože jsou zablokovány",
+          "wheel_motor_blocked": "Pohon kol je zablokován",
+          "trapped_timeout": "Vypršel časový limit při uváznutí",
+          "upside_down": "Sekačka je vzhůru nohama",
+          "battery_low": "Vybitá baterie",
+          "reverse_wire": "Drát je obrácený",
+          "charge_error": "Chyba nabíjení",
+          "timeout_finding_home": "Vypršel časový limit při hledání doku",
+          "locked": "Sekačka je uzamčena",
+          "battery_temperature_error": "Chyba teploty baterie",
+          "battery_trunk_open_timeout": "Vypršel časový limit otevření přihrádky na baterii",
+          "wire_sync": "Synchronizace kabelem",
+          "charging_station_docking_error": "Chyba dokování nabíjecí stanice",
+          "hbi_error": "Chyba HBI (rozpoznání okraje)",
+          "ota_error": "Chyba OTA",
+          "map_error": "Chyba mapy",
+          "excessive_slope": "Zjištěn nadměrný sklon",
+          "unreachable_zone": "Nedosažitelná zóna",
+          "unreachable_charging_station": "Nedosažitelná nabíjecí stanice",
+          "insufficient_sensor_data": "Nedostatek dat ze senzorů",
+          "training_start_disallowed": "Spuštění učení nepovoleno",
+          "camera_error": "Chyba kamery",
+          "mapping_exploration_required": "Je vyžadováno průzkumné mapování",
+          "mapping_exploration_failed": "Průzkumné mapování selhalo",
+          "rfid_reader_error": "Chyba čtečky RFID",
+          "headlight_error": "Chyba světlometu",
+          "missing_charging_station": "Chybí nabíjecí stanice",
+          "blade_height_adjustment_blocked": "Zablokované nastavení výšky nožů"
+        }
+      },
+      "rssi": {
+        "name": "Síla signálu"
+      },
+      "daily_progress": {
+        "name": "Denní průběh"
+      },
+      "next_schedule": {
+        "name": "Další plán"
+      },
+      "rain_delay_remaining": {
+        "name": "Zbývající dešťová prodleva"
+      },
+      "last_update": {
+        "name": "Poslední aktualizace"
+      },
+      "battery_charge_cycles_total": {
+        "name": "Celkový počet nabíjecích cyklů baterie"
+      },
+      "battery_charge_cycles_current": {
+        "name": "Nabíjecí cykly baterie od resetu"
+      },
+      "battery_temperature": {
+        "name": "Teplota baterie"
+      },
+      "battery_voltage": {
+        "name": "Napětí baterie"
+      },
+      "blade_runtime_total": {
+        "name": "Celková doba chodu nožů"
+      },
+      "blade_runtime_current": {
+        "name": "Doba chodu nožů od resetu"
+      },
+      "blade_runtime_reset_at": {
+        "name": "Doba chodu nožů při posledním resetu"
+      },
+      "blade_runtime_reset_time": {
+        "name": "Čas resetu doby chodu nožů"
+      },
+      "distance_driven_total": {
+        "name": "Celková ujetá vzdálenost"
+      },
+      "mower_runtime_total": {
+        "name": "Celková doba provozu sekačky"
+      }
+    },
+    "binary_sensor": {
+      "rain_sensor": {
+        "name": "Dešťový senzor"
+      },
+      "charging": {
+        "name": "Nabíjení"
+      }
+    },
+    "switch": {
+      "party_mode": {
+        "name": "Párty režim"
+      },
+      "lock": {
+        "name": "Zámek"
+      },
+      "off_limits": {
+        "name": "Off Limits"
+      },
+      "off_limits_shortcut": {
+        "name": "Zkratky Off Limits"
+      },
+      "acs": {
+        "name": "ACS"
+      }
+    },
+    "button": {
+      "edge_cut": {
+        "name": "Sekání okraje"
+      },
+      "reset_blade_time": {
+        "name": "Resetovat dobu chodu nožů"
+      },
+      "reset_battery_cycles": {
+        "name": "Resetovat cykly baterie"
+      }
+    },
+    "number": {
+      "rain_delay": {
+        "name": "Dešťová prodleva"
+      },
+      "cutting_height": {
+        "name": "Výška sečení"
+      },
+      "time_extension": {
+        "name": "Časové prodloužení"
+      },
+      "torque": {
+        "name": "Krouticí moment"
+      }
+    },
+    "select": {
+      "zone": {
+        "name": "Zóna"
+      }
+    }
+  }
+}

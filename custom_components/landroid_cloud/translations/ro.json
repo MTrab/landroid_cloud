@@ -1,0 +1,197 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Conectare la serviciile cloud",
+        "description": "Introduceți credențialele cloud și selectați furnizorul de cloud.",
+        "data": {
+          "email": "E-mail",
+          "password": "Parolă",
+          "cloud": "Furnizor cloud"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "A eșuat conectarea",
+      "invalid_auth": "Eroare la autentificare",
+      "too_many_requests": "Prea multe solicitări",
+      "api_error": "API-ul cloud a respins cererea",
+      "timeout": "Timpul de conectare a expirat",
+      "unknown": "Eroare neașteptată"
+    },
+    "abort": {
+      "already_exists": "Acest cont a fost deja configurat"
+    }
+  },
+  "selector": {
+    "cloud": {
+      "options": {
+        "worx": "Worx",
+        "kress": "Kress",
+        "landxcape": "LandXcape"
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opțiuni Landroid Cloud",
+        "data": {
+          "command_timeout": "Timp limită comandă (secunde)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "battery": {
+        "name": "Baterie"
+      },
+      "status": {
+        "name": "Stare"
+      },
+      "error": {
+        "name": "Eroare",
+        "state": {
+          "unknown": "Necunoscut",
+          "no_error": "Nicio eroare",
+          "trapped": "Blocată",
+          "lifted": "Ridicată",
+          "wire_missing": "Fir lipsă",
+          "outside_wire": "În afara firului",
+          "rain_delay": "Întârziere ploaie activă",
+          "close_door_to_mow": "Închideți capacul pentru a tunde",
+          "close_door_to_go_home": "Închideți capacul pentru a merge acasă",
+          "blade_motor_blocked": "Motorul lamei este blocat",
+          "wheel_motor_blocked": "Motorul roții este blocat",
+          "trapped_timeout": "Timp expirat în timp ce era blocată",
+          "upside_down": "Mașina de tuns este răsturnată",
+          "battery_low": "Baterie descărcată",
+          "reverse_wire": "Firul este inversat",
+          "charge_error": "Eroare la încărcare",
+          "timeout_finding_home": "Timp expirat la găsirea bazei",
+          "locked": "Mașina de tuns este blocată",
+          "battery_temperature_error": "Eroare de temperatură a bateriei",
+          "battery_trunk_open_timeout": "Timp expirat, capacul bateriei este deschis",
+          "wire_sync": "Sincronizare fir",
+          "charging_station_docking_error": "Eroare de andocare la stația de încărcare",
+          "hbi_error": "Eroare HBI",
+          "ota_error": "Eroare OTA",
+          "map_error": "Eroare hartă",
+          "excessive_slope": "Pantă excesivă detectată",
+          "unreachable_zone": "Zonă inaccesibilă",
+          "unreachable_charging_station": "Stație de încărcare inaccesibilă",
+          "insufficient_sensor_data": "Date insuficiente de la senzori",
+          "training_start_disallowed": "Pornirea antrenării nu este permisă",
+          "camera_error": "Eroare cameră",
+          "mapping_exploration_required": "Este necesară explorarea hărții",
+          "mapping_exploration_failed": "Explorarea hărții a eșuat",
+          "rfid_reader_error": "Eroare cititor RFID",
+          "headlight_error": "Eroare far",
+          "missing_charging_station": "Stație de încărcare lipsă",
+          "blade_height_adjustment_blocked": "Reglarea înălțimii lamei este blocată"
+        }
+      },
+      "rssi": {
+        "name": "Puterea semnalului"
+      },
+      "daily_progress": {
+        "name": "Progres zilnic"
+      },
+      "next_schedule": {
+        "name": "Programarea următoare"
+      },
+      "rain_delay_remaining": {
+        "name": "Întârziere ploaie rămasă"
+      },
+      "last_update": {
+        "name": "Ultima actualizare"
+      },
+      "battery_charge_cycles_total": {
+        "name": "Cicluri totale de încărcare a bateriei"
+      },
+      "battery_charge_cycles_current": {
+        "name": "Cicluri de încărcare a bateriei de la resetare"
+      },
+      "battery_temperature": {
+        "name": "Temperatura bateriei"
+      },
+      "battery_voltage": {
+        "name": "Tensiunea bateriei"
+      },
+      "blade_runtime_total": {
+        "name": "Timp total de funcționare al lamelor"
+      },
+      "blade_runtime_current": {
+        "name": "Timp de funcționare al lamelor de la resetare"
+      },
+      "blade_runtime_reset_at": {
+        "name": "Timp de funcționare al lamelor la ultima resetare"
+      },
+      "blade_runtime_reset_time": {
+        "name": "Momentul resetării timpului lamelor"
+      },
+      "distance_driven_total": {
+        "name": "Distanța totală parcursă"
+      },
+      "mower_runtime_total": {
+        "name": "Timp total de funcționare al mașinii de tuns"
+      }
+    },
+    "binary_sensor": {
+      "rain_sensor": {
+        "name": "Senzor de ploaie"
+      },
+      "charging": {
+        "name": "Încărcare"
+      }
+    },
+    "switch": {
+      "party_mode": {
+        "name": "Mod petrecere"
+      },
+      "lock": {
+        "name": "Blocare"
+      },
+      "off_limits": {
+        "name": "Off Limits"
+      },
+      "off_limits_shortcut": {
+        "name": "Scurtături Off Limits"
+      },
+      "acs": {
+        "name": "ACS"
+      }
+    },
+    "button": {
+      "edge_cut": {
+        "name": "Tăiere margine"
+      },
+      "reset_blade_time": {
+        "name": "Resetează timpul lamelor"
+      },
+      "reset_battery_cycles": {
+        "name": "Resetează ciclurile bateriei"
+      }
+    },
+    "number": {
+      "rain_delay": {
+        "name": "Întârziere ploaie"
+      },
+      "cutting_height": {
+        "name": "Înălțime de tăiere"
+      },
+      "time_extension": {
+        "name": "Extensie de timp"
+      },
+      "torque": {
+        "name": "Cuplu"
+      }
+    },
+    "select": {
+      "zone": {
+        "name": "Zonă"
+      }
+    }
+  }
+}

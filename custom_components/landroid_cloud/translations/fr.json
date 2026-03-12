@@ -1,0 +1,197 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Se connecter aux services cloud",
+        "description": "Saisissez vos identifiants cloud et sélectionnez votre fournisseur cloud.",
+        "data": {
+          "email": "Email",
+          "password": "Mot de passe",
+          "cloud": "Fournisseur cloud"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Échec de la connexion",
+      "invalid_auth": "Erreur d'authentification",
+      "too_many_requests": "Trop de requêtes",
+      "api_error": "L'API cloud a rejeté la requête",
+      "timeout": "Délai de connexion dépassé",
+      "unknown": "Erreur inattendue"
+    },
+    "abort": {
+      "already_exists": "Ce compte d'utilisateur a déjà été configuré"
+    }
+  },
+  "selector": {
+    "cloud": {
+      "options": {
+        "worx": "Worx",
+        "kress": "Kress",
+        "landxcape": "LandXcape"
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options Landroid Cloud",
+        "data": {
+          "command_timeout": "Délai d'expiration des commandes (secondes)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "battery": {
+        "name": "Batterie"
+      },
+      "status": {
+        "name": "Statut"
+      },
+      "error": {
+        "name": "Erreur",
+        "state": {
+          "unknown": "Inconnu",
+          "no_error": "Aucune erreur",
+          "trapped": "Bloquée",
+          "lifted": "Soulevée",
+          "wire_missing": "Fil manquant",
+          "outside_wire": "En dehors du fil",
+          "rain_delay": "Délai pluie actif",
+          "close_door_to_mow": "Fermez le couvercle pour tondre",
+          "close_door_to_go_home": "Fermez le couvercle pour rentrer à la base",
+          "blade_motor_blocked": "Le moteur de lame est bloqué",
+          "wheel_motor_blocked": "Le moteur de roue est bloqué",
+          "trapped_timeout": "Délai dépassé en état bloqué",
+          "upside_down": "La tondeuse est retournée",
+          "battery_low": "Batterie faible",
+          "reverse_wire": "Le fil est inversé",
+          "charge_error": "Erreur de charge",
+          "timeout_finding_home": "Délai dépassé pour trouver la base",
+          "locked": "La tondeuse est verrouillée",
+          "battery_temperature_error": "Erreur de température de batterie",
+          "battery_trunk_open_timeout": "Délai dépassé, trappe batterie ouverte",
+          "wire_sync": "Synchronisation du fil",
+          "charging_station_docking_error": "Erreur d'amarrage à la station de charge",
+          "hbi_error": "Erreur HBI",
+          "ota_error": "Erreur OTA",
+          "map_error": "Erreur de carte",
+          "excessive_slope": "Pente excessive détectée",
+          "unreachable_zone": "Zone inaccessible",
+          "unreachable_charging_station": "Station de charge inaccessible",
+          "insufficient_sensor_data": "Données capteurs insuffisantes",
+          "training_start_disallowed": "Démarrage de l'apprentissage non autorisé",
+          "camera_error": "Erreur caméra",
+          "mapping_exploration_required": "Exploration de cartographie requise",
+          "mapping_exploration_failed": "Échec de l'exploration de cartographie",
+          "rfid_reader_error": "Erreur du lecteur RFID",
+          "headlight_error": "Erreur de phare",
+          "missing_charging_station": "Station de charge introuvable",
+          "blade_height_adjustment_blocked": "Réglage de hauteur de lame bloqué"
+        }
+      },
+      "rssi": {
+        "name": "Puissance du signal"
+      },
+      "daily_progress": {
+        "name": "Progression quotidienne"
+      },
+      "next_schedule": {
+        "name": "Prochain programme"
+      },
+      "rain_delay_remaining": {
+        "name": "Délai pluie restant"
+      },
+      "last_update": {
+        "name": "Dernière mise à jour"
+      },
+      "battery_charge_cycles_total": {
+        "name": "Cycles de charge batterie totaux"
+      },
+      "battery_charge_cycles_current": {
+        "name": "Cycles de charge batterie depuis la réinitialisation"
+      },
+      "battery_temperature": {
+        "name": "Température de la batterie"
+      },
+      "battery_voltage": {
+        "name": "Tension de la batterie"
+      },
+      "blade_runtime_total": {
+        "name": "Temps total de fonctionnement des lames"
+      },
+      "blade_runtime_current": {
+        "name": "Temps de fonctionnement des lames depuis la réinitialisation"
+      },
+      "blade_runtime_reset_at": {
+        "name": "Temps de fonctionnement des lames lors de la dernière réinitialisation"
+      },
+      "blade_runtime_reset_time": {
+        "name": "Heure de réinitialisation du temps des lames"
+      },
+      "distance_driven_total": {
+        "name": "Distance totale parcourue"
+      },
+      "mower_runtime_total": {
+        "name": "Temps total de fonctionnement de la tondeuse"
+      }
+    },
+    "binary_sensor": {
+      "rain_sensor": {
+        "name": "Capteur de pluie"
+      },
+      "charging": {
+        "name": "En charge"
+      }
+    },
+    "switch": {
+      "party_mode": {
+        "name": "Mode fête"
+      },
+      "lock": {
+        "name": "Verrouillage"
+      },
+      "off_limits": {
+        "name": "Off Limits"
+      },
+      "off_limits_shortcut": {
+        "name": "Raccourcis Off Limits"
+      },
+      "acs": {
+        "name": "ACS"
+      }
+    },
+    "button": {
+      "edge_cut": {
+        "name": "Coupe des bords"
+      },
+      "reset_blade_time": {
+        "name": "Réinitialiser le temps des lames"
+      },
+      "reset_battery_cycles": {
+        "name": "Réinitialiser les cycles batterie"
+      }
+    },
+    "number": {
+      "rain_delay": {
+        "name": "Délai pluie"
+      },
+      "cutting_height": {
+        "name": "Hauteur de coupe"
+      },
+      "time_extension": {
+        "name": "Extension de temps"
+      },
+      "torque": {
+        "name": "Couple"
+      }
+    },
+    "select": {
+      "zone": {
+        "name": "Zone"
+      }
+    }
+  }
+}

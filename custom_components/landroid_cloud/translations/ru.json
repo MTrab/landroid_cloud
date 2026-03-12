@@ -1,0 +1,197 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Подключить к облачным сервисам",
+        "description": "Введите данные облачной учетной записи и выберите поставщика облака.",
+        "data": {
+          "email": "Email",
+          "password": "Пароль",
+          "cloud": "Облачный провайдер"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Не удалось подключиться",
+      "invalid_auth": "Ошибка аутентификации",
+      "too_many_requests": "Слишком много запросов",
+      "api_error": "Облачный API отклонил запрос",
+      "timeout": "Истекло время ожидания подключения",
+      "unknown": "Неожиданная ошибка"
+    },
+    "abort": {
+      "already_exists": "Эта учетная запись пользователя уже настроена"
+    }
+  },
+  "selector": {
+    "cloud": {
+      "options": {
+        "worx": "Worx",
+        "kress": "Kress",
+        "landxcape": "LandXcape"
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Параметры Landroid Cloud",
+        "data": {
+          "command_timeout": "Таймаут команды (секунды)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "battery": {
+        "name": "Батарея"
+      },
+      "status": {
+        "name": "Статус"
+      },
+      "error": {
+        "name": "Ошибка",
+        "state": {
+          "unknown": "Неизвестно",
+          "no_error": "Нет ошибки",
+          "trapped": "Застряла",
+          "lifted": "Поднята",
+          "wire_missing": "Провод отсутствует",
+          "outside_wire": "За пределами провода",
+          "rain_delay": "Активна задержка из-за дождя",
+          "close_door_to_mow": "Закройте крышку, чтобы косить",
+          "close_door_to_go_home": "Закройте крышку, чтобы поехать на базу",
+          "blade_motor_blocked": "Мотор ножа заблокирован",
+          "wheel_motor_blocked": "Мотор колеса заблокирован",
+          "trapped_timeout": "Тайм-аут в состоянии застревания",
+          "upside_down": "Газонокосилка перевернута",
+          "battery_low": "Низкий заряд батареи",
+          "reverse_wire": "Провод подключен наоборот",
+          "charge_error": "Ошибка зарядки",
+          "timeout_finding_home": "Тайм-аут при поиске базы",
+          "locked": "Газонокосилка заблокирована",
+          "battery_temperature_error": "Ошибка температуры батареи",
+          "battery_trunk_open_timeout": "Тайм-аут, крышка батареи открыта",
+          "wire_sync": "Синхронизация провода",
+          "charging_station_docking_error": "Ошибка стыковки с зарядной станцией",
+          "hbi_error": "Ошибка HBI",
+          "ota_error": "Ошибка OTA",
+          "map_error": "Ошибка карты",
+          "excessive_slope": "Обнаружен слишком большой уклон",
+          "unreachable_zone": "Недостижимая зона",
+          "unreachable_charging_station": "Недостижимая зарядная станция",
+          "insufficient_sensor_data": "Недостаточно данных датчиков",
+          "training_start_disallowed": "Запуск обучения запрещен",
+          "camera_error": "Ошибка камеры",
+          "mapping_exploration_required": "Требуется исследование карты",
+          "mapping_exploration_failed": "Исследование карты не удалось",
+          "rfid_reader_error": "Ошибка считывателя RFID",
+          "headlight_error": "Ошибка фары",
+          "missing_charging_station": "Зарядная станция отсутствует",
+          "blade_height_adjustment_blocked": "Регулировка высоты ножа заблокирована"
+        }
+      },
+      "rssi": {
+        "name": "Уровень сигнала"
+      },
+      "daily_progress": {
+        "name": "Дневной прогресс"
+      },
+      "next_schedule": {
+        "name": "Следующее расписание"
+      },
+      "rain_delay_remaining": {
+        "name": "Оставшаяся задержка из-за дождя"
+      },
+      "last_update": {
+        "name": "Последнее обновление"
+      },
+      "battery_charge_cycles_total": {
+        "name": "Общее количество циклов заряда батареи"
+      },
+      "battery_charge_cycles_current": {
+        "name": "Циклы заряда батареи после сброса"
+      },
+      "battery_temperature": {
+        "name": "Температура батареи"
+      },
+      "battery_voltage": {
+        "name": "Напряжение батареи"
+      },
+      "blade_runtime_total": {
+        "name": "Общее время работы ножей"
+      },
+      "blade_runtime_current": {
+        "name": "Время работы ножей после сброса"
+      },
+      "blade_runtime_reset_at": {
+        "name": "Время работы ножей при последнем сбросе"
+      },
+      "blade_runtime_reset_time": {
+        "name": "Время сброса времени работы ножей"
+      },
+      "distance_driven_total": {
+        "name": "Общая пройденная дистанция"
+      },
+      "mower_runtime_total": {
+        "name": "Общее время работы косилки"
+      }
+    },
+    "binary_sensor": {
+      "rain_sensor": {
+        "name": "Датчик дождя"
+      },
+      "charging": {
+        "name": "Зарядка"
+      }
+    },
+    "switch": {
+      "party_mode": {
+        "name": "Режим вечеринки"
+      },
+      "lock": {
+        "name": "Блокировка"
+      },
+      "off_limits": {
+        "name": "Off Limits"
+      },
+      "off_limits_shortcut": {
+        "name": "Ярлыки Off Limits"
+      },
+      "acs": {
+        "name": "ACS"
+      }
+    },
+    "button": {
+      "edge_cut": {
+        "name": "Кромочная стрижка"
+      },
+      "reset_blade_time": {
+        "name": "Сбросить время работы ножей"
+      },
+      "reset_battery_cycles": {
+        "name": "Сбросить циклы батареи"
+      }
+    },
+    "number": {
+      "rain_delay": {
+        "name": "Задержка из-за дождя"
+      },
+      "cutting_height": {
+        "name": "Высота стрижки"
+      },
+      "time_extension": {
+        "name": "Продление времени"
+      },
+      "torque": {
+        "name": "Крутящий момент"
+      }
+    },
+    "select": {
+      "zone": {
+        "name": "Зона"
+      }
+    }
+  }
+}

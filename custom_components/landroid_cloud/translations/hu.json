@@ -1,0 +1,197 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Kapcsolódás a felhőszolgáltatásokhoz",
+        "description": "Adja meg a felhő-hozzáférési adatokat, és válassza ki a felhőszolgáltatót.",
+        "data": {
+          "email": "E-mail",
+          "password": "Jelszó",
+          "cloud": "Felhőszolgáltató"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Kapcsolódási hiba",
+      "invalid_auth": "Hitelesítési hiba",
+      "too_many_requests": "Túl sok API hívás. Próbálja meg 24 óra múlva",
+      "api_error": "A felhő API elutasította a kérést",
+      "timeout": "Kapcsolódási időtúllépés",
+      "unknown": "Váratlan hiba"
+    },
+    "abort": {
+      "already_exists": "Ez a felhasználói fiók már be van állítva"
+    }
+  },
+  "selector": {
+    "cloud": {
+      "options": {
+        "worx": "Worx",
+        "kress": "Kress",
+        "landxcape": "LandXcape"
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Landroid Cloud beállítások",
+        "data": {
+          "command_timeout": "Parancs időtúllépés (másodperc)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "battery": {
+        "name": "Akkumulátor"
+      },
+      "status": {
+        "name": "Állapot"
+      },
+      "error": {
+        "name": "Hiba",
+        "state": {
+          "unknown": "Ismeretlen",
+          "no_error": "Nincs hiba",
+          "trapped": "Megakadt",
+          "lifted": "Felemelve",
+          "wire_missing": "Hiányzó vezetődrót",
+          "outside_wire": "Vezetődróton kívül",
+          "rain_delay": "Az eső késleltetése aktív",
+          "close_door_to_mow": "Csukja be az ajtót a fűnyíráshoz",
+          "close_door_to_go_home": "Csukja be az ajtót a haza induláshoz",
+          "blade_motor_blocked": "A vágómotor blokkolva van",
+          "wheel_motor_blocked": "A kerékmotor blokkolva van",
+          "trapped_timeout": "Időtúllépés megakadás közben",
+          "upside_down": "A fűnyíró fejjel lefelé van",
+          "battery_low": "Az akkumulátor lemerült",
+          "reverse_wire": "A vezetődrót fodított irányú",
+          "charge_error": "Töltési hiba",
+          "timeout_finding_home": "Időtúllépés dokkoló keresése közben",
+          "locked": "A fűnyíró le van zárva",
+          "battery_temperature_error": "Akkumulátor hőmérsékleti hiba",
+          "battery_trunk_open_timeout": "Az akkutartó túl sokáig van nyitva",
+          "wire_sync": "Vezetődrót szinkronizálás",
+          "charging_station_docking_error": "Töltőállomás dokkolási hiba",
+          "hbi_error": "HBI hiba",
+          "ota_error": "OTA hiba",
+          "map_error": "Térképhiba",
+          "excessive_slope": "A lejtő túl meredek",
+          "unreachable_zone": "Elérhetetlen zóna",
+          "unreachable_charging_station": "A töltőállomás nem elérhető",
+          "insufficient_sensor_data": "Nincs elegendő érzékelő adat",
+          "training_start_disallowed": "A betanítás elindítása nem engedélyezett",
+          "camera_error": "Kamera hiba",
+          "mapping_exploration_required": "Térképfelderítés szükséges",
+          "mapping_exploration_failed": "Térképfelderítés sikertelen",
+          "rfid_reader_error": "RFID olvasó hiba",
+          "headlight_error": "Fényszóró hiba",
+          "missing_charging_station": "A töltőállomás hiányzik",
+          "blade_height_adjustment_blocked": "A penge magasság állítása meghiúsult."
+        }
+      },
+      "rssi": {
+        "name": "Jelerősség"
+      },
+      "daily_progress": {
+        "name": "Napi előrehaladás"
+      },
+      "next_schedule": {
+        "name": "Következő ütemezés"
+      },
+      "rain_delay_remaining": {
+        "name": "Hátralévő esőkésleltetés"
+      },
+      "last_update": {
+        "name": "Utolsó frissítés"
+      },
+      "battery_charge_cycles_total": {
+        "name": "Akkumulátor töltési ciklusok összesen"
+      },
+      "battery_charge_cycles_current": {
+        "name": "Akkumulátor töltési ciklusok a visszaállítás óta"
+      },
+      "battery_temperature": {
+        "name": "Akkumulátor hőmérséklete"
+      },
+      "battery_voltage": {
+        "name": "Akkumulátor feszültsége"
+      },
+      "blade_runtime_total": {
+        "name": "Kések teljes üzemideje"
+      },
+      "blade_runtime_current": {
+        "name": "Kések üzemideje a visszaállítás óta"
+      },
+      "blade_runtime_reset_at": {
+        "name": "Kések üzemideje az utolsó visszaállításnál"
+      },
+      "blade_runtime_reset_time": {
+        "name": "Késüzemidő-visszaállítás ideje"
+      },
+      "distance_driven_total": {
+        "name": "Összes megtett távolság"
+      },
+      "mower_runtime_total": {
+        "name": "Fűnyíró teljes üzemideje"
+      }
+    },
+    "binary_sensor": {
+      "rain_sensor": {
+        "name": "Esőérzékelő"
+      },
+      "charging": {
+        "name": "Töltés"
+      }
+    },
+    "switch": {
+      "party_mode": {
+        "name": "Parti mód"
+      },
+      "lock": {
+        "name": "Zár"
+      },
+      "off_limits": {
+        "name": "Off Limits"
+      },
+      "off_limits_shortcut": {
+        "name": "Off Limits parancsikonok"
+      },
+      "acs": {
+        "name": "ACS"
+      }
+    },
+    "button": {
+      "edge_cut": {
+        "name": "Szegélynyírás"
+      },
+      "reset_blade_time": {
+        "name": "Kés üzemidő visszaállítása"
+      },
+      "reset_battery_cycles": {
+        "name": "Akkumulátor ciklusok visszaállítása"
+      }
+    },
+    "number": {
+      "rain_delay": {
+        "name": "Esőkésleltetés"
+      },
+      "cutting_height": {
+        "name": "Vágási magasság"
+      },
+      "time_extension": {
+        "name": "Időkiterjesztés"
+      },
+      "torque": {
+        "name": "Nyomaték"
+      }
+    },
+    "select": {
+      "zone": {
+        "name": "Zóna"
+      }
+    }
+  }
+}
