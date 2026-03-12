@@ -4,7 +4,11 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from homeassistant.components.number import NumberEntity, NumberEntityDescription, NumberMode
+from homeassistant.components.number import (
+    NumberEntity,
+    NumberEntityDescription,
+    NumberMode,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
@@ -32,6 +36,12 @@ def _rain_delay_value(device) -> int | None:
 def _time_extension_value(device) -> int | None:
     """Return schedule time extension percentage when available."""
     value = getattr(device, "schedules", {}).get("time_extension")
+    return None if value is None else int(value)
+
+
+def _torque_value(device) -> int | None:
+    """Return torque as an integer percentage when available."""
+    value = getattr(device, "torque", None)
     return None if value is None else int(value)
 
 
@@ -71,6 +81,19 @@ NUMBERS: tuple[LandroidNumberDescription, ...] = (
         native_unit_of_measurement="%",
         mode=NumberMode.BOX,
         icon="mdi:timer-edit-outline",
+    ),
+    LandroidNumberDescription(
+        key="torque",
+        translation_key="torque",
+        entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
+        native_min_value=-50,
+        native_max_value=50,
+        native_step=1,
+        native_unit_of_measurement="%",
+        mode=NumberMode.SLIDER,
+        icon="mdi:gauge",
+        capability=DeviceCapability.TORQUE,
     ),
 )
 
@@ -139,6 +162,9 @@ class LandroidNumber(LandroidBaseEntity, NumberEntity):
         if self.entity_description.key == "time_extension":
             return _time_extension_value(self.device)
 
+        if self.entity_description.key == "torque":
+            return _torque_value(self.device)
+
         return None
 
     async def async_set_native_value(self, value: float) -> None:
@@ -160,4 +186,8 @@ class LandroidNumber(LandroidBaseEntity, NumberEntity):
                 lambda: self.coordinator.cloud.set_time_extension(
                     serial_number, int(value)
                 )
+            )
+        elif self.entity_description.key == "torque":
+            await async_run_cloud_command(
+                lambda: self.coordinator.cloud.set_torque(serial_number, int(value))
             )
