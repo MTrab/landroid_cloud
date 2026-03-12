@@ -20,7 +20,6 @@ The main breaking areas are:
 The legacy integration exposed service calls that are not present in the new version:
 
 - `landroid_cloud.config`
-- `landroid_cloud.ots`
 - `landroid_cloud.schedule`
 - `landroid_cloud.send_raw`
 
