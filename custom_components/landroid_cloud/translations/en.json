@@ -2,7 +2,8 @@
   "config": {
     "step": {
       "user": {
-        "title": "Connect to Landroid Cloud",
+        "title": "Connect to cloud services",
+        "description": "Enter your cloud credentials and select your cloud provider.",
         "data": {
           "email": "Email",
           "password": "Password",
@@ -20,6 +21,15 @@
     },
     "abort": {
       "already_exists": "This account is already configured"
+    }
+  },
+  "selector": {
+    "cloud": {
+      "options": {
+        "worx": "Worx",
+        "kress": "Kress",
+        "landxcape": "LandXcape"
+      }
     }
   },
   "options": {
@@ -41,7 +51,46 @@
         "name": "Status"
       },
       "error": {
-        "name": "Error"
+        "name": "Error",
+        "state": {
+          "unknown": "Unknown",
+          "no_error": "No error",
+          "trapped": "Trapped",
+          "lifted": "Lifted",
+          "wire_missing": "Wire missing",
+          "outside_wire": "Outside wire",
+          "rain_delay": "Rain delay active",
+          "close_door_to_mow": "Close door to mow",
+          "close_door_to_go_home": "Close door to go home",
+          "blade_motor_blocked": "Blade motor is blocked",
+          "wheel_motor_blocked": "Wheel motor is blocked",
+          "trapped_timeout": "Timed out while trapped",
+          "upside_down": "Mower is upside down",
+          "battery_low": "Battery low",
+          "reverse_wire": "Wire is reversed",
+          "charge_error": "Error charging",
+          "timeout_finding_home": "Timed out while finding home",
+          "locked": "Mower is locked",
+          "battery_temperature_error": "Battery temperature error",
+          "battery_trunk_open_timeout": "Battery trunk open timeout",
+          "wire_sync": "Wire sync",
+          "charging_station_docking_error": "Charging station docking error",
+          "hbi_error": "HBI error",
+          "ota_error": "OTA error",
+          "map_error": "Map error",
+          "excessive_slope": "Excessive slope detected",
+          "unreachable_zone": "Unreachable zone",
+          "unreachable_charging_station": "Unreachable charging station",
+          "insufficient_sensor_data": "Insufficient sensor data",
+          "training_start_disallowed": "Training start disallowed",
+          "camera_error": "Camera error",
+          "mapping_exploration_required": "Mapping exploration required",
+          "mapping_exploration_failed": "Mapping exploration failed",
+          "rfid_reader_error": "RFID reader error",
+          "headlight_error": "Headlight error",
+          "missing_charging_station": "Missing charging station",
+          "blade_height_adjustment_blocked": "Blade height adjustment blocked"
+        }
       },
       "rssi": {
         "name": "Signal strength"

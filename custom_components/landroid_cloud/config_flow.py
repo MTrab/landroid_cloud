@@ -8,6 +8,7 @@ from typing import Any
 import voluptuous as vol
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult, OptionsFlow
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD
+from homeassistant.helpers.selector import SelectSelector, SelectSelectorConfig
 from pyworxcloud import WorxCloud
 from pyworxcloud.exceptions import (
     APIException,
@@ -36,8 +37,11 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_EMAIL): str,
         vol.Required(CONF_PASSWORD): str,
-        vol.Required(CONF_CLOUD, default=DEFAULT_CLOUD): vol.In(
-            ["worx", "kress", "landxcape"]
+        vol.Required(CONF_CLOUD, default=DEFAULT_CLOUD): SelectSelector(
+            SelectSelectorConfig(
+                options=["worx", "kress", "landxcape"],
+                translation_key="cloud",
+            )
         ),
     }
 )
