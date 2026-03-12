@@ -108,39 +108,39 @@
         "name": "Laatste update"
       },
       "battery_charge_cycles_total": {
-        "name": "Battery charge cycles total"
+        "name": "Totaal aantal batterijlaadcycli"
       },
       "battery_charge_cycles_current": {
-        "name": "Battery charge cycles since reset"
+        "name": "Batterijlaadcycli sinds reset"
       },
       "battery_temperature": {
-        "name": "Battery temperature"
+        "name": "Batterijtemperatuur"
       },
       "battery_voltage": {
-        "name": "Battery voltage"
+        "name": "Batterijspanning"
       },
       "blade_runtime_total": {
-        "name": "Blade runtime total"
+        "name": "Totale looptijd van de messen"
       },
       "blade_runtime_current": {
-        "name": "Blade runtime since reset"
+        "name": "Looptijd van de messen sinds reset"
       },
       "blade_runtime_reset_at": {
-        "name": "Blade runtime at last reset"
+        "name": "Looptijd van de messen bij laatste reset"
       },
       "blade_runtime_reset_time": {
-        "name": "Blade runtime reset time"
+        "name": "Tijdstip van reset van de messentijd"
       },
       "distance_driven_total": {
-        "name": "Distance driven total"
+        "name": "Totaal afgelegde afstand"
       },
       "mower_runtime_total": {
-        "name": "Mower runtime total"
+        "name": "Totale looptijd van de maaier"
       }
     },
     "binary_sensor": {
       "rain_sensor": {
-        "name": "Rain sensor"
+        "name": "Regensensor"
       },
       "charging": {
         "name": "Opladen"
@@ -157,7 +157,7 @@
         "name": "Off Limits"
       },
       "off_limits_shortcut": {
-        "name": "Off Limits shortcuts"
+        "name": "Off Limits-snelkoppelingen"
       },
       "acs": {
         "name": "ACS"
@@ -165,13 +165,13 @@
     },
     "button": {
       "edge_cut": {
-        "name": "Randroutine"
+        "name": "Randmaaien"
       },
       "reset_blade_time": {
-        "name": "Reset blade runtime"
+        "name": "Meslooptijd resetten"
       },
       "reset_battery_cycles": {
-        "name": "Reset battery cycles"
+        "name": "Batterijcycli resetten"
       }
     },
     "number": {
@@ -182,7 +182,7 @@
         "name": "Maaihoogte"
       },
       "time_extension": {
-        "name": "Werktijd"
+        "name": "Tijdsverlenging"
       },
       "torque": {
         "name": "Koppel"

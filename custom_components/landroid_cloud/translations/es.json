@@ -15,8 +15,8 @@
       "cannot_connect": "Fallo en la conexión",
       "invalid_auth": "Error en la autentificación",
       "too_many_requests": "Demasiadas solicitudes a la API: vuelva a intentarlo en 24 horas",
-      "api_error": "La API en la nube rechazo la solicitud",
-      "timeout": "Tiempo de espera de conexion agotado",
+      "api_error": "La API en la nube rechazó la solicitud",
+      "timeout": "Tiempo de espera de conexión agotado",
       "unknown": "Error inesperado"
     },
     "abort": {
@@ -45,7 +45,7 @@
   "entity": {
     "sensor": {
       "battery": {
-        "name": "Bateria"
+        "name": "Batería"
       },
       "status": {
         "name": "Estado"
@@ -93,54 +93,54 @@
         }
       },
       "rssi": {
-        "name": "Intensidad de senal"
+        "name": "Intensidad de señal"
       },
       "daily_progress": {
         "name": "Progreso diario"
       },
       "next_schedule": {
-        "name": "Proximo horario"
+        "name": "Próximo horario"
       },
       "rain_delay_remaining": {
         "name": "Retraso por lluvia restante"
       },
       "last_update": {
-        "name": "Ultima actualizacion"
+        "name": "Última actualización"
       },
       "battery_charge_cycles_total": {
-        "name": "Battery charge cycles total"
+        "name": "Ciclos de carga totales de la batería"
       },
       "battery_charge_cycles_current": {
-        "name": "Battery charge cycles since reset"
+        "name": "Ciclos de carga de la batería desde el reinicio"
       },
       "battery_temperature": {
-        "name": "Battery temperature"
+        "name": "Temperatura de la batería"
       },
       "battery_voltage": {
-        "name": "Battery voltage"
+        "name": "Voltaje de la batería"
       },
       "blade_runtime_total": {
-        "name": "Blade runtime total"
+        "name": "Tiempo total de uso de las cuchillas"
       },
       "blade_runtime_current": {
-        "name": "Blade runtime since reset"
+        "name": "Tiempo de uso de las cuchillas desde el reinicio"
       },
       "blade_runtime_reset_at": {
-        "name": "Blade runtime at last reset"
+        "name": "Tiempo de uso de las cuchillas en el último reinicio"
       },
       "blade_runtime_reset_time": {
-        "name": "Blade runtime reset time"
+        "name": "Momento del reinicio del tiempo de cuchillas"
       },
       "distance_driven_total": {
-        "name": "Distance driven total"
+        "name": "Distancia total recorrida"
       },
       "mower_runtime_total": {
-        "name": "Mower runtime total"
+        "name": "Tiempo total de funcionamiento del cortacésped"
       }
     },
     "binary_sensor": {
       "rain_sensor": {
-        "name": "Rain sensor"
+        "name": "Sensor de lluvia"
       },
       "charging": {
         "name": "Cargando"
@@ -157,7 +157,7 @@
         "name": "Off Limits"
       },
       "off_limits_shortcut": {
-        "name": "Off Limits shortcuts"
+        "name": "Accesos directos de Off Limits"
       },
       "acs": {
         "name": "ACS"
@@ -168,10 +168,10 @@
         "name": "Corte de bordes"
       },
       "reset_blade_time": {
-        "name": "Reset blade runtime"
+        "name": "Restablecer tiempo de cuchillas"
       },
       "reset_battery_cycles": {
-        "name": "Reset battery cycles"
+        "name": "Restablecer ciclos de batería"
       }
     },
     "number": {
@@ -185,7 +185,7 @@
         "name": "Extensión de tiempo"
       },
       "torque": {
-        "name": "Par de torsión"
+        "name": "Par motor"
       }
     },
     "select": {

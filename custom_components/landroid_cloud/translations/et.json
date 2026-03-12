@@ -2,7 +2,7 @@
   "config": {
     "step": {
       "user": {
-        "title": "Uhenda pilveteenustega",
+        "title": "Ühenda pilveteenustega",
         "description": "Sisestage oma pilveteenuse kasutajatunnused ja valige pilveteenuse pakkuja.",
         "data": {
           "email": "E-post",
@@ -15,8 +15,8 @@
       "cannot_connect": "Ühendamine ebaõnnestus",
       "invalid_auth": "Viga autentimisel",
       "too_many_requests": "Liiga palju päringuid API-le - proovige uuesti 24 tunni pärast.",
-      "api_error": "Pilve API lukkas paringu tagasi",
-      "timeout": "Uhendumise ajalimiit uletatud",
+      "api_error": "Pilve API lükkas päringu tagasi",
+      "timeout": "Ühenduse ajalimiit ületatud",
       "unknown": "Ootamatu viga"
     },
     "abort": {
@@ -37,7 +37,7 @@
       "init": {
         "title": "Landroid Cloud seaded",
         "data": {
-          "command_timeout": "Kasu ajalimiit (sekundites)"
+          "command_timeout": "Käsu ajalimiit (sekundites)"
         }
       }
     }
@@ -96,51 +96,51 @@
         "name": "Signaali tugevus"
       },
       "daily_progress": {
-        "name": "Paevane edenemine"
+        "name": "Päevane edenemine"
       },
       "next_schedule": {
-        "name": "Jargmine ajakava"
+        "name": "Järgmine ajakava"
       },
       "rain_delay_remaining": {
-        "name": "Jarelejaanud vihmaviivitus"
+        "name": "Järelejäänud vihmaviivitus"
       },
       "last_update": {
         "name": "Viimane uuendus"
       },
       "battery_charge_cycles_total": {
-        "name": "Battery charge cycles total"
+        "name": "Aku laadimistsüklid kokku"
       },
       "battery_charge_cycles_current": {
-        "name": "Battery charge cycles since reset"
+        "name": "Aku laadimistsüklid pärast lähtestust"
       },
       "battery_temperature": {
-        "name": "Battery temperature"
+        "name": "Aku temperatuur"
       },
       "battery_voltage": {
-        "name": "Battery voltage"
+        "name": "Aku pinge"
       },
       "blade_runtime_total": {
-        "name": "Blade runtime total"
+        "name": "Terade kogu tööaeg"
       },
       "blade_runtime_current": {
-        "name": "Blade runtime since reset"
+        "name": "Terade tööaeg pärast lähtestust"
       },
       "blade_runtime_reset_at": {
-        "name": "Blade runtime at last reset"
+        "name": "Terade tööaeg viimase lähtestuse ajal"
       },
       "blade_runtime_reset_time": {
-        "name": "Blade runtime reset time"
+        "name": "Terade tööaja lähtestamise aeg"
       },
       "distance_driven_total": {
-        "name": "Distance driven total"
+        "name": "Kokku läbitud vahemaa"
       },
       "mower_runtime_total": {
-        "name": "Mower runtime total"
+        "name": "Niiduki kogu tööaeg"
       }
     },
     "binary_sensor": {
       "rain_sensor": {
-        "name": "Rain sensor"
+        "name": "Vihmaandur"
       },
       "charging": {
         "name": "Laadimine"
@@ -148,7 +148,7 @@
     },
     "switch": {
       "party_mode": {
-        "name": "Peoreziim"
+        "name": "Peorežiim"
       },
       "lock": {
         "name": "Lukk"
@@ -157,7 +157,7 @@
         "name": "Off Limits"
       },
       "off_limits_shortcut": {
-        "name": "Off Limits shortcuts"
+        "name": "Off Limits otseteed"
       },
       "acs": {
         "name": "ACS"
@@ -165,24 +165,24 @@
     },
     "button": {
       "edge_cut": {
-        "name": "Ääre-/servalõige"
+        "name": "Ääreserva niitmine"
       },
       "reset_blade_time": {
-        "name": "Reset blade runtime"
+        "name": "Lähtesta terade tööaeg"
       },
       "reset_battery_cycles": {
-        "name": "Reset battery cycles"
+        "name": "Lähtesta aku tsüklid"
       }
     },
     "number": {
       "rain_delay": {
-        "name": "Vihma viivitus"
+        "name": "Vihmaviivitus"
       },
       "cutting_height": {
-        "name": "Loikekorgus"
+        "name": "Lõikekõrgus"
       },
       "time_extension": {
-        "name": "Ajapikendus"
+        "name": "Aja pikendus"
       },
       "torque": {
         "name": "Pöördemoment"

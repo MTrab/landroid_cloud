@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "Se connecter aux services cloud",
-        "description": "Saisissez vos identifiants cloud et selectionnez votre fournisseur cloud.",
+        "description": "Saisissez vos identifiants cloud et sélectionnez votre fournisseur cloud.",
         "data": {
           "email": "Email",
           "password": "Mot de passe",
@@ -14,9 +14,9 @@
     "error": {
       "cannot_connect": "Échec de la connexion",
       "invalid_auth": "Erreur d'authentification",
-      "too_many_requests": "Too many requests",
-      "api_error": "L'API cloud a rejete la requete",
-      "timeout": "Delai de connexion depasse",
+      "too_many_requests": "Trop de requêtes",
+      "api_error": "L'API cloud a rejeté la requête",
+      "timeout": "Délai de connexion dépassé",
       "unknown": "Erreur inattendue"
     },
     "abort": {
@@ -37,7 +37,7 @@
       "init": {
         "title": "Options Landroid Cloud",
         "data": {
-          "command_timeout": "Delai d'expiration des commandes (secondes)"
+          "command_timeout": "Délai d'expiration des commandes (secondes)"
         }
       }
     }
@@ -53,43 +53,43 @@
       "error": {
         "name": "Erreur",
         "state": {
-          "unknown": "Unknown",
-          "no_error": "No error",
-          "trapped": "Trapped",
-          "lifted": "Lifted",
-          "wire_missing": "Wire missing",
-          "outside_wire": "Outside wire",
-          "rain_delay": "Rain delay active",
-          "close_door_to_mow": "Close door to mow",
-          "close_door_to_go_home": "Close door to go home",
-          "blade_motor_blocked": "Blade motor is blocked",
-          "wheel_motor_blocked": "Wheel motor is blocked",
-          "trapped_timeout": "Timed out while trapped",
-          "upside_down": "Mower is upside down",
-          "battery_low": "Battery low",
-          "reverse_wire": "Wire is reversed",
-          "charge_error": "Error charging",
-          "timeout_finding_home": "Timed out while finding home",
-          "locked": "Mower is locked",
-          "battery_temperature_error": "Battery temperature error",
-          "battery_trunk_open_timeout": "Battery trunk open timeout",
-          "wire_sync": "Wire sync",
-          "charging_station_docking_error": "Charging station docking error",
-          "hbi_error": "HBI error",
-          "ota_error": "OTA error",
-          "map_error": "Map error",
-          "excessive_slope": "Excessive slope detected",
-          "unreachable_zone": "Unreachable zone",
-          "unreachable_charging_station": "Unreachable charging station",
-          "insufficient_sensor_data": "Insufficient sensor data",
-          "training_start_disallowed": "Training start disallowed",
-          "camera_error": "Camera error",
-          "mapping_exploration_required": "Mapping exploration required",
-          "mapping_exploration_failed": "Mapping exploration failed",
-          "rfid_reader_error": "RFID reader error",
-          "headlight_error": "Headlight error",
-          "missing_charging_station": "Missing charging station",
-          "blade_height_adjustment_blocked": "Blade height adjustment blocked"
+          "unknown": "Inconnu",
+          "no_error": "Aucune erreur",
+          "trapped": "Bloquée",
+          "lifted": "Soulevée",
+          "wire_missing": "Fil manquant",
+          "outside_wire": "En dehors du fil",
+          "rain_delay": "Délai pluie actif",
+          "close_door_to_mow": "Fermez le couvercle pour tondre",
+          "close_door_to_go_home": "Fermez le couvercle pour rentrer à la base",
+          "blade_motor_blocked": "Le moteur de lame est bloqué",
+          "wheel_motor_blocked": "Le moteur de roue est bloqué",
+          "trapped_timeout": "Délai dépassé en état bloqué",
+          "upside_down": "La tondeuse est retournée",
+          "battery_low": "Batterie faible",
+          "reverse_wire": "Le fil est inversé",
+          "charge_error": "Erreur de charge",
+          "timeout_finding_home": "Délai dépassé pour trouver la base",
+          "locked": "La tondeuse est verrouillée",
+          "battery_temperature_error": "Erreur de température de batterie",
+          "battery_trunk_open_timeout": "Délai dépassé, trappe batterie ouverte",
+          "wire_sync": "Synchronisation du fil",
+          "charging_station_docking_error": "Erreur d'amarrage à la station de charge",
+          "hbi_error": "Erreur HBI",
+          "ota_error": "Erreur OTA",
+          "map_error": "Erreur de carte",
+          "excessive_slope": "Pente excessive détectée",
+          "unreachable_zone": "Zone inaccessible",
+          "unreachable_charging_station": "Station de charge inaccessible",
+          "insufficient_sensor_data": "Données capteurs insuffisantes",
+          "training_start_disallowed": "Démarrage de l'apprentissage non autorisé",
+          "camera_error": "Erreur caméra",
+          "mapping_exploration_required": "Exploration de cartographie requise",
+          "mapping_exploration_failed": "Échec de l'exploration de cartographie",
+          "rfid_reader_error": "Erreur du lecteur RFID",
+          "headlight_error": "Erreur de phare",
+          "missing_charging_station": "Station de charge introuvable",
+          "blade_height_adjustment_blocked": "Réglage de hauteur de lame bloqué"
         }
       },
       "rssi": {
@@ -102,45 +102,45 @@
         "name": "Prochain programme"
       },
       "rain_delay_remaining": {
-        "name": "Delai pluie restant"
+        "name": "Délai pluie restant"
       },
       "last_update": {
-        "name": "Derniere mise a jour"
+        "name": "Dernière mise à jour"
       },
       "battery_charge_cycles_total": {
-        "name": "Battery charge cycles total"
+        "name": "Cycles de charge batterie totaux"
       },
       "battery_charge_cycles_current": {
-        "name": "Battery charge cycles since reset"
+        "name": "Cycles de charge batterie depuis la réinitialisation"
       },
       "battery_temperature": {
-        "name": "Battery temperature"
+        "name": "Température de la batterie"
       },
       "battery_voltage": {
-        "name": "Battery voltage"
+        "name": "Tension de la batterie"
       },
       "blade_runtime_total": {
-        "name": "Blade runtime total"
+        "name": "Temps total de fonctionnement des lames"
       },
       "blade_runtime_current": {
-        "name": "Blade runtime since reset"
+        "name": "Temps de fonctionnement des lames depuis la réinitialisation"
       },
       "blade_runtime_reset_at": {
-        "name": "Blade runtime at last reset"
+        "name": "Temps de fonctionnement des lames lors de la dernière réinitialisation"
       },
       "blade_runtime_reset_time": {
-        "name": "Blade runtime reset time"
+        "name": "Heure de réinitialisation du temps des lames"
       },
       "distance_driven_total": {
-        "name": "Distance driven total"
+        "name": "Distance totale parcourue"
       },
       "mower_runtime_total": {
-        "name": "Mower runtime total"
+        "name": "Temps total de fonctionnement de la tondeuse"
       }
     },
     "binary_sensor": {
       "rain_sensor": {
-        "name": "Rain sensor"
+        "name": "Capteur de pluie"
       },
       "charging": {
         "name": "En charge"
@@ -148,7 +148,7 @@
     },
     "switch": {
       "party_mode": {
-        "name": "Mode fete"
+        "name": "Mode fête"
       },
       "lock": {
         "name": "Verrouillage"
@@ -157,7 +157,7 @@
         "name": "Off Limits"
       },
       "off_limits_shortcut": {
-        "name": "Off Limits shortcuts"
+        "name": "Raccourcis Off Limits"
       },
       "acs": {
         "name": "ACS"
@@ -165,24 +165,24 @@
     },
     "button": {
       "edge_cut": {
-        "name": "Routine de bord"
+        "name": "Coupe des bords"
       },
       "reset_blade_time": {
-        "name": "Reset blade runtime"
+        "name": "Réinitialiser le temps des lames"
       },
       "reset_battery_cycles": {
-        "name": "Reset battery cycles"
+        "name": "Réinitialiser les cycles batterie"
       }
     },
     "number": {
       "rain_delay": {
-        "name": "Retard de pluie"
+        "name": "Délai pluie"
       },
       "cutting_height": {
         "name": "Hauteur de coupe"
       },
       "time_extension": {
-        "name": "Augmentation/diminution du temps de travail"
+        "name": "Extension de temps"
       },
       "torque": {
         "name": "Couple"

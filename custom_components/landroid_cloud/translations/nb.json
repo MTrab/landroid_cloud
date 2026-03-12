@@ -3,19 +3,19 @@
     "step": {
       "user": {
         "title": "Koble til skytjenester",
-        "description": "Skriv inn sky-legitimasjonen din og velg skyleverandor.",
+        "description": "Skriv inn sky-legitimasjonen din og velg skyleverandør.",
         "data": {
           "email": "E-post",
           "password": "Passord",
-          "cloud": "Skyleverandor"
+          "cloud": "Skyleverandør"
         }
       }
     },
     "error": {
       "cannot_connect": "Tilkobling mislyktes",
       "invalid_auth": "Feil ved autentisering",
-      "too_many_requests": "Too many requests",
-      "api_error": "Sky-API-et avviste foresporselen",
+      "too_many_requests": "For mange forespørsler",
+      "api_error": "Sky-API-et avviste forespørselen",
       "timeout": "Tidsavbrudd ved tilkobling",
       "unknown": "Uventet feil"
     },
@@ -53,43 +53,43 @@
       "error": {
         "name": "Feil",
         "state": {
-          "unknown": "Unknown",
-          "no_error": "No error",
-          "trapped": "Trapped",
-          "lifted": "Lifted",
-          "wire_missing": "Wire missing",
-          "outside_wire": "Outside wire",
-          "rain_delay": "Rain delay active",
-          "close_door_to_mow": "Close door to mow",
-          "close_door_to_go_home": "Close door to go home",
-          "blade_motor_blocked": "Blade motor is blocked",
-          "wheel_motor_blocked": "Wheel motor is blocked",
-          "trapped_timeout": "Timed out while trapped",
-          "upside_down": "Mower is upside down",
-          "battery_low": "Battery low",
-          "reverse_wire": "Wire is reversed",
-          "charge_error": "Error charging",
-          "timeout_finding_home": "Timed out while finding home",
-          "locked": "Mower is locked",
-          "battery_temperature_error": "Battery temperature error",
-          "battery_trunk_open_timeout": "Battery trunk open timeout",
-          "wire_sync": "Wire sync",
-          "charging_station_docking_error": "Charging station docking error",
-          "hbi_error": "HBI error",
-          "ota_error": "OTA error",
-          "map_error": "Map error",
-          "excessive_slope": "Excessive slope detected",
-          "unreachable_zone": "Unreachable zone",
-          "unreachable_charging_station": "Unreachable charging station",
-          "insufficient_sensor_data": "Insufficient sensor data",
-          "training_start_disallowed": "Training start disallowed",
-          "camera_error": "Camera error",
-          "mapping_exploration_required": "Mapping exploration required",
-          "mapping_exploration_failed": "Mapping exploration failed",
-          "rfid_reader_error": "RFID reader error",
-          "headlight_error": "Headlight error",
-          "missing_charging_station": "Missing charging station",
-          "blade_height_adjustment_blocked": "Blade height adjustment blocked"
+          "unknown": "Ukjent",
+          "no_error": "Ingen feil",
+          "trapped": "Fastkjørt",
+          "lifted": "Løftet",
+          "wire_missing": "Kabel mangler",
+          "outside_wire": "Utenfor kabelen",
+          "rain_delay": "Regnforsinkelse aktiv",
+          "close_door_to_mow": "Lukk dekselet for å klippe",
+          "close_door_to_go_home": "Lukk dekselet for å kjøre hjem",
+          "blade_motor_blocked": "Knivmotor er blokkert",
+          "wheel_motor_blocked": "Hjulmotor er blokkert",
+          "trapped_timeout": "Tidsavbrudd mens fastkjørt",
+          "upside_down": "Klipperen er opp ned",
+          "battery_low": "Lavt batteri",
+          "reverse_wire": "Kabelen er koblet omvendt",
+          "charge_error": "Ladefeil",
+          "timeout_finding_home": "Tidsavbrudd ved søk etter ladestasjon",
+          "locked": "Klipperen er låst",
+          "battery_temperature_error": "Batteritemperaturfeil",
+          "battery_trunk_open_timeout": "Tidsavbrudd, batterilokk åpent",
+          "wire_sync": "Kabelsynkronisering",
+          "charging_station_docking_error": "Feil ved docking til ladestasjon",
+          "hbi_error": "HBI-feil",
+          "ota_error": "OTA-feil",
+          "map_error": "Kartfeil",
+          "excessive_slope": "For stor helning registrert",
+          "unreachable_zone": "Sonen kan ikke nås",
+          "unreachable_charging_station": "Ladestasjonen kan ikke nås",
+          "insufficient_sensor_data": "Utilstrekkelige sensordata",
+          "training_start_disallowed": "Treningsstart ikke tillatt",
+          "camera_error": "Kamerafeil",
+          "mapping_exploration_required": "Kartlegging kreves",
+          "mapping_exploration_failed": "Kartlegging mislyktes",
+          "rfid_reader_error": "RFID-leserfeil",
+          "headlight_error": "Frontlyktfeil",
+          "missing_charging_station": "Ladestasjon mangler",
+          "blade_height_adjustment_blocked": "Justering av knivhøyde blokkert"
         }
       },
       "rssi": {
@@ -102,45 +102,45 @@
         "name": "Neste plan"
       },
       "rain_delay_remaining": {
-        "name": "Gjenstaende regnforsinkelse"
+        "name": "Gjenstående regnforsinkelse"
       },
       "last_update": {
         "name": "Siste oppdatering"
       },
       "battery_charge_cycles_total": {
-        "name": "Battery charge cycles total"
+        "name": "Totale batteriladesykluser"
       },
       "battery_charge_cycles_current": {
-        "name": "Battery charge cycles since reset"
+        "name": "Batteriladesykluser siden tilbakestilling"
       },
       "battery_temperature": {
-        "name": "Battery temperature"
+        "name": "Batteritemperatur"
       },
       "battery_voltage": {
-        "name": "Battery voltage"
+        "name": "Batterispenning"
       },
       "blade_runtime_total": {
-        "name": "Blade runtime total"
+        "name": "Total knivdriftstid"
       },
       "blade_runtime_current": {
-        "name": "Blade runtime since reset"
+        "name": "Knivdriftstid siden tilbakestilling"
       },
       "blade_runtime_reset_at": {
-        "name": "Blade runtime at last reset"
+        "name": "Knivdriftstid ved siste tilbakestilling"
       },
       "blade_runtime_reset_time": {
-        "name": "Blade runtime reset time"
+        "name": "Tidspunkt for tilbakestilling av knivdriftstid"
       },
       "distance_driven_total": {
-        "name": "Distance driven total"
+        "name": "Total kjørt distanse"
       },
       "mower_runtime_total": {
-        "name": "Mower runtime total"
+        "name": "Total driftstid for klipper"
       }
     },
     "binary_sensor": {
       "rain_sensor": {
-        "name": "Rain sensor"
+        "name": "Regnsensor"
       },
       "charging": {
         "name": "Lader"
@@ -151,13 +151,13 @@
         "name": "Festmodus"
       },
       "lock": {
-        "name": "Las"
+        "name": "Lås"
       },
       "off_limits": {
         "name": "Off Limits"
       },
       "off_limits_shortcut": {
-        "name": "Off Limits shortcuts"
+        "name": "Off Limits-snarveier"
       },
       "acs": {
         "name": "ACS"
@@ -168,10 +168,10 @@
         "name": "Kantklipp"
       },
       "reset_blade_time": {
-        "name": "Reset blade runtime"
+        "name": "Tilbakestill knivdriftstid"
       },
       "reset_battery_cycles": {
-        "name": "Reset battery cycles"
+        "name": "Tilbakestill batterisykluser"
       }
     },
     "number": {
@@ -179,7 +179,7 @@
         "name": "Regnforsinkelse"
       },
       "cutting_height": {
-        "name": "Klippehoyde"
+        "name": "Klippehøyde"
       },
       "time_extension": {
         "name": "Tidsutvidelse"

@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "Mit Cloud-Diensten verbinden",
-        "description": "Geben Sie Ihre Cloud-Zugangsdaten ein und wahlen Sie Ihren Cloud-Anbieter aus.",
+        "description": "Geben Sie Ihre Cloud-Zugangsdaten ein und wählen Sie Ihren Cloud-Anbieter aus.",
         "data": {
           "email": "E-Mail",
           "password": "Passwort",
@@ -16,7 +16,7 @@
       "invalid_auth": "Fehler bei der Authentifizierung",
       "too_many_requests": "Zu viele API-Anfragen - In 24 Stunden erneut versuchen",
       "api_error": "Die Cloud-API hat die Anfrage abgelehnt",
-      "timeout": "Zeituberschreitung bei der Verbindung",
+      "timeout": "Zeitüberschreitung bei der Verbindung",
       "unknown": "Unerwarteter Fehler"
     },
     "abort": {
@@ -64,25 +64,25 @@
           "close_door_to_go_home": "Schließe die Klappe zum Fahren zur Ladestation",
           "blade_motor_blocked": "Klingenmotor ist blockiert",
           "wheel_motor_blocked": "Radmotor ist blockiert",
-          "trapped_timeout": "Timed out while trapped",
+          "trapped_timeout": "Zeitüberschreitung im festgefahrenen Zustand",
           "upside_down": "Mäher liegt auf dem Kopf",
           "battery_low": "Batterie schwach",
-          "reverse_wire": "Wire is reversed",
-          "charge_error": "Error charging",
-          "timeout_finding_home": "Timed out while finding home",
+          "reverse_wire": "Draht ist vertauscht",
+          "charge_error": "Fehler beim Laden",
+          "timeout_finding_home": "Zeitüberschreitung beim Finden der Ladestation",
           "locked": "Mäher ist gesperrt",
           "battery_temperature_error": "Batterietemperaturfehler",
-          "battery_trunk_open_timeout": "Battery trunk open timeout",
-          "wire_sync": "Wire sync",
+          "battery_trunk_open_timeout": "Zeitüberschreitung bei offener Batterieabdeckung",
+          "wire_sync": "Drahtsynchronisierung",
           "charging_station_docking_error": "Fehler beim Andocken der Ladestation",
-          "hbi_error": "HBI error",
-          "ota_error": "OTA error",
+          "hbi_error": "HBI-Fehler",
+          "ota_error": "OTA-Fehler",
           "map_error": "Kartenfehler",
-          "excessive_slope": "Excessive slope detected",
+          "excessive_slope": "Übermäßige Steigung erkannt",
           "unreachable_zone": "Unerreichbare Zone",
           "unreachable_charging_station": "Ladestation nicht erreichbar",
           "insufficient_sensor_data": "Unzureichende Sensordaten",
-          "training_start_disallowed": "Training start disallowed",
+          "training_start_disallowed": "Trainingsstart nicht erlaubt",
           "camera_error": "Kamerafehler",
           "mapping_exploration_required": "Kartierung erforderlich",
           "mapping_exploration_failed": "Kartierung fehlgeschlagen",
@@ -93,54 +93,54 @@
         }
       },
       "rssi": {
-        "name": "Signalstarke"
+        "name": "Signalstärke"
       },
       "daily_progress": {
-        "name": "Taglicher Fortschritt"
+        "name": "Täglicher Fortschritt"
       },
       "next_schedule": {
-        "name": "Nachster Zeitplan"
+        "name": "Nächster Zeitplan"
       },
       "rain_delay_remaining": {
-        "name": "Verbleibende Regenverzogerung"
+        "name": "Verbleibende Regenverzögerung"
       },
       "last_update": {
         "name": "Letzte Aktualisierung"
       },
       "battery_charge_cycles_total": {
-        "name": "Battery charge cycles total"
+        "name": "Batterieladezyklen gesamt"
       },
       "battery_charge_cycles_current": {
-        "name": "Battery charge cycles since reset"
+        "name": "Batterieladezyklen seit Zurücksetzung"
       },
       "battery_temperature": {
-        "name": "Battery temperature"
+        "name": "Batterietemperatur"
       },
       "battery_voltage": {
-        "name": "Battery voltage"
+        "name": "Batteriespannung"
       },
       "blade_runtime_total": {
-        "name": "Blade runtime total"
+        "name": "Gesamte Klingenlaufzeit"
       },
       "blade_runtime_current": {
-        "name": "Blade runtime since reset"
+        "name": "Klingenlaufzeit seit Zurücksetzung"
       },
       "blade_runtime_reset_at": {
-        "name": "Blade runtime at last reset"
+        "name": "Klingenlaufzeit bei letzter Zurücksetzung"
       },
       "blade_runtime_reset_time": {
-        "name": "Blade runtime reset time"
+        "name": "Zeitpunkt der Klingenlaufzeit-Zurücksetzung"
       },
       "distance_driven_total": {
-        "name": "Distance driven total"
+        "name": "Insgesamt gefahrene Strecke"
       },
       "mower_runtime_total": {
-        "name": "Mower runtime total"
+        "name": "Gesamte Laufzeit des Mähers"
       }
     },
     "binary_sensor": {
       "rain_sensor": {
-        "name": "Rain sensor"
+        "name": "Regensensor"
       },
       "charging": {
         "name": "Ladevorgang"
@@ -157,7 +157,7 @@
         "name": "Off Limits"
       },
       "off_limits_shortcut": {
-        "name": "Off Limits shortcuts"
+        "name": "Off-Limits-Verknüpfungen"
       },
       "acs": {
         "name": "ACS"
@@ -165,13 +165,13 @@
     },
     "button": {
       "edge_cut": {
-        "name": "Rand-/Kantenschnitt"
+        "name": "Kantenschnitt"
       },
       "reset_blade_time": {
-        "name": "Reset blade runtime"
+        "name": "Klingenlaufzeit zurücksetzen"
       },
       "reset_battery_cycles": {
-        "name": "Reset battery cycles"
+        "name": "Batteriezyklen zurücksetzen"
       }
     },
     "number": {
@@ -179,7 +179,7 @@
         "name": "Regenverzögerung"
       },
       "cutting_height": {
-        "name": "Schnitthohe"
+        "name": "Schnitthöhe"
       },
       "time_extension": {
         "name": "Zeitverlängerung"

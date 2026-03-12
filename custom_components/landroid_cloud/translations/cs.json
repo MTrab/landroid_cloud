@@ -2,8 +2,8 @@
   "config": {
     "step": {
       "user": {
-        "title": "Pripojit ke cloudovym sluzbam",
-        "description": "Zadejte sve cloudove prihlasovaci udaje a vyberte poskytovatele cloudove sluzby.",
+        "title": "Připojit ke cloudovým službám",
+        "description": "Zadejte své cloudové přihlašovací údaje a vyberte poskytovatele cloudové služby.",
         "data": {
           "email": "Email",
           "password": "Heslo",
@@ -15,8 +15,8 @@
       "cannot_connect": "Chyba připojení",
       "invalid_auth": "Chyba přihlášení",
       "too_many_requests": "Příliš mnoho požadavků na API – Zkuste to znovu za 24 hodin.",
-      "api_error": "Cloud API odmitlo pozadavek",
-      "timeout": "Vyprsel casovy limit pripojeni",
+      "api_error": "Cloud API požadavek odmítlo",
+      "timeout": "Vypršel časový limit připojení",
       "unknown": "Neočekávaná chyba"
     },
     "abort": {
@@ -35,9 +35,9 @@
   "options": {
     "step": {
       "init": {
-        "title": "Moznosti Landroid Cloud",
+        "title": "Možnosti Landroid Cloud",
         "data": {
-          "command_timeout": "Casovy limit prikazu (sekundy)"
+          "command_timeout": "Časový limit příkazu (sekundy)"
         }
       }
     }
@@ -93,71 +93,71 @@
         }
       },
       "rssi": {
-        "name": "Sila signalu"
+        "name": "Síla signálu"
       },
       "daily_progress": {
-        "name": "Denni postup"
+        "name": "Denní průběh"
       },
       "next_schedule": {
-        "name": "Dalsi plan"
+        "name": "Další plán"
       },
       "rain_delay_remaining": {
-        "name": "Zbyvajici destova prodleva"
+        "name": "Zbývající dešťová prodleva"
       },
       "last_update": {
-        "name": "Posledni aktualizace"
+        "name": "Poslední aktualizace"
       },
       "battery_charge_cycles_total": {
-        "name": "Battery charge cycles total"
+        "name": "Celkový počet nabíjecích cyklů baterie"
       },
       "battery_charge_cycles_current": {
-        "name": "Battery charge cycles since reset"
+        "name": "Nabíjecí cykly baterie od resetu"
       },
       "battery_temperature": {
-        "name": "Battery temperature"
+        "name": "Teplota baterie"
       },
       "battery_voltage": {
-        "name": "Battery voltage"
+        "name": "Napětí baterie"
       },
       "blade_runtime_total": {
-        "name": "Blade runtime total"
+        "name": "Celková doba chodu nožů"
       },
       "blade_runtime_current": {
-        "name": "Blade runtime since reset"
+        "name": "Doba chodu nožů od resetu"
       },
       "blade_runtime_reset_at": {
-        "name": "Blade runtime at last reset"
+        "name": "Doba chodu nožů při posledním resetu"
       },
       "blade_runtime_reset_time": {
-        "name": "Blade runtime reset time"
+        "name": "Čas resetu doby chodu nožů"
       },
       "distance_driven_total": {
-        "name": "Distance driven total"
+        "name": "Celková ujetá vzdálenost"
       },
       "mower_runtime_total": {
-        "name": "Mower runtime total"
+        "name": "Celková doba provozu sekačky"
       }
     },
     "binary_sensor": {
       "rain_sensor": {
-        "name": "Rain sensor"
+        "name": "Dešťový senzor"
       },
       "charging": {
-        "name": "Nabijeni"
+        "name": "Nabíjení"
       }
     },
     "switch": {
       "party_mode": {
-        "name": "Party rezim"
+        "name": "Párty režim"
       },
       "lock": {
-        "name": "Zamknuti"
+        "name": "Zámek"
       },
       "off_limits": {
         "name": "Off Limits"
       },
       "off_limits_shortcut": {
-        "name": "Off Limits shortcuts"
+        "name": "Zkratky Off Limits"
       },
       "acs": {
         "name": "ACS"
@@ -168,24 +168,24 @@
         "name": "Sekání okraje"
       },
       "reset_blade_time": {
-        "name": "Reset blade runtime"
+        "name": "Resetovat dobu chodu nožů"
       },
       "reset_battery_cycles": {
-        "name": "Reset battery cycles"
+        "name": "Resetovat cykly baterie"
       }
     },
     "number": {
       "rain_delay": {
-        "name": "Prodleva po dešti"
+        "name": "Dešťová prodleva"
       },
       "cutting_height": {
-        "name": "Vyska sekani"
+        "name": "Výška sečení"
       },
       "time_extension": {
-        "name": "Prodloužení času"
+        "name": "Časové prodloužení"
       },
       "torque": {
-        "name": "Síla"
+        "name": "Krouticí moment"
       }
     },
     "select": {

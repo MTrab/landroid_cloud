@@ -2,12 +2,12 @@
   "config": {
     "step": {
       "user": {
-        "title": "Kapcsolodas a felhoszolgaltatasokhoz",
-        "description": "Adja meg a felhohozzaferesi adatokat, es valassza ki a felhoszolgaltatot.",
+        "title": "Kapcsolódás a felhőszolgáltatásokhoz",
+        "description": "Adja meg a felhő-hozzáférési adatokat, és válassza ki a felhőszolgáltatót.",
         "data": {
           "email": "E-mail",
           "password": "Jelszó",
-          "cloud": "Felhoszolgaltato"
+          "cloud": "Felhőszolgáltató"
         }
       }
     },
@@ -15,8 +15,8 @@
       "cannot_connect": "Kapcsolódási hiba",
       "invalid_auth": "Hitelesítési hiba",
       "too_many_requests": "Túl sok API hívás. Próbálja meg 24 óra múlva",
-      "api_error": "A felho API elutasitotta a kerest",
-      "timeout": "Kapcsolodasi idotullepes",
+      "api_error": "A felhő API elutasította a kérést",
+      "timeout": "Kapcsolódási időtúllépés",
       "unknown": "Váratlan hiba"
     },
     "abort": {
@@ -35,9 +35,9 @@
   "options": {
     "step": {
       "init": {
-        "title": "Landroid Cloud beallitasok",
+        "title": "Landroid Cloud beállítások",
         "data": {
-          "command_timeout": "Parancs idotullepes (masodperc)"
+          "command_timeout": "Parancs időtúllépés (másodperc)"
         }
       }
     }
@@ -45,10 +45,10 @@
   "entity": {
     "sensor": {
       "battery": {
-        "name": "Akkumulator"
+        "name": "Akkumulátor"
       },
       "status": {
-        "name": "Allapot"
+        "name": "Állapot"
       },
       "error": {
         "name": "Hiba",
@@ -93,71 +93,71 @@
         }
       },
       "rssi": {
-        "name": "Jelerosseg"
+        "name": "Jelerősség"
       },
       "daily_progress": {
-        "name": "Napi elorehaladas"
+        "name": "Napi előrehaladás"
       },
       "next_schedule": {
-        "name": "Kovetkezo utemezes"
+        "name": "Következő ütemezés"
       },
       "rain_delay_remaining": {
-        "name": "Hatralevo esokesleltetes"
+        "name": "Hátralévő esőkésleltetés"
       },
       "last_update": {
-        "name": "Utolso frissites"
+        "name": "Utolsó frissítés"
       },
       "battery_charge_cycles_total": {
-        "name": "Battery charge cycles total"
+        "name": "Akkumulátor töltési ciklusok összesen"
       },
       "battery_charge_cycles_current": {
-        "name": "Battery charge cycles since reset"
+        "name": "Akkumulátor töltési ciklusok a visszaállítás óta"
       },
       "battery_temperature": {
-        "name": "Battery temperature"
+        "name": "Akkumulátor hőmérséklete"
       },
       "battery_voltage": {
-        "name": "Battery voltage"
+        "name": "Akkumulátor feszültsége"
       },
       "blade_runtime_total": {
-        "name": "Blade runtime total"
+        "name": "Kések teljes üzemideje"
       },
       "blade_runtime_current": {
-        "name": "Blade runtime since reset"
+        "name": "Kések üzemideje a visszaállítás óta"
       },
       "blade_runtime_reset_at": {
-        "name": "Blade runtime at last reset"
+        "name": "Kések üzemideje az utolsó visszaállításnál"
       },
       "blade_runtime_reset_time": {
-        "name": "Blade runtime reset time"
+        "name": "Késüzemidő-visszaállítás ideje"
       },
       "distance_driven_total": {
-        "name": "Distance driven total"
+        "name": "Összes megtett távolság"
       },
       "mower_runtime_total": {
-        "name": "Mower runtime total"
+        "name": "Fűnyíró teljes üzemideje"
       }
     },
     "binary_sensor": {
       "rain_sensor": {
-        "name": "Rain sensor"
+        "name": "Esőérzékelő"
       },
       "charging": {
-        "name": "Toltes"
+        "name": "Töltés"
       }
     },
     "switch": {
       "party_mode": {
-        "name": "Parti mod"
+        "name": "Parti mód"
       },
       "lock": {
-        "name": "Zar"
+        "name": "Zár"
       },
       "off_limits": {
         "name": "Off Limits"
       },
       "off_limits_shortcut": {
-        "name": "Off Limits shortcuts"
+        "name": "Off Limits parancsikonok"
       },
       "acs": {
         "name": "ACS"
@@ -165,24 +165,24 @@
     },
     "button": {
       "edge_cut": {
-        "name": "Szélvágás"
+        "name": "Szegélynyírás"
       },
       "reset_blade_time": {
-        "name": "Reset blade runtime"
+        "name": "Kés üzemidő visszaállítása"
       },
       "reset_battery_cycles": {
-        "name": "Reset battery cycles"
+        "name": "Akkumulátor ciklusok visszaállítása"
       }
     },
     "number": {
       "rain_delay": {
-        "name": "Eső késleltetés"
+        "name": "Esőkésleltetés"
       },
       "cutting_height": {
-        "name": "Vagasi magassag"
+        "name": "Vágási magasság"
       },
       "time_extension": {
-        "name": "Időhosszabbítás"
+        "name": "Időkiterjesztés"
       },
       "torque": {
         "name": "Nyomaték"

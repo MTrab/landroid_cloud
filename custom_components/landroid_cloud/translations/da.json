@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "Forbind til cloud-tjenester",
-        "description": "Indtast dine cloud-oplysninger og vaelg din cloud-udbyder.",
+        "description": "Indtast dine cloud-oplysninger og vælg din cloud-udbyder.",
         "data": {
           "email": "E-mail",
           "password": "Kodeord",
@@ -15,7 +15,7 @@
       "cannot_connect": "Kunne ikke forbinde",
       "invalid_auth": "Fejl i brugernavn og/eller password",
       "too_many_requests": "For mange forespørgsler mod API - Prøv igen om 24 timer",
-      "api_error": "Cloud-API afviste foresporgslen",
+      "api_error": "Cloud-API afviste forespørgslen",
       "timeout": "Forbindelsen fik timeout",
       "unknown": "Ukendt fejl"
     },
@@ -35,7 +35,7 @@
   "options": {
     "step": {
       "init": {
-        "title": "Landroid Cloud indstillinger",
+        "title": "Landroid Cloud-indstillinger",
         "data": {
           "command_timeout": "Kommandotimeout (sekunder)"
         }
@@ -48,7 +48,7 @@
         "name": "Batteri"
       },
       "status": {
-        "name": "Status"
+        "name": "Tilstand"
       },
       "error": {
         "name": "Fejl",
@@ -73,7 +73,7 @@
           "locked": "Klipperen er låst",
           "battery_temperature_error": "Batteritemperatur fejl",
           "battery_trunk_open_timeout": "Klap til batterirummet åben",
-          "wire_sync": "Wire sync",
+          "wire_sync": "Trådsynkronisering",
           "charging_station_docking_error": "Fejl ved docking til ladestation",
           "hbi_error": "HBI fejl",
           "ota_error": "Fejl ved OTA",
@@ -99,7 +99,7 @@
         "name": "Dagens fremdrift"
       },
       "next_schedule": {
-        "name": "Naeste tidsplan"
+        "name": "Næste tidsplan"
       },
       "rain_delay_remaining": {
         "name": "Resterende regnforsinkelse"
@@ -108,56 +108,56 @@
         "name": "Seneste opdatering"
       },
       "battery_charge_cycles_total": {
-        "name": "Battery charge cycles total"
+        "name": "Batteriets samlede ladecyklusser"
       },
       "battery_charge_cycles_current": {
-        "name": "Battery charge cycles since reset"
+        "name": "Batteriets ladecyklusser siden nulstilling"
       },
       "battery_temperature": {
-        "name": "Battery temperature"
+        "name": "Batteritemperatur"
       },
       "battery_voltage": {
-        "name": "Battery voltage"
+        "name": "Batterispænding"
       },
       "blade_runtime_total": {
-        "name": "Blade runtime total"
+        "name": "Knivenes samlede driftstid"
       },
       "blade_runtime_current": {
-        "name": "Blade runtime since reset"
+        "name": "Knivenes driftstid siden nulstilling"
       },
       "blade_runtime_reset_at": {
-        "name": "Blade runtime at last reset"
+        "name": "Knivenes driftstid ved seneste nulstilling"
       },
       "blade_runtime_reset_time": {
-        "name": "Blade runtime reset time"
+        "name": "Tidspunkt for nulstilling af knivenes driftstid"
       },
       "distance_driven_total": {
-        "name": "Distance driven total"
+        "name": "Samlet kørt distance"
       },
       "mower_runtime_total": {
-        "name": "Mower runtime total"
+        "name": "Klipperens samlede driftstid"
       }
     },
     "binary_sensor": {
       "rain_sensor": {
-        "name": "Rain sensor"
+        "name": "Regnsensor"
       },
       "charging": {
-        "name": "Oplader"
+        "name": "Opladning"
       }
     },
     "switch": {
       "party_mode": {
-        "name": "Party mode"
+        "name": "Festtilstand"
       },
       "lock": {
-        "name": "Laas"
+        "name": "Lås"
       },
       "off_limits": {
         "name": "Off Limits"
       },
       "off_limits_shortcut": {
-        "name": "Off Limits shortcuts"
+        "name": "Off Limits-genveje"
       },
       "acs": {
         "name": "ACS"
@@ -168,10 +168,10 @@
         "name": "Kantklip"
       },
       "reset_blade_time": {
-        "name": "Reset blade runtime"
+        "name": "Nulstil knivenes driftstid"
       },
       "reset_battery_cycles": {
-        "name": "Reset battery cycles"
+        "name": "Nulstil battericyklusser"
       }
     },
     "number": {
@@ -179,7 +179,7 @@
         "name": "Regnforsinkelse"
       },
       "cutting_height": {
-        "name": "Klippehojde"
+        "name": "Klippehøjde"
       },
       "time_extension": {
         "name": "Tidsforlængelse"
@@ -190,7 +190,7 @@
     },
     "select": {
       "zone": {
-        "name": "Zone"
+        "name": "Område"
       }
     }
   }

@@ -2,12 +2,12 @@
   "config": {
     "step": {
       "user": {
-        "title": "Anslut till molntjanster",
-        "description": "Ange dina molnuppgifter och valj din molnleverantor.",
+        "title": "Anslut till molntjänster",
+        "description": "Ange dina molnuppgifter och välj din molnleverantör.",
         "data": {
           "email": "E-post",
           "password": "Lösenord",
-          "cloud": "Molnleverantor"
+          "cloud": "Molnleverantör"
         }
       }
     },
@@ -15,8 +15,8 @@
       "cannot_connect": "Misslyckades med att ansluta",
       "invalid_auth": "Fel vid autentisering",
       "too_many_requests": "För många API-förfrågningar. Försök igen om 24 timmar",
-      "api_error": "Moln-API:t avvisade begaran",
-      "timeout": "Tidsgrans for anslutning overskreds",
+      "api_error": "Moln-API:t avvisade begäran",
+      "timeout": "Tidsgräns för anslutning överskreds",
       "unknown": "Oväntat fel"
     },
     "abort": {
@@ -37,7 +37,7 @@
       "init": {
         "title": "Landroid Cloud-alternativ",
         "data": {
-          "command_timeout": "Timeout for kommando (sekunder)"
+          "command_timeout": "Timeout för kommando (sekunder)"
         }
       }
     }
@@ -99,48 +99,48 @@
         "name": "Daglig framdrift"
       },
       "next_schedule": {
-        "name": "Nasta schema"
+        "name": "Nästa schema"
       },
       "rain_delay_remaining": {
-        "name": "Aterstaende regnfordrojning"
+        "name": "Återstående regnfördröjning"
       },
       "last_update": {
         "name": "Senaste uppdatering"
       },
       "battery_charge_cycles_total": {
-        "name": "Battery charge cycles total"
+        "name": "Totalt antal batteriladdningscykler"
       },
       "battery_charge_cycles_current": {
-        "name": "Battery charge cycles since reset"
+        "name": "Batteriladdningscykler sedan återställning"
       },
       "battery_temperature": {
-        "name": "Battery temperature"
+        "name": "Batteritemperatur"
       },
       "battery_voltage": {
-        "name": "Battery voltage"
+        "name": "Batterispänning"
       },
       "blade_runtime_total": {
-        "name": "Blade runtime total"
+        "name": "Total knivdrifttid"
       },
       "blade_runtime_current": {
-        "name": "Blade runtime since reset"
+        "name": "Knivdrifttid sedan återställning"
       },
       "blade_runtime_reset_at": {
-        "name": "Blade runtime at last reset"
+        "name": "Knivdrifttid vid senaste återställning"
       },
       "blade_runtime_reset_time": {
-        "name": "Blade runtime reset time"
+        "name": "Tidpunkt för återställning av knivdrifttid"
       },
       "distance_driven_total": {
-        "name": "Distance driven total"
+        "name": "Total körd sträcka"
       },
       "mower_runtime_total": {
-        "name": "Mower runtime total"
+        "name": "Total drifttid för klipparen"
       }
     },
     "binary_sensor": {
       "rain_sensor": {
-        "name": "Rain sensor"
+        "name": "Regnsensor"
       },
       "charging": {
         "name": "Laddar"
@@ -148,16 +148,16 @@
     },
     "switch": {
       "party_mode": {
-        "name": "Festlage"
+        "name": "Festläge"
       },
       "lock": {
-        "name": "Las"
+        "name": "Lås"
       },
       "off_limits": {
         "name": "Off Limits"
       },
       "off_limits_shortcut": {
-        "name": "Off Limits shortcuts"
+        "name": "Off Limits-genvägar"
       },
       "acs": {
         "name": "ACS"
@@ -168,10 +168,10 @@
         "name": "Kantklippning"
       },
       "reset_blade_time": {
-        "name": "Reset blade runtime"
+        "name": "Återställ knivdrifttid"
       },
       "reset_battery_cycles": {
-        "name": "Reset battery cycles"
+        "name": "Återställ battericykler"
       }
     },
     "number": {
@@ -179,10 +179,10 @@
         "name": "Regnfördröjning"
       },
       "cutting_height": {
-        "name": "Klipphojd"
+        "name": "Klipphöjd"
       },
       "time_extension": {
-        "name": "Förlängning av arbetstiden."
+        "name": "Tidsförlängning"
       },
       "torque": {
         "name": "Vridmoment"

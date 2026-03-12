@@ -73,9 +73,9 @@
           "locked": "Il robot è bloccato",
           "battery_temperature_error": "Errore di temperatura della batteria",
           "battery_trunk_open_timeout": "Timeout apertura sportello batteria",
-          "wire_sync": "Wire sync",
+          "wire_sync": "Sincronizzazione filo",
           "charging_station_docking_error": "Errore di aggancio alla base",
-          "hbi_error": "HBI error",
+          "hbi_error": "Errore HBI",
           "ota_error": "Errore OTA",
           "map_error": "Errore della mappa",
           "excessive_slope": "Rilevata pendenza eccessiva",
@@ -108,39 +108,39 @@
         "name": "Ultimo aggiornamento"
       },
       "battery_charge_cycles_total": {
-        "name": "Battery charge cycles total"
+        "name": "Cicli di carica batteria totali"
       },
       "battery_charge_cycles_current": {
-        "name": "Battery charge cycles since reset"
+        "name": "Cicli di carica batteria dal ripristino"
       },
       "battery_temperature": {
-        "name": "Battery temperature"
+        "name": "Temperatura batteria"
       },
       "battery_voltage": {
-        "name": "Battery voltage"
+        "name": "Tensione batteria"
       },
       "blade_runtime_total": {
-        "name": "Blade runtime total"
+        "name": "Tempo totale lame"
       },
       "blade_runtime_current": {
-        "name": "Blade runtime since reset"
+        "name": "Tempo lame dal ripristino"
       },
       "blade_runtime_reset_at": {
-        "name": "Blade runtime at last reset"
+        "name": "Tempo lame all’ultimo ripristino"
       },
       "blade_runtime_reset_time": {
-        "name": "Blade runtime reset time"
+        "name": "Momento del ripristino del tempo lame"
       },
       "distance_driven_total": {
-        "name": "Distance driven total"
+        "name": "Distanza totale percorsa"
       },
       "mower_runtime_total": {
-        "name": "Mower runtime total"
+        "name": "Tempo totale di funzionamento del rasaerba"
       }
     },
     "binary_sensor": {
       "rain_sensor": {
-        "name": "Rain sensor"
+        "name": "Sensore pioggia"
       },
       "charging": {
         "name": "In carica"
@@ -148,7 +148,7 @@
     },
     "switch": {
       "party_mode": {
-        "name": "Modalita festa"
+        "name": "Modalità festa"
       },
       "lock": {
         "name": "Blocco"
@@ -157,7 +157,7 @@
         "name": "Off Limits"
       },
       "off_limits_shortcut": {
-        "name": "Off Limits shortcuts"
+        "name": "Scorciatoie Off Limits"
       },
       "acs": {
         "name": "ACS"
@@ -165,13 +165,13 @@
     },
     "button": {
       "edge_cut": {
-        "name": "Taglio bordo"
+        "name": "Taglio bordi"
       },
       "reset_blade_time": {
-        "name": "Reset blade runtime"
+        "name": "Reimposta tempo lame"
       },
       "reset_battery_cycles": {
-        "name": "Reset battery cycles"
+        "name": "Reimposta cicli batteria"
       }
     },
     "number": {
@@ -182,7 +182,7 @@
         "name": "Altezza di taglio"
       },
       "time_extension": {
-        "name": "Tempo di lavoro"
+        "name": "Estensione tempo"
       },
       "torque": {
         "name": "Coppia"
