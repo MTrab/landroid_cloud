@@ -135,6 +135,7 @@ Numbers require the mower to be online and are disabled by default.
 | Rain delay | Configuration | 0-300 min | 1 | |
 | Cutting height | Configuration | 20-70 mm | 1 | Requires cutting height support |
 | Time extension | Configuration | -100% to 100% | 10 | |
+| Torque | Configuration | -50% to 50% | 1 | Requires torque support |
 
 #### Selects
 
@@ -149,7 +150,7 @@ The integration does not add custom Home Assistant services. Control is exposed 
 - Lawn mower actions for start, pause and dock
 - Buttons for one-shot actions such as edge cut and counter resets
 - Switches for boolean features such as ACS, lock and Off Limits
-- Numbers for writable values such as rain delay, cutting height and time extension
+- Numbers for writable values such as rain delay, cutting height, time extension and torque
 - Select for zone choice
 
 ## Availability behavior
