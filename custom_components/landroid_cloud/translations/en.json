@@ -125,6 +125,9 @@
       },
       "time_extension": {
         "name": "Time extension"
+      },
+      "torque": {
+        "name": "Torque"
       }
     },
     "select": {
