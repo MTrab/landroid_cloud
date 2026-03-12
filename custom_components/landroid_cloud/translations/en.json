@@ -1,78 +1,148 @@
 {
-    "config": {
-        "step": {
-            "user": {
-                "title": "Connect to Landroid Cloud",
-                "data": {
-                    "email": "Email",
-                    "password": "Password",
-                    "cloud": "Cloud provider",
-                },
-            }
-        },
-        "error": {
-            "cannot_connect": "Failed to connect to cloud service",
-            "invalid_auth": "Invalid credentials",
-            "too_many_requests": "Too many requests",
-            "api_error": "Cloud API rejected the request",
-            "timeout": "Connection timed out",
-            "unknown": "Unexpected error",
-        },
-        "abort": {"already_exists": "This account is already configured"},
-    },
-    "options": {
-        "step": {
-            "init": {
-                "title": "Landroid Cloud options",
-                "data": {"command_timeout": "Command timeout (seconds)"},
-            }
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to Landroid Cloud",
+        "data": {
+          "email": "Email",
+          "password": "Password",
+          "cloud": "Cloud provider"
         }
+      }
     },
-    "entity": {
-        "sensor": {
-            "battery": {"name": "Battery"},
-            "status": {"name": "Status"},
-            "error": {"name": "Error"},
-            "rssi": {"name": "Signal strength"},
-            "daily_progress": {"name": "Daily progress"},
-            "next_schedule": {"name": "Next schedule"},
-            "rain_delay_remaining": {"name": "Rain delay remaining"},
-            "last_update": {"name": "Last update"},
-            "battery_charge_cycles_total": {"name": "Battery charge cycles total"},
-            "battery_charge_cycles_current": {
-                "name": "Battery charge cycles since reset"
-            },
-            "battery_temperature": {"name": "Battery temperature"},
-            "battery_voltage": {"name": "Battery voltage"},
-            "blade_runtime_total": {"name": "Blade runtime total"},
-            "blade_runtime_current": {"name": "Blade runtime since reset"},
-            "blade_runtime_reset_at": {"name": "Blade runtime reset at"},
-            "blade_runtime_reset_time": {"name": "Blade runtime reset time"},
-            "distance_driven_total": {"name": "Distance driven total"},
-            "mower_runtime_total": {"name": "Mower runtime total"},
-        },
-        "binary_sensor": {
-            "rain_sensor": {"name": "Rain sensor"},
-            "charging": {"name": "Charging"},
-        },
-        "switch": {
-            "party_mode": {"name": "Party mode"},
-            "lock": {"name": "Lock"},
-            "off_limits": {"name": "Off Limits"},
-            "off_limits_shortcut": {"name": "Off Limits shortcuts"},
-            "acs": {"name": "ACS"},
-        },
-        "button": {
-            "edge_cut": {"name": "Edge cut"},
-            "reset_blade_time": {"name": "Reset blade runtime"},
-            "reset_battery_cycles": {"name": "Reset battery cycles"},
-        },
-        "number": {
-            "rain_delay": {"name": "Rain delay"},
-            "cutting_height": {"name": "Cutting height"},
-            "time_extension": {"name": "Time extension"},
-            "torque": {"name": "Torque"},
-        },
-        "select": {"zone": {"name": "Zone"}},
+    "error": {
+      "cannot_connect": "Failed to connect to cloud service",
+      "invalid_auth": "Invalid credentials",
+      "too_many_requests": "Too many requests",
+      "api_error": "Cloud API rejected the request",
+      "timeout": "Connection timed out",
+      "unknown": "Unexpected error"
     },
+    "abort": {
+      "already_exists": "This account is already configured"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Landroid Cloud options",
+        "data": {
+          "command_timeout": "Command timeout (seconds)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "battery": {
+        "name": "Battery"
+      },
+      "status": {
+        "name": "Status"
+      },
+      "error": {
+        "name": "Error"
+      },
+      "rssi": {
+        "name": "Signal strength"
+      },
+      "daily_progress": {
+        "name": "Daily progress"
+      },
+      "next_schedule": {
+        "name": "Next schedule"
+      },
+      "rain_delay_remaining": {
+        "name": "Rain delay remaining"
+      },
+      "last_update": {
+        "name": "Last update"
+      },
+      "battery_charge_cycles_total": {
+        "name": "Battery charge cycles total"
+      },
+      "battery_charge_cycles_current": {
+        "name": "Battery charge cycles since reset"
+      },
+      "battery_temperature": {
+        "name": "Battery temperature"
+      },
+      "battery_voltage": {
+        "name": "Battery voltage"
+      },
+      "blade_runtime_total": {
+        "name": "Blade runtime total"
+      },
+      "blade_runtime_current": {
+        "name": "Blade runtime since reset"
+      },
+      "blade_runtime_reset_at": {
+        "name": "Blade runtime at last reset"
+      },
+      "blade_runtime_reset_time": {
+        "name": "Blade runtime reset time"
+      },
+      "distance_driven_total": {
+        "name": "Distance driven total"
+      },
+      "mower_runtime_total": {
+        "name": "Mower runtime total"
+      }
+    },
+    "binary_sensor": {
+      "rain_sensor": {
+        "name": "Rain sensor"
+      },
+      "charging": {
+        "name": "Charging"
+      }
+    },
+    "switch": {
+      "party_mode": {
+        "name": "Party mode"
+      },
+      "lock": {
+        "name": "Lock"
+      },
+      "off_limits": {
+        "name": "Off Limits"
+      },
+      "off_limits_shortcut": {
+        "name": "Off Limits shortcuts"
+      },
+      "acs": {
+        "name": "ACS"
+      }
+    },
+    "button": {
+      "edge_cut": {
+        "name": "Edge cut"
+      },
+      "reset_blade_time": {
+        "name": "Reset blade runtime"
+      },
+      "reset_battery_cycles": {
+        "name": "Reset battery cycles"
+      }
+    },
+    "number": {
+      "rain_delay": {
+        "name": "Rain delay"
+      },
+      "cutting_height": {
+        "name": "Cutting height"
+      },
+      "time_extension": {
+        "name": "Time extension"
+      },
+      "torque": {
+        "name": "Torque"
+      }
+    },
+    "select": {
+      "zone": {
+        "name": "Zone"
+      }
+    }
+  }
 }
