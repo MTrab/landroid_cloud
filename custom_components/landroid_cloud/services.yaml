@@ -1,0 +1,28 @@
+ots:
+  description: Start One-Time-Schedule (if supported)
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: lawn_mower
+  fields:
+    boundary:
+      name: Boundary
+      description: Do boundary (Edge cut)
+      example: true
+      required: true
+      default: false
+      selector:
+        boolean:
+    runtime:
+      name: Run time
+      description: Run time in minutes
+      example: 60
+      required: true
+      default: 30
+      selector:
+        number:
+          min: 10
+          max: 120
+          step: 1
+          unit_of_measurement: "minutes"
+          mode: slider
