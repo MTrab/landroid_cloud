@@ -1,0 +1,197 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Se connecter aux services cloud",
+        "description": "Saisissez vos identifiants cloud et selectionnez votre fournisseur cloud.",
+        "data": {
+          "email": "E-mail",
+          "password": "Mot de passe",
+          "cloud": "Fournisseur cloud"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Échec de la connexion",
+      "invalid_auth": "Erreur d’authentification",
+      "too_many_requests": "Trop de requêtes à l'API - Réessayez dans 24 heures",
+      "api_error": "L'API cloud a rejete la requete",
+      "timeout": "Delai de connexion depasse",
+      "unknown": "Erreur inattendue"
+    },
+    "abort": {
+      "already_exists": "Ce compte utilisateur a déjà été configuré"
+    }
+  },
+  "selector": {
+    "cloud": {
+      "options": {
+        "worx": "Worx",
+        "kress": "Kress",
+        "landxcape": "LandXcape"
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options Landroid Cloud",
+        "data": {
+          "command_timeout": "Delai d'expiration des commandes (secondes)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "battery": {
+        "name": "Batterie"
+      },
+      "status": {
+        "name": "Statut"
+      },
+      "error": {
+        "name": "Erreur",
+        "state": {
+          "unknown": "Inconnu",
+          "no_error": "Aucune erreur",
+          "trapped": "Immobilisé",
+          "lifted": "Levé",
+          "wire_missing": "Câble périphérique manquant",
+          "outside_wire": "En dehors du câble périphérique",
+          "rain_delay": "Retard de pluviosité",
+          "close_door_to_mow": "Fermer la trappe pour tondre",
+          "close_door_to_go_home": "Fermer la trappe pour retourner à la base",
+          "blade_motor_blocked": "Le moteur de la lame est bloqué",
+          "wheel_motor_blocked": "Le moteur de roue est bloqué",
+          "trapped_timeout": "Délai d'attente en cas d'immobilisation",
+          "upside_down": "La tondeuse est retournée",
+          "battery_low": "Batterie faible",
+          "reverse_wire": "Le fil est inversé",
+          "charge_error": "Erreur de chargement",
+          "timeout_finding_home": "Délai expiré lors de la recherche de la base",
+          "locked": "La tondeuse est verrouillée",
+          "battery_temperature_error": "Erreur de température de la batterie",
+          "battery_trunk_open_timeout": "Délai expiré ouverture logement batterie",
+          "wire_sync": "Synchronisation du câble",
+          "charging_station_docking_error": "Erreur de la station de recharge",
+          "hbi_error": "Erreur HBI",
+          "ota_error": "Erreur OTA",
+          "map_error": "Erreur de la carte",
+          "excessive_slope": "Pente excessive détectée",
+          "unreachable_zone": "Zone inaccessible",
+          "unreachable_charging_station": "Station de recharge inaccessible",
+          "insufficient_sensor_data": "Données de capteur insuffisantes",
+          "training_start_disallowed": "Début de l’entraînement non autorisé",
+          "camera_error": "Erreur de la caméra",
+          "mapping_exploration_required": "Exploration de la cartographique requise",
+          "mapping_exploration_failed": "Échec de l’exploration cartographique",
+          "rfid_reader_error": "Erreur du lecteur RFID",
+          "headlight_error": "Erreur des phares",
+          "missing_charging_station": "Station de recharge absente",
+          "blade_height_adjustment_blocked": "Réglage de la hauteur de lame bloqué"
+        }
+      },
+      "rssi": {
+        "name": "Puissance du signal"
+      },
+      "daily_progress": {
+        "name": "Progression quotidienne"
+      },
+      "next_schedule": {
+        "name": "Prochain programme"
+      },
+      "rain_delay_remaining": {
+        "name": "Delai pluie restant"
+      },
+      "last_update": {
+        "name": "Derniere mise a jour"
+      },
+      "battery_charge_cycles_total": {
+        "name": "Battery charge cycles total"
+      },
+      "battery_charge_cycles_current": {
+        "name": "Battery charge cycles since reset"
+      },
+      "battery_temperature": {
+        "name": "Battery temperature"
+      },
+      "battery_voltage": {
+        "name": "Battery voltage"
+      },
+      "blade_runtime_total": {
+        "name": "Blade runtime total"
+      },
+      "blade_runtime_current": {
+        "name": "Blade runtime since reset"
+      },
+      "blade_runtime_reset_at": {
+        "name": "Blade runtime at last reset"
+      },
+      "blade_runtime_reset_time": {
+        "name": "Blade runtime reset time"
+      },
+      "distance_driven_total": {
+        "name": "Distance driven total"
+      },
+      "mower_runtime_total": {
+        "name": "Mower runtime total"
+      }
+    },
+    "binary_sensor": {
+      "rain_sensor": {
+        "name": "Rain sensor"
+      },
+      "charging": {
+        "name": "En charge"
+      }
+    },
+    "switch": {
+      "party_mode": {
+        "name": "Mode fete"
+      },
+      "lock": {
+        "name": "Verrouillage"
+      },
+      "off_limits": {
+        "name": "Off Limits"
+      },
+      "off_limits_shortcut": {
+        "name": "Off Limits shortcuts"
+      },
+      "acs": {
+        "name": "ACS"
+      }
+    },
+    "button": {
+      "edge_cut": {
+        "name": "Bordure/Coupe-bord"
+      },
+      "reset_blade_time": {
+        "name": "Reset blade runtime"
+      },
+      "reset_battery_cycles": {
+        "name": "Reset battery cycles"
+      }
+    },
+    "number": {
+      "rain_delay": {
+        "name": "Retard pluviosité"
+      },
+      "cutting_height": {
+        "name": "Hauteur de coupe"
+      },
+      "time_extension": {
+        "name": "Temps de travail supplémentaire"
+      },
+      "torque": {
+        "name": "Couple"
+      }
+    },
+    "select": {
+      "zone": {
+        "name": "Zone"
+      }
+    }
+  }
+}
