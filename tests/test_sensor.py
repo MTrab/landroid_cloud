@@ -9,6 +9,7 @@ from homeassistant.const import ATTR_BATTERY_CHARGING
 from homeassistant.helpers.entity import EntityCategory
 
 import custom_components.landroid_cloud.sensor as sensor_module
+from custom_components.landroid_cloud.const import ERROR_STATE_MAP, ERROR_STATE_OPTIONS
 from custom_components.landroid_cloud.sensor import (
     SENSORS,
     _battery_cycle_value,
@@ -66,6 +67,13 @@ def test_rain_delay_remaining_value_unavailable() -> None:
     assert _rain_delay_remaining_value(device) is None
 
 
+def test_error_state_mapping_uses_stable_tokens() -> None:
+    """Error states should map from numeric ids to translation tokens."""
+    assert ERROR_STATE_MAP[0] == "no_error"
+    assert ERROR_STATE_MAP[110] == "camera_error"
+    assert ERROR_STATE_MAP.get(999, "unknown") == "unknown"
+
+
 def test_error_and_rssi_are_diagnostic_entities() -> None:
     """Error and signal strength should be categorized as diagnostics."""
     error = next(description for description in SENSORS if description.key == "error")
@@ -73,6 +81,17 @@ def test_error_and_rssi_are_diagnostic_entities() -> None:
 
     assert error.entity_category is EntityCategory.DIAGNOSTIC
     assert rssi.entity_category is EntityCategory.DIAGNOSTIC
+
+
+def test_error_is_enum_sensor_with_translated_state_tokens() -> None:
+    """Error should expose stable enum tokens for translation."""
+    error = next(description for description in SENSORS if description.key == "error")
+
+    assert error.device_class is SensorDeviceClass.ENUM
+    assert error.options == ERROR_STATE_OPTIONS
+    assert "no_error" in error.options
+    assert "camera_error" in error.options
+    assert "unknown" in error.options
 
 
 def test_selected_sensors_expose_specific_icons() -> None:

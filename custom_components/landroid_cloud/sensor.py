@@ -27,6 +27,7 @@ from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from pyworxcloud.day_map import DAY_MAP
 
+from .const import ERROR_STATE_MAP, ERROR_STATE_OPTIONS
 from .entity import LandroidBaseEntity
 
 
@@ -188,6 +189,8 @@ SENSORS: tuple[LandroidSensorDescription, ...] = (
     LandroidSensorDescription(
         key="error",
         translation_key="error",
+        device_class=SensorDeviceClass.ENUM,
+        options=ERROR_STATE_OPTIONS,
         entity_category=EntityCategory.DIAGNOSTIC,
         icon="mdi:alert-circle-outline",
     ),
@@ -370,7 +373,7 @@ class LandroidSensor(LandroidBaseEntity, SensorEntity):
         if key == "battery":
             return device.battery.get("percent")
         if key == "error":
-            return device.error.get("description")
+            return ERROR_STATE_MAP.get(device.error.get("id", -1), "unknown")
         if key == "rssi":
             return getattr(device, "rssi", None)
         if key == "daily_progress":
