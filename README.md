@@ -90,7 +90,7 @@ Each mower creates one lawn mower entity with these actions:
 | Battery voltage | Diagnostic | Disabled |
 | Blade runtime total | Diagnostic | Disabled |
 | Blade runtime since reset | Diagnostic | Disabled |
-| Blade runtime reset at | Diagnostic | Disabled |
+| Blade runtime at last reset | Diagnostic | Disabled |
 | Blade runtime reset time | Diagnostic | Disabled |
 | Distance driven total | Diagnostic | Disabled |
 | Mower runtime total | Diagnostic | Disabled |
