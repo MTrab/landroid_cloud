@@ -83,12 +83,15 @@ Each mower creates one lawn mower entity with these actions:
 | Daily progress | Standard | Disabled |
 | Next schedule | Standard | Disabled |
 | Rain delay remaining | Standard | Disabled |
+| Last update | Standard | Disabled |
 | Battery charge cycles total | Diagnostic | Disabled |
 | Battery charge cycles since reset | Diagnostic | Disabled |
 | Battery temperature | Diagnostic | Disabled |
 | Battery voltage | Diagnostic | Disabled |
 | Blade runtime total | Diagnostic | Disabled |
 | Blade runtime since reset | Diagnostic | Disabled |
+| Blade runtime reset at | Diagnostic | Disabled |
+| Blade runtime reset time | Diagnostic | Disabled |
 | Distance driven total | Diagnostic | Disabled |
 | Mower runtime total | Diagnostic | Disabled |
 
