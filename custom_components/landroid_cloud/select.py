@@ -6,10 +6,37 @@ from homeassistant.components.select import SelectEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
 from .commands import async_run_cloud_command
 from .entity import LandroidBaseEntity
+
+
+def _zone_options(device) -> list[str]:
+    """Return available zone options for legacy and RTK devices."""
+    zone_ids = device.zone.get("ids", [])
+    if zone_ids:
+        return [str(zone_id) for zone_id in zone_ids]
+
+    starting_points = device.zone.get("starting_point", [])
+    zone_count = len(starting_points)
+    if zone_count == 0:
+        zone_count = 4
+    return [str(zone) for zone in range(1, zone_count + 1)]
+
+
+def _current_zone_option(device) -> str | None:
+    """Return current selected zone for legacy and RTK devices."""
+    zone_ids = device.zone.get("ids", [])
+    if zone_ids:
+        current = device.zone.get("current")
+        if current in zone_ids:
+            return str(int(current))
+        return None
+
+    index = device.zone.get("index", 0)
+    return str(int(index) + 1)
 
 
 async def async_setup_entry(
@@ -49,20 +76,19 @@ class LandroidZoneSelect(LandroidBaseEntity, SelectEntity):
     @property
     def options(self) -> list[str]:
         """Return available zone options."""
-        starting_points = self.device.zone.get("starting_point", [])
-        zone_count = len(starting_points)
-        if zone_count == 0:
-            zone_count = 4
-        return [str(zone) for zone in range(1, zone_count + 1)]
+        return _zone_options(self.device)
 
     @property
     def current_option(self) -> str | None:
         """Return current selected zone."""
-        index = self.device.zone.get("index", 0)
-        return str(int(index) + 1)
+        return _current_zone_option(self.device)
 
     async def async_select_option(self, option: str) -> None:
         """Set selected zone."""
+        if self.device.zone.get("ids", []):
+            raise HomeAssistantError(
+                "Zone selection for RTK devices is not supported yet"
+            )
         zone = int(option)
         serial_number = str(self.device.serial_number)
         await async_run_cloud_command(
