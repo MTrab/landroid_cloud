@@ -67,6 +67,9 @@ autolabeler:
   - label: 'dependencies'
     branch:
       - '/dependabot\/.+/'
+  - label: 'documentation'
+    branch:
+      - '/documentation\/.+/'
   - label: 'patch'
     branch:
       - '/patch\/.+/'
@@ -76,3 +79,4 @@ autolabeler:
       - '/feature\/.+/'
       - '/fix\/.+/'
       - '/enhancement\/.+/'
+      - '/documentation\/.+/'
