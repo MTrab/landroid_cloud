@@ -1,0 +1,197 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connetti ai servizi cloud",
+        "description": "Inserisci le credenziali cloud e seleziona il tuo provider cloud.",
+        "data": {
+          "email": "Email",
+          "password": "Password",
+          "cloud": "Provider cloud"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Impossibile connettersi",
+      "invalid_auth": "Errore di autenticazione",
+      "too_many_requests": "Troppe richieste alle API - Riprova tra 24 ore",
+      "api_error": "La Cloud API ha rifiutato la richiesta",
+      "timeout": "Timeout di connessione",
+      "unknown": "Errore inaspettato"
+    },
+    "abort": {
+      "already_exists": "Questo account è già stato configurato"
+    }
+  },
+  "selector": {
+    "cloud": {
+      "options": {
+        "worx": "Worx",
+        "kress": "Kress",
+        "landxcape": "LandXcape"
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opzioni Landroid Cloud",
+        "data": {
+          "command_timeout": "Timeout comando (secondi)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "battery": {
+        "name": "Batteria"
+      },
+      "status": {
+        "name": "Stato"
+      },
+      "error": {
+        "name": "Errore",
+        "state": {
+          "unknown": "Errore sconosciuto",
+          "no_error": "Nessun errore",
+          "trapped": "Incastrato",
+          "lifted": "Landroid sollevato",
+          "wire_missing": "Filo perimetrale assente",
+          "outside_wire": "Landroid fuori area di lavoro",
+          "rain_delay": "Ritardo pioggia",
+          "close_door_to_mow": "Chiudere la porta per tagliare",
+          "close_door_to_go_home": "Chiudere la porta per tornare alla base",
+          "blade_motor_blocked": "Il motore della lama è bloccato",
+          "wheel_motor_blocked": "Il motore della ruota è bloccato",
+          "trapped_timeout": "Timeout mentre Landroid era incastrato",
+          "upside_down": "Il robot è capovolto",
+          "battery_low": "Batteria scarica",
+          "reverse_wire": "Il filo perimetrale è invertito",
+          "charge_error": "Errore durante la ricarica",
+          "timeout_finding_home": "Timeout durante la ricerca della base",
+          "locked": "Il robot è bloccato",
+          "battery_temperature_error": "Errore di temperatura della batteria",
+          "battery_trunk_open_timeout": "Timeout apertura sportello batteria",
+          "wire_sync": "Wire sync",
+          "charging_station_docking_error": "Errore di aggancio alla base",
+          "hbi_error": "HBI error",
+          "ota_error": "Errore OTA",
+          "map_error": "Errore della mappa",
+          "excessive_slope": "Rilevata pendenza eccessiva",
+          "unreachable_zone": "Zona non raggiungibile",
+          "unreachable_charging_station": "Stazione di ricarica non raggiungibile",
+          "insufficient_sensor_data": "Dati dei sensori insufficienti",
+          "training_start_disallowed": "Inizio addestramento non consentito",
+          "camera_error": "Errore della camera",
+          "mapping_exploration_required": "Richiesta esplorazione di mappatura",
+          "mapping_exploration_failed": "Esplorazione di mappatura fallita",
+          "rfid_reader_error": "Errore del lettore RFID",
+          "headlight_error": "Errore fari",
+          "missing_charging_station": "Stazione di ricarica mancante",
+          "blade_height_adjustment_blocked": "Regolazione altezza lama bloccata"
+        }
+      },
+      "rssi": {
+        "name": "Potenza del segnale"
+      },
+      "daily_progress": {
+        "name": "Avanzamento giornaliero"
+      },
+      "next_schedule": {
+        "name": "Prossima pianificazione"
+      },
+      "rain_delay_remaining": {
+        "name": "Ritardo pioggia rimanente"
+      },
+      "last_update": {
+        "name": "Ultimo aggiornamento"
+      },
+      "battery_charge_cycles_total": {
+        "name": "Battery charge cycles total"
+      },
+      "battery_charge_cycles_current": {
+        "name": "Battery charge cycles since reset"
+      },
+      "battery_temperature": {
+        "name": "Battery temperature"
+      },
+      "battery_voltage": {
+        "name": "Battery voltage"
+      },
+      "blade_runtime_total": {
+        "name": "Blade runtime total"
+      },
+      "blade_runtime_current": {
+        "name": "Blade runtime since reset"
+      },
+      "blade_runtime_reset_at": {
+        "name": "Blade runtime at last reset"
+      },
+      "blade_runtime_reset_time": {
+        "name": "Blade runtime reset time"
+      },
+      "distance_driven_total": {
+        "name": "Distance driven total"
+      },
+      "mower_runtime_total": {
+        "name": "Mower runtime total"
+      }
+    },
+    "binary_sensor": {
+      "rain_sensor": {
+        "name": "Rain sensor"
+      },
+      "charging": {
+        "name": "In carica"
+      }
+    },
+    "switch": {
+      "party_mode": {
+        "name": "Modalita festa"
+      },
+      "lock": {
+        "name": "Blocco"
+      },
+      "off_limits": {
+        "name": "Off Limits"
+      },
+      "off_limits_shortcut": {
+        "name": "Off Limits shortcuts"
+      },
+      "acs": {
+        "name": "ACS"
+      }
+    },
+    "button": {
+      "edge_cut": {
+        "name": "Taglio bordo"
+      },
+      "reset_blade_time": {
+        "name": "Reset blade runtime"
+      },
+      "reset_battery_cycles": {
+        "name": "Reset battery cycles"
+      }
+    },
+    "number": {
+      "rain_delay": {
+        "name": "Ritardo pioggia"
+      },
+      "cutting_height": {
+        "name": "Altezza di taglio"
+      },
+      "time_extension": {
+        "name": "Tempo di lavoro"
+      },
+      "torque": {
+        "name": "Coppia"
+      }
+    },
+    "select": {
+      "zone": {
+        "name": "Zona"
+      }
+    }
+  }
+}
