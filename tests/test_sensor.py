@@ -1,17 +1,21 @@
 """Tests for Landroid sensors."""
 
+from datetime import datetime
 from types import SimpleNamespace
+from zoneinfo import ZoneInfo
 
 from homeassistant.components.sensor import SensorDeviceClass
 from homeassistant.const import ATTR_BATTERY_CHARGING
 from homeassistant.helpers.entity import EntityCategory
 
+import custom_components.landroid_cloud.sensor as sensor_module
 from custom_components.landroid_cloud.sensor import (
     SENSORS,
     _battery_cycle_value,
     _battery_charging_attribute,
     _battery_value,
     _blade_runtime_value,
+    _next_schedule_value,
     _rain_delay_remaining_value,
     _schedule_attributes,
     _statistics_value,
@@ -115,6 +119,49 @@ def test_schedule_attributes_expose_known_schedule_fields() -> None:
     }
 
 
+def test_next_schedule_skips_zero_duration_slots(monkeypatch) -> None:
+    """Zero-duration slots should not be exposed as the next schedule."""
+    real_datetime = sensor_module.datetime
+
+    class FrozenDateTime:
+        """Minimal datetime shim returning a fixed current time."""
+
+        @staticmethod
+        def now(tz=None):
+            return real_datetime(2026, 3, 12, 10, 30, tzinfo=tz or ZoneInfo("UTC"))
+
+        strptime = staticmethod(real_datetime.strptime)
+
+    monkeypatch.setattr(sensor_module, "datetime", FrozenDateTime)
+
+    device = SimpleNamespace(
+        time_zone="UTC",
+        schedules={
+            "slots": [
+                {
+                    "day": "thursday",
+                    "start": "11:00",
+                    "end": "11:00",
+                    "duration": 0,
+                    "duration_extended": 0,
+                },
+                {
+                    "day": "thursday",
+                    "start": "15:00",
+                    "end": "15:30",
+                    "duration": 30,
+                    "duration_extended": 30,
+                },
+            ],
+            "next_schedule_start": datetime(2026, 3, 12, 11, 0, tzinfo=ZoneInfo("UTC")),
+        },
+    )
+
+    assert _next_schedule_value(device) == datetime(
+        2026, 3, 12, 15, 0, tzinfo=ZoneInfo("UTC")
+    )
+
+
 def test_battery_cycle_value_returns_integer() -> None:
     """Battery cycle values should be exposed when present."""
     device = SimpleNamespace(battery={"cycles": {"total": 3014, "current": 14}})
@@ -159,7 +206,9 @@ def test_blade_and_battery_diagnostic_sensors_are_disabled_by_default() -> None:
         "distance_driven_total",
         "mower_runtime_total",
     }
-    sensors = [description for description in SENSORS if description.key in diagnostic_keys]
+    sensors = [
+        description for description in SENSORS if description.key in diagnostic_keys
+    ]
 
     assert len(sensors) == 8
     assert all(
@@ -172,7 +221,9 @@ def test_blade_and_battery_diagnostic_sensors_are_disabled_by_default() -> None:
 def test_rain_delay_remaining_is_disabled_by_default() -> None:
     """Rain delay remaining should be disabled by default."""
     rain_delay_remaining = next(
-        description for description in SENSORS if description.key == "rain_delay_remaining"
+        description
+        for description in SENSORS
+        if description.key == "rain_delay_remaining"
     )
 
     assert rain_delay_remaining.entity_registry_enabled_default is False
