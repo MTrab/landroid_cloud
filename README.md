@@ -148,13 +148,14 @@ Numbers require the mower to be online and are disabled by default.
 
 ## Actions and control model
 
-The integration does not add custom Home Assistant services. Control is exposed through native entities instead:
+The integration exposes control through native entities and one legacy-compatible service:
 
 - Lawn mower actions for start, pause and dock
 - Buttons for one-shot actions such as edge cut and counter resets
 - Switches for boolean features such as ACS, lock and Off Limits
 - Numbers for writable values such as rain delay, cutting height, time extension and torque
 - Select for zone choice
+- The `landroid_cloud.ots` service for starting a one-time schedule with boundary and runtime parameters
 
 ## Availability behavior
 
