@@ -1,0 +1,197 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Uhenda pilveteenustega",
+        "description": "Sisestage oma pilveteenuse kasutajatunnused ja valige pilveteenuse pakkuja.",
+        "data": {
+          "email": "E-post",
+          "password": "Salasõna",
+          "cloud": "Pilveteenuse pakkuja"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Ühendamine ebaõnnestus",
+      "invalid_auth": "Viga autentimisel",
+      "too_many_requests": "Liiga palju päringuid API-le - proovige uuesti 24 tunni pärast.",
+      "api_error": "Pilve API lukkas paringu tagasi",
+      "timeout": "Uhendumise ajalimiit uletatud",
+      "unknown": "Ootamatu viga"
+    },
+    "abort": {
+      "already_exists": "See kasutajakonto on juba konfigureeritud"
+    }
+  },
+  "selector": {
+    "cloud": {
+      "options": {
+        "worx": "Worx",
+        "kress": "Kress",
+        "landxcape": "LandXcape"
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Landroid Cloud seaded",
+        "data": {
+          "command_timeout": "Kasu ajalimiit (sekundites)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "battery": {
+        "name": "Aku"
+      },
+      "status": {
+        "name": "Staatus"
+      },
+      "error": {
+        "name": "Viga",
+        "state": {
+          "unknown": "Tundmatu",
+          "no_error": "Vigu pole",
+          "trapped": "Lõksus",
+          "lifted": "Ülestõstetud",
+          "wire_missing": "Piirdetraat kadunud",
+          "outside_wire": "Väljaspool piirdetraati",
+          "rain_delay": "Vihma viivitus aktiivne",
+          "close_door_to_mow": "Niitmiseks sulgege uks",
+          "close_door_to_go_home": "Sulge uks, et naasta koju",
+          "blade_motor_blocked": "Tera mootor on blokeeritud",
+          "wheel_motor_blocked": "Ratta mootor on blokeeritud",
+          "trapped_timeout": "Aegunud kinni olles",
+          "upside_down": "Niiduk on tagurpidi",
+          "battery_low": "Aku tühi",
+          "reverse_wire": "Piirdetraat on vastupidine",
+          "charge_error": "Viga laadimisel",
+          "timeout_finding_home": "Aegus kodu leidmisel",
+          "locked": "Niiduk on lukustatud",
+          "battery_temperature_error": "Aku temperatuuri viga",
+          "battery_trunk_open_timeout": "Aku pagasiruumi avamise aegumine",
+          "wire_sync": "Piirdekaabli sünkroniseerimine",
+          "charging_station_docking_error": "Laadimisjaama dokkimisviga",
+          "hbi_error": "HBI viga",
+          "ota_error": "OTA viga",
+          "map_error": "Kaardi viga",
+          "excessive_slope": "Tuvastati liigne kalle",
+          "unreachable_zone": "Tsoon läbipääsmatu",
+          "unreachable_charging_station": "Laadimisjaam on kättesaamatu",
+          "insufficient_sensor_data": "Anduri andmed on ebapiisavad",
+          "training_start_disallowed": "Treeningu alustamine on keelatud",
+          "camera_error": "Kaamera viga",
+          "mapping_exploration_required": "Kaardistamine on vajalik",
+          "mapping_exploration_failed": "Kaardistamine ebaõnnestus",
+          "rfid_reader_error": "RFID-lugeja viga",
+          "headlight_error": "Esitulede viga",
+          "missing_charging_station": "Laadimisjaam on kättesaamatu",
+          "blade_height_adjustment_blocked": "Tera kõrguse reguleerimine blokeeritud"
+        }
+      },
+      "rssi": {
+        "name": "Signaali tugevus"
+      },
+      "daily_progress": {
+        "name": "Paevane edenemine"
+      },
+      "next_schedule": {
+        "name": "Jargmine ajakava"
+      },
+      "rain_delay_remaining": {
+        "name": "Jarelejaanud vihmaviivitus"
+      },
+      "last_update": {
+        "name": "Viimane uuendus"
+      },
+      "battery_charge_cycles_total": {
+        "name": "Battery charge cycles total"
+      },
+      "battery_charge_cycles_current": {
+        "name": "Battery charge cycles since reset"
+      },
+      "battery_temperature": {
+        "name": "Battery temperature"
+      },
+      "battery_voltage": {
+        "name": "Battery voltage"
+      },
+      "blade_runtime_total": {
+        "name": "Blade runtime total"
+      },
+      "blade_runtime_current": {
+        "name": "Blade runtime since reset"
+      },
+      "blade_runtime_reset_at": {
+        "name": "Blade runtime at last reset"
+      },
+      "blade_runtime_reset_time": {
+        "name": "Blade runtime reset time"
+      },
+      "distance_driven_total": {
+        "name": "Distance driven total"
+      },
+      "mower_runtime_total": {
+        "name": "Mower runtime total"
+      }
+    },
+    "binary_sensor": {
+      "rain_sensor": {
+        "name": "Rain sensor"
+      },
+      "charging": {
+        "name": "Laadimine"
+      }
+    },
+    "switch": {
+      "party_mode": {
+        "name": "Peoreziim"
+      },
+      "lock": {
+        "name": "Lukk"
+      },
+      "off_limits": {
+        "name": "Off Limits"
+      },
+      "off_limits_shortcut": {
+        "name": "Off Limits shortcuts"
+      },
+      "acs": {
+        "name": "ACS"
+      }
+    },
+    "button": {
+      "edge_cut": {
+        "name": "Ääre-/servalõige"
+      },
+      "reset_blade_time": {
+        "name": "Reset blade runtime"
+      },
+      "reset_battery_cycles": {
+        "name": "Reset battery cycles"
+      }
+    },
+    "number": {
+      "rain_delay": {
+        "name": "Vihma viivitus"
+      },
+      "cutting_height": {
+        "name": "Loikekorgus"
+      },
+      "time_extension": {
+        "name": "Ajapikendus"
+      },
+      "torque": {
+        "name": "Pöördemoment"
+      }
+    },
+    "select": {
+      "zone": {
+        "name": "Tsoon"
+      }
+    }
+  }
+}
