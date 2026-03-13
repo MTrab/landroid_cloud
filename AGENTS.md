@@ -1,4 +1,4 @@
-# AGENTS.md — Webasto Connect Integration
+# AGENTS.md — Landroid Cloud Integration
 
 This document is intended for AI coding agents (e.g., OpenAI Codex) working in this repository.
 It defines setup, constraints, workflow, safety rules, and quality expectations for the Webast Connect integration.
@@ -67,7 +67,7 @@ The agent must use the exact versions defined in the project configuration files
 
 - Runtime: Python 3.14
 
-## Webasto Connect Integration Rules
+## Landroid Cloud Integration Rules
 
 Devices must be treated as external hardware systems.
 
