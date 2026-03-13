@@ -71,7 +71,7 @@ jobs:
 
           with manifest_path.open("w", encoding="utf-8") as manifest_file:
               json.dump(ordered_manifest, manifest_file, indent=4)
-              manifest_file.write("\\n")
+              manifest_file.write("\n")
           PY
 
       - name: Commit manifest update
