@@ -1,12 +1,11 @@
 name: Release Manifest Automerge
 
 on:
-  workflow_run:
-    workflows:
-      - HACS validation
-      - Hassfest validation
+  pull_request_target:
     types:
-      - completed
+      - opened
+      - reopened
+      - synchronize
 
 permissions:
   actions: read
@@ -14,89 +13,56 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: release-manifest-${{ github.event.workflow_run.head_branch }}
-  cancel-in-progress: false
+  group: release-manifest-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
   merge_and_upload_release_asset:
     name: Merge release manifest PR and upload asset
     if: >
-      github.event.workflow_run.conclusion == 'success' &&
-      startsWith(github.event.workflow_run.head_branch, 'release/')
+      github.event.pull_request.base.ref == 'master' &&
+      startsWith(github.event.pull_request.head.ref, 'release/')
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Resolve pull request
+      - name: Resolve release metadata
         id: pr
         env:
           GH_TOKEN: ${{ github.token }}
-          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
-          pr_json="$(gh pr list \
+          gh pr view "$PR_NUMBER" \
             --repo "${{ github.repository }}" \
-            --head "${{ github.repository_owner }}:$HEAD_BRANCH" \
-            --state open \
-            --json number,body,mergeStateStatus)"
-
-          if [ "$(printf '%s' "$pr_json" | python3 -c 'import json,sys; print(len(json.load(sys.stdin)))')" -eq 0 ]; then
-            echo "found=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          printf '%s' "$pr_json" | python3 - <<'PY' >> "$GITHUB_OUTPUT"
+            --json body,headRefName \
+            | python3 - <<'PY' >> "$GITHUB_OUTPUT"
           import json
           import re
           import sys
 
-          pr = json.load(sys.stdin)[0]
+          pr = json.load(sys.stdin)
           match = re.search(r"release-tag:\s*(\S+)", pr.get("body") or "")
 
-          print("found=true")
-          print(f"number={pr['number']}")
-          print(f"merge_state={pr['mergeStateStatus']}")
+          if not match:
+              raise SystemExit("Missing release-tag metadata in PR body")
+
+          print(f"head_branch={pr['headRefName']}")
           print(f"release_tag={match.group(1) if match else ''}")
           PY
 
-      - name: Verify required checks are complete
-        if: steps.pr.outputs.found == 'true'
+      - name: Wait for required checks
         env:
           GH_TOKEN: ${{ github.token }}
-          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
-          checks_json="$(gh api \
-            "repos/${{ github.repository }}/commits/${HEAD_SHA}/check-runs")"
-
-          printf '%s' "$checks_json" | python3 - <<'PY'
-          import json
-          import sys
-
-          payload = json.load(sys.stdin)
-          required = {
-              "HACS validation": "success",
-              "Hassfest validation": "success",
-          }
-
-          results = {run["name"]: run["conclusion"] for run in payload["check_runs"]}
-          missing = [
-              name for name, conclusion in required.items()
-              if results.get(name) != conclusion
-          ]
-
-          if missing:
-              raise SystemExit(
-                  f"Required checks not ready for merge: {', '.join(missing)}"
-              )
-          PY
+          gh pr checks "$PR_NUMBER" \
+            --repo "${{ github.repository }}" \
+            --watch \
+            --required \
+            --interval 10
 
       - name: Merge pull request
-        if: steps.pr.outputs.found == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ steps.pr.outputs.number }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           for _ in 1 2 3 4 5 6; do
             merge_state="$(gh pr view "$PR_NUMBER" \
@@ -117,11 +83,10 @@ jobs:
             --delete-branch
 
       - name: Resolve merge commit
-        if: steps.pr.outputs.found == 'true'
         id: merge
         env:
           GH_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ steps.pr.outputs.number }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           merge_sha="$(gh pr view "$PR_NUMBER" \
             --repo "${{ github.repository }}" \
@@ -129,8 +94,12 @@ jobs:
             --jq '.mergeCommit.oid')"
           echo "sha=${merge_sha}" >> "$GITHUB_OUTPUT"
 
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
       - name: Check out merge commit
-        if: steps.pr.outputs.found == 'true'
         env:
           MERGE_SHA: ${{ steps.merge.outputs.sha }}
         run: |
@@ -138,13 +107,11 @@ jobs:
           git checkout "$MERGE_SHA"
 
       - name: Create zip
-        if: steps.pr.outputs.found == 'true'
         run: |
           cd custom_components/landroid_cloud
           zip landroid_cloud.zip -r ./
 
       - name: Upload zip to release
-        if: steps.pr.outputs.found == 'true'
         uses: svenstaro/upload-release-action@2.11.4
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
