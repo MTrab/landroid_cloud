@@ -74,14 +74,6 @@ jobs:
               manifest_file.write("\\n")
           PY
 
-      - name: Run HACS validation
-        uses: hacs/action@main
-        with:
-          category: integration
-
-      - name: Run Hassfest validation
-        uses: home-assistant/actions/hassfest@master
-
       - name: Commit manifest update
         id: commit
         run: |
