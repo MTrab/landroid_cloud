@@ -5,31 +5,102 @@ on:
   release:
     types: [published]
 
-env:
-  COMPONENT_DIR: landroid_cloud
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
-  release_zip_file:
-    name: Prepare release asset
+  prepare_release_manifest:
+    name: Prepare release manifest PR
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Derive release metadata
+        id: metadata
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import os
+
+          release_tag = os.environ["RELEASE_TAG"]
+          normalized = release_tag[1:] if release_tag.startswith("v") else release_tag
+          branch_name = f"release/{release_tag}"
+
+          print(f"normalized_version={normalized}")
+          print(f"branch_name={branch_name}")
+          PY
+
       - name: Update manifest.json version to ${{ github.event.release.tag_name }}
         run: |
-          python3 ${{ github.workspace }}/.github/scripts/update_hacs_manifest.py --version ${{ github.event.release.tag_name }} --path /custom_components/landroid_cloud/
-      - name: Commit manifest update
+          python3 "${{ github.workspace }}/.github/scripts/update_hacs_manifest.py" \
+            --version "${{ github.event.release.tag_name }}" \
+            --path /custom_components/landroid_cloud/
+
+      - name: Check whether manifest changed
+        id: manifest
+        run: |
+          if git diff --quiet -- custom_components/landroid_cloud/manifest.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create release manifest branch and PR
+        if: steps.manifest.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          RELEASE_BRANCH: ${{ steps.metadata.outputs.branch_name }}
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git add ./custom_components/landroid_cloud/manifest.json
-          git commit -m "Updated manifest.json"
-          git push origin HEAD:master
-      - name: Create zip
+          git checkout -B "$RELEASE_BRANCH"
+          git add custom_components/landroid_cloud/manifest.json
+          git commit -m "chore: bump manifest for ${RELEASE_TAG}"
+          git push --force-with-lease --set-upstream origin "$RELEASE_BRANCH"
+
+          existing_pr="$(gh pr list \
+            --repo "${{ github.repository }}" \
+            --head "${{ github.repository_owner }}:$RELEASE_BRANCH" \
+            --state open \
+            --json number \
+            --jq '.[0].number')"
+
+          if [ -n "$existing_pr" ]; then
+            gh pr edit "$existing_pr" \
+              --repo "${{ github.repository }}" \
+              --add-label skip-changelog \
+              --title "chore: bump manifest for ${RELEASE_TAG} release" \
+              --body "Automated manifest version bump for ${RELEASE_TAG}.
+
+          release-tag: ${RELEASE_TAG}"
+            exit 0
+          fi
+
+          gh pr create \
+            --repo "${{ github.repository }}" \
+            --base master \
+            --head "$RELEASE_BRANCH" \
+            --title "chore: bump manifest for ${RELEASE_TAG} release" \
+            --body "Automated manifest version bump for ${RELEASE_TAG}.
+
+          release-tag: ${RELEASE_TAG}" \
+            --label skip-changelog
+
+      - name: Create zip immediately when manifest is already up to date
+        if: steps.manifest.outputs.changed == 'false'
         run: |
           cd custom_components/landroid_cloud
           zip landroid_cloud.zip -r ./
-      - name: Upload zip to release
+
+      - name: Upload zip immediately when manifest is already up to date
+        if: steps.manifest.outputs.changed == 'false'
         uses: svenstaro/upload-release-action@2.11.4
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
