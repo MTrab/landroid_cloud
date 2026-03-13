@@ -1,4 +1,4 @@
-name: Code validation
+name: Hassfest validation
 
 on:
   push:
