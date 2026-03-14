@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+
+set -eu
+
+LOGDIR="${LOGDIR:-/config/logs}"
+LOGFILE="${LOGFILE:-$LOGDIR/fd_monitor.log}"
+JSONFILE="${JSONFILE:-$LOGDIR/fd_monitor.json}"
+INTERVAL_SECONDS="${INTERVAL_SECONDS:-60}"
+PROCESS_NAME="${PROCESS_NAME:-python3}"
+
+mkdir -p "$LOGDIR"
+
+find_pid() {
+    pidof "$PROCESS_NAME" 2>/dev/null | awk '{print $1}'
+}
+
+count_matching_fds() {
+    local pid="$1"
+    local pattern="$2"
+
+    ls -l "/proc/$pid/fd" 2>/dev/null | grep -c -- "$pattern" || true
+}
+
+while true; do
+    HA_PID="$(find_pid)"
+
+    if [ -z "$HA_PID" ]; then
+        echo "$(date '+%Y-%m-%d %H:%M:%S') | ha_pid=null PID not found for process=$PROCESS_NAME" >> "$LOGFILE"
+        printf '{ "ha_pid": null, "process_name": "%s" }\n' "$PROCESS_NAME" > "$JSONFILE"
+        sleep "$INTERVAL_SECONDS"
+        continue
+    fi
+
+    FD_TOTAL="$(ls -1 "/proc/$HA_PID/fd" 2>/dev/null | wc -l)"
+    FD_EPOLL="$(count_matching_fds "$HA_PID" 'eventpoll')"
+    FD_INOTIFY="$(count_matching_fds "$HA_PID" 'inotify')"
+    FD_PIPES="$(count_matching_fds "$HA_PID" 'pipe:')"
+    FD_SOCKETS="$(count_matching_fds "$HA_PID" 'socket:')"
+
+    THREADS="$(ls "/proc/$HA_PID/task" 2>/dev/null | wc -l)"
+    CPU_JIFFIES="$(awk '{print $14+$15}' "/proc/$HA_PID/stat" 2>/dev/null)"
+    RSS="$(awk '/VmRSS/ {print $2}' "/proc/$HA_PID/status" 2>/dev/null)"
+    VSZ="$(awk '/VmSize/ {print $2}' "/proc/$HA_PID/status" 2>/dev/null)"
+
+    LINE="$(date '+%Y-%m-%d %H:%M:%S') | ha_pid=$HA_PID total=$FD_TOTAL eventpoll=$FD_EPOLL inotify=$FD_INOTIFY pipes=$FD_PIPES sockets=$FD_SOCKETS threads=$THREADS cpu_jiffies=$CPU_JIFFIES rss_kb=$RSS vsz_kb=$VSZ process_name=$PROCESS_NAME"
+    echo "$LINE" >> "$LOGFILE"
+
+    cat > "$JSONFILE" <<EOF
+{
+  "ha_pid": $HA_PID,
+  "process_name": "$PROCESS_NAME",
+  "total": $FD_TOTAL,
+  "eventpoll": $FD_EPOLL,
+  "inotify": $FD_INOTIFY,
+  "pipes": $FD_PIPES,
+  "sockets": $FD_SOCKETS,
+  "threads": $THREADS,
+  "cpu_jiffies": $CPU_JIFFIES,
+  "rss_kb": $RSS,
+  "vsz_kb": $VSZ
+}
+EOF
+
+    sleep "$INTERVAL_SECONDS"
+done
