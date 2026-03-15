@@ -148,21 +148,21 @@ Numbers require the mower to be online and are disabled by default.
 
 ## Actions and control model
 
-The integration exposes control through native entities and custom `lawn_mower` actions:
+The integration exposes control through native entities and custom `landroid_cloud` services:
 
 - Lawn mower actions for start, pause and dock
 - Buttons for one-shot actions such as edge cut and counter resets
 - Switches for boolean features such as ACS, lock and Off Limits
 - Numbers for writable values such as rain delay, cutting height, time extension and torque
 - Select for zone choice
-- The `lawn_mower.ots` action for starting a one-time schedule
-- The `lawn_mower.add_schedule`, `lawn_mower.edit_schedule`, and `lawn_mower.delete_schedule` actions for schedule management
+- The `landroid_cloud.ots` service for starting a one-time schedule
+- The `landroid_cloud.add_schedule`, `landroid_cloud.edit_schedule`, and `landroid_cloud.delete_schedule` services for schedule management
 
-### Custom lawn mower actions
+### Custom integration services
 
-All custom actions target a `lawn_mower` entity from this integration.
+All custom services target a `lawn_mower` entity from this integration.
 
-#### `lawn_mower.ots`
+#### `landroid_cloud.ots`
 
 Starts a one-time mowing session on mowers that support it.
 
@@ -174,7 +174,7 @@ Fields:
 Example:
 
 ```yaml
-action: lawn_mower.ots
+action: landroid_cloud.ots
 target:
   entity_id: lawn_mower.my_landroid
 data:
@@ -182,7 +182,7 @@ data:
   runtime: 45
 ```
 
-#### `lawn_mower.add_schedule`
+#### `landroid_cloud.add_schedule`
 
 Creates one or more recurring schedule entries in a single action call.
 
@@ -202,7 +202,7 @@ Behavior:
 Example:
 
 ```yaml
-action: lawn_mower.add_schedule
+action: landroid_cloud.add_schedule
 target:
   entity_id: lawn_mower.my_landroid
 data:
@@ -215,7 +215,7 @@ data:
   boundary: false
 ```
 
-#### `lawn_mower.edit_schedule`
+#### `landroid_cloud.edit_schedule`
 
 Updates one existing schedule entry.
 
@@ -237,7 +237,7 @@ Behavior:
 Example:
 
 ```yaml
-action: lawn_mower.edit_schedule
+action: landroid_cloud.edit_schedule
 target:
   entity_id: lawn_mower.my_landroid
 data:
@@ -249,7 +249,7 @@ data:
   boundary: true
 ```
 
-#### `lawn_mower.delete_schedule`
+#### `landroid_cloud.delete_schedule`
 
 Deletes one schedule entry or clears the whole schedule.
 
@@ -268,7 +268,7 @@ Behavior:
 Examples:
 
 ```yaml
-action: lawn_mower.delete_schedule
+action: landroid_cloud.delete_schedule
 target:
   entity_id: lawn_mower.my_landroid
 data:
@@ -277,7 +277,7 @@ data:
 ```
 
 ```yaml
-action: lawn_mower.delete_schedule
+action: landroid_cloud.delete_schedule
 target:
   entity_id: lawn_mower.my_landroid
 data:
