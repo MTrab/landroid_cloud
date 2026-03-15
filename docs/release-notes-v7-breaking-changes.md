@@ -8,6 +8,7 @@ The new integration is not a drop-in replacement for the legacy version.
 The main breaking areas are:
 
 - legacy services are no longer exposed
+- new service names and payloads must be used for schedule management
 - many entity keys changed
 - several entities were removed
 - many configuration and diagnostic entities are now disabled by default
@@ -24,6 +25,25 @@ The legacy integration exposed service calls that are not present in the new ver
 - `landroid_cloud.send_raw`
 
 Automations or scripts calling those services will break.
+
+### New custom service model
+
+The rewrite now exposes these custom services instead:
+
+- `landroid_cloud.ots`
+- `landroid_cloud.add_schedule`
+- `landroid_cloud.edit_schedule`
+- `landroid_cloud.delete_schedule`
+
+This means old automations cannot be migrated by a simple rename.
+Schedule-related automations must be rewritten to use the new service names and field structure.
+
+Key behavior differences:
+
+- schedule creation now uses `days`, `start`, `duration`, and optional `boundary`
+- schedule editing now targets an existing entry with `current_day` and optional `current_start`
+- schedule deletion now uses `day` and optional `start`, or `all_schedules: true`
+- the old generic schedule payload format is no longer used
 
 ### Entity ID and unique ID churn
 
@@ -92,6 +112,16 @@ Examples include:
 - blade runtime reset time
 - most diagnostic sensors
 
+### Next schedule behavior changed
+
+`next_schedule` now becomes unavailable when the mower has no valid upcoming schedule.
+Users coming from older behavior may previously have seen stale, misleading, or `unknown` values instead.
+
+Expected impact:
+
+- automations checking for a timestamp value should also handle `unavailable`
+- dashboards may now show no upcoming schedule more explicitly
+
 ### Availability changes
 
 Write-capable entities are now unavailable while the mower is offline.
@@ -116,6 +146,8 @@ Users upgrading from legacy should be told to:
 2. re-enable desired disabled-by-default entities manually
 3. update automations/scripts to use the new entity IDs
 4. remove or rewrite any automations using the removed legacy services
+5. rewrite schedule automations to use the new `landroid_cloud.add_schedule`, `landroid_cloud.edit_schedule`, and `landroid_cloud.delete_schedule` services
+6. update any automation using `next_schedule` so it handles `unavailable`
 
 ## Notes For Final Release Post
 
@@ -123,6 +155,7 @@ Recommended release-note sections:
 
 - breaking changes
 - removed services
+- new schedule service model
 - renamed entities
 - disabled-by-default entities
 - migration guidance
