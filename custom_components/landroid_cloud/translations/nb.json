@@ -30,6 +30,17 @@
         "kress": "Kress",
         "landxcape": "LandXcape"
       }
+    },
+    "days_of_week": {
+      "options": {
+        "monday": "Mandag",
+        "tuesday": "Tirsdag",
+        "wednesday": "Onsdag",
+        "thursday": "Torsdag",
+        "friday": "Fredag",
+        "saturday": "Lørdag",
+        "sunday": "Søndag"
+      }
     }
   },
   "options": {

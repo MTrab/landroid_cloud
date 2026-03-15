@@ -30,6 +30,17 @@
         "kress": "Kress",
         "landxcape": "LandXcape"
       }
+    },
+    "days_of_week": {
+      "options": {
+        "monday": "Luni",
+        "tuesday": "Marți",
+        "wednesday": "Miercuri",
+        "thursday": "Joi",
+        "friday": "Vineri",
+        "saturday": "Sâmbătă",
+        "sunday": "Duminică"
+      }
     }
   },
   "options": {

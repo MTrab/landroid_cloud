@@ -103,29 +103,95 @@ def _statistics_value(device, statistics_key: str) -> int | None:
 
 def _schedule_attributes(device) -> dict[str, object] | None:
     """Return known schedule fields for the next schedule sensor."""
-    schedules = getattr(device, "schedules", None)
-    if not isinstance(schedules, dict):
+    return _schedule_attributes_with_normalized_schedule(device, None)
+
+
+def _normalized_schedule_attributes(schedule) -> dict[str, object] | None:
+    """Return normalized schedule fields when available."""
+    if schedule is None:
         return None
 
-    known_keys = (
-        "active",
-        "time_extension",
-        "slots",
-        "pause_mode_enabled",
-        "one_time_schedule",
-        "auto_schedule",
-        "daily_progress",
-        "next_schedule_start",
-    )
-    attributes = {
-        key: schedules[key]
-        for key in known_keys
-        if key in schedules and schedules[key] is not None
+    protocol = int(getattr(schedule, "protocol"))
+    entries = [
+        {
+            "entry_id": entry.entry_id,
+            "day": entry.day,
+            "start": entry.start,
+            "duration": entry.duration,
+            "boundary": entry.boundary,
+            "source": entry.source,
+            "secondary": entry.secondary,
+            "label": _schedule_entry_label(
+                day=entry.day,
+                start=entry.start,
+                duration=entry.duration,
+                source=entry.source,
+                protocol=protocol,
+            ),
+        }
+        for entry in getattr(schedule, "entries", [])
+    ]
+    attributes: dict[str, object] = {
+        "schedule_enabled": bool(getattr(schedule, "enabled", False)),
+        "schedule_protocol": protocol,
+        "schedule_entries": entries,
     }
-    corrected_next = _next_schedule_value(device)
-    if corrected_next is not None:
-        attributes["next_schedule_start"] = corrected_next
+    time_extension = getattr(schedule, "time_extension", None)
+    if time_extension is not None:
+        attributes["schedule_time_extension"] = int(time_extension)
+    return attributes
+
+
+def _schedule_attributes_with_normalized_schedule(
+    device, schedule
+) -> dict[str, object] | None:
+    """Return known schedule fields merged with normalized schedule data."""
+    schedules = getattr(device, "schedules", None)
+    attributes: dict[str, object] = {}
+
+    if isinstance(schedules, dict):
+        known_keys = (
+            "active",
+            "time_extension",
+            "slots",
+            "pause_mode_enabled",
+            "one_time_schedule",
+            "auto_schedule",
+            "daily_progress",
+            "next_schedule_start",
+        )
+        attributes.update(
+            {
+                key: schedules[key]
+                for key in known_keys
+                if key in schedules and schedules[key] is not None
+            }
+        )
+        corrected_next = _next_schedule_value(device)
+        if corrected_next is not None:
+            attributes["next_schedule_start"] = corrected_next
+        else:
+            attributes.pop("next_schedule_start", None)
+
+    normalized_attributes = _normalized_schedule_attributes(schedule)
+    if normalized_attributes is not None:
+        attributes.update(normalized_attributes)
     return attributes or None
+
+
+def _schedule_entry_label(
+    *,
+    day: str,
+    start: str,
+    duration: int,
+    source: str,
+    protocol: int,
+) -> str:
+    """Return a human-readable schedule label."""
+    label = f"{day.capitalize()} {start} ({duration} min)"
+    if protocol == 0:
+        label = f"{label} - {source}"
+    return label
 
 
 def _resolve_timezone(device) -> timezone | ZoneInfo:
@@ -147,7 +213,7 @@ def _next_schedule_value(device) -> datetime | None:
 
     slots = schedules.get("slots", []) or []
     if not isinstance(slots, list):
-        return schedules.get("next_schedule_start")
+        return None
 
     tzinfo = _resolve_timezone(device)
     now = datetime.now(tzinfo)
@@ -175,7 +241,7 @@ def _next_schedule_value(device) -> datetime | None:
     if candidates:
         return min(candidates)
 
-    return schedules.get("next_schedule_start")
+    return None
 
 
 SENSORS: tuple[LandroidSensorDescription, ...] = (
@@ -365,6 +431,15 @@ class LandroidSensor(LandroidBaseEntity, SensorEntity):
         )
 
     @property
+    def available(self) -> bool:
+        """Return availability for sensors."""
+        if not super().available:
+            return False
+        if self.entity_description.key == "next_schedule":
+            return _next_schedule_value(self.device) is not None
+        return True
+
+    @property
     def native_value(self):
         """Return the native value for this sensor."""
         device = self.device
@@ -413,5 +488,8 @@ class LandroidSensor(LandroidBaseEntity, SensorEntity):
         if self.entity_description.key == "battery":
             return _battery_charging_attribute(self.device)
         if self.entity_description.key == "next_schedule":
-            return _schedule_attributes(self.device)
+            return _schedule_attributes_with_normalized_schedule(
+                self.device,
+                self.coordinator.cloud.get_schedule(str(self.device.serial_number)),
+            )
         return None

@@ -11,6 +11,7 @@ from homeassistant.helpers.entity import EntityCategory
 import custom_components.landroid_cloud.sensor as sensor_module
 from custom_components.landroid_cloud.const import ERROR_STATE_MAP, ERROR_STATE_OPTIONS
 from custom_components.landroid_cloud.sensor import (
+    LandroidSensor,
     SENSORS,
     _battery_cycle_value,
     _battery_charging_attribute,
@@ -19,8 +20,11 @@ from custom_components.landroid_cloud.sensor import (
     _blade_runtime_value,
     _last_update_value,
     _next_schedule_value,
+    _normalized_schedule_attributes,
     _rain_delay_remaining_value,
     _schedule_attributes,
+    _schedule_attributes_with_normalized_schedule,
+    _schedule_entry_label,
     _statistics_value,
 )
 
@@ -114,7 +118,7 @@ def test_next_schedule_is_timestamp_sensor() -> None:
 
 
 def test_schedule_attributes_expose_known_schedule_fields() -> None:
-    """Known schedule fields should be exposed as next schedule attributes."""
+    """Known schedule fields should be exposed without stale next-schedule values."""
     schedules = {
         "active": True,
         "time_extension": 10,
@@ -136,7 +140,92 @@ def test_schedule_attributes_expose_known_schedule_fields() -> None:
         "one_time_schedule": True,
         "auto_schedule": {"enabled": True, "settings": {"boost": 1}},
         "daily_progress": 75,
-        "next_schedule_start": "2026-03-12 10:30:00+01:00",
+    }
+
+
+def test_normalized_schedule_attributes_include_entry_metadata() -> None:
+    """Normalized schedule fields should expose entry ids and protocol data."""
+    schedule = SimpleNamespace(
+        enabled=True,
+        protocol=0,
+        time_extension=10,
+        entries=[
+            SimpleNamespace(
+                entry_id="p0:monday:primary",
+                day="monday",
+                start="09:00",
+                duration=60,
+                boundary=False,
+                source="primary",
+                secondary=False,
+            )
+        ],
+    )
+
+    assert _normalized_schedule_attributes(schedule) == {
+        "schedule_enabled": True,
+        "schedule_protocol": 0,
+        "schedule_time_extension": 10,
+        "schedule_entries": [
+            {
+                "entry_id": "p0:monday:primary",
+                "day": "monday",
+                "start": "09:00",
+                "duration": 60,
+                "boundary": False,
+                "source": "primary",
+                "secondary": False,
+                "label": "Monday 09:00 (60 min) - primary",
+            }
+        ],
+    }
+
+
+def test_schedule_entry_label_is_human_readable() -> None:
+    """Schedule labels should be easy to copy from sensor attributes."""
+    assert (
+        _schedule_entry_label(
+            day="monday",
+            start="09:00",
+            duration=60,
+            source="primary",
+            protocol=0,
+        )
+        == "Monday 09:00 (60 min) - primary"
+    )
+    assert (
+        _schedule_entry_label(
+            day="tuesday",
+            start="12:30",
+            duration=45,
+            source="slot",
+            protocol=1,
+        )
+        == "Tuesday 12:30 (45 min)"
+    )
+
+
+def test_schedule_attributes_merge_normalized_schedule_fields() -> None:
+    """Legacy and normalized schedule fields should be exposed together."""
+    device = SimpleNamespace(
+        schedules={
+            "active": True,
+            "slots": [{"day": "monday", "start": "09:00", "end": "10:00"}],
+        }
+    )
+    schedule = SimpleNamespace(
+        enabled=False,
+        protocol=1,
+        time_extension=None,
+        entries=[],
+    )
+
+    assert _schedule_attributes_with_normalized_schedule(device, schedule) == {
+        "active": True,
+        "slots": [{"day": "monday", "start": "09:00", "end": "10:00"}],
+        "schedule_enabled": False,
+        "schedule_protocol": 1,
+        "schedule_entries": [],
     }
 
 
@@ -181,6 +270,119 @@ def test_next_schedule_skips_zero_duration_slots(monkeypatch) -> None:
     assert _next_schedule_value(device) == datetime(
         2026, 3, 12, 15, 0, tzinfo=ZoneInfo("UTC")
     )
+
+
+def test_next_schedule_returns_none_when_no_valid_slots_exist(monkeypatch) -> None:
+    """Stale next-schedule payloads should be ignored when no schedule is active."""
+    real_datetime = sensor_module.datetime
+
+    class FrozenDateTime:
+        """Minimal datetime shim returning a fixed current time."""
+
+        @staticmethod
+        def now(tz=None):
+            return real_datetime(2026, 3, 12, 10, 30, tzinfo=tz or ZoneInfo("UTC"))
+
+        strptime = staticmethod(real_datetime.strptime)
+
+    monkeypatch.setattr(sensor_module, "datetime", FrozenDateTime)
+
+    device = SimpleNamespace(
+        time_zone="UTC",
+        schedules={
+            "active": False,
+            "slots": [
+                {
+                    "day": "thursday",
+                    "start": "11:00",
+                    "end": "11:00",
+                    "duration": 0,
+                    "duration_extended": 0,
+                }
+            ],
+            "next_schedule_start": datetime(
+                2026, 3, 12, 11, 0, tzinfo=ZoneInfo("UTC")
+            ),
+        },
+    )
+
+    assert _next_schedule_value(device) is None
+    assert _schedule_attributes(device) == {
+        "active": False,
+        "slots": [
+            {
+                "day": "thursday",
+                "start": "11:00",
+                "end": "11:00",
+                "duration": 0,
+                "duration_extended": 0,
+            }
+        ],
+    }
+
+
+def test_next_schedule_sensor_is_unavailable_without_valid_schedule() -> None:
+    """Next schedule sensor should be unavailable when no schedule exists."""
+    entity = object.__new__(LandroidSensor)
+    entity.entity_description = next(
+        description for description in SENSORS if description.key == "next_schedule"
+    )
+    entity.coordinator = SimpleNamespace(
+        last_update_success=True,
+        data={
+            "serial": SimpleNamespace(
+                schedules={"active": False, "slots": []},
+                time_zone="UTC",
+            )
+        },
+    )
+    entity._serial_number = "serial"
+
+    assert entity.available is False
+
+
+def test_next_schedule_sensor_stays_available_with_valid_schedule(monkeypatch) -> None:
+    """Next schedule sensor should be available when a future schedule exists."""
+    real_datetime = sensor_module.datetime
+
+    class FrozenDateTime:
+        """Minimal datetime shim returning a fixed current time."""
+
+        @staticmethod
+        def now(tz=None):
+            return real_datetime(2026, 3, 12, 10, 30, tzinfo=tz or ZoneInfo("UTC"))
+
+        strptime = staticmethod(real_datetime.strptime)
+
+    monkeypatch.setattr(sensor_module, "datetime", FrozenDateTime)
+
+    entity = object.__new__(LandroidSensor)
+    entity.entity_description = next(
+        description for description in SENSORS if description.key == "next_schedule"
+    )
+    entity.coordinator = SimpleNamespace(
+        last_update_success=True,
+        data={
+            "serial": SimpleNamespace(
+                schedules={
+                    "active": True,
+                    "slots": [
+                        {
+                            "day": "thursday",
+                            "start": "15:00",
+                            "end": "15:30",
+                            "duration": 30,
+                            "duration_extended": 30,
+                        }
+                    ],
+                },
+                time_zone="UTC",
+            )
+        },
+    )
+    entity._serial_number = "serial"
+
+    assert entity.available is True
 
 
 def test_battery_cycle_value_returns_integer() -> None:
