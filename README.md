@@ -148,14 +148,145 @@ Numbers require the mower to be online and are disabled by default.
 
 ## Actions and control model
 
-The integration exposes control through native entities and one legacy-compatible service:
+The integration exposes control through native entities and custom `lawn_mower` actions:
 
 - Lawn mower actions for start, pause and dock
 - Buttons for one-shot actions such as edge cut and counter resets
 - Switches for boolean features such as ACS, lock and Off Limits
 - Numbers for writable values such as rain delay, cutting height, time extension and torque
 - Select for zone choice
-- The `landroid_cloud.ots` service for starting a one-time schedule with boundary and runtime parameters
+- The `lawn_mower.ots` action for starting a one-time schedule
+- The `lawn_mower.add_schedule`, `lawn_mower.edit_schedule`, and `lawn_mower.delete_schedule` actions for schedule management
+
+### Custom lawn mower actions
+
+All custom actions target a `lawn_mower` entity from this integration.
+
+#### `lawn_mower.ots`
+
+Starts a one-time mowing session on mowers that support it.
+
+Fields:
+
+- `boundary`: Include boundary or edge cutting
+- `runtime`: Run time in minutes, from `10` to `120`
+
+Example:
+
+```yaml
+action: lawn_mower.ots
+target:
+  entity_id: lawn_mower.my_landroid
+data:
+  boundary: false
+  runtime: 45
+```
+
+#### `lawn_mower.add_schedule`
+
+Creates one or more recurring schedule entries in a single action call.
+
+Fields:
+
+- `days`: One or more days of the week
+- `start`: Start time in `HH:MM` format
+- `duration`: Duration in minutes
+- `boundary`: Optional. If omitted, boundary defaults to `false` on mowers that require it
+
+Behavior:
+
+- If you select multiple days, the same schedule is created for each selected day
+- On mowers with two slots per day, the integration automatically chooses the first or second free slot
+- On mowers that support more than two daily entries, the integration will keep adding entries on the selected day as long as the mower accepts them
+
+Example:
+
+```yaml
+action: lawn_mower.add_schedule
+target:
+  entity_id: lawn_mower.my_landroid
+data:
+  days:
+    - monday
+    - wednesday
+    - friday
+  start: "09:00"
+  duration: 60
+  boundary: false
+```
+
+#### `lawn_mower.edit_schedule`
+
+Updates one existing schedule entry.
+
+Fields:
+
+- `current_day`: The current day of the schedule you want to change
+- `current_start`: Optional. Use this when that day has more than one schedule
+- `day`: The new day
+- `start`: The new start time in `HH:MM` format
+- `duration`: The new duration in minutes
+- `boundary`: Optional boundary setting for the updated entry
+
+Behavior:
+
+- If the selected current day only has one schedule, `current_start` is not needed
+- If the day has multiple schedules, you must provide `current_start` so the integration knows which one to edit
+- When moving an entry to a different day, the integration automatically resolves the correct slot behind the scenes
+
+Example:
+
+```yaml
+action: lawn_mower.edit_schedule
+target:
+  entity_id: lawn_mower.my_landroid
+data:
+  current_day: monday
+  current_start: "09:00"
+  day: tuesday
+  start: "10:30"
+  duration: 45
+  boundary: true
+```
+
+#### `lawn_mower.delete_schedule`
+
+Deletes one schedule entry or clears the whole schedule.
+
+Fields:
+
+- `all_schedules`: Optional. Set to `true` to remove every schedule entry in one call
+- `day`: Day of the schedule you want to delete
+- `start`: Optional. Use this when the selected day has more than one schedule
+
+Behavior:
+
+- If `all_schedules` is `true`, all schedule entries are removed and `day` is not needed
+- If a day only has one schedule, `start` is not needed
+- If a day has multiple schedules, you must provide `start`
+
+Examples:
+
+```yaml
+action: lawn_mower.delete_schedule
+target:
+  entity_id: lawn_mower.my_landroid
+data:
+  day: monday
+  start: "09:00"
+```
+
+```yaml
+action: lawn_mower.delete_schedule
+target:
+  entity_id: lawn_mower.my_landroid
+data:
+  all_schedules: true
+```
+
+### Finding the right schedule to edit or delete
+
+Enable the `Next schedule` sensor if you want a simple view of the normalized schedule data the integration uses. Its attributes include `schedule_entries`, which can help you see which days and start times currently exist for the mower.
 
 ## Availability behavior
 
