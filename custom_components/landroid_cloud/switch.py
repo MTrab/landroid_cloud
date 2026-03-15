@@ -24,12 +24,12 @@ class LandroidSwitchDescription(SwitchEntityDescription):
 
 SWITCHES: tuple[LandroidSwitchDescription, ...] = (
     LandroidSwitchDescription(
-        key="party_mode",
-        translation_key="party_mode",
-        icon="mdi:party-popper",
+        key="pause_mode",
+        translation_key="pause_mode",
+        icon="mdi:pause-circle",
         entity_category=EntityCategory.CONFIG,
         entity_registry_enabled_default=False,
-        capability=DeviceCapability.PARTY_MODE,
+        capability=DeviceCapability.PAUSE_MODE,
     ),
     LandroidSwitchDescription(
         key="lock",
@@ -113,8 +113,8 @@ class LandroidSwitch(LandroidBaseEntity, SwitchEntity):
     def is_on(self) -> bool | None:
         """Return true if switch is on."""
         key = self.entity_description.key
-        if key == "party_mode":
-            return bool(self.device.schedules.get("party_mode_enabled", False))
+        if key == "pause_mode":
+            return bool(self.device.schedules.get("pause_mode_enabled", False))
         if key == "lock":
             locked = getattr(self.device, "locked", None)
             return None if locked is None else bool(locked)
@@ -139,11 +139,12 @@ class LandroidSwitch(LandroidBaseEntity, SwitchEntity):
         await self._async_set_state(False)
 
     async def _async_set_state(self, state: bool) -> None:
+        """Apply the selected switch state in the cloud API."""
         serial_number = str(self.device.serial_number)
 
-        if self.entity_description.key == "party_mode":
+        if self.entity_description.key == "pause_mode":
             await async_run_cloud_command(
-                lambda: self.coordinator.cloud.set_partymode(serial_number, state)
+                lambda: self.coordinator.cloud.set_pause_mode(serial_number, state)
             )
         elif self.entity_description.key == "lock":
             await async_run_cloud_command(

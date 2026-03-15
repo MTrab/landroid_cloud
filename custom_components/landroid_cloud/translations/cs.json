@@ -158,8 +158,8 @@
       }
     },
     "switch": {
-      "party_mode": {
-        "name": "Párty režim"
+      "pause_mode": {
+        "name": "Rezim pauzy"
       },
       "lock": {
         "name": "Zámek"

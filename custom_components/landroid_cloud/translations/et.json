@@ -158,8 +158,8 @@
       }
     },
     "switch": {
-      "party_mode": {
-        "name": "Peorežiim"
+      "pause_mode": {
+        "name": "Pausireziim"
       },
       "lock": {
         "name": "Lukk"

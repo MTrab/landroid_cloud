@@ -244,8 +244,8 @@
       }
     },
     "switch": {
-      "party_mode": {
-        "name": "Party mode"
+      "pause_mode": {
+        "name": "Pause mode"
       },
       "lock": {
         "name": "Lock"

@@ -158,8 +158,8 @@
       }
     },
     "switch": {
-      "party_mode": {
-        "name": "Tryb imprezy"
+      "pause_mode": {
+        "name": "Tryb pauzy"
       },
       "lock": {
         "name": "Blokada"

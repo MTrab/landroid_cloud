@@ -158,8 +158,8 @@
       }
     },
     "switch": {
-      "party_mode": {
-        "name": "Parti mód"
+      "pause_mode": {
+        "name": "Szünet mód"
       },
       "lock": {
         "name": "Zár"

@@ -158,8 +158,8 @@
       }
     },
     "switch": {
-      "party_mode": {
-        "name": "Modalità festa"
+      "pause_mode": {
+        "name": "Modalita pausa"
       },
       "lock": {
         "name": "Blocco"
