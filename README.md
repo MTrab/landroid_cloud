@@ -113,7 +113,7 @@ All switches are configuration entities and require the mower to be online.
 
 | Entity | Default | Notes |
 | --- | --- | --- |
-| Party mode | Disabled | Requires party mode support |
+| Pause mode | Disabled | Requires pause mode support |
 | Lock | Disabled | |
 | Off Limits | Enabled | Requires Off Limits support |
 | Off Limits shortcuts | Enabled | Requires Off Limits support |
