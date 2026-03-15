@@ -1,0 +1,342 @@
+"""Custom lawn mower entity services for Landroid Cloud."""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Final
+
+import voluptuous as vol
+from homeassistant.helpers import config_validation as cv
+from homeassistant.exceptions import HomeAssistantError
+from pyworxcloud import ScheduleEntry, ScheduleModel
+from pyworxcloud.day_map import DAY_MAP
+from pyworxcloud.exceptions import NoOneTimeScheduleError
+from pyworxcloud.utils.schedule_codec import add_schedule_entry as add_schedule_entry_model
+
+from .commands import async_run_cloud_command
+
+if TYPE_CHECKING:
+    from homeassistant.helpers.entity_platform import EntityPlatform
+
+    from .lawn_mower import LandroidCloudMowerEntity
+
+SERVICE_OTS: Final = "ots"
+SERVICE_ADD_SCHEDULE: Final = "add_schedule"
+SERVICE_EDIT_SCHEDULE: Final = "edit_schedule"
+SERVICE_DELETE_SCHEDULE: Final = "delete_schedule"
+ATTR_BOUNDARY: Final = "boundary"
+ATTR_ALL_SCHEDULES: Final = "all_schedules"
+ATTR_CURRENT_DAY: Final = "current_day"
+ATTR_CURRENT_START: Final = "current_start"
+ATTR_DAY: Final = "day"
+ATTR_DAYS: Final = "days"
+ATTR_DURATION: Final = "duration"
+ATTR_RUNTIME: Final = "runtime"
+ATTR_START: Final = "start"
+DAYS: Final = tuple(DAY_MAP[index] for index in sorted(DAY_MAP))
+
+
+def async_register_entity_services(platform: EntityPlatform) -> None:
+    """Register custom lawn mower entity services."""
+    platform.async_register_entity_service(
+        SERVICE_OTS,
+        {
+            vol.Required(ATTR_BOUNDARY): bool,
+            vol.Required(ATTR_RUNTIME): vol.All(
+                vol.Coerce(int), vol.Range(min=10, max=120)
+            ),
+        },
+        "_async_service_ots",
+    )
+    schedule_schema = {
+        vol.Required(ATTR_DAYS): vol.All(cv.ensure_list, [vol.In(DAYS)], vol.Length(min=1)),
+        vol.Required(ATTR_START): cv.string,
+        vol.Required(ATTR_DURATION): vol.All(vol.Coerce(int), vol.Range(min=0)),
+        vol.Optional(ATTR_BOUNDARY): bool,
+    }
+    platform.async_register_entity_service(
+        SERVICE_ADD_SCHEDULE,
+        schedule_schema,
+        "_async_service_add_schedule",
+    )
+    platform.async_register_entity_service(
+        SERVICE_EDIT_SCHEDULE,
+        {
+            vol.Required(ATTR_CURRENT_DAY): vol.In(DAYS),
+            vol.Optional(ATTR_CURRENT_START): cv.string,
+            **schedule_schema,
+        },
+        "_async_service_edit_schedule",
+    )
+    platform.async_register_entity_service(
+        SERVICE_DELETE_SCHEDULE,
+        {
+            vol.Optional(ATTR_ALL_SCHEDULES): bool,
+            vol.Optional(ATTR_DAY): vol.In(DAYS),
+            vol.Optional(ATTR_START): cv.string,
+        },
+        "_async_service_delete_schedule",
+    )
+
+
+async def async_handle_ots(
+    entity: LandroidCloudMowerEntity, *, boundary: bool, runtime: int
+) -> None:
+    """Handle legacy OTS service call."""
+    try:
+        await async_run_cloud_command(
+            lambda: entity.coordinator.cloud.ots(
+                str(entity.device.serial_number), boundary, runtime
+            )
+        )
+    except HomeAssistantError as err:
+        if isinstance(err.__cause__, NoOneTimeScheduleError):
+            raise HomeAssistantError("Mower does not support one-time schedule") from err
+        raise
+
+
+def _build_schedule_entry(
+    entity: LandroidCloudMowerEntity,
+    *,
+    entry_id: str,
+    day: str,
+    start: str,
+    duration: int,
+    boundary: bool | None = None,
+    source: str | None = None,
+) -> ScheduleEntry:
+    """Build a normalized schedule entry from service parameters."""
+    protocol = entity.coordinator.cloud.get_schedule(
+        str(entity.device.serial_number)
+    ).protocol
+    if protocol == 0:
+        if boundary is None:
+            boundary = False
+        resolved_source = source or "primary"
+        secondary = resolved_source == "secondary"
+    else:
+        resolved_source = "slot"
+        secondary = False
+
+    return ScheduleEntry(
+        entry_id=entry_id,
+        day=day,
+        start=start,
+        duration=duration,
+        boundary=boundary,
+        source=resolved_source,
+        secondary=secondary,
+    )
+
+
+def _schedule_for_write(entity: LandroidCloudMowerEntity) -> ScheduleModel:
+    """Return the normalized schedule used for service writes."""
+    return entity.coordinator.cloud.get_schedule(str(entity.device.serial_number))
+
+
+def _resolve_protocol_zero_source(
+    entity: LandroidCloudMowerEntity,
+    *,
+    day: str,
+    entries: list[ScheduleEntry] | None = None,
+    keep_entry_id: str | None = None,
+    preferred_source: str | None = None,
+) -> str | None:
+    """Resolve which two-slot source should be used for a day."""
+    schedule = _schedule_for_write(entity)
+    if schedule.protocol != 0:
+        return None
+
+    pool = entries if entries is not None else getattr(schedule, "entries", [])
+    day_entries = [
+        entry for entry in pool if entry.day == day and entry.entry_id != keep_entry_id
+    ]
+    has_primary = any(entry.source == "primary" for entry in day_entries)
+    has_secondary = any(entry.source == "secondary" for entry in day_entries)
+
+    if preferred_source == "primary" and not has_primary:
+        return "primary"
+    if preferred_source == "secondary" and not has_secondary:
+        return "secondary"
+    if not has_primary:
+        return "primary"
+    if not has_secondary:
+        return "secondary"
+    raise HomeAssistantError(
+        "This day already has two schedules; delete one before adding another"
+    )
+
+
+def _resolve_schedule_entry(
+    entity: LandroidCloudMowerEntity,
+    *,
+    day: str,
+    start: str | None = None,
+    action: str,
+) -> ScheduleEntry:
+    """Resolve one schedule entry from a day and optional start time."""
+    entries = [
+        entry for entry in getattr(_schedule_for_write(entity), "entries", []) if entry.day == day
+    ]
+
+    if not entries:
+        raise HomeAssistantError("No schedule entry exists for the selected day")
+
+    if len(entries) == 1:
+        if start is not None and entries[0].start != start:
+            raise HomeAssistantError(
+                "No schedule entry matches the selected day and start time"
+            )
+        return entries[0]
+
+    if start is None:
+        raise HomeAssistantError(
+            f"Select a start time to choose which schedule to {action}"
+        )
+
+    entries = [entry for entry in entries if entry.start == start]
+    if not entries:
+        raise HomeAssistantError(
+            "No schedule entry matches the selected day and start time"
+        )
+    if len(entries) > 1:
+        raise HomeAssistantError(
+            "More than one schedule uses that day and start time; change one of them first"
+        )
+    return entries[0]
+
+
+def _resolve_delete_schedule_entry_id(
+    entity: LandroidCloudMowerEntity,
+    *,
+    day: str,
+    start: str | None = None,
+) -> str:
+    """Resolve one entry to delete using simple user-facing selectors."""
+    return _resolve_schedule_entry(
+        entity,
+        day=day,
+        start=start,
+        action="delete",
+    ).entry_id
+
+
+def _build_cleared_schedule(entity: LandroidCloudMowerEntity) -> ScheduleModel:
+    """Return the current schedule model with all entries removed."""
+    schedule = _schedule_for_write(entity)
+    return ScheduleModel(
+        enabled=schedule.enabled,
+        time_extension=schedule.time_extension,
+        entries=[],
+        protocol=schedule.protocol,
+    )
+
+
+async def async_handle_add_schedule(
+    entity: LandroidCloudMowerEntity,
+    *,
+    days: list[str],
+    start: str,
+    duration: int,
+    boundary: bool | None = None,
+) -> None:
+    """Add one or more schedule entries."""
+    serial_number = str(entity.device.serial_number)
+    schedule = _schedule_for_write(entity)
+    updated_schedule = schedule
+
+    for day in dict.fromkeys(days):
+        source = _resolve_protocol_zero_source(
+            entity,
+            day=day,
+            entries=updated_schedule.entries,
+        )
+        updated_schedule = add_schedule_entry_model(
+            updated_schedule,
+            _build_schedule_entry(
+                entity,
+                entry_id="",
+                day=day,
+                start=start,
+                duration=duration,
+                boundary=boundary,
+                source=source,
+            ),
+        )
+
+    await async_run_cloud_command(
+        lambda: entity.coordinator.cloud.set_schedule(serial_number, updated_schedule)
+    )
+
+
+async def async_handle_edit_schedule(
+    entity: LandroidCloudMowerEntity,
+    *,
+    current_day: str,
+    day: str,
+    start: str,
+    duration: int,
+    current_start: str | None = None,
+    boundary: bool | None = None,
+) -> None:
+    """Replace one schedule entry."""
+    serial_number = str(entity.device.serial_number)
+    current_entry = _resolve_schedule_entry(
+        entity,
+        day=current_day,
+        start=current_start,
+        action="edit",
+    )
+    source = _resolve_protocol_zero_source(
+        entity,
+        day=day,
+        keep_entry_id=current_entry.entry_id,
+        preferred_source=current_entry.source if current_entry.day == day else None,
+    )
+    await async_run_cloud_command(
+        lambda: entity.coordinator.cloud.update_schedule_entry(
+            serial_number,
+            current_entry.entry_id,
+            _build_schedule_entry(
+                entity,
+                entry_id=current_entry.entry_id,
+                day=day,
+                start=start,
+                duration=duration,
+                boundary=boundary,
+                source=source,
+            ),
+        )
+    )
+
+
+async def async_handle_delete_schedule(
+    entity: LandroidCloudMowerEntity,
+    *,
+    all_schedules: bool = False,
+    day: str | None = None,
+    start: str | None = None,
+) -> None:
+    """Delete one schedule entry."""
+    serial_number = str(entity.device.serial_number)
+    if all_schedules:
+        await async_run_cloud_command(
+            lambda: entity.coordinator.cloud.set_schedule(
+                serial_number, _build_cleared_schedule(entity)
+            )
+        )
+        return
+
+    if day is None:
+        raise HomeAssistantError(
+            "Select a day or enable all schedules to delete everything"
+        )
+    resolved_entry_id = _resolve_delete_schedule_entry_id(
+        entity,
+        day=day,
+        start=start,
+    )
+    await async_run_cloud_command(
+        lambda: entity.coordinator.cloud.delete_schedule_entry(
+            serial_number, resolved_entry_id
+        )
+    )

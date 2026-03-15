@@ -26,3 +26,161 @@ ots:
           step: 1
           unit_of_measurement: "minutes"
           mode: slider
+add_schedule:
+  description: Add a mowing schedule entry
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: lawn_mower
+  fields:
+    days:
+      name: Days
+      description: Days of week for the new schedule entry
+      example:
+        - monday
+        - wednesday
+      required: true
+      selector:
+        select:
+          options:
+            - monday
+            - tuesday
+            - wednesday
+            - thursday
+            - friday
+            - saturday
+            - sunday
+          multiple: true
+          sort: false
+          translation_key: days_of_week
+    start:
+      name: Start
+      description: Start time in HH:MM format
+      example: "09:00"
+      required: true
+      selector:
+        text:
+    duration:
+      name: Duration
+      description: Duration in minutes
+      example: 60
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 1440
+          step: 1
+          unit_of_measurement: "minutes"
+          mode: box
+    boundary:
+      name: Boundary
+      description: Whether boundary cutting should be enabled for this entry
+      example: false
+      selector:
+        boolean:
+edit_schedule:
+  description: Replace an existing mowing schedule entry
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: lawn_mower
+  fields:
+    current_day:
+      name: Current day
+      description: Day for the schedule you want to change
+      example: monday
+      required: true
+      selector:
+        select:
+          options:
+            - monday
+            - tuesday
+            - wednesday
+            - thursday
+            - friday
+            - saturday
+            - sunday
+          sort: false
+          translation_key: days_of_week
+    current_start:
+      name: Current start
+      description: Use this if the selected day has more than one schedule and you need to choose one by time
+      example: "09:00"
+      selector:
+        text:
+    day:
+      name: Day
+      description: New day of week for the schedule entry
+      example: monday
+      required: true
+      selector:
+        select:
+          options:
+            - monday
+            - tuesday
+            - wednesday
+            - thursday
+            - friday
+            - saturday
+            - sunday
+          sort: false
+          translation_key: days_of_week
+    start:
+      name: Start
+      description: New start time in HH:MM format
+      example: "09:00"
+      required: true
+      selector:
+        text:
+    duration:
+      name: Duration
+      description: New duration in minutes
+      example: 60
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 1440
+          step: 1
+          unit_of_measurement: "minutes"
+          mode: box
+    boundary:
+      name: Boundary
+      description: Whether boundary cutting should be enabled for this entry
+      example: false
+      selector:
+        boolean:
+delete_schedule:
+  description: Delete an existing mowing schedule entry
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: lawn_mower
+  fields:
+    all_schedules:
+      name: All schedules
+      description: Delete all schedules for this mower in one call
+      selector:
+        boolean:
+    day:
+      name: Day
+      description: Day for the schedule you want to delete
+      example: monday
+      selector:
+        select:
+          options:
+            - monday
+            - tuesday
+            - wednesday
+            - thursday
+            - friday
+            - saturday
+            - sunday
+          sort: false
+          translation_key: days_of_week
+    start:
+      name: Start
+      description: Use this if the selected day has more than one schedule and you need to choose one by time
+      example: "09:00"
+      selector:
+        text:

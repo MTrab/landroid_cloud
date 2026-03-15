@@ -30,6 +30,17 @@
         "kress": "Kress",
         "landxcape": "LandXcape"
       }
+    },
+    "days_of_week": {
+      "options": {
+        "monday": "Mandag",
+        "tuesday": "Tirsdag",
+        "wednesday": "Onsdag",
+        "thursday": "Torsdag",
+        "friday": "Fredag",
+        "saturday": "Lørdag",
+        "sunday": "Søndag"
+      }
     }
   },
   "options": {
@@ -38,6 +49,92 @@
         "title": "Landroid Cloud-indstillinger",
         "data": {
           "command_timeout": "Kommandotimeout (sekunder)"
+        }
+      }
+    }
+  },
+  "services": {
+    "ots": {
+      "name": "Start engangstidsplan",
+      "description": "Start en engangsklipning, hvis klipperen understøtter det.",
+      "fields": {
+        "boundary": {
+          "name": "Kant",
+          "description": "Om der skal køres kantklip."
+        },
+        "runtime": {
+          "name": "Køretid",
+          "description": "Køretid i minutter."
+        }
+      }
+    },
+    "add_schedule": {
+      "name": "Tilføj tidsplan",
+      "description": "Tilføj en post til klippetidsplanen.",
+      "fields": {
+        "days": {
+          "name": "Dage",
+          "description": "Ugedage for den nye tidsplan."
+        },
+        "start": {
+          "name": "Start",
+          "description": "Starttid i formatet TT:MM."
+        },
+        "duration": {
+          "name": "Varighed",
+          "description": "Varighed i minutter."
+        },
+        "boundary": {
+          "name": "Kant",
+          "description": "Om kantklip skal være aktivt for denne tidsplan."
+        }
+      }
+    },
+    "edit_schedule": {
+      "name": "Rediger tidsplan",
+      "description": "Erstat en eksisterende post i klippetidsplanen.",
+      "fields": {
+        "current_day": {
+          "name": "Nuværende dag",
+          "description": "Dag for den tidsplan du vil ændre."
+        },
+        "current_start": {
+          "name": "Nuværende start",
+          "description": "Brug denne hvis den valgte dag har mere end én tidsplan, og du skal vælge den rigtige via starttid."
+        },
+        "day": {
+          "name": "Dag",
+          "description": "Ny ugedag for tidsplanen."
+        },
+        "start": {
+          "name": "Start",
+          "description": "Ny starttid i formatet TT:MM."
+        },
+        "duration": {
+          "name": "Varighed",
+          "description": "Ny varighed i minutter."
+        },
+        "boundary": {
+          "name": "Kant",
+          "description": "Om kantklip skal være aktivt for denne tidsplan."
+        }
+      }
+    },
+    "delete_schedule": {
+      "name": "Slet tidsplan",
+      "description": "Slet en eksisterende post i klippetidsplanen.",
+      "fields": {
+        "all_schedules": {
+          "name": "Alle tidsplaner",
+          "description": "Slet alle tidsplaner for denne klipper i ét kald."
+        },
+        "day": {
+          "name": "Dag",
+          "description": "Dag for den tidsplan du vil slette."
+        },
+        "start": {
+          "name": "Start",
+          "description": "Brug denne hvis den valgte dag har mere end én tidsplan, og du skal vælge den rigtige via starttid."
         }
       }
     }
