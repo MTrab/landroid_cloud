@@ -64,9 +64,10 @@ jobs:
             const existingLabels = (context.payload.issue.labels ?? []).map(
               (label) => label.name,
             );
+            const isFeatureRequest = existingLabels.includes(featureRequestLabel);
 
             if (
-              existingLabels.includes(featureRequestLabel) &&
+              isFeatureRequest &&
               !context.payload.issue.title.startsWith(featureRequestPrefix)
             ) {
               await github.rest.issues.update({
@@ -92,7 +93,7 @@ jobs:
               !hasMeaningfulValue(diagnosticsFile) &&
               !hasMeaningfulValue(diagnosticsExplanation);
 
-            if (diagnosticsMissing) {
+            if (!isFeatureRequest && diagnosticsMissing) {
               labels.add(diagnosticsMissingLabel);
 
               try {
