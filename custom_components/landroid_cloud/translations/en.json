@@ -30,6 +30,17 @@
         "kress": "Kress",
         "landxcape": "LandXcape"
       }
+    },
+    "days_of_week": {
+      "options": {
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday"
+      }
     }
   },
   "options": {
@@ -38,6 +49,92 @@
         "title": "Landroid Cloud options",
         "data": {
           "command_timeout": "Command timeout (seconds)"
+        }
+      }
+    }
+  },
+  "services": {
+    "ots": {
+      "name": "Start one-time schedule",
+      "description": "Start a one-time mowing schedule if the mower supports it.",
+      "fields": {
+        "boundary": {
+          "name": "Boundary",
+          "description": "Whether to include a boundary cut."
+        },
+        "runtime": {
+          "name": "Run time",
+          "description": "Run time in minutes."
+        }
+      }
+    },
+    "add_schedule": {
+      "name": "Add schedule",
+      "description": "Add a mowing schedule entry.",
+      "fields": {
+        "days": {
+          "name": "Days",
+          "description": "Days of week for the new schedule entry."
+        },
+        "start": {
+          "name": "Start",
+          "description": "Start time in HH:MM format."
+        },
+        "duration": {
+          "name": "Duration",
+          "description": "Duration in minutes."
+        },
+        "boundary": {
+          "name": "Boundary",
+          "description": "Whether boundary cutting should be enabled for this entry."
+        }
+      }
+    },
+    "edit_schedule": {
+      "name": "Edit schedule",
+      "description": "Replace an existing mowing schedule entry.",
+      "fields": {
+        "current_day": {
+          "name": "Current day",
+          "description": "Day for the schedule you want to change."
+        },
+        "current_start": {
+          "name": "Current start",
+          "description": "Use this if the selected day has more than one schedule and you need to choose one by time."
+        },
+        "day": {
+          "name": "Day",
+          "description": "New day of week for the schedule entry."
+        },
+        "start": {
+          "name": "Start",
+          "description": "New start time in HH:MM format."
+        },
+        "duration": {
+          "name": "Duration",
+          "description": "New duration in minutes."
+        },
+        "boundary": {
+          "name": "Boundary",
+          "description": "Whether boundary cutting should be enabled for this entry."
+        }
+      }
+    },
+    "delete_schedule": {
+      "name": "Delete schedule",
+      "description": "Delete an existing mowing schedule entry.",
+      "fields": {
+        "all_schedules": {
+          "name": "All schedules",
+          "description": "Delete all schedules for this mower in one call."
+        },
+        "day": {
+          "name": "Day",
+          "description": "Day for the schedule you want to delete."
+        },
+        "start": {
+          "name": "Start",
+          "description": "Use this if the selected day has more than one schedule and you need to choose one by time."
         }
       }
     }

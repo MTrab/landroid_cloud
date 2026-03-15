@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from typing import Final
 
-import voluptuous as vol
 from homeassistant.components.lawn_mower import (
     LawnMowerActivity,
     LawnMowerEntity,
@@ -13,13 +12,19 @@ from homeassistant.components.lawn_mower import (
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers import entity_platform
-from pyworxcloud.exceptions import NoOneTimeScheduleError
 
 from .commands import async_run_cloud_command
 from .entity import LandroidBaseEntity
+from . import services as integration_services
+from .services import (
+    async_handle_add_schedule,
+    async_handle_delete_schedule,
+    async_handle_edit_schedule,
+    async_handle_ots,
+    async_register_entity_services,
+)
 
 STATUS_ACTIVITY_MAP: Final[dict[int, LawnMowerActivity]] = {
     0: LawnMowerActivity.DOCKED,
@@ -44,9 +49,10 @@ STATUS_ACTIVITY_MAP: Final[dict[int, LawnMowerActivity]] = {
     104: LawnMowerActivity.RETURNING,
 }
 MOWER_DESCRIPTION: Final = LawnMowerEntityEntityDescription(key="mower")
-SERVICE_OTS: Final = "ots"
-ATTR_BOUNDARY: Final = "boundary"
-ATTR_RUNTIME: Final = "runtime"
+SERVICE_OTS: Final = integration_services.SERVICE_OTS
+SERVICE_ADD_SCHEDULE: Final = integration_services.SERVICE_ADD_SCHEDULE
+SERVICE_EDIT_SCHEDULE: Final = integration_services.SERVICE_EDIT_SCHEDULE
+SERVICE_DELETE_SCHEDULE: Final = integration_services.SERVICE_DELETE_SCHEDULE
 
 
 async def async_setup_entry(
@@ -57,16 +63,7 @@ async def async_setup_entry(
     """Set up Landroid Cloud lawn mower entities."""
     coordinator = entry.runtime_data.coordinator
     platform = entity_platform.async_get_current_platform()
-    platform.async_register_entity_service(
-        SERVICE_OTS,
-        {
-            vol.Required(ATTR_BOUNDARY): bool,
-            vol.Required(ATTR_RUNTIME): vol.All(
-                vol.Coerce(int), vol.Range(min=10, max=120)
-            ),
-        },
-        "_async_service_ots",
-    )
+    async_register_entity_services(platform)
 
     async_add_entities(
         LandroidCloudMowerEntity(coordinator, entry, serial_number)
@@ -122,15 +119,54 @@ class LandroidCloudMowerEntity(LandroidBaseEntity, LawnMowerEntity):
 
     async def _async_service_ots(self, boundary: bool, runtime: int) -> None:
         """Handle legacy OTS service call."""
-        try:
-            await async_run_cloud_command(
-                lambda: self.coordinator.cloud.ots(
-                    str(self.device.serial_number), boundary, runtime
-                )
-            )
-        except HomeAssistantError as err:
-            if isinstance(err.__cause__, NoOneTimeScheduleError):
-                raise HomeAssistantError(
-                    "Mower does not support one-time schedule"
-                ) from err
-            raise
+        await async_handle_ots(self, boundary=boundary, runtime=runtime)
+
+    async def _async_service_add_schedule(
+        self,
+        days: list[str],
+        start: str,
+        duration: int,
+        boundary: bool | None = None,
+    ) -> None:
+        """Add one or more schedule entries."""
+        await async_handle_add_schedule(
+            self,
+            days=days,
+            start=start,
+            duration=duration,
+            boundary=boundary,
+        )
+
+    async def _async_service_edit_schedule(
+        self,
+        current_day: str,
+        day: str,
+        start: str,
+        duration: int,
+        current_start: str | None = None,
+        boundary: bool | None = None,
+    ) -> None:
+        """Replace one schedule entry."""
+        await async_handle_edit_schedule(
+            self,
+            current_day=current_day,
+            day=day,
+            start=start,
+            duration=duration,
+            current_start=current_start,
+            boundary=boundary,
+        )
+
+    async def _async_service_delete_schedule(
+        self,
+        all_schedules: bool = False,
+        day: str | None = None,
+        start: str | None = None,
+    ) -> None:
+        """Delete one schedule entry."""
+        await async_handle_delete_schedule(
+            self,
+            all_schedules=all_schedules,
+            day=day,
+            start=start,
+        )

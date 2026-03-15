@@ -30,6 +30,17 @@
         "kress": "Kress",
         "landxcape": "LandXcape"
       }
+    },
+    "days_of_week": {
+      "options": {
+        "monday": "Hétfő",
+        "tuesday": "Kedd",
+        "wednesday": "Szerda",
+        "thursday": "Csütörtök",
+        "friday": "Péntek",
+        "saturday": "Szombat",
+        "sunday": "Vasárnap"
+      }
     }
   },
   "options": {

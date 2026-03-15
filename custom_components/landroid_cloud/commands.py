@@ -12,6 +12,9 @@ async def async_run_cloud_command(command: Callable[[], Awaitable[object]]) -> N
     """Run a pyworxcloud command and normalize errors for Home Assistant."""
     try:
         await command()
+    except ValueError as err:
+        message = str(err).strip() or "Invalid command data"
+        raise HomeAssistantError(message) from err
     except (NoConnectionError, OfflineError) as err:
         raise HomeAssistantError("Mower is unavailable") from err
     except APIException as err:
