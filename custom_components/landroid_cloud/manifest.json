@@ -13,7 +13,7 @@
         "pyworxcloud"
     ],
     "requirements": [
-        "pyworxcloud==6.0.5"
+        "pyworxcloud@git+https://github.com/MTrab/pyworxcloud.git@feature/rename-party-to-pause"
     ],
     "version": "7.0.0b1"
 }

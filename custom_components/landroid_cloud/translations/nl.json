@@ -147,8 +147,8 @@
       }
     },
     "switch": {
-      "party_mode": {
-        "name": "Partymodus"
+      "pause_mode": {
+        "name": "Pauzemodus"
       },
       "lock": {
         "name": "Vergrendeling"

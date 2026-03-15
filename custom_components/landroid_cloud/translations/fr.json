@@ -147,8 +147,8 @@
       }
     },
     "switch": {
-      "party_mode": {
-        "name": "Mode fête"
+      "pause_mode": {
+        "name": "Mode pause"
       },
       "lock": {
         "name": "Verrouillage"

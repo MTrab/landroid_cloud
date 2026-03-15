@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Generic, TypeVar
+from typing import TypeVar
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_EMAIL
@@ -30,7 +30,7 @@ def _firmware_version(device: DeviceHandler) -> str:
 
 
 @dataclass(frozen=True, kw_only=True)
-class LandroidEntityDescription(Generic[T]):
+class LandroidEntityDescription[T]:
     """Generic entity description with value getter."""
 
     key: str

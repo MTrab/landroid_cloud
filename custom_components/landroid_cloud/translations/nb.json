@@ -147,8 +147,8 @@
       }
     },
     "switch": {
-      "party_mode": {
-        "name": "Festmodus"
+      "pause_mode": {
+        "name": "Pausemodus"
       },
       "lock": {
         "name": "Lås"

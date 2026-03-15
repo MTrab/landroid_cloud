@@ -147,8 +147,8 @@
       }
     },
     "switch": {
-      "party_mode": {
-        "name": "Party-Modus"
+      "pause_mode": {
+        "name": "Pausenmodus"
       },
       "lock": {
         "name": "Sperre"

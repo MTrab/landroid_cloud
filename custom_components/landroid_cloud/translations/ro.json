@@ -147,8 +147,8 @@
       }
     },
     "switch": {
-      "party_mode": {
-        "name": "Mod petrecere"
+      "pause_mode": {
+        "name": "Mod pauza"
       },
       "lock": {
         "name": "Blocare"

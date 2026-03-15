@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta, timezone
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from homeassistant.components.sensor import (
@@ -89,7 +89,7 @@ def _last_update_value(device) -> datetime | None:
     """Return last update timestamp in UTC when available."""
     value = getattr(device, "updated", None)
     if isinstance(value, datetime):
-        return value.astimezone(timezone.utc)
+        return value.astimezone(UTC)
     return None
 
 
@@ -111,7 +111,7 @@ def _schedule_attributes(device) -> dict[str, object] | None:
         "active",
         "time_extension",
         "slots",
-        "party_mode_enabled",
+        "pause_mode_enabled",
         "one_time_schedule",
         "auto_schedule",
         "daily_progress",
@@ -132,11 +132,11 @@ def _resolve_timezone(device) -> timezone | ZoneInfo:
     """Return the device timezone or UTC fallback."""
     tz_name = getattr(device, "time_zone", None)
     if tz_name is None:
-        return timezone.utc
+        return UTC
     try:
         return ZoneInfo(tz_name)
     except ZoneInfoNotFoundError:
-        return timezone.utc
+        return UTC
 
 
 def _next_schedule_value(device) -> datetime | None:

@@ -147,8 +147,8 @@
       }
     },
     "switch": {
-      "party_mode": {
-        "name": "Режим вечеринки"
+      "pause_mode": {
+        "name": "Режим паузы"
       },
       "lock": {
         "name": "Блокировка"
