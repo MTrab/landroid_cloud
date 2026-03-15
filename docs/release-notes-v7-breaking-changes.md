@@ -60,7 +60,7 @@ Expected impact:
 
 Known high-impact renames:
 
-- `partymode` -> `party_mode`
+- `partymode` -> `pause_mode`
 - `locked` -> `lock`
 - `offlimits` -> `off_limits`
 - `offlimits_shortcut` -> `off_limits_shortcut`
@@ -104,7 +104,7 @@ Examples include:
 - cutting height
 - time extension
 - torque
-- party mode
+- pause mode
 - lock
 - rain sensor
 - next schedule
