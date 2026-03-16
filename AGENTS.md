@@ -144,6 +144,8 @@ Each PR must include:
 - Test strategy (automated or manual)
 - Known limitations
 - Any required configuration changes
+- The correct semver label (`patch`, `minor`, or `major`) before merge
+- A proposed semver label that is explicitly verified with the user before the label is set or changed
 - If the PR resolves an issue, include the text `Fixes #<issue-id>`
 - A shout, descriptive and human readable title
 
