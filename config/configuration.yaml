@@ -1,11 +1,10 @@
 default_config:
 
-automation: !include automations.yaml
-
 logger:
   default: warning
   logs:
     custom_components.landroid_cloud: debug
     pyworxcloud: debug
+    
 # If you need to debug uncomment the line below (doc: https://www.home-assistant.io/integrations/debugpy/)
 # debugpy:

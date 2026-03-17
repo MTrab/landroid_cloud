@@ -106,6 +106,7 @@ If certificates or tokens are required:
 - Keep commits small and focused.
 - Avoid introducing new dependencies unless justified.
 - Use `ruff` as formatter/linter in this repository, if not found local, install it.
+- Run `ruff check --fix` as defined in `.pre-commit-config.yaml` when validating Python changes.
 
 ## Home Assistant Compliance
 
@@ -156,6 +157,16 @@ The agent must NOT use administrative merge overrides (for example `gh pr merge 
 Before merging any PR, the agent MUST wait until all required CI/status checks are green/passing.
 
 When a branch is merged it must also be deleted both local and remote, and changes merged to master must be pulled
+
+---
+
+## Release Notes
+
+- Release notes should ALWAYS be in english
+- Keep the existing release note structure unless explicitly asked to change it
+- The `## Changes` section should be short, easy to read, and written as plain prose without bullets
+- Prefer 2-3 short paragraphs under `## Changes` instead of one dense block of text
+- Base the `## Changes` text only on the PRs already included in the release draft unless told otherwise
 
 ---
 
