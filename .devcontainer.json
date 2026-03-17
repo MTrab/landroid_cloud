@@ -46,7 +46,7 @@
 	"mounts": [
 		"source=${localWorkspaceFolder}/config,target=/config,type=bind,consistency=cached",
 		"source=${localEnv:HOME}/.codex/auth.json,target=/etc/codex/auth.json,readonly,type=bind",
-		"source=${localWorkspaceFolder}/../pyworxcloud,target=/development/github/homeassistant/pyworxcloud,type=bind",
+		"source=${localWorkspaceFolder}/../pyworxcloud,target=/workspaces/pyworxcloud,type=bind",
 		"source=gh-config,target=/home/vscode/.config/gh,type=volume"
 	]
 }
