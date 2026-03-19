@@ -38,7 +38,7 @@ from .const import (
 from .coordinator import LandroidCloudCoordinator
 from .models import LandroidRuntimeData
 
-type LandroidConfigEntry = ConfigEntry[LandroidRuntimeData]
+LandroidConfigEntry = ConfigEntry[LandroidRuntimeData]
 _LOGGER = logging.getLogger(__name__)
 _CONFIG_ENTRY_VERSION = 2
 _SUPPORTED_CLOUDS = {provider.value for provider in CloudProvider}
@@ -90,7 +90,10 @@ def _unique_id_conflicts(
 ) -> bool:
     """Return whether another config entry already uses the target unique id."""
     for other_entry in hass.config_entries.async_entries(DOMAIN):
-        if other_entry.entry_id != entry.entry_id and other_entry.unique_id == unique_id:
+        if (
+            other_entry.entry_id != entry.entry_id
+            and other_entry.unique_id == unique_id
+        ):
             return True
 
     return False
@@ -128,7 +131,10 @@ async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry[Any]) -> b
         }
 
         if current_unique_id != target_unique_id:
-            if current_unique_id is None or current_unique_id.casefold() in legacy_candidates:
+            if (
+                current_unique_id is None
+                or current_unique_id.casefold() in legacy_candidates
+            ):
                 if _unique_id_conflicts(hass, entry, target_unique_id):
                     _LOGGER.warning(
                         "Skipping unique_id migration for entry %s because %s is already in use",
