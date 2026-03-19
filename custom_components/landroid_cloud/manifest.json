@@ -13,7 +13,7 @@
         "pyworxcloud"
     ],
     "requirements": [
-        "pyworxcloud==6.1.0"
+        "pyworxcloud @ git+https://github.com/mtrab/pyworxcloud.git@fix/reconnect-token-refresh"
     ],
     "version": "7.0.0b1"
 }
