@@ -112,6 +112,45 @@ async def test_add_schedule_service_calls_cloud_add_schedule_entry() -> None:
 
 
 @pytest.mark.asyncio
+async def test_add_schedule_service_accepts_day_alias() -> None:
+    """Add schedule should accept the legacy single-day alias."""
+    entity = _entity_with_cloud(protocol=1)
+
+    await entity._async_service_add_schedule(
+        day="tuesday",
+        start="12:00",
+        duration=50,
+        boundary=None,
+    )
+
+    _, schedule = entity.coordinator.cloud.set_schedule.await_args.args
+    assert schedule.entries == [
+        ScheduleEntry(
+            entry_id="p1:0",
+            day="tuesday",
+            start="12:00",
+            duration=50,
+            boundary=None,
+            source="slot",
+            secondary=False,
+        )
+    ]
+
+
+@pytest.mark.asyncio
+async def test_add_schedule_service_rejects_invalid_start_with_clear_error() -> None:
+    """Add schedule should fail with a Home Assistant error for malformed time."""
+    entity = _entity_with_cloud(protocol=0)
+
+    with pytest.raises(HomeAssistantError, match="start must be in HH:MM format"):
+        await entity._async_service_add_schedule(
+            days=["monday"],
+            start="25:00",
+            duration=30,
+        )
+
+
+@pytest.mark.asyncio
 async def test_add_schedule_service_uses_secondary_when_primary_exists() -> None:
     """Add schedule should use the second slot when the first one is already taken."""
     entity = _entity_with_cloud(protocol=0)

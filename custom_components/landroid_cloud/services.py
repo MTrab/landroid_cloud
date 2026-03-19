@@ -35,6 +35,62 @@ ATTR_START: Final = "start"
 DAYS: Final = tuple(DAY_MAP[index] for index in sorted(DAY_MAP))
 
 
+def _normalize_day(day: str | None, field_name: str) -> str:
+    """Validate and normalize a weekday value."""
+    if not isinstance(day, str):
+        raise HomeAssistantError(
+            f"{field_name} must be one of: {', '.join(DAYS)}"
+        )
+
+    normalized_day = day.lower()
+    if normalized_day not in DAYS:
+        raise HomeAssistantError(
+            f"{field_name} must be one of: {', '.join(DAYS)}"
+        )
+
+    return normalized_day
+
+
+def _normalize_start(start: str | None, field_name: str) -> str:
+    """Validate and normalize a HH:MM start value."""
+    if not isinstance(start, str):
+        raise HomeAssistantError(f"{field_name} must be in HH:MM format")
+
+    parts = start.split(":")
+    if len(parts) != 2:
+        raise HomeAssistantError(f"{field_name} must be in HH:MM format")
+
+    try:
+        hour = int(parts[0])
+        minute = int(parts[1])
+    except ValueError as err:
+        raise HomeAssistantError(f"{field_name} must be in HH:MM format") from err
+
+    if hour < 0 or hour > 23 or minute < 0 or minute > 59:
+        raise HomeAssistantError(f"{field_name} must be in HH:MM format")
+
+    return f"{hour:02d}:{minute:02d}"
+
+
+def _normalize_add_schedule_days(
+    *, day: str | None = None, days: list[str] | None = None
+) -> list[str]:
+    """Return a unique, validated list of weekdays for add_schedule."""
+    resolved_days: list[str] = []
+    if days is not None:
+        resolved_days.extend(days)
+    if day is not None:
+        resolved_days.append(day)
+
+    normalized_days = [
+        _normalize_day(value, ATTR_DAY) for value in dict.fromkeys(resolved_days)
+    ]
+    if not normalized_days:
+        raise HomeAssistantError("Select at least one day for the schedule")
+
+    return normalized_days
+
+
 def async_register_entity_services(platform: EntityPlatform) -> None:
     """Register custom lawn mower entity services."""
     platform.async_register_entity_service(
@@ -47,32 +103,41 @@ def async_register_entity_services(platform: EntityPlatform) -> None:
         },
         "_async_service_ots",
     )
-    schedule_schema = {
-        vol.Required(ATTR_DAYS): vol.All(cv.ensure_list, [vol.In(DAYS)], vol.Length(min=1)),
-        vol.Required(ATTR_START): cv.string,
+    add_schedule_schema = {
+        vol.Optional(ATTR_DAY): cv.string,
+        vol.Optional(ATTR_DAYS): vol.All(
+            cv.ensure_list, [vol.In(DAYS)], vol.Length(min=1)
+        ),
+        vol.Required(ATTR_START): vol.Any(cv.string, None),
         vol.Required(ATTR_DURATION): vol.All(vol.Coerce(int), vol.Range(min=0)),
-        vol.Optional(ATTR_BOUNDARY): bool,
+        vol.Optional(ATTR_BOUNDARY): vol.Any(bool, None),
+    }
+    schedule_entry_schema = {
+        vol.Required(ATTR_START): vol.Any(cv.string, None),
+        vol.Required(ATTR_DURATION): vol.All(vol.Coerce(int), vol.Range(min=0)),
+        vol.Optional(ATTR_BOUNDARY): vol.Any(bool, None),
     }
     platform.async_register_entity_service(
         SERVICE_ADD_SCHEDULE,
-        schedule_schema,
+        add_schedule_schema,
         "_async_service_add_schedule",
     )
     platform.async_register_entity_service(
         SERVICE_EDIT_SCHEDULE,
         {
             vol.Required(ATTR_CURRENT_DAY): vol.In(DAYS),
-            vol.Optional(ATTR_CURRENT_START): cv.string,
-            **schedule_schema,
+            vol.Optional(ATTR_CURRENT_START): vol.Any(cv.string, None),
+            vol.Required(ATTR_DAY): vol.In(DAYS),
+            **schedule_entry_schema,
         },
         "_async_service_edit_schedule",
     )
     platform.async_register_entity_service(
         SERVICE_DELETE_SCHEDULE,
         {
-            vol.Optional(ATTR_ALL_SCHEDULES): bool,
+            vol.Optional(ATTR_ALL_SCHEDULES): vol.Any(bool, None),
             vol.Optional(ATTR_DAY): vol.In(DAYS),
-            vol.Optional(ATTR_START): cv.string,
+            vol.Optional(ATTR_START): vol.Any(cv.string, None),
         },
         "_async_service_delete_schedule",
     )
@@ -105,6 +170,8 @@ def _build_schedule_entry(
     source: str | None = None,
 ) -> ScheduleEntry:
     """Build a normalized schedule entry from service parameters."""
+    day = _normalize_day(day, ATTR_DAY)
+    start = _normalize_start(start, ATTR_START)
     protocol = entity.coordinator.cloud.get_schedule(
         str(entity.device.serial_number)
     ).protocol
@@ -146,9 +213,12 @@ def _resolve_protocol_zero_source(
     if schedule.protocol != 0:
         return None
 
+    normalized_day = _normalize_day(day, ATTR_DAY)
     pool = entries if entries is not None else getattr(schedule, "entries", [])
     day_entries = [
-        entry for entry in pool if entry.day == day and entry.entry_id != keep_entry_id
+        entry
+        for entry in pool
+        if entry.day == normalized_day and entry.entry_id != keep_entry_id
     ]
     has_primary = any(entry.source == "primary" for entry in day_entries)
     has_secondary = any(entry.source == "secondary" for entry in day_entries)
@@ -174,26 +244,32 @@ def _resolve_schedule_entry(
     action: str,
 ) -> ScheduleEntry:
     """Resolve one schedule entry from a day and optional start time."""
+    normalized_day = _normalize_day(day, ATTR_DAY)
+    normalized_start = (
+        None if start is None else _normalize_start(start, ATTR_START)
+    )
     entries = [
-        entry for entry in getattr(_schedule_for_write(entity), "entries", []) if entry.day == day
+        entry
+        for entry in getattr(_schedule_for_write(entity), "entries", [])
+        if entry.day == normalized_day
     ]
 
     if not entries:
         raise HomeAssistantError("No schedule entry exists for the selected day")
 
     if len(entries) == 1:
-        if start is not None and entries[0].start != start:
+        if normalized_start is not None and entries[0].start != normalized_start:
             raise HomeAssistantError(
                 "No schedule entry matches the selected day and start time"
             )
         return entries[0]
 
-    if start is None:
+    if normalized_start is None:
         raise HomeAssistantError(
             f"Select a start time to choose which schedule to {action}"
         )
 
-    entries = [entry for entry in entries if entry.start == start]
+    entries = [entry for entry in entries if entry.start == normalized_start]
     if not entries:
         raise HomeAssistantError(
             "No schedule entry matches the selected day and start time"
@@ -234,8 +310,9 @@ def _build_cleared_schedule(entity: LandroidCloudMowerEntity) -> ScheduleModel:
 async def async_handle_add_schedule(
     entity: LandroidCloudMowerEntity,
     *,
-    days: list[str],
-    start: str,
+    days: list[str] | None = None,
+    day: str | None = None,
+    start: str | None = None,
     duration: int,
     boundary: bool | None = None,
 ) -> None:
@@ -243,25 +320,30 @@ async def async_handle_add_schedule(
     serial_number = str(entity.device.serial_number)
     schedule = _schedule_for_write(entity)
     updated_schedule = schedule
+    normalized_days = _normalize_add_schedule_days(day=day, days=days)
+    normalized_start = _normalize_start(start, ATTR_START)
 
-    for day in dict.fromkeys(days):
-        source = _resolve_protocol_zero_source(
-            entity,
-            day=day,
-            entries=updated_schedule.entries,
-        )
-        updated_schedule = add_schedule_entry_model(
-            updated_schedule,
-            _build_schedule_entry(
+    try:
+        for resolved_day in normalized_days:
+            source = _resolve_protocol_zero_source(
                 entity,
-                entry_id="",
-                day=day,
-                start=start,
-                duration=duration,
-                boundary=boundary,
-                source=source,
-            ),
-        )
+                day=resolved_day,
+                entries=updated_schedule.entries,
+            )
+            updated_schedule = add_schedule_entry_model(
+                updated_schedule,
+                _build_schedule_entry(
+                    entity,
+                    entry_id="",
+                    day=resolved_day,
+                    start=normalized_start,
+                    duration=duration,
+                    boundary=boundary,
+                    source=source,
+                ),
+            )
+    except ValueError as err:
+        raise HomeAssistantError(str(err)) from err
 
     await async_run_cloud_command(
         lambda: entity.coordinator.cloud.set_schedule(serial_number, updated_schedule)
@@ -273,7 +355,7 @@ async def async_handle_edit_schedule(
     *,
     current_day: str,
     day: str,
-    start: str,
+    start: str | None,
     duration: int,
     current_start: str | None = None,
     boundary: bool | None = None,
@@ -286,11 +368,14 @@ async def async_handle_edit_schedule(
         start=current_start,
         action="edit",
     )
+    normalized_day = _normalize_day(day, ATTR_DAY)
     source = _resolve_protocol_zero_source(
         entity,
-        day=day,
+        day=normalized_day,
         keep_entry_id=current_entry.entry_id,
-        preferred_source=current_entry.source if current_entry.day == day else None,
+        preferred_source=(
+            current_entry.source if current_entry.day == normalized_day else None
+        ),
     )
     await async_run_cloud_command(
         lambda: entity.coordinator.cloud.update_schedule_entry(
@@ -299,7 +384,7 @@ async def async_handle_edit_schedule(
             _build_schedule_entry(
                 entity,
                 entry_id=current_entry.entry_id,
-                day=day,
+                day=normalized_day,
                 start=start,
                 duration=duration,
                 boundary=boundary,
