@@ -437,6 +437,8 @@ class LandroidSensor(LandroidBaseEntity, SensorEntity):
             return False
         if self.entity_description.key == "next_schedule":
             return _next_schedule_value(self.device) is not None
+        if self.entity_description.key == "rain_delay_remaining":
+            return _rain_delay_remaining_value(self.device) is not None
         return True
 
     @property
