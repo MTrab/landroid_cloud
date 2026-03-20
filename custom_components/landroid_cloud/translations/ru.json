@@ -212,6 +212,18 @@
       "zone": {
         "name": "Зона"
       }
+    },
+    "lawn_mower": {
+      "mower": {
+        "state": {
+          "edgecut": "Обрезка края",
+          "escaped_digital_fence": "Вышла за пределы цифрового ограждения",
+          "idle": "Ожидание",
+          "searching_zone": "Поиск зоны",
+          "starting": "Запуск",
+          "zoning": "Обучение зоне"
+        }
+      }
     }
   },
   "device_automation": {
@@ -224,13 +236,25 @@
       "is_mowing": "{entity_name} косит газон",
       "is_docked": "{entity_name} находится на зарядной станции",
       "has_error": "{entity_name} сообщает об ошибке",
-      "is_returning": "{entity_name} возвращается на зарядную станцию"
+      "is_returning": "{entity_name} возвращается на зарядную станцию",
+      "is_edgecut": "{entity_name} выполняет подрезку края",
+      "is_starting": "{entity_name} запускается",
+      "is_zoning": "{entity_name} обучает зону",
+      "is_searching_zone": "{entity_name} ищет зону",
+      "is_idle": "{entity_name} находится в ожидании",
+      "is_escaped_digital_fence": "{entity_name} находится за пределами цифрового ограждения"
     },
     "trigger_type": {
       "mowing": "{entity_name} начал косить",
       "docked": "{entity_name} вернулся на зарядную станцию",
       "error": "{entity_name} перешёл в состояние ошибки",
-      "returning": "{entity_name} начал возвращаться на зарядную станцию"
+      "returning": "{entity_name} начал возвращаться на зарядную станцию",
+      "edgecut": "{entity_name} начал подрезку края",
+      "starting": "{entity_name} начал запуск",
+      "zoning": "{entity_name} начал обучение зоны",
+      "searching_zone": "{entity_name} начал поиск зоны",
+      "idle": "{entity_name} перешёл в режим ожидания",
+      "escaped_digital_fence": "{entity_name} вышел за пределы цифрового ограждения"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"

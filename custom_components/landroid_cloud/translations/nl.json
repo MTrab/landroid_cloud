@@ -212,6 +212,18 @@
       "zone": {
         "name": "Zone"
       }
+    },
+    "lawn_mower": {
+      "mower": {
+        "state": {
+          "edgecut": "Randroutine",
+          "escaped_digital_fence": "Buiten het digitale hek",
+          "idle": "Inactief",
+          "searching_zone": "Zone zoeken",
+          "starting": "Starten",
+          "zoning": "Zone-inleren"
+        }
+      }
     }
   },
   "device_automation": {
@@ -224,13 +236,25 @@
       "is_mowing": "{entity_name} maait",
       "is_docked": "{entity_name} staat in het laadstation",
       "has_error": "{entity_name} heeft een fout",
-      "is_returning": "{entity_name} keert terug naar het laadstation"
+      "is_returning": "{entity_name} keert terug naar het laadstation",
+      "is_edgecut": "{entity_name} voert de randroutine uit",
+      "is_starting": "{entity_name} start op",
+      "is_zoning": "{entity_name} leert een zone in",
+      "is_searching_zone": "{entity_name} zoekt naar een zone",
+      "is_idle": "{entity_name} is inactief",
+      "is_escaped_digital_fence": "{entity_name} staat buiten het digitale hek"
     },
     "trigger_type": {
       "mowing": "{entity_name} is begonnen met maaien",
       "docked": "{entity_name} is teruggekeerd naar het laadstation",
       "error": "{entity_name} is in een foutstatus gekomen",
-      "returning": "{entity_name} is begonnen met terugkeren naar het laadstation"
+      "returning": "{entity_name} is begonnen met terugkeren naar het laadstation",
+      "edgecut": "{entity_name} begon met de randroutine",
+      "starting": "{entity_name} begon op te starten",
+      "zoning": "{entity_name} begon met het inleren van een zone",
+      "searching_zone": "{entity_name} begon naar een zone te zoeken",
+      "idle": "{entity_name} werd inactief",
+      "escaped_digital_fence": "{entity_name} ging buiten het digitale hek"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"

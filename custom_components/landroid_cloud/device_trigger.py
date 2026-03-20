@@ -22,6 +22,14 @@ from homeassistant.helpers.trigger import TriggerActionType, TriggerInfo
 from homeassistant.helpers.typing import ConfigType
 
 from . import DOMAIN
+from .const import (
+    MOWER_STATE_EDGECUT,
+    MOWER_STATE_ESCAPED_DIGITAL_FENCE,
+    MOWER_STATE_IDLE,
+    MOWER_STATE_SEARCHING_ZONE,
+    MOWER_STATE_STARTING,
+    MOWER_STATE_ZONING,
+)
 
 MOWER_DOMAIN: Final = "lawn_mower"
 TRIGGER_STATE_MAP: Final[dict[str, str]] = {
@@ -29,6 +37,12 @@ TRIGGER_STATE_MAP: Final[dict[str, str]] = {
     "docked": LawnMowerActivity.DOCKED,
     "error": LawnMowerActivity.ERROR,
     "returning": LawnMowerActivity.RETURNING,
+    "edgecut": MOWER_STATE_EDGECUT,
+    "starting": MOWER_STATE_STARTING,
+    "zoning": MOWER_STATE_ZONING,
+    "searching_zone": MOWER_STATE_SEARCHING_ZONE,
+    "idle": MOWER_STATE_IDLE,
+    "escaped_digital_fence": MOWER_STATE_ESCAPED_DIGITAL_FENCE,
 }
 
 TRIGGER_SCHEMA = DEVICE_TRIGGER_BASE_SCHEMA.extend(

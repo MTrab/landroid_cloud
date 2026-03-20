@@ -23,6 +23,14 @@ from homeassistant.helpers.config_validation import DEVICE_CONDITION_BASE_SCHEMA
 from homeassistant.helpers.typing import ConfigType, TemplateVarsType
 
 from . import DOMAIN
+from .const import (
+    MOWER_STATE_EDGECUT,
+    MOWER_STATE_ESCAPED_DIGITAL_FENCE,
+    MOWER_STATE_IDLE,
+    MOWER_STATE_SEARCHING_ZONE,
+    MOWER_STATE_STARTING,
+    MOWER_STATE_ZONING,
+)
 
 MOWER_DOMAIN: Final = "lawn_mower"
 CONDITION_STATE_MAP: Final[dict[str, tuple[str, ...]]] = {
@@ -30,6 +38,12 @@ CONDITION_STATE_MAP: Final[dict[str, tuple[str, ...]]] = {
     "is_docked": (LawnMowerActivity.DOCKED,),
     "has_error": (LawnMowerActivity.ERROR,),
     "is_returning": (LawnMowerActivity.RETURNING,),
+    "is_edgecut": (MOWER_STATE_EDGECUT,),
+    "is_starting": (MOWER_STATE_STARTING,),
+    "is_zoning": (MOWER_STATE_ZONING,),
+    "is_searching_zone": (MOWER_STATE_SEARCHING_ZONE,),
+    "is_idle": (MOWER_STATE_IDLE,),
+    "is_escaped_digital_fence": (MOWER_STATE_ESCAPED_DIGITAL_FENCE,),
 }
 
 CONDITION_SCHEMA = DEVICE_CONDITION_BASE_SCHEMA.extend(

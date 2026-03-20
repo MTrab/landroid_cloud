@@ -15,6 +15,14 @@ from homeassistant.const import (
 import pytest
 
 from custom_components.landroid_cloud import DOMAIN
+from custom_components.landroid_cloud.const import (
+    MOWER_STATE_EDGECUT,
+    MOWER_STATE_ESCAPED_DIGITAL_FENCE,
+    MOWER_STATE_IDLE,
+    MOWER_STATE_SEARCHING_ZONE,
+    MOWER_STATE_STARTING,
+    MOWER_STATE_ZONING,
+)
 from custom_components.landroid_cloud.device_condition import (
     async_condition_from_config,
     async_get_conditions,
@@ -80,6 +88,48 @@ async def test_get_conditions_returns_supported_mower_conditions(
             CONF_ENTITY_ID: "registry-entry-id",
             CONF_TYPE: "is_returning",
         },
+        {
+            CONF_CONDITION: "device",
+            CONF_DEVICE_ID: "device-123",
+            CONF_DOMAIN: DOMAIN,
+            CONF_ENTITY_ID: "registry-entry-id",
+            CONF_TYPE: "is_edgecut",
+        },
+        {
+            CONF_CONDITION: "device",
+            CONF_DEVICE_ID: "device-123",
+            CONF_DOMAIN: DOMAIN,
+            CONF_ENTITY_ID: "registry-entry-id",
+            CONF_TYPE: "is_starting",
+        },
+        {
+            CONF_CONDITION: "device",
+            CONF_DEVICE_ID: "device-123",
+            CONF_DOMAIN: DOMAIN,
+            CONF_ENTITY_ID: "registry-entry-id",
+            CONF_TYPE: "is_zoning",
+        },
+        {
+            CONF_CONDITION: "device",
+            CONF_DEVICE_ID: "device-123",
+            CONF_DOMAIN: DOMAIN,
+            CONF_ENTITY_ID: "registry-entry-id",
+            CONF_TYPE: "is_searching_zone",
+        },
+        {
+            CONF_CONDITION: "device",
+            CONF_DEVICE_ID: "device-123",
+            CONF_DOMAIN: DOMAIN,
+            CONF_ENTITY_ID: "registry-entry-id",
+            CONF_TYPE: "is_idle",
+        },
+        {
+            CONF_CONDITION: "device",
+            CONF_DEVICE_ID: "device-123",
+            CONF_DOMAIN: DOMAIN,
+            CONF_ENTITY_ID: "registry-entry-id",
+            CONF_TYPE: "is_escaped_digital_fence",
+        },
     ]
 
 
@@ -143,3 +193,44 @@ def test_condition_from_config_rejects_non_matching_state(monkeypatch) -> None:
     )
 
     assert checker(hass, {}) is False
+
+
+@pytest.mark.parametrize(
+    ("condition_type", "state"),
+    [
+        ("is_edgecut", MOWER_STATE_EDGECUT),
+        ("is_starting", MOWER_STATE_STARTING),
+        ("is_zoning", MOWER_STATE_ZONING),
+        ("is_searching_zone", MOWER_STATE_SEARCHING_ZONE),
+        ("is_idle", MOWER_STATE_IDLE),
+        ("is_escaped_digital_fence", MOWER_STATE_ESCAPED_DIGITAL_FENCE),
+    ],
+)
+def test_condition_from_config_supports_restored_legacy_states(
+    monkeypatch, condition_type: str, state: str
+) -> None:
+    """Condition checker should support restored legacy mower states."""
+    monkeypatch.setattr(
+        "custom_components.landroid_cloud.device_condition.er.async_get",
+        lambda hass: object(),
+    )
+    monkeypatch.setattr(
+        "custom_components.landroid_cloud.device_condition.er.async_resolve_entity_id",
+        lambda registry, entity_id: "lawn_mower.front_yard",
+    )
+    hass = SimpleNamespace(
+        states=SimpleNamespace(get=lambda entity_id: SimpleNamespace(state=state))
+    )
+
+    checker = async_condition_from_config(
+        hass,
+        {
+            CONF_CONDITION: "device",
+            CONF_DEVICE_ID: "device-123",
+            CONF_DOMAIN: DOMAIN,
+            CONF_ENTITY_ID: "1234567890abcdef1234567890abcdef",
+            CONF_TYPE: condition_type,
+        },
+    )
+
+    assert checker(hass, {}) is True

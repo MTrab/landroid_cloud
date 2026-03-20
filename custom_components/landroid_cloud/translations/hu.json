@@ -212,6 +212,18 @@
       "zone": {
         "name": "Zóna"
       }
+    },
+    "lawn_mower": {
+      "mower": {
+        "state": {
+          "edgecut": "Szélvágás",
+          "escaped_digital_fence": "A digitális kerítésen kívül",
+          "idle": "Tétlen",
+          "searching_zone": "Zóna keresése",
+          "starting": "Indulás",
+          "zoning": "Zóna betanítás"
+        }
+      }
     }
   },
   "device_automation": {
@@ -224,13 +236,25 @@
       "is_mowing": "A(z) {entity_name} füvet nyír",
       "is_docked": "A(z) {entity_name} a töltőállomáson van",
       "has_error": "A(z) {entity_name} hibát jelez",
-      "is_returning": "A(z) {entity_name} visszatér a töltőállomásra"
+      "is_returning": "A(z) {entity_name} visszatér a töltőállomásra",
+      "is_edgecut": "A(z) {entity_name} szélvágást végez",
+      "is_starting": "A(z) {entity_name} indul",
+      "is_zoning": "A(z) {entity_name} zónát tanul",
+      "is_searching_zone": "A(z) {entity_name} zónát keres",
+      "is_idle": "A(z) {entity_name} tétlen",
+      "is_escaped_digital_fence": "A(z) {entity_name} a digitális kerítésen kívül van"
     },
     "trigger_type": {
       "mowing": "A(z) {entity_name} megkezdte a fűnyírást",
       "docked": "A(z) {entity_name} elérte a töltőállomást",
       "error": "A(z) {entity_name} hibás állapotba került",
-      "returning": "A(z) {entity_name} megkezdte a visszatérést a töltőállomásra"
+      "returning": "A(z) {entity_name} megkezdte a visszatérést a töltőállomásra",
+      "edgecut": "A(z) {entity_name} megkezdte a szélvágást",
+      "starting": "A(z) {entity_name} megkezdte az indulást",
+      "zoning": "A(z) {entity_name} megkezdte a zóna betanítását",
+      "searching_zone": "A(z) {entity_name} megkezdte a zóna keresését",
+      "idle": "A(z) {entity_name} tétlen állapotba került",
+      "escaped_digital_fence": "A(z) {entity_name} elhagyta a digitális kerítést"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"

@@ -18,6 +18,14 @@ from homeassistant.helpers import entity_platform
 from .commands import async_run_cloud_command
 from .entity import LandroidBaseEntity
 from . import services as integration_services
+from .const import (
+    MOWER_STATE_EDGECUT,
+    MOWER_STATE_ESCAPED_DIGITAL_FENCE,
+    MOWER_STATE_IDLE,
+    MOWER_STATE_SEARCHING_ZONE,
+    MOWER_STATE_STARTING,
+    MOWER_STATE_ZONING,
+)
 from .services import (
     async_handle_add_schedule,
     async_handle_delete_schedule,
@@ -26,11 +34,11 @@ from .services import (
     async_register_entity_services,
 )
 
-STATUS_ACTIVITY_MAP: Final[dict[int, LawnMowerActivity]] = {
-    0: LawnMowerActivity.DOCKED,
+STATUS_ACTIVITY_MAP: Final[dict[int, str]] = {
+    0: MOWER_STATE_IDLE,
     1: LawnMowerActivity.DOCKED,
-    2: LawnMowerActivity.MOWING,
-    3: LawnMowerActivity.MOWING,
+    2: MOWER_STATE_STARTING,
+    3: MOWER_STATE_STARTING,
     4: LawnMowerActivity.RETURNING,
     5: LawnMowerActivity.RETURNING,
     6: LawnMowerActivity.RETURNING,
@@ -40,15 +48,18 @@ STATUS_ACTIVITY_MAP: Final[dict[int, LawnMowerActivity]] = {
     10: LawnMowerActivity.ERROR,
     11: LawnMowerActivity.ERROR,
     12: LawnMowerActivity.MOWING,
+    13: MOWER_STATE_ESCAPED_DIGITAL_FENCE,
     30: LawnMowerActivity.RETURNING,
-    31: LawnMowerActivity.MOWING,
-    32: LawnMowerActivity.MOWING,
-    33: LawnMowerActivity.MOWING,
+    31: MOWER_STATE_ZONING,
+    32: MOWER_STATE_EDGECUT,
+    33: MOWER_STATE_STARTING,
     34: LawnMowerActivity.PAUSED,
-    103: LawnMowerActivity.MOWING,
+    103: MOWER_STATE_SEARCHING_ZONE,
     104: LawnMowerActivity.RETURNING,
 }
-MOWER_DESCRIPTION: Final = LawnMowerEntityEntityDescription(key="mower")
+MOWER_DESCRIPTION: Final = LawnMowerEntityEntityDescription(
+    key="mower", translation_key="mower"
+)
 SERVICE_OTS: Final = integration_services.SERVICE_OTS
 SERVICE_ADD_SCHEDULE: Final = integration_services.SERVICE_ADD_SCHEDULE
 SERVICE_EDIT_SCHEDULE: Final = integration_services.SERVICE_EDIT_SCHEDULE
@@ -94,7 +105,7 @@ class LandroidCloudMowerEntity(LandroidBaseEntity, LawnMowerEntity):
         return None
 
     @property
-    def activity(self) -> LawnMowerActivity | None:
+    def activity(self) -> str | None:
         """Return current mower activity."""
         status_id = int(getattr(self.device.status, "id", -1))
         return STATUS_ACTIVITY_MAP.get(status_id, LawnMowerActivity.ERROR)

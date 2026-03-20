@@ -17,6 +17,7 @@ from homeassistant.const import (
 import pytest
 
 from custom_components.landroid_cloud import DOMAIN
+from custom_components.landroid_cloud.const import MOWER_STATE_SEARCHING_ZONE
 from custom_components.landroid_cloud.device_trigger import (
     async_attach_trigger,
     async_get_trigger_capabilities,
@@ -81,6 +82,48 @@ async def test_get_triggers_returns_supported_mower_triggers(monkeypatch) -> Non
             CONF_ENTITY_ID: "registry-entry-id",
             CONF_TYPE: "returning",
         },
+        {
+            CONF_PLATFORM: "device",
+            CONF_DEVICE_ID: "device-123",
+            CONF_DOMAIN: DOMAIN,
+            CONF_ENTITY_ID: "registry-entry-id",
+            CONF_TYPE: "edgecut",
+        },
+        {
+            CONF_PLATFORM: "device",
+            CONF_DEVICE_ID: "device-123",
+            CONF_DOMAIN: DOMAIN,
+            CONF_ENTITY_ID: "registry-entry-id",
+            CONF_TYPE: "starting",
+        },
+        {
+            CONF_PLATFORM: "device",
+            CONF_DEVICE_ID: "device-123",
+            CONF_DOMAIN: DOMAIN,
+            CONF_ENTITY_ID: "registry-entry-id",
+            CONF_TYPE: "zoning",
+        },
+        {
+            CONF_PLATFORM: "device",
+            CONF_DEVICE_ID: "device-123",
+            CONF_DOMAIN: DOMAIN,
+            CONF_ENTITY_ID: "registry-entry-id",
+            CONF_TYPE: "searching_zone",
+        },
+        {
+            CONF_PLATFORM: "device",
+            CONF_DEVICE_ID: "device-123",
+            CONF_DOMAIN: DOMAIN,
+            CONF_ENTITY_ID: "registry-entry-id",
+            CONF_TYPE: "idle",
+        },
+        {
+            CONF_PLATFORM: "device",
+            CONF_DEVICE_ID: "device-123",
+            CONF_DOMAIN: DOMAIN,
+            CONF_ENTITY_ID: "registry-entry-id",
+            CONF_TYPE: "escaped_digital_fence",
+        },
     ]
 
 
@@ -139,4 +182,46 @@ async def test_attach_trigger_builds_state_trigger(monkeypatch) -> None:
         CONF_ENTITY_ID: "lawn_mower.front_yard",
         "to": LawnMowerActivity.RETURNING,
         CONF_FOR: {"minutes": 1},
+    }
+
+
+@pytest.mark.asyncio
+async def test_attach_trigger_supports_restored_legacy_states(monkeypatch) -> None:
+    """Trigger attachment should also work for restored legacy mower states."""
+    validated_config: dict | None = None
+
+    async def _validate(_hass, config):
+        nonlocal validated_config
+        validated_config = config
+        return config
+
+    async def _attach(_hass, config, action, trigger_info, platform_type):
+        return "remove-callback"
+
+    monkeypatch.setattr(
+        "custom_components.landroid_cloud.device_trigger.state_trigger.async_validate_trigger_config",
+        _validate,
+    )
+    monkeypatch.setattr(
+        "custom_components.landroid_cloud.device_trigger.state_trigger.async_attach_trigger",
+        _attach,
+    )
+
+    await async_attach_trigger(
+        SimpleNamespace(),
+        {
+            CONF_PLATFORM: "device",
+            CONF_DEVICE_ID: "device-123",
+            CONF_DOMAIN: DOMAIN,
+            CONF_ENTITY_ID: "lawn_mower.front_yard",
+            CONF_TYPE: "searching_zone",
+        },
+        action="callback",
+        trigger_info="info",
+    )
+
+    assert validated_config == {
+        CONF_PLATFORM: "state",
+        CONF_ENTITY_ID: "lawn_mower.front_yard",
+        "to": MOWER_STATE_SEARCHING_ZONE,
     }

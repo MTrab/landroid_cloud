@@ -212,6 +212,18 @@
       "zone": {
         "name": "Zone"
       }
+    },
+    "lawn_mower": {
+      "mower": {
+        "state": {
+          "edgecut": "Coupe des bordures",
+          "escaped_digital_fence": "Hors de la barrière numérique",
+          "idle": "Au repos",
+          "searching_zone": "Recherche de zone",
+          "starting": "Démarrage",
+          "zoning": "Entraînement de zone"
+        }
+      }
     }
   },
   "device_automation": {
@@ -224,13 +236,25 @@
       "is_mowing": "{entity_name} est en train de tondre",
       "is_docked": "{entity_name} est à la station de charge",
       "has_error": "{entity_name} est en erreur",
-      "is_returning": "{entity_name} retourne à la station de charge"
+      "is_returning": "{entity_name} retourne à la station de charge",
+      "is_edgecut": "{entity_name} effectue la coupe des bordures",
+      "is_starting": "{entity_name} démarre",
+      "is_zoning": "{entity_name} est en entraînement de zone",
+      "is_searching_zone": "{entity_name} recherche une zone",
+      "is_idle": "{entity_name} est au repos",
+      "is_escaped_digital_fence": "{entity_name} est hors de la barrière numérique"
     },
     "trigger_type": {
       "mowing": "{entity_name} a commencé à tondre",
       "docked": "{entity_name} est revenu à la station de charge",
       "error": "{entity_name} est passé en erreur",
-      "returning": "{entity_name} a commencé à revenir vers la station de charge"
+      "returning": "{entity_name} a commencé à revenir vers la station de charge",
+      "edgecut": "{entity_name} a commencé la coupe des bordures",
+      "starting": "{entity_name} a commencé à démarrer",
+      "zoning": "{entity_name} a commencé l'entraînement de zone",
+      "searching_zone": "{entity_name} a commencé à rechercher une zone",
+      "idle": "{entity_name} est passé au repos",
+      "escaped_digital_fence": "{entity_name} est sorti de la barrière numérique"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"

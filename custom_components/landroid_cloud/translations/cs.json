@@ -212,6 +212,18 @@
       "zone": {
         "name": "Zóna"
       }
+    },
+    "lawn_mower": {
+      "mower": {
+        "state": {
+          "edgecut": "Sekání podél okraje",
+          "escaped_digital_fence": "Sekačka překročila virtuální plot",
+          "idle": "Nečinný",
+          "searching_zone": "Vyhledávání zóny",
+          "starting": "Začínání",
+          "zoning": "Učení zóny"
+        }
+      }
     }
   },
   "device_automation": {
@@ -224,13 +236,25 @@
       "is_mowing": "{entity_name} seká",
       "is_docked": "{entity_name} je v nabíjecí stanici",
       "has_error": "{entity_name} hlásí chybu",
-      "is_returning": "{entity_name} se vrací do nabíjecí stanice"
+      "is_returning": "{entity_name} se vrací do nabíjecí stanice",
+      "is_edgecut": "{entity_name} seká podél okraje",
+      "is_starting": "{entity_name} se spouští",
+      "is_zoning": "{entity_name} se učí zónu",
+      "is_searching_zone": "{entity_name} hledá zónu",
+      "is_idle": "{entity_name} je nečinný",
+      "is_escaped_digital_fence": "{entity_name} je mimo virtuální plot"
     },
     "trigger_type": {
       "mowing": "{entity_name} začal sekat",
       "docked": "{entity_name} dorazil do nabíjecí stanice",
       "error": "{entity_name} přešel do chybového stavu",
-      "returning": "{entity_name} se začal vracet do nabíjecí stanice"
+      "returning": "{entity_name} se začal vracet do nabíjecí stanice",
+      "edgecut": "{entity_name} začal sekat podél okraje",
+      "starting": "{entity_name} se začal spouštět",
+      "zoning": "{entity_name} začal učit zónu",
+      "searching_zone": "{entity_name} začal hledat zónu",
+      "idle": "{entity_name} přešel do nečinného stavu",
+      "escaped_digital_fence": "{entity_name} opustil virtuální plot"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"
