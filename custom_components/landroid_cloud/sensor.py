@@ -47,7 +47,7 @@ def _battery_charging_attribute(device) -> dict[str, bool] | None:
 def _rain_delay_remaining_value(device) -> int | None:
     """Return remaining rain delay in minutes when available."""
     remaining = getattr(device, "rainsensor", {}).get("remaining")
-    if isinstance(remaining, int):
+    if isinstance(remaining, int) and remaining > 0:
         return remaining
     return None
 

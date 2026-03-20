@@ -65,6 +65,12 @@ def test_rain_delay_remaining_value_returns_minutes() -> None:
     assert _rain_delay_remaining_value(device) == 42
 
 
+def test_rain_delay_remaining_value_zero_is_unavailable() -> None:
+    """Rain delay remaining should be unavailable when no delay is active."""
+    device = SimpleNamespace(rainsensor={"remaining": 0})
+    assert _rain_delay_remaining_value(device) is None
+
+
 def test_rain_delay_remaining_value_unavailable() -> None:
     """Rain delay remaining should be unknown for non-integer values."""
     device = SimpleNamespace(rainsensor={"remaining": "42"})
