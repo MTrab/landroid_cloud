@@ -100,6 +100,7 @@ Each mower creates one lawn mower entity with these actions:
 Notes:
 
 - `Next schedule` is exposed as a timestamp sensor and includes known schedule details as attributes.
+- `Rain delay remaining` is only available while a rain delay is active. When the mower reports `0` minutes remaining, the sensor is exposed as unavailable instead of reporting `0`.
 - Duration and distance sensors suggest user-friendly display units where Home Assistant supports conversion.
 
 #### Binary sensors
