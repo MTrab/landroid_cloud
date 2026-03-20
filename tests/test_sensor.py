@@ -134,9 +134,9 @@ def test_selected_sensors_expose_specific_icons() -> None:
     assert descriptions["battery_charge_cycles_total"].icon == "mdi:battery-sync"
     assert descriptions["battery_charge_cycles_current"].icon == "mdi:battery-sync"
     assert descriptions["error"].icon == "mdi:alert-circle-outline"
-    assert descriptions["pitch"].icon == "mdi:arrow-up-down-bold-outline"
-    assert descriptions["roll"].icon == "mdi:arrow-left-right-bold-outline"
-    assert descriptions["yaw"].icon == "mdi:compass-rose"
+    assert descriptions["pitch"].icon == "mdi:axis-x-rotate-clockwise"
+    assert descriptions["roll"].icon == "mdi:axis-y-rotate-clockwise"
+    assert descriptions["yaw"].icon == "mdi:axis-z-rotate-clockwise"
 
 
 def test_next_schedule_is_timestamp_sensor() -> None:

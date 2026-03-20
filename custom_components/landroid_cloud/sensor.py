@@ -347,7 +347,7 @@ SENSORS: tuple[LandroidSensorDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
-        icon="mdi:arrow-up-down-bold-outline",
+        icon="mdi:axis-x-rotate-clockwise",
     ),
     LandroidSensorDescription(
         key="roll",
@@ -356,7 +356,7 @@ SENSORS: tuple[LandroidSensorDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
-        icon="mdi:arrow-left-right-bold-outline",
+        icon="mdi:axis-y-rotate-clockwise",
     ),
     LandroidSensorDescription(
         key="yaw",
@@ -365,7 +365,7 @@ SENSORS: tuple[LandroidSensorDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
-        icon="mdi:compass-rose",
+        icon="mdi:axis-z-rotate-clockwise",
     ),
     LandroidSensorDescription(
         key="blade_runtime_total",
