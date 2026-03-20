@@ -33,6 +33,11 @@ You can find installation instructions on [this Github repo](https://github.com/
 
 
 ### Other useful information
+#### Rain delay remaining sensor
+
+The `rain_delay_remaining` sensor is only available while a rain delay is active.
+When the mower reports `0` minutes remaining, the sensor is exposed as unavailable instead of reporting `0`.
+
 #### Services and app stopped working
 
 You might experience being banned from Worx Landroid Cloud service.
