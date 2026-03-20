@@ -57,6 +57,7 @@ SWITCHES: tuple[LandroidSwitchDescription, ...] = (
         translation_key="acs",
         icon="mdi:radar",
         entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
         capability=DeviceCapability.ACS,
     ),
 )

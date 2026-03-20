@@ -20,3 +20,10 @@ def test_pause_mode_is_disabled_by_default() -> None:
     )
 
     assert pause_mode.entity_registry_enabled_default is False
+
+
+def test_acs_is_disabled_by_default() -> None:
+    """ACS should be disabled by default."""
+    acs = next(description for description in SWITCHES if description.key == "acs")
+
+    assert acs.entity_registry_enabled_default is False
