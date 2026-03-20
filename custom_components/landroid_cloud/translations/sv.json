@@ -212,6 +212,18 @@
       "zone": {
         "name": "Zon"
       }
+    },
+    "lawn_mower": {
+      "mower": {
+        "state": {
+          "edgecut": "Kantklippning",
+          "escaped_digital_fence": "Utanför det digitala staketet",
+          "idle": "Inaktiv",
+          "searching_zone": "Söker efter zon",
+          "starting": "Startar",
+          "zoning": "Zonträning"
+        }
+      }
     }
   },
   "device_automation": {
@@ -224,13 +236,25 @@
       "is_mowing": "{entity_name} klipper",
       "is_docked": "{entity_name} står i laddstationen",
       "has_error": "{entity_name} har ett fel",
-      "is_returning": "{entity_name} är på väg tillbaka till laddstationen"
+      "is_returning": "{entity_name} är på väg tillbaka till laddstationen",
+      "is_edgecut": "{entity_name} utför kantklippning",
+      "is_starting": "{entity_name} startar",
+      "is_zoning": "{entity_name} tränar en zon",
+      "is_searching_zone": "{entity_name} söker efter en zon",
+      "is_idle": "{entity_name} är inaktiv",
+      "is_escaped_digital_fence": "{entity_name} är utanför det digitala staketet"
     },
     "trigger_type": {
       "mowing": "{entity_name} började klippa",
       "docked": "{entity_name} körde in i laddstationen",
       "error": "{entity_name} gick in i felläge",
-      "returning": "{entity_name} började köra tillbaka till laddstationen"
+      "returning": "{entity_name} började köra tillbaka till laddstationen",
+      "edgecut": "{entity_name} började med kantklippning",
+      "starting": "{entity_name} började starta",
+      "zoning": "{entity_name} började zonträningen",
+      "searching_zone": "{entity_name} började söka efter en zon",
+      "idle": "{entity_name} blev inaktiv",
+      "escaped_digital_fence": "{entity_name} kom utanför det digitala staketet"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"

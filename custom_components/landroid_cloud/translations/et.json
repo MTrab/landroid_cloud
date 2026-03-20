@@ -212,6 +212,18 @@
       "zone": {
         "name": "Tsoon"
       }
+    },
+    "lawn_mower": {
+      "mower": {
+        "state": {
+          "edgecut": "Äärelõikus",
+          "escaped_digital_fence": "Digitaalsest piirdest väljas",
+          "idle": "Ootel",
+          "searching_zone": "Tsooni otsimine",
+          "starting": "Käivitamine",
+          "zoning": "Tsooni treening"
+        }
+      }
     }
   },
   "device_automation": {
@@ -224,13 +236,25 @@
       "is_mowing": "{entity_name} niidab",
       "is_docked": "{entity_name} on laadimisjaamas",
       "has_error": "{entity_name} on veaseisundis",
-      "is_returning": "{entity_name} liigub tagasi laadimisjaama"
+      "is_returning": "{entity_name} liigub tagasi laadimisjaama",
+      "is_edgecut": "{entity_name} teeb äärelõikust",
+      "is_starting": "{entity_name} käivitub",
+      "is_zoning": "{entity_name} õpib tsooni",
+      "is_searching_zone": "{entity_name} otsib tsooni",
+      "is_idle": "{entity_name} on ootel",
+      "is_escaped_digital_fence": "{entity_name} on digitaalsest piirdest väljas"
     },
     "trigger_type": {
       "mowing": "{entity_name} alustas niitmist",
       "docked": "{entity_name} jõudis laadimisjaama",
       "error": "{entity_name} läks veaseisundisse",
-      "returning": "{entity_name} alustas tagasisõitu laadimisjaama"
+      "returning": "{entity_name} alustas tagasisõitu laadimisjaama",
+      "edgecut": "{entity_name} alustas äärelõikust",
+      "starting": "{entity_name} alustas käivitumist",
+      "zoning": "{entity_name} alustas tsooni treeningut",
+      "searching_zone": "{entity_name} alustas tsooni otsimist",
+      "idle": "{entity_name} läks ootele",
+      "escaped_digital_fence": "{entity_name} väljus digitaalsest piirdest"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"

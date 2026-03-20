@@ -212,6 +212,18 @@
       "zone": {
         "name": "Zona"
       }
+    },
+    "lawn_mower": {
+      "mower": {
+        "state": {
+          "edgecut": "Corte de borde",
+          "escaped_digital_fence": "Fuera del cercado digital",
+          "idle": "Inactivo",
+          "searching_zone": "Buscando zona",
+          "starting": "Iniciando",
+          "zoning": "Aprendizaje de zonas"
+        }
+      }
     }
   },
   "device_automation": {
@@ -224,13 +236,25 @@
       "is_mowing": "{entity_name} está cortando el césped",
       "is_docked": "{entity_name} está en la estación de carga",
       "has_error": "{entity_name} tiene un error",
-      "is_returning": "{entity_name} está volviendo a la estación de carga"
+      "is_returning": "{entity_name} está volviendo a la estación de carga",
+      "is_edgecut": "{entity_name} está realizando el corte de borde",
+      "is_starting": "{entity_name} está iniciando",
+      "is_zoning": "{entity_name} está aprendiendo una zona",
+      "is_searching_zone": "{entity_name} está buscando una zona",
+      "is_idle": "{entity_name} está inactivo",
+      "is_escaped_digital_fence": "{entity_name} está fuera del cercado digital"
     },
     "trigger_type": {
       "mowing": "{entity_name} comenzó a cortar el césped",
       "docked": "{entity_name} llegó a la estación de carga",
       "error": "{entity_name} entró en estado de error",
-      "returning": "{entity_name} comenzó a volver a la estación de carga"
+      "returning": "{entity_name} comenzó a volver a la estación de carga",
+      "edgecut": "{entity_name} comenzó el corte de borde",
+      "starting": "{entity_name} comenzó a iniciarse",
+      "zoning": "{entity_name} comenzó el aprendizaje de una zona",
+      "searching_zone": "{entity_name} comenzó a buscar una zona",
+      "idle": "{entity_name} quedó inactivo",
+      "escaped_digital_fence": "{entity_name} salió del cercado digital"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"

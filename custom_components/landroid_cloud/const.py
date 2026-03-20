@@ -37,6 +37,13 @@ DEFAULT_COMMAND_TIMEOUT = 30.0
 MIN_COMMAND_TIMEOUT = 1.0
 MAX_COMMAND_TIMEOUT = 120.0
 
+MOWER_STATE_IDLE = "idle"
+MOWER_STATE_STARTING = "starting"
+MOWER_STATE_EDGECUT = "edgecut"
+MOWER_STATE_ZONING = "zoning"
+MOWER_STATE_SEARCHING_ZONE = "searching_zone"
+MOWER_STATE_ESCAPED_DIGITAL_FENCE = "escaped_digital_fence"
+
 
 class CloudProvider(StrEnum):
     """Supported cloud providers."""

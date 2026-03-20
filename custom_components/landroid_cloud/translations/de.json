@@ -212,6 +212,18 @@
       "zone": {
         "name": "Zone"
       }
+    },
+    "lawn_mower": {
+      "mower": {
+        "state": {
+          "edgecut": "Kantenschnitt",
+          "escaped_digital_fence": "Außerhalb der digitalen Begrenzung",
+          "idle": "Untätig",
+          "searching_zone": "Zone wird gesucht",
+          "starting": "Startet",
+          "zoning": "Zonentraining"
+        }
+      }
     }
   },
   "device_automation": {
@@ -224,13 +236,25 @@
       "is_mowing": "{entity_name} mäht",
       "is_docked": "{entity_name} ist angedockt",
       "has_error": "{entity_name} hat einen Fehler",
-      "is_returning": "{entity_name} kehrt zur Ladestation zurück"
+      "is_returning": "{entity_name} kehrt zur Ladestation zurück",
+      "is_edgecut": "{entity_name} führt einen Kantenschnitt aus",
+      "is_starting": "{entity_name} startet",
+      "is_zoning": "{entity_name} trainiert eine Zone",
+      "is_searching_zone": "{entity_name} sucht nach einer Zone",
+      "is_idle": "{entity_name} ist untätig",
+      "is_escaped_digital_fence": "{entity_name} ist außerhalb der digitalen Begrenzung"
     },
     "trigger_type": {
       "mowing": "{entity_name} hat mit dem Mähen begonnen",
       "docked": "{entity_name} hat die Ladestation erreicht",
       "error": "{entity_name} ist in einen Fehlerzustand gewechselt",
-      "returning": "{entity_name} hat die Rückkehr zur Ladestation begonnen"
+      "returning": "{entity_name} hat die Rückkehr zur Ladestation begonnen",
+      "edgecut": "{entity_name} hat mit dem Kantenschnitt begonnen",
+      "starting": "{entity_name} hat mit dem Starten begonnen",
+      "zoning": "{entity_name} hat das Zonentraining begonnen",
+      "searching_zone": "{entity_name} hat mit der Zonensuche begonnen",
+      "idle": "{entity_name} wurde untätig",
+      "escaped_digital_fence": "{entity_name} hat die digitale Begrenzung verlassen"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"

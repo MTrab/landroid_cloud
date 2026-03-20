@@ -149,13 +149,25 @@
       "is_mowing": "{entity_name} klipper",
       "is_docked": "{entity_name} er i ladestationen",
       "has_error": "{entity_name} har en fejl",
-      "is_returning": "{entity_name} er på vej tilbage til ladestationen"
+      "is_returning": "{entity_name} er på vej tilbage til ladestationen",
+      "is_edgecut": "{entity_name} klipper kanten",
+      "is_starting": "{entity_name} starter",
+      "is_zoning": "{entity_name} er i gang med zone-træning",
+      "is_searching_zone": "{entity_name} søger efter en zone",
+      "is_idle": "{entity_name} afventer",
+      "is_escaped_digital_fence": "{entity_name} er uden for det digitale hegn"
     },
     "trigger_type": {
       "mowing": "{entity_name} begyndte at klippe",
       "docked": "{entity_name} kørte ind i ladestationen",
       "error": "{entity_name} gik i fejltilstand",
-      "returning": "{entity_name} begyndte at køre tilbage til ladestationen"
+      "returning": "{entity_name} begyndte at køre tilbage til ladestationen",
+      "edgecut": "{entity_name} begyndte at klippe kanten",
+      "starting": "{entity_name} begyndte at starte op",
+      "zoning": "{entity_name} begyndte zone-træning",
+      "searching_zone": "{entity_name} begyndte at søge efter en zone",
+      "idle": "{entity_name} gik i ventetilstand",
+      "escaped_digital_fence": "{entity_name} kom uden for det digitale hegn"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"
@@ -319,6 +331,18 @@
     "select": {
       "zone": {
         "name": "Område"
+      }
+    },
+    "lawn_mower": {
+      "mower": {
+        "state": {
+          "edgecut": "Klipper kant",
+          "escaped_digital_fence": "Uden for det digitale hegn",
+          "idle": "Afventer",
+          "searching_zone": "Søger efter zone",
+          "starting": "Starter",
+          "zoning": "Zone-træning"
+        }
       }
     }
   }

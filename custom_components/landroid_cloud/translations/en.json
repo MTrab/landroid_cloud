@@ -149,13 +149,25 @@
       "is_mowing": "{entity_name} is mowing",
       "is_docked": "{entity_name} is docked",
       "has_error": "{entity_name} has an error",
-      "is_returning": "{entity_name} is returning to the charging station"
+      "is_returning": "{entity_name} is returning to the charging station",
+      "is_edgecut": "{entity_name} is cutting the edge",
+      "is_starting": "{entity_name} is starting",
+      "is_zoning": "{entity_name} is training a zone",
+      "is_searching_zone": "{entity_name} is searching for a zone",
+      "is_idle": "{entity_name} is idle",
+      "is_escaped_digital_fence": "{entity_name} is outside the digital fence"
     },
     "trigger_type": {
       "mowing": "{entity_name} started mowing",
       "docked": "{entity_name} docked",
       "error": "{entity_name} entered an error state",
-      "returning": "{entity_name} started returning to the charging station"
+      "returning": "{entity_name} started returning to the charging station",
+      "edgecut": "{entity_name} started cutting the edge",
+      "starting": "{entity_name} started up",
+      "zoning": "{entity_name} started zone training",
+      "searching_zone": "{entity_name} started searching for a zone",
+      "idle": "{entity_name} became idle",
+      "escaped_digital_fence": "{entity_name} escaped the digital fence"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"
@@ -319,6 +331,18 @@
     "select": {
       "zone": {
         "name": "Zone"
+      }
+    },
+    "lawn_mower": {
+      "mower": {
+        "state": {
+          "edgecut": "Cutting edge",
+          "escaped_digital_fence": "Escaped digital fence",
+          "idle": "Idle",
+          "searching_zone": "Searching for zone",
+          "starting": "Starting",
+          "zoning": "Zone training"
+        }
       }
     }
   }

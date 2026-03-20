@@ -212,6 +212,18 @@
       "zone": {
         "name": "Strefa"
       }
+    },
+    "lawn_mower": {
+      "mower": {
+        "state": {
+          "edgecut": "Przycinanie obrzeży",
+          "escaped_digital_fence": "Poza cyfrowym ogrodzeniem",
+          "idle": "Bezczynny",
+          "searching_zone": "Szukanie strefy",
+          "starting": "Rozpoczynanie",
+          "zoning": "Przyuczanie strefy"
+        }
+      }
     }
   },
   "device_automation": {
@@ -224,13 +236,25 @@
       "is_mowing": "{entity_name} kosi",
       "is_docked": "{entity_name} znajduje się w stacji ładującej",
       "has_error": "{entity_name} zgłasza błąd",
-      "is_returning": "{entity_name} wraca do stacji ładującej"
+      "is_returning": "{entity_name} wraca do stacji ładującej",
+      "is_edgecut": "{entity_name} przycina obrzeża",
+      "is_starting": "{entity_name} rozpoczyna pracę",
+      "is_zoning": "{entity_name} uczy się strefy",
+      "is_searching_zone": "{entity_name} szuka strefy",
+      "is_idle": "{entity_name} jest bezczynna",
+      "is_escaped_digital_fence": "{entity_name} znajduje się poza cyfrowym ogrodzeniem"
     },
     "trigger_type": {
       "mowing": "{entity_name} rozpoczęła koszenie",
       "docked": "{entity_name} wróciła do stacji ładującej",
       "error": "{entity_name} przeszła w stan błędu",
-      "returning": "{entity_name} rozpoczęła powrót do stacji ładującej"
+      "returning": "{entity_name} rozpoczęła powrót do stacji ładującej",
+      "edgecut": "{entity_name} rozpoczęła przycinanie obrzeży",
+      "starting": "{entity_name} rozpoczęła uruchamianie",
+      "zoning": "{entity_name} rozpoczęła naukę strefy",
+      "searching_zone": "{entity_name} rozpoczęła szukanie strefy",
+      "idle": "{entity_name} przeszła w stan bezczynności",
+      "escaped_digital_fence": "{entity_name} opuściła cyfrowe ogrodzenie"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"

@@ -212,6 +212,18 @@
       "zone": {
         "name": "Zonă"
       }
+    },
+    "lawn_mower": {
+      "mower": {
+        "state": {
+          "edgecut": "Tunde perimetrul",
+          "escaped_digital_fence": "A trecut de gardul digital",
+          "idle": "În așteptare",
+          "searching_zone": "În căutarea zonei",
+          "starting": "Pornire",
+          "zoning": "Antrenament pentru zonă"
+        }
+      }
     }
   },
   "device_automation": {
@@ -224,13 +236,25 @@
       "is_mowing": "{entity_name} tunde",
       "is_docked": "{entity_name} este în stația de încărcare",
       "has_error": "{entity_name} are o eroare",
-      "is_returning": "{entity_name} se întoarce la stația de încărcare"
+      "is_returning": "{entity_name} se întoarce la stația de încărcare",
+      "is_edgecut": "{entity_name} tunde perimetrul",
+      "is_starting": "{entity_name} pornește",
+      "is_zoning": "{entity_name} învață o zonă",
+      "is_searching_zone": "{entity_name} caută o zonă",
+      "is_idle": "{entity_name} este în așteptare",
+      "is_escaped_digital_fence": "{entity_name} este în afara gardului digital"
     },
     "trigger_type": {
       "mowing": "{entity_name} a început să tundă",
       "docked": "{entity_name} a ajuns în stația de încărcare",
       "error": "{entity_name} a intrat în stare de eroare",
-      "returning": "{entity_name} a început să se întoarcă la stația de încărcare"
+      "returning": "{entity_name} a început să se întoarcă la stația de încărcare",
+      "edgecut": "{entity_name} a început tunderea perimetrului",
+      "starting": "{entity_name} a început să pornească",
+      "zoning": "{entity_name} a început antrenamentul pentru zonă",
+      "searching_zone": "{entity_name} a început să caute o zonă",
+      "idle": "{entity_name} a intrat în așteptare",
+      "escaped_digital_fence": "{entity_name} a ieșit din gardul digital"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"
