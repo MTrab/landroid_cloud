@@ -213,5 +213,27 @@
         "name": "Zon"
       }
     }
+  },
+  "device_automation": {
+    "action_type": {
+      "start_mowing": "Låt {entity_name} börja klippa",
+      "pause": "Pausa {entity_name}",
+      "dock": "Låt {entity_name} köra tillbaka till laddstationen"
+    },
+    "condition_type": {
+      "is_mowing": "{entity_name} klipper",
+      "is_docked": "{entity_name} står i laddstationen",
+      "has_error": "{entity_name} har ett fel",
+      "is_returning": "{entity_name} är på väg tillbaka till laddstationen"
+    },
+    "trigger_type": {
+      "mowing": "{entity_name} började klippa",
+      "docked": "{entity_name} körde in i laddstationen",
+      "error": "{entity_name} gick in i felläge",
+      "returning": "{entity_name} började köra tillbaka till laddstationen"
+    },
+    "extra_fields": {
+      "for": "[%key:common::device_automation::extra_fields::for%]"
+    }
   }
 }

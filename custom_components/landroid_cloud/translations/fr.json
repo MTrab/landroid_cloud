@@ -213,5 +213,27 @@
         "name": "Zone"
       }
     }
+  },
+  "device_automation": {
+    "action_type": {
+      "start_mowing": "Lancer la tonte de {entity_name}",
+      "pause": "Mettre {entity_name} en pause",
+      "dock": "Faire revenir {entity_name} à la station de charge"
+    },
+    "condition_type": {
+      "is_mowing": "{entity_name} est en train de tondre",
+      "is_docked": "{entity_name} est à la station de charge",
+      "has_error": "{entity_name} est en erreur",
+      "is_returning": "{entity_name} retourne à la station de charge"
+    },
+    "trigger_type": {
+      "mowing": "{entity_name} a commencé à tondre",
+      "docked": "{entity_name} est revenu à la station de charge",
+      "error": "{entity_name} est passé en erreur",
+      "returning": "{entity_name} a commencé à revenir vers la station de charge"
+    },
+    "extra_fields": {
+      "for": "[%key:common::device_automation::extra_fields::for%]"
+    }
   }
 }

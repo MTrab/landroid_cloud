@@ -213,5 +213,27 @@
         "name": "Sone"
       }
     }
+  },
+  "device_automation": {
+    "action_type": {
+      "start_mowing": "La {entity_name} starte klippingen",
+      "pause": "Sett {entity_name} på pause",
+      "dock": "La {entity_name} kjøre tilbake til ladestasjonen"
+    },
+    "condition_type": {
+      "is_mowing": "{entity_name} klipper",
+      "is_docked": "{entity_name} står i ladestasjonen",
+      "has_error": "{entity_name} har en feil",
+      "is_returning": "{entity_name} er på vei tilbake til ladestasjonen"
+    },
+    "trigger_type": {
+      "mowing": "{entity_name} begynte å klippe",
+      "docked": "{entity_name} kjørte inn i ladestasjonen",
+      "error": "{entity_name} gikk over i feiltilstand",
+      "returning": "{entity_name} begynte å kjøre tilbake til ladestasjonen"
+    },
+    "extra_fields": {
+      "for": "[%key:common::device_automation::extra_fields::for%]"
+    }
   }
 }

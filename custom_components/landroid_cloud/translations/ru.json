@@ -213,5 +213,27 @@
         "name": "Зона"
       }
     }
+  },
+  "device_automation": {
+    "action_type": {
+      "start_mowing": "Запустить кошение для {entity_name}",
+      "pause": "Приостановить {entity_name}",
+      "dock": "Отправить {entity_name} обратно на зарядную станцию"
+    },
+    "condition_type": {
+      "is_mowing": "{entity_name} косит газон",
+      "is_docked": "{entity_name} находится на зарядной станции",
+      "has_error": "{entity_name} сообщает об ошибке",
+      "is_returning": "{entity_name} возвращается на зарядную станцию"
+    },
+    "trigger_type": {
+      "mowing": "{entity_name} начал косить",
+      "docked": "{entity_name} вернулся на зарядную станцию",
+      "error": "{entity_name} перешёл в состояние ошибки",
+      "returning": "{entity_name} начал возвращаться на зарядную станцию"
+    },
+    "extra_fields": {
+      "for": "[%key:common::device_automation::extra_fields::for%]"
+    }
   }
 }

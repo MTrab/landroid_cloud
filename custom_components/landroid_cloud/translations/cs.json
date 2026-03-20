@@ -213,5 +213,27 @@
         "name": "Zóna"
       }
     }
+  },
+  "device_automation": {
+    "action_type": {
+      "start_mowing": "Nechte {entity_name} začít sekat",
+      "pause": "Pozastavit {entity_name}",
+      "dock": "Poslat {entity_name} zpět do nabíjecí stanice"
+    },
+    "condition_type": {
+      "is_mowing": "{entity_name} seká",
+      "is_docked": "{entity_name} je v nabíjecí stanici",
+      "has_error": "{entity_name} hlásí chybu",
+      "is_returning": "{entity_name} se vrací do nabíjecí stanice"
+    },
+    "trigger_type": {
+      "mowing": "{entity_name} začal sekat",
+      "docked": "{entity_name} dorazil do nabíjecí stanice",
+      "error": "{entity_name} přešel do chybového stavu",
+      "returning": "{entity_name} se začal vracet do nabíjecí stanice"
+    },
+    "extra_fields": {
+      "for": "[%key:common::device_automation::extra_fields::for%]"
+    }
   }
 }

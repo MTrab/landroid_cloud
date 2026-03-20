@@ -213,5 +213,27 @@
         "name": "Strefa"
       }
     }
+  },
+  "device_automation": {
+    "action_type": {
+      "start_mowing": "Niech {entity_name} rozpocznie koszenie",
+      "pause": "Wstrzymaj {entity_name}",
+      "dock": "Niech {entity_name} wróci do stacji ładującej"
+    },
+    "condition_type": {
+      "is_mowing": "{entity_name} kosi",
+      "is_docked": "{entity_name} znajduje się w stacji ładującej",
+      "has_error": "{entity_name} zgłasza błąd",
+      "is_returning": "{entity_name} wraca do stacji ładującej"
+    },
+    "trigger_type": {
+      "mowing": "{entity_name} rozpoczęła koszenie",
+      "docked": "{entity_name} wróciła do stacji ładującej",
+      "error": "{entity_name} przeszła w stan błędu",
+      "returning": "{entity_name} rozpoczęła powrót do stacji ładującej"
+    },
+    "extra_fields": {
+      "for": "[%key:common::device_automation::extra_fields::for%]"
+    }
   }
 }

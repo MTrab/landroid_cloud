@@ -139,6 +139,28 @@
       }
     }
   },
+  "device_automation": {
+    "action_type": {
+      "start_mowing": "Let {entity_name} start mowing",
+      "pause": "Pause {entity_name}",
+      "dock": "Let {entity_name} return to the charging station"
+    },
+    "condition_type": {
+      "is_mowing": "{entity_name} is mowing",
+      "is_docked": "{entity_name} is docked",
+      "has_error": "{entity_name} has an error",
+      "is_returning": "{entity_name} is returning to the charging station"
+    },
+    "trigger_type": {
+      "mowing": "{entity_name} started mowing",
+      "docked": "{entity_name} docked",
+      "error": "{entity_name} entered an error state",
+      "returning": "{entity_name} started returning to the charging station"
+    },
+    "extra_fields": {
+      "for": "[%key:common::device_automation::extra_fields::for%]"
+    }
+  },
   "entity": {
     "sensor": {
       "battery": {
