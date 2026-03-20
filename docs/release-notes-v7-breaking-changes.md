@@ -38,6 +38,7 @@ The rewrite now exposes these custom services instead:
 
 This means old automations cannot be migrated by a simple rename.
 Schedule-related automations must be rewritten to use the new service names and field structure.
+Native device automations are available again for mower actions, conditions, and triggers, so the breaking change mainly affects automations that called the removed legacy services directly.
 
 Key behavior differences:
 
@@ -45,6 +46,21 @@ Key behavior differences:
 - schedule editing now targets an existing entry with `current_day` and optional `current_start`
 - schedule deletion now uses `day` and optional `start`, or `all_schedules: true`
 - the old generic schedule payload format is no longer used
+
+### Mower state model changed
+
+The mower entity still uses the v7 lawn mower platform, but detailed runtime states are exposed again where the cloud data supports them.
+
+The current model includes detailed states such as:
+
+- `idle`
+- `starting`
+- `edgecut`
+- `zoning`
+- `searching_zone`
+- `escaped_digital_fence`
+
+This reduces the migration gap versus legacy, but users should still verify any automation that depends on exact state names.
 
 ### Entity ID and unique ID churn
 
@@ -99,9 +115,6 @@ The following legacy entities are not present in the current version:
 - `online` binary sensor
 - `request_update` button
 - `restart` button
-- `pitch` sensor
-- `roll` sensor
-- `yaw` sensor
 
 ### Disabled by default
 
@@ -121,6 +134,9 @@ Examples include:
 - ACS
 - rain sensor
 - next schedule
+- pitch
+- roll
+- yaw
 - blade runtime at last reset
 - blade runtime reset time
 - most diagnostic sensors
