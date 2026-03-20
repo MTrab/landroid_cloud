@@ -11,6 +11,7 @@ The main breaking areas are:
 - new service names and payloads must be used for schedule management
 - many entity keys changed
 - several entities were removed
+- legacy config entries now migrate forward automatically, but the stored data format changed
 - many configuration and diagnostic entities are now disabled by default
 - write-capable entities are unavailable while the mower is offline
 
@@ -55,6 +56,17 @@ Expected impact:
 - dashboards will show missing entities
 - automations and scripts targeting old entity IDs will break
 - users may need to reassign entities manually in dashboards/helpers
+
+### Config entry data changed
+
+The stored config entry format changed in v7.
+Older entries used the legacy `type` field and older unique ID patterns, while the new version stores a canonical `cloud` value and a new unique ID format.
+
+Expected impact:
+
+- existing v6 entries should now migrate automatically during setup
+- manual delete-and-recreate should no longer be the normal upgrade path
+- users with unusual or conflicting old unique IDs may still need manual cleanup if Home Assistant already has a collision
 
 ### Entity renames
 
@@ -106,6 +118,7 @@ Examples include:
 - torque
 - pause mode
 - lock
+- ACS
 - rain sensor
 - next schedule
 - blade runtime at last reset
@@ -142,12 +155,13 @@ Expected impact:
 
 Users upgrading from legacy should be told to:
 
-1. review broken or unavailable entities after upgrade
-2. re-enable desired disabled-by-default entities manually
-3. update automations/scripts to use the new entity IDs
-4. remove or rewrite any automations using the removed legacy services
-5. rewrite schedule automations to use the new `landroid_cloud.add_schedule`, `landroid_cloud.edit_schedule`, and `landroid_cloud.delete_schedule` services
-6. update any automation using `next_schedule` so it handles `unavailable`
+1. allow the integration to migrate the existing config entry before attempting manual cleanup
+2. review broken or unavailable entities after upgrade
+3. re-enable desired disabled-by-default entities manually
+4. update automations/scripts to use the new entity IDs
+5. remove or rewrite any automations using the removed legacy services
+6. rewrite schedule automations to use the new `landroid_cloud.add_schedule`, `landroid_cloud.edit_schedule`, and `landroid_cloud.delete_schedule` services
+7. update any automation using `next_schedule` so it handles `unavailable`
 
 ## Notes For Final Release Post
 
