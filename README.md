@@ -90,6 +90,9 @@ Each mower creates one lawn mower entity with these actions:
 | Battery charge cycles since reset | Diagnostic | Disabled |
 | Battery temperature | Diagnostic | Disabled |
 | Battery voltage | Diagnostic | Disabled |
+| Pitch | Diagnostic | Disabled |
+| Roll | Diagnostic | Disabled |
+| Yaw | Diagnostic | Disabled |
 | Blade runtime total | Diagnostic | Disabled |
 | Blade runtime since reset | Diagnostic | Disabled |
 | Blade runtime at last reset | Diagnostic | Disabled |
@@ -154,12 +157,15 @@ Numbers require the mower to be online and are disabled by default.
 The integration exposes control through native entities and custom `landroid_cloud` services:
 
 - Lawn mower actions for start, pause and dock
+- Device automations for mower actions, triggers, and conditions in Home Assistant automations
 - Buttons for one-shot actions such as edge cut and counter resets
 - Switches for boolean features such as ACS, lock and Off Limits
 - Numbers for writable values such as rain delay, cutting height, time extension and torque
 - Select for zone choice
 - The `landroid_cloud.ots` service for starting a one-time schedule
 - The `landroid_cloud.add_schedule`, `landroid_cloud.edit_schedule`, and `landroid_cloud.delete_schedule` services for schedule management
+
+Supported device automation states include mowing, docked, returning, error, edge cut, starting, zoning, searching for zone, idle, and escaped digital fence.
 
 ### Custom integration services
 
