@@ -123,15 +123,18 @@ class LandroidCloudMowerEntity(LandroidBaseEntity, LawnMowerEntity):
 
     async def _async_service_add_schedule(
         self,
-        days: list[str],
-        start: str,
+        *,
         duration: int,
+        days: list[str] | None = None,
+        day: str | None = None,
+        start: str | None = None,
         boundary: bool | None = None,
     ) -> None:
         """Add one or more schedule entries."""
         await async_handle_add_schedule(
             self,
             days=days,
+            day=day,
             start=start,
             duration=duration,
             boundary=boundary,
@@ -139,9 +142,10 @@ class LandroidCloudMowerEntity(LandroidBaseEntity, LawnMowerEntity):
 
     async def _async_service_edit_schedule(
         self,
+        *,
         current_day: str,
         day: str,
-        start: str,
+        start: str | None,
         duration: int,
         current_start: str | None = None,
         boundary: bool | None = None,
@@ -159,6 +163,7 @@ class LandroidCloudMowerEntity(LandroidBaseEntity, LawnMowerEntity):
 
     async def _async_service_delete_schedule(
         self,
+        *,
         all_schedules: bool = False,
         day: str | None = None,
         start: str | None = None,
