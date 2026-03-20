@@ -391,6 +391,21 @@ def test_next_schedule_sensor_stays_available_with_valid_schedule(monkeypatch) -
     assert entity.available is True
 
 
+def test_rain_delay_remaining_sensor_is_unavailable_when_zero() -> None:
+    """Rain delay remaining sensor should be unavailable when delay is inactive."""
+    entity = object.__new__(LandroidSensor)
+    entity.entity_description = next(
+        description for description in SENSORS if description.key == "rain_delay_remaining"
+    )
+    entity.coordinator = SimpleNamespace(
+        last_update_success=True,
+        data={"serial": SimpleNamespace(rainsensor={"remaining": 0})},
+    )
+    entity._serial_number = "serial"
+
+    assert entity.available is False
+
+
 def test_battery_cycle_value_returns_integer() -> None:
     """Battery cycle values should be exposed when present."""
     device = SimpleNamespace(battery={"cycles": {"total": 3014, "current": 14}})
