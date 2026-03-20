@@ -147,6 +147,15 @@
       },
       "mower_runtime_total": {
         "name": "Tiempo total de funcionamiento del cortacésped"
+      },
+      "pitch": {
+        "name": "Cabeceo"
+      },
+      "roll": {
+        "name": "Alabeo"
+      },
+      "yaw": {
+        "name": "Guiñada"
       }
     },
     "binary_sensor": {

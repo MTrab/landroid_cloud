@@ -147,6 +147,15 @@
       },
       "mower_runtime_total": {
         "name": "Fűnyíró teljes üzemideje"
+      },
+      "pitch": {
+        "name": "Pitch"
+      },
+      "roll": {
+        "name": "Roll"
+      },
+      "yaw": {
+        "name": "Yaw"
       }
     },
     "binary_sensor": {

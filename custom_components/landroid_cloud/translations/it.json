@@ -147,6 +147,15 @@
       },
       "mower_runtime_total": {
         "name": "Tempo totale di funzionamento del rasaerba"
+      },
+      "pitch": {
+        "name": "Beccheggio"
+      },
+      "roll": {
+        "name": "Rollio"
+      },
+      "yaw": {
+        "name": "Imbardata"
       }
     },
     "binary_sensor": {

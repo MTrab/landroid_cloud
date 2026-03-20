@@ -233,6 +233,15 @@
       },
       "mower_runtime_total": {
         "name": "Klipperens samlede driftstid"
+      },
+      "pitch": {
+        "name": "Pitch"
+      },
+      "roll": {
+        "name": "Roll"
+      },
+      "yaw": {
+        "name": "Yaw"
       }
     },
     "binary_sensor": {

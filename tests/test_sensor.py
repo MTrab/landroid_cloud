@@ -21,6 +21,7 @@ from custom_components.landroid_cloud.sensor import (
     _last_update_value,
     _next_schedule_value,
     _normalized_schedule_attributes,
+    _orientation_value,
     _rain_delay_remaining_value,
     _schedule_attributes,
     _schedule_attributes_with_normalized_schedule,
@@ -77,6 +78,21 @@ def test_rain_delay_remaining_value_unavailable() -> None:
     assert _rain_delay_remaining_value(device) is None
 
 
+def test_orientation_value_returns_axis_degrees() -> None:
+    """Orientation axes should be exposed as numeric degree values."""
+    device = SimpleNamespace(orientation={"pitch": 1, "roll": -2.5, "yaw": 180})
+
+    assert _orientation_value(device, "pitch") == 1.0
+    assert _orientation_value(device, "roll") == -2.5
+    assert _orientation_value(device, "yaw") == 180.0
+
+
+def test_orientation_value_unavailable_for_non_numeric_axis() -> None:
+    """Orientation axes should be unavailable for non-numeric values."""
+    device = SimpleNamespace(orientation={"pitch": "1"})
+    assert _orientation_value(device, "pitch") is None
+
+
 def test_error_state_mapping_uses_stable_tokens() -> None:
     """Error states should map from numeric ids to translation tokens."""
     assert ERROR_STATE_MAP[0] == "no_error"
@@ -88,9 +104,15 @@ def test_error_and_rssi_are_diagnostic_entities() -> None:
     """Error and signal strength should be categorized as diagnostics."""
     error = next(description for description in SENSORS if description.key == "error")
     rssi = next(description for description in SENSORS if description.key == "rssi")
+    pitch = next(description for description in SENSORS if description.key == "pitch")
+    roll = next(description for description in SENSORS if description.key == "roll")
+    yaw = next(description for description in SENSORS if description.key == "yaw")
 
     assert error.entity_category is EntityCategory.DIAGNOSTIC
     assert rssi.entity_category is EntityCategory.DIAGNOSTIC
+    assert pitch.entity_category is EntityCategory.DIAGNOSTIC
+    assert roll.entity_category is EntityCategory.DIAGNOSTIC
+    assert yaw.entity_category is EntityCategory.DIAGNOSTIC
 
 
 def test_error_is_enum_sensor_with_translated_state_tokens() -> None:
@@ -112,6 +134,9 @@ def test_selected_sensors_expose_specific_icons() -> None:
     assert descriptions["battery_charge_cycles_total"].icon == "mdi:battery-sync"
     assert descriptions["battery_charge_cycles_current"].icon == "mdi:battery-sync"
     assert descriptions["error"].icon == "mdi:alert-circle-outline"
+    assert descriptions["pitch"].icon == "mdi:axis-x-arrow"
+    assert descriptions["roll"].icon == "mdi:axis-y-arrow"
+    assert descriptions["yaw"].icon == "mdi:axis-z-arrow"
 
 
 def test_next_schedule_is_timestamp_sensor() -> None:
@@ -476,6 +501,15 @@ def test_rain_delay_remaining_is_disabled_by_default() -> None:
     )
 
     assert rain_delay_remaining.entity_registry_enabled_default is False
+
+
+def test_orientation_sensors_are_disabled_by_default() -> None:
+    """Orientation sensors should be disabled by default."""
+    descriptions = {description.key: description for description in SENSORS}
+
+    assert descriptions["pitch"].entity_registry_enabled_default is False
+    assert descriptions["roll"].entity_registry_enabled_default is False
+    assert descriptions["yaw"].entity_registry_enabled_default is False
 
 
 def test_last_update_is_disabled_by_default() -> None:

@@ -147,6 +147,15 @@
       },
       "mower_runtime_total": {
         "name": "Gesamte Laufzeit des Mähers"
+      },
+      "pitch": {
+        "name": "Nickwinkel"
+      },
+      "roll": {
+        "name": "Rollwinkel"
+      },
+      "yaw": {
+        "name": "Gierwinkel"
       }
     },
     "binary_sensor": {

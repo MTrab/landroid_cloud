@@ -147,6 +147,15 @@
       },
       "mower_runtime_total": {
         "name": "Общее время работы косилки"
+      },
+      "pitch": {
+        "name": "Тангаж"
+      },
+      "roll": {
+        "name": "Крен"
+      },
+      "yaw": {
+        "name": "Рыскание"
       }
     },
     "binary_sensor": {

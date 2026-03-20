@@ -147,6 +147,15 @@
       },
       "mower_runtime_total": {
         "name": "Timp total de funcționare al mașinii de tuns"
+      },
+      "pitch": {
+        "name": "Tangaj"
+      },
+      "roll": {
+        "name": "Ruliu"
+      },
+      "yaw": {
+        "name": "Girație"
       }
     },
     "binary_sensor": {
