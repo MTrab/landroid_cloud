@@ -18,6 +18,7 @@ from custom_components.landroid_cloud.sensor import (
     _battery_value,
     _blade_reset_time_value,
     _blade_runtime_value,
+    _daily_progress_value,
     _last_update_value,
     _next_schedule_value,
     _normalized_schedule_attributes,
@@ -76,6 +77,18 @@ def test_rain_delay_remaining_value_unavailable() -> None:
     """Rain delay remaining should be unknown for non-integer values."""
     device = SimpleNamespace(rainsensor={"remaining": "42"})
     assert _rain_delay_remaining_value(device) is None
+
+
+def test_daily_progress_value_returns_integer() -> None:
+    """Daily progress should be exposed when present as an integer."""
+    device = SimpleNamespace(schedules={"daily_progress": 0})
+    assert _daily_progress_value(device) == 0
+
+
+def test_daily_progress_value_none_is_unavailable() -> None:
+    """Daily progress should be unavailable when pyworxcloud returns None."""
+    device = SimpleNamespace(schedules={"daily_progress": None})
+    assert _daily_progress_value(device) is None
 
 
 def test_orientation_value_returns_axis_degrees() -> None:
@@ -429,6 +442,36 @@ def test_rain_delay_remaining_sensor_is_unavailable_when_zero() -> None:
     entity._serial_number = "serial"
 
     assert entity.available is False
+
+
+def test_daily_progress_sensor_is_unavailable_when_none() -> None:
+    """Daily progress sensor should be unavailable when pyworxcloud returns None."""
+    entity = object.__new__(LandroidSensor)
+    entity.entity_description = next(
+        description for description in SENSORS if description.key == "daily_progress"
+    )
+    entity.coordinator = SimpleNamespace(
+        last_update_success=True,
+        data={"serial": SimpleNamespace(schedules={"daily_progress": None})},
+    )
+    entity._serial_number = "serial"
+
+    assert entity.available is False
+
+
+def test_daily_progress_sensor_stays_available_with_zero() -> None:
+    """Daily progress sensor should stay available for a valid zero value."""
+    entity = object.__new__(LandroidSensor)
+    entity.entity_description = next(
+        description for description in SENSORS if description.key == "daily_progress"
+    )
+    entity.coordinator = SimpleNamespace(
+        last_update_success=True,
+        data={"serial": SimpleNamespace(schedules={"daily_progress": 0})},
+    )
+    entity._serial_number = "serial"
+
+    assert entity.available is True
 
 
 def test_battery_cycle_value_returns_integer() -> None:

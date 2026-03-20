@@ -53,6 +53,14 @@ def _rain_delay_remaining_value(device) -> int | None:
     return None
 
 
+def _daily_progress_value(device) -> int | None:
+    """Return daily progress percentage when available."""
+    progress = getattr(device, "schedules", {}).get("daily_progress")
+    if isinstance(progress, int):
+        return progress
+    return None
+
+
 def _battery_cycle_value(device, cycle_key: str) -> int | None:
     """Return battery cycle information when available."""
     cycles = getattr(device, "battery", {}).get("cycles", {})
@@ -475,6 +483,8 @@ class LandroidSensor(LandroidBaseEntity, SensorEntity):
             return _next_schedule_value(self.device) is not None
         if self.entity_description.key == "rain_delay_remaining":
             return _rain_delay_remaining_value(self.device) is not None
+        if self.entity_description.key == "daily_progress":
+            return _daily_progress_value(self.device) is not None
         return True
 
     @property
@@ -490,7 +500,7 @@ class LandroidSensor(LandroidBaseEntity, SensorEntity):
         if key == "rssi":
             return getattr(device, "rssi", None)
         if key == "daily_progress":
-            return device.schedules.get("daily_progress")
+            return _daily_progress_value(device)
         if key == "next_schedule":
             return _next_schedule_value(device)
         if key == "rain_delay_remaining":
