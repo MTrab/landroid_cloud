@@ -147,6 +147,15 @@
       },
       "mower_runtime_total": {
         "name": "Całkowity czas pracy kosiarki"
+      },
+      "pitch": {
+        "name": "Pitch"
+      },
+      "roll": {
+        "name": "Roll"
+      },
+      "yaw": {
+        "name": "Yaw"
       }
     },
     "binary_sensor": {

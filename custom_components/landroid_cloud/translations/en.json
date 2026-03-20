@@ -233,6 +233,15 @@
       },
       "mower_runtime_total": {
         "name": "Mower runtime total"
+      },
+      "pitch": {
+        "name": "Pitch"
+      },
+      "roll": {
+        "name": "Roll"
+      },
+      "yaw": {
+        "name": "Yaw"
       }
     },
     "binary_sensor": {

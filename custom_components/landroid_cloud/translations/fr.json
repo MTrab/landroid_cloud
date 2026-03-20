@@ -147,6 +147,15 @@
       },
       "mower_runtime_total": {
         "name": "Temps total de fonctionnement de la tondeuse"
+      },
+      "pitch": {
+        "name": "Tangage"
+      },
+      "roll": {
+        "name": "Roulis"
+      },
+      "yaw": {
+        "name": "Lacet"
       }
     },
     "binary_sensor": {

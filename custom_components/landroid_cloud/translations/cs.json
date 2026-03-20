@@ -147,6 +147,15 @@
       },
       "mower_runtime_total": {
         "name": "Celková doba provozu sekačky"
+      },
+      "pitch": {
+        "name": "Pitch"
+      },
+      "roll": {
+        "name": "Roll"
+      },
+      "yaw": {
+        "name": "Yaw"
       }
     },
     "binary_sensor": {
