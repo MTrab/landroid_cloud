@@ -44,6 +44,8 @@ Add the `Landroid Cloud` integration _(If it doesn't show, try CTRL+F5 to force 
 
 Use the same credentials as in your mower app.
 
+If you are upgrading from v6, existing config entries should now migrate into v7 automatically instead of requiring a full remove and re-add.
+
 ## Landroid Card
 
 [Barma-lej](https://github.com/barma-lej) has created a custom card for the Landroid Cloud integration.<br/>
@@ -117,7 +119,7 @@ All switches are configuration entities and require the mower to be online.
 | Lock | Disabled | |
 | Off Limits | Enabled | Requires Off Limits support |
 | Off Limits shortcuts | Enabled | Requires Off Limits support |
-| ACS | Enabled | Requires ACS support |
+| ACS | Disabled | Requires ACS support |
 
 #### Buttons
 
