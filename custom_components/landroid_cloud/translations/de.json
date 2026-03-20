@@ -204,5 +204,27 @@
         "name": "Zone"
       }
     }
+  },
+  "device_automation": {
+    "action_type": {
+      "start_mowing": "Lassen Sie {entity_name} mit dem Mähen beginnen",
+      "pause": "Pausieren Sie {entity_name}",
+      "dock": "Lassen Sie {entity_name} zur Ladestation zurückkehren"
+    },
+    "condition_type": {
+      "is_mowing": "{entity_name} mäht",
+      "is_docked": "{entity_name} ist angedockt",
+      "has_error": "{entity_name} hat einen Fehler",
+      "is_returning": "{entity_name} kehrt zur Ladestation zurück"
+    },
+    "trigger_type": {
+      "mowing": "{entity_name} hat mit dem Mähen begonnen",
+      "docked": "{entity_name} hat die Ladestation erreicht",
+      "error": "{entity_name} ist in einen Fehlerzustand gewechselt",
+      "returning": "{entity_name} hat die Rückkehr zur Ladestation begonnen"
+    },
+    "extra_fields": {
+      "for": "[%key:common::device_automation::extra_fields::for%]"
+    }
   }
 }

@@ -204,5 +204,27 @@
         "name": "Zona"
       }
     }
+  },
+  "device_automation": {
+    "action_type": {
+      "start_mowing": "Haz que {entity_name} empiece a cortar el césped",
+      "pause": "Pausa {entity_name}",
+      "dock": "Haz que {entity_name} vuelva a la estación de carga"
+    },
+    "condition_type": {
+      "is_mowing": "{entity_name} está cortando el césped",
+      "is_docked": "{entity_name} está en la estación de carga",
+      "has_error": "{entity_name} tiene un error",
+      "is_returning": "{entity_name} está volviendo a la estación de carga"
+    },
+    "trigger_type": {
+      "mowing": "{entity_name} comenzó a cortar el césped",
+      "docked": "{entity_name} llegó a la estación de carga",
+      "error": "{entity_name} entró en estado de error",
+      "returning": "{entity_name} comenzó a volver a la estación de carga"
+    },
+    "extra_fields": {
+      "for": "[%key:common::device_automation::extra_fields::for%]"
+    }
   }
 }

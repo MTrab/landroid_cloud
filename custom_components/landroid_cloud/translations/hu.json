@@ -204,5 +204,27 @@
         "name": "Zóna"
       }
     }
+  },
+  "device_automation": {
+    "action_type": {
+      "start_mowing": "A(z) {entity_name} kezdje meg a fűnyírást",
+      "pause": "A(z) {entity_name} szüneteltetése",
+      "dock": "A(z) {entity_name} térjen vissza a töltőállomásra"
+    },
+    "condition_type": {
+      "is_mowing": "A(z) {entity_name} füvet nyír",
+      "is_docked": "A(z) {entity_name} a töltőállomáson van",
+      "has_error": "A(z) {entity_name} hibát jelez",
+      "is_returning": "A(z) {entity_name} visszatér a töltőállomásra"
+    },
+    "trigger_type": {
+      "mowing": "A(z) {entity_name} megkezdte a fűnyírást",
+      "docked": "A(z) {entity_name} elérte a töltőállomást",
+      "error": "A(z) {entity_name} hibás állapotba került",
+      "returning": "A(z) {entity_name} megkezdte a visszatérést a töltőállomásra"
+    },
+    "extra_fields": {
+      "for": "[%key:common::device_automation::extra_fields::for%]"
+    }
   }
 }

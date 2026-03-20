@@ -204,5 +204,27 @@
         "name": "Zone"
       }
     }
+  },
+  "device_automation": {
+    "action_type": {
+      "start_mowing": "Laat {entity_name} beginnen met maaien",
+      "pause": "Pauzeer {entity_name}",
+      "dock": "Laat {entity_name} terugkeren naar het laadstation"
+    },
+    "condition_type": {
+      "is_mowing": "{entity_name} maait",
+      "is_docked": "{entity_name} staat in het laadstation",
+      "has_error": "{entity_name} heeft een fout",
+      "is_returning": "{entity_name} keert terug naar het laadstation"
+    },
+    "trigger_type": {
+      "mowing": "{entity_name} is begonnen met maaien",
+      "docked": "{entity_name} is teruggekeerd naar het laadstation",
+      "error": "{entity_name} is in een foutstatus gekomen",
+      "returning": "{entity_name} is begonnen met terugkeren naar het laadstation"
+    },
+    "extra_fields": {
+      "for": "[%key:common::device_automation::extra_fields::for%]"
+    }
   }
 }

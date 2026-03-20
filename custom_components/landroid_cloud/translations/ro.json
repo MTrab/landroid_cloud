@@ -204,5 +204,27 @@
         "name": "Zonă"
       }
     }
+  },
+  "device_automation": {
+    "action_type": {
+      "start_mowing": "Pornește tunderea pentru {entity_name}",
+      "pause": "Pune pe pauză {entity_name}",
+      "dock": "Trimite {entity_name} înapoi la stația de încărcare"
+    },
+    "condition_type": {
+      "is_mowing": "{entity_name} tunde",
+      "is_docked": "{entity_name} este în stația de încărcare",
+      "has_error": "{entity_name} are o eroare",
+      "is_returning": "{entity_name} se întoarce la stația de încărcare"
+    },
+    "trigger_type": {
+      "mowing": "{entity_name} a început să tundă",
+      "docked": "{entity_name} a ajuns în stația de încărcare",
+      "error": "{entity_name} a intrat în stare de eroare",
+      "returning": "{entity_name} a început să se întoarcă la stația de încărcare"
+    },
+    "extra_fields": {
+      "for": "[%key:common::device_automation::extra_fields::for%]"
+    }
   }
 }

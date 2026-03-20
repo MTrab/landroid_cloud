@@ -204,5 +204,27 @@
         "name": "Tsoon"
       }
     }
+  },
+  "device_automation": {
+    "action_type": {
+      "start_mowing": "Lase {entity_name} niitmist alustada",
+      "pause": "Peata {entity_name}",
+      "dock": "Saada {entity_name} tagasi laadimisjaama"
+    },
+    "condition_type": {
+      "is_mowing": "{entity_name} niidab",
+      "is_docked": "{entity_name} on laadimisjaamas",
+      "has_error": "{entity_name} on veaseisundis",
+      "is_returning": "{entity_name} liigub tagasi laadimisjaama"
+    },
+    "trigger_type": {
+      "mowing": "{entity_name} alustas niitmist",
+      "docked": "{entity_name} jõudis laadimisjaama",
+      "error": "{entity_name} läks veaseisundisse",
+      "returning": "{entity_name} alustas tagasisõitu laadimisjaama"
+    },
+    "extra_fields": {
+      "for": "[%key:common::device_automation::extra_fields::for%]"
+    }
   }
 }
