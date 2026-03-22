@@ -184,3 +184,243 @@ delete_schedule:
       example: "09:00"
       selector:
         text:
+set_nutrition:
+  description: Set auto-schedule nutrition values
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: lawn_mower
+  fields:
+    n:
+      name: Nitrogen (N)
+      description: Nitrogen value for auto-schedule nutrition
+      example: 10
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 1000
+          step: 1
+          mode: box
+    p:
+      name: Phosphorus (P)
+      description: Phosphorus value for auto-schedule nutrition
+      example: 20
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 1000
+          step: 1
+          mode: box
+    k:
+      name: Potassium (K)
+      description: Potassium value for auto-schedule nutrition
+      example: 5
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 1000
+          step: 1
+          mode: box
+clear_nutrition:
+  description: Clear auto-schedule nutrition values
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: lawn_mower
+set_exclusion_day:
+  description: Exclude or include one weekday in auto schedule
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: lawn_mower
+  fields:
+    day:
+      name: Day
+      description: Day to update in the exclusion scheduler
+      example: monday
+      required: true
+      selector:
+        select:
+          options:
+            - monday
+            - tuesday
+            - wednesday
+            - thursday
+            - friday
+            - saturday
+            - sunday
+          sort: false
+          translation_key: days_of_week
+    exclude_day:
+      name: Exclude day
+      description: Whether the selected day should be fully excluded
+      required: true
+      selector:
+        boolean:
+add_exclusion_schedule:
+  description: Add an exclusion schedule entry to auto schedule
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: lawn_mower
+  fields:
+    day:
+      name: Day
+      description: Day of week for the new exclusion schedule entry
+      example: monday
+      required: true
+      selector:
+        select:
+          options:
+            - monday
+            - tuesday
+            - wednesday
+            - thursday
+            - friday
+            - saturday
+            - sunday
+          sort: false
+          translation_key: days_of_week
+    start:
+      name: Start
+      description: Start time in HH:MM format
+      example: "09:00"
+      required: true
+      selector:
+        text:
+    duration:
+      name: Duration
+      description: Duration in minutes
+      example: 45
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 1440
+          step: 1
+          unit_of_measurement: "minutes"
+          mode: box
+    reason:
+      name: Reason
+      description: Reason for the exclusion schedule entry
+      example: generic
+      required: false
+      selector:
+        select:
+          options:
+            - generic
+            - irrigation
+          sort: false
+          translation_key: auto_schedule_exclusion_reason
+edit_exclusion_schedule:
+  description: Replace an existing exclusion schedule entry in auto schedule
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: lawn_mower
+  fields:
+    current_day:
+      name: Current day
+      description: Day for the exclusion schedule you want to change
+      example: monday
+      required: true
+      selector:
+        select:
+          options:
+            - monday
+            - tuesday
+            - wednesday
+            - thursday
+            - friday
+            - saturday
+            - sunday
+          sort: false
+          translation_key: days_of_week
+    current_start:
+      name: Current start
+      description: Start time for the exclusion schedule you want to change
+      example: "09:00"
+      required: true
+      selector:
+        text:
+    day:
+      name: Day
+      description: New day of week for the exclusion schedule entry
+      example: monday
+      required: true
+      selector:
+        select:
+          options:
+            - monday
+            - tuesday
+            - wednesday
+            - thursday
+            - friday
+            - saturday
+            - sunday
+          sort: false
+          translation_key: days_of_week
+    start:
+      name: Start
+      description: New start time in HH:MM format
+      example: "09:00"
+      required: true
+      selector:
+        text:
+    duration:
+      name: Duration
+      description: New duration in minutes
+      example: 45
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 1440
+          step: 1
+          unit_of_measurement: "minutes"
+          mode: box
+    reason:
+      name: Reason
+      description: Reason for the exclusion schedule entry
+      example: irrigation
+      required: false
+      selector:
+        select:
+          options:
+            - generic
+            - irrigation
+          sort: false
+          translation_key: auto_schedule_exclusion_reason
+delete_exclusion_schedule:
+  description: Delete an exclusion schedule entry from auto schedule
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: lawn_mower
+  fields:
+    day:
+      name: Day
+      description: Day for the exclusion schedule you want to delete
+      example: monday
+      required: true
+      selector:
+        select:
+          options:
+            - monday
+            - tuesday
+            - wednesday
+            - thursday
+            - friday
+            - saturday
+            - sunday
+          sort: false
+          translation_key: days_of_week
+    start:
+      name: Start
+      description: Use this if the selected day has more than one exclusion schedule and you need to choose one by time
+      example: "09:00"
+      selector:
+        text:
