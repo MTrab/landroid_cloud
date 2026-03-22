@@ -1,349 +1,294 @@
 {
-  "config": {
-    "step": {
-      "user": {
-        "title": "Connect to cloud services",
-        "description": "Enter your cloud credentials and select your cloud provider.",
-        "data": {
-          "email": "Email",
-          "password": "Password",
-          "cloud": "Cloud provider"
+    "config": {
+        "step": {
+            "user": {
+                "title": "Connect to cloud services",
+                "description": "Enter your cloud credentials and select your cloud provider.",
+                "data": {
+                    "email": "Email",
+                    "password": "Password",
+                    "cloud": "Cloud provider",
+                },
+            }
+        },
+        "error": {
+            "cannot_connect": "Failed to connect to cloud service",
+            "invalid_auth": "Invalid credentials",
+            "too_many_requests": "Too many requests",
+            "api_error": "Cloud API rejected the request",
+            "timeout": "Connection timed out",
+            "unknown": "Unexpected error",
+        },
+        "abort": {"already_exists": "This account is already configured"},
+    },
+    "selector": {
+        "cloud": {
+            "options": {"worx": "Worx", "kress": "Kress", "landxcape": "LandXcape"}
+        },
+        "days_of_week": {
+            "options": {
+                "monday": "Monday",
+                "tuesday": "Tuesday",
+                "wednesday": "Wednesday",
+                "thursday": "Thursday",
+                "friday": "Friday",
+                "saturday": "Saturday",
+                "sunday": "Sunday",
+            }
+        },
+    },
+    "options": {
+        "step": {
+            "init": {
+                "title": "Landroid Cloud options",
+                "data": {"command_timeout": "Command timeout (seconds)"},
+            }
         }
-      }
     },
-    "error": {
-      "cannot_connect": "Failed to connect to cloud service",
-      "invalid_auth": "Invalid credentials",
-      "too_many_requests": "Too many requests",
-      "api_error": "Cloud API rejected the request",
-      "timeout": "Connection timed out",
-      "unknown": "Unexpected error"
-    },
-    "abort": {
-      "already_exists": "This account is already configured"
-    }
-  },
-  "selector": {
-    "cloud": {
-      "options": {
-        "worx": "Worx",
-        "kress": "Kress",
-        "landxcape": "LandXcape"
-      }
-    },
-    "days_of_week": {
-      "options": {
-        "monday": "Monday",
-        "tuesday": "Tuesday",
-        "wednesday": "Wednesday",
-        "thursday": "Thursday",
-        "friday": "Friday",
-        "saturday": "Saturday",
-        "sunday": "Sunday"
-      }
-    }
-  },
-  "options": {
-    "step": {
-      "init": {
-        "title": "Landroid Cloud options",
-        "data": {
-          "command_timeout": "Command timeout (seconds)"
-        }
-      }
-    }
-  },
-  "services": {
-    "ots": {
-      "name": "Start one-time schedule",
-      "description": "Start a one-time mowing schedule if the mower supports it.",
-      "fields": {
-        "boundary": {
-          "name": "Boundary",
-          "description": "Whether to include a boundary cut."
+    "services": {
+        "ots": {
+            "name": "Start one-time schedule",
+            "description": "Start a one-time mowing schedule if the mower supports it.",
+            "fields": {
+                "boundary": {
+                    "name": "Boundary",
+                    "description": "Whether to include a boundary cut.",
+                },
+                "runtime": {"name": "Run time", "description": "Run time in minutes."},
+            },
         },
-        "runtime": {
-          "name": "Run time",
-          "description": "Run time in minutes."
-        }
-      }
-    },
-    "add_schedule": {
-      "name": "Add schedule",
-      "description": "Add a mowing schedule entry.",
-      "fields": {
-        "days": {
-          "name": "Days",
-          "description": "Days of week for the new schedule entry."
+        "add_schedule": {
+            "name": "Add schedule",
+            "description": "Add a mowing schedule entry.",
+            "fields": {
+                "days": {
+                    "name": "Days",
+                    "description": "Days of week for the new schedule entry.",
+                },
+                "start": {
+                    "name": "Start",
+                    "description": "Start time in HH:MM format.",
+                },
+                "duration": {"name": "Duration", "description": "Duration in minutes."},
+                "boundary": {
+                    "name": "Boundary",
+                    "description": "Whether boundary cutting should be enabled for this entry.",
+                },
+            },
         },
-        "start": {
-          "name": "Start",
-          "description": "Start time in HH:MM format."
+        "edit_schedule": {
+            "name": "Edit schedule",
+            "description": "Replace an existing mowing schedule entry.",
+            "fields": {
+                "current_day": {
+                    "name": "Current day",
+                    "description": "Day for the schedule you want to change.",
+                },
+                "current_start": {
+                    "name": "Current start",
+                    "description": "Use this if the selected day has more than one schedule and you need to choose one by time.",
+                },
+                "day": {
+                    "name": "Day",
+                    "description": "New day of week for the schedule entry.",
+                },
+                "start": {
+                    "name": "Start",
+                    "description": "New start time in HH:MM format.",
+                },
+                "duration": {
+                    "name": "Duration",
+                    "description": "New duration in minutes.",
+                },
+                "boundary": {
+                    "name": "Boundary",
+                    "description": "Whether boundary cutting should be enabled for this entry.",
+                },
+            },
         },
-        "duration": {
-          "name": "Duration",
-          "description": "Duration in minutes."
+        "delete_schedule": {
+            "name": "Delete schedule",
+            "description": "Delete an existing mowing schedule entry.",
+            "fields": {
+                "all_schedules": {
+                    "name": "All schedules",
+                    "description": "Delete all schedules for this mower in one call.",
+                },
+                "day": {
+                    "name": "Day",
+                    "description": "Day for the schedule you want to delete.",
+                },
+                "start": {
+                    "name": "Start",
+                    "description": "Use this if the selected day has more than one schedule and you need to choose one by time.",
+                },
+            },
         },
-        "boundary": {
-          "name": "Boundary",
-          "description": "Whether boundary cutting should be enabled for this entry."
-        }
-      }
     },
-    "edit_schedule": {
-      "name": "Edit schedule",
-      "description": "Replace an existing mowing schedule entry.",
-      "fields": {
-        "current_day": {
-          "name": "Current day",
-          "description": "Day for the schedule you want to change."
+    "device_automation": {
+        "action_type": {
+            "start_mowing": "Let {entity_name} start mowing",
+            "pause": "Pause {entity_name}",
+            "dock": "Let {entity_name} return to the charging station",
         },
-        "current_start": {
-          "name": "Current start",
-          "description": "Use this if the selected day has more than one schedule and you need to choose one by time."
+        "condition_type": {
+            "is_mowing": "{entity_name} is mowing",
+            "is_docked": "{entity_name} is docked",
+            "has_error": "{entity_name} has an error",
+            "is_returning": "{entity_name} is returning to the charging station",
+            "is_edgecut": "{entity_name} is cutting the edge",
+            "is_starting": "{entity_name} is starting",
+            "is_zoning": "{entity_name} is training a zone",
+            "is_searching_zone": "{entity_name} is searching for a zone",
+            "is_idle": "{entity_name} is idle",
+            "is_escaped_digital_fence": "{entity_name} is outside the digital fence",
         },
-        "day": {
-          "name": "Day",
-          "description": "New day of week for the schedule entry."
+        "trigger_type": {
+            "mowing": "{entity_name} started mowing",
+            "docked": "{entity_name} docked",
+            "error": "{entity_name} entered an error state",
+            "returning": "{entity_name} started returning to the charging station",
+            "edgecut": "{entity_name} started cutting the edge",
+            "starting": "{entity_name} started up",
+            "zoning": "{entity_name} started zone training",
+            "searching_zone": "{entity_name} started searching for a zone",
+            "idle": "{entity_name} became idle",
+            "escaped_digital_fence": "{entity_name} escaped the digital fence",
         },
-        "start": {
-          "name": "Start",
-          "description": "New start time in HH:MM format."
+        "extra_fields": {"for": "[%key:common::device_automation::extra_fields::for%]"},
+    },
+    "entity": {
+        "sensor": {
+            "battery": {"name": "Battery"},
+            "status": {"name": "Status"},
+            "error": {
+                "name": "Error",
+                "state": {
+                    "unknown": "Unknown",
+                    "no_error": "No error",
+                    "trapped": "Trapped",
+                    "lifted": "Lifted",
+                    "wire_missing": "Wire missing",
+                    "outside_wire": "Outside wire",
+                    "rain_delay": "Rain delay active",
+                    "close_door_to_mow": "Close door to mow",
+                    "close_door_to_go_home": "Close door to go home",
+                    "blade_motor_blocked": "Blade motor is blocked",
+                    "wheel_motor_blocked": "Wheel motor is blocked",
+                    "trapped_timeout": "Timed out while trapped",
+                    "upside_down": "Mower is upside down",
+                    "battery_low": "Battery low",
+                    "reverse_wire": "Wire is reversed",
+                    "charge_error": "Error charging",
+                    "timeout_finding_home": "Timed out while finding home",
+                    "locked": "Mower is locked",
+                    "battery_temperature_error": "Battery temperature error",
+                    "battery_trunk_open_timeout": "Battery trunk open timeout",
+                    "wire_sync": "Wire sync",
+                    "charging_station_docking_error": "Charging station docking error",
+                    "hbi_error": "HBI error",
+                    "ota_error": "OTA error",
+                    "map_error": "Map error",
+                    "excessive_slope": "Excessive slope detected",
+                    "unreachable_zone": "Unreachable zone",
+                    "unreachable_charging_station": "Unreachable charging station",
+                    "insufficient_sensor_data": "Insufficient sensor data",
+                    "training_start_disallowed": "Training start disallowed",
+                    "camera_error": "Camera error",
+                    "mapping_exploration_required": "Mapping exploration required",
+                    "mapping_exploration_failed": "Mapping exploration failed",
+                    "rfid_reader_error": "RFID reader error",
+                    "headlight_error": "Headlight error",
+                    "missing_charging_station": "Missing charging station",
+                    "blade_height_adjustment_blocked": "Blade height adjustment blocked",
+                },
+            },
+            "rssi": {"name": "Signal strength"},
+            "daily_progress": {"name": "Daily progress"},
+            "next_schedule": {"name": "Next schedule"},
+            "auto_schedule_nutrition": {"name": "Nutrition"},
+            "auto_schedule_exclusion_schedules": {"name": "Exclusion schedules"},
+            "rain_delay_remaining": {"name": "Rain delay remaining"},
+            "last_update": {"name": "Last update"},
+            "battery_charge_cycles_total": {"name": "Battery charge cycles total"},
+            "battery_charge_cycles_current": {
+                "name": "Battery charge cycles since reset"
+            },
+            "battery_temperature": {"name": "Battery temperature"},
+            "battery_voltage": {"name": "Battery voltage"},
+            "blade_runtime_total": {"name": "Blade runtime total"},
+            "blade_runtime_current": {"name": "Blade runtime since reset"},
+            "blade_runtime_reset_at": {"name": "Blade runtime at last reset"},
+            "blade_runtime_reset_time": {"name": "Blade runtime reset time"},
+            "distance_driven_total": {"name": "Distance driven total"},
+            "mower_runtime_total": {"name": "Mower runtime total"},
+            "pitch": {"name": "Pitch"},
+            "roll": {"name": "Roll"},
+            "yaw": {"name": "Yaw"},
         },
-        "duration": {
-          "name": "Duration",
-          "description": "New duration in minutes."
+        "binary_sensor": {
+            "rain_sensor": {"name": "Rain sensor"},
+            "charging": {"name": "Charging"},
         },
-        "boundary": {
-          "name": "Boundary",
-          "description": "Whether boundary cutting should be enabled for this entry."
-        }
-      }
-    },
-    "delete_schedule": {
-      "name": "Delete schedule",
-      "description": "Delete an existing mowing schedule entry.",
-      "fields": {
-        "all_schedules": {
-          "name": "All schedules",
-          "description": "Delete all schedules for this mower in one call."
+        "switch": {
+            "auto_schedule": {"name": "Auto schedule"},
+            "pause_mode": {"name": "Pause mode"},
+            "auto_schedule_irrigation": {"name": "Irrigation"},
+            "auto_schedule_exclude_nights": {"name": "Exclude nights"},
+            "lock": {"name": "Lock"},
+            "off_limits": {"name": "Off Limits"},
+            "off_limits_shortcut": {"name": "Off Limits shortcuts"},
+            "acs": {"name": "ACS"},
         },
-        "day": {
-          "name": "Day",
-          "description": "Day for the schedule you want to delete."
+        "button": {
+            "edge_cut": {"name": "Edge cut"},
+            "reset_blade_time": {"name": "Reset blade runtime"},
+            "reset_battery_cycles": {"name": "Reset battery cycles"},
         },
-        "start": {
-          "name": "Start",
-          "description": "Use this if the selected day has more than one schedule and you need to choose one by time."
-        }
-      }
-    }
-  },
-  "device_automation": {
-    "action_type": {
-      "start_mowing": "Let {entity_name} start mowing",
-      "pause": "Pause {entity_name}",
-      "dock": "Let {entity_name} return to the charging station"
+        "number": {
+            "rain_delay": {"name": "Rain delay"},
+            "cutting_height": {"name": "Cutting height"},
+            "time_extension": {"name": "Time extension"},
+            "torque": {"name": "Torque"},
+        },
+        "select": {
+            "auto_schedule_boost": {
+                "name": "Boost",
+                "state": {"0": "Off", "1": "Eco", "2": "Max"},
+            },
+            "auto_schedule_grass_type": {
+                "name": "Grass type",
+                "state": {
+                    "mixed_species": "Mixed species",
+                    "festuca_arundinacea": "Tall fescue",
+                    "lolium_perenne": "Perennial ryegrass",
+                    "poa_pratensis": "Kentucky bluegrass",
+                    "festuca_rubra": "Red fescue",
+                    "agrostis_stolonifera": "Creeping bentgrass",
+                },
+            },
+            "auto_schedule_soil_type": {
+                "name": "Soil type",
+                "state": {
+                    "clay": "Clay",
+                    "silt": "Silt",
+                    "sand": "Sand",
+                    "ignore": "Ignore",
+                },
+            },
+            "zone": {"name": "Zone"},
+        },
+        "lawn_mower": {
+            "mower": {
+                "state": {
+                    "edgecut": "Cutting edge",
+                    "escaped_digital_fence": "Escaped digital fence",
+                    "idle": "Idle",
+                    "searching_zone": "Searching for zone",
+                    "starting": "Starting",
+                    "zoning": "Zone training",
+                }
+            }
+        },
     },
-    "condition_type": {
-      "is_mowing": "{entity_name} is mowing",
-      "is_docked": "{entity_name} is docked",
-      "has_error": "{entity_name} has an error",
-      "is_returning": "{entity_name} is returning to the charging station",
-      "is_edgecut": "{entity_name} is cutting the edge",
-      "is_starting": "{entity_name} is starting",
-      "is_zoning": "{entity_name} is training a zone",
-      "is_searching_zone": "{entity_name} is searching for a zone",
-      "is_idle": "{entity_name} is idle",
-      "is_escaped_digital_fence": "{entity_name} is outside the digital fence"
-    },
-    "trigger_type": {
-      "mowing": "{entity_name} started mowing",
-      "docked": "{entity_name} docked",
-      "error": "{entity_name} entered an error state",
-      "returning": "{entity_name} started returning to the charging station",
-      "edgecut": "{entity_name} started cutting the edge",
-      "starting": "{entity_name} started up",
-      "zoning": "{entity_name} started zone training",
-      "searching_zone": "{entity_name} started searching for a zone",
-      "idle": "{entity_name} became idle",
-      "escaped_digital_fence": "{entity_name} escaped the digital fence"
-    },
-    "extra_fields": {
-      "for": "[%key:common::device_automation::extra_fields::for%]"
-    }
-  },
-  "entity": {
-    "sensor": {
-      "battery": {
-        "name": "Battery"
-      },
-      "status": {
-        "name": "Status"
-      },
-      "error": {
-        "name": "Error",
-        "state": {
-          "unknown": "Unknown",
-          "no_error": "No error",
-          "trapped": "Trapped",
-          "lifted": "Lifted",
-          "wire_missing": "Wire missing",
-          "outside_wire": "Outside wire",
-          "rain_delay": "Rain delay active",
-          "close_door_to_mow": "Close door to mow",
-          "close_door_to_go_home": "Close door to go home",
-          "blade_motor_blocked": "Blade motor is blocked",
-          "wheel_motor_blocked": "Wheel motor is blocked",
-          "trapped_timeout": "Timed out while trapped",
-          "upside_down": "Mower is upside down",
-          "battery_low": "Battery low",
-          "reverse_wire": "Wire is reversed",
-          "charge_error": "Error charging",
-          "timeout_finding_home": "Timed out while finding home",
-          "locked": "Mower is locked",
-          "battery_temperature_error": "Battery temperature error",
-          "battery_trunk_open_timeout": "Battery trunk open timeout",
-          "wire_sync": "Wire sync",
-          "charging_station_docking_error": "Charging station docking error",
-          "hbi_error": "HBI error",
-          "ota_error": "OTA error",
-          "map_error": "Map error",
-          "excessive_slope": "Excessive slope detected",
-          "unreachable_zone": "Unreachable zone",
-          "unreachable_charging_station": "Unreachable charging station",
-          "insufficient_sensor_data": "Insufficient sensor data",
-          "training_start_disallowed": "Training start disallowed",
-          "camera_error": "Camera error",
-          "mapping_exploration_required": "Mapping exploration required",
-          "mapping_exploration_failed": "Mapping exploration failed",
-          "rfid_reader_error": "RFID reader error",
-          "headlight_error": "Headlight error",
-          "missing_charging_station": "Missing charging station",
-          "blade_height_adjustment_blocked": "Blade height adjustment blocked"
-        }
-      },
-      "rssi": {
-        "name": "Signal strength"
-      },
-      "daily_progress": {
-        "name": "Daily progress"
-      },
-      "next_schedule": {
-        "name": "Next schedule"
-      },
-      "rain_delay_remaining": {
-        "name": "Rain delay remaining"
-      },
-      "last_update": {
-        "name": "Last update"
-      },
-      "battery_charge_cycles_total": {
-        "name": "Battery charge cycles total"
-      },
-      "battery_charge_cycles_current": {
-        "name": "Battery charge cycles since reset"
-      },
-      "battery_temperature": {
-        "name": "Battery temperature"
-      },
-      "battery_voltage": {
-        "name": "Battery voltage"
-      },
-      "blade_runtime_total": {
-        "name": "Blade runtime total"
-      },
-      "blade_runtime_current": {
-        "name": "Blade runtime since reset"
-      },
-      "blade_runtime_reset_at": {
-        "name": "Blade runtime at last reset"
-      },
-      "blade_runtime_reset_time": {
-        "name": "Blade runtime reset time"
-      },
-      "distance_driven_total": {
-        "name": "Distance driven total"
-      },
-      "mower_runtime_total": {
-        "name": "Mower runtime total"
-      },
-      "pitch": {
-        "name": "Pitch"
-      },
-      "roll": {
-        "name": "Roll"
-      },
-      "yaw": {
-        "name": "Yaw"
-      }
-    },
-    "binary_sensor": {
-      "rain_sensor": {
-        "name": "Rain sensor"
-      },
-      "charging": {
-        "name": "Charging"
-      }
-    },
-    "switch": {
-      "pause_mode": {
-        "name": "Pause mode"
-      },
-      "lock": {
-        "name": "Lock"
-      },
-      "off_limits": {
-        "name": "Off Limits"
-      },
-      "off_limits_shortcut": {
-        "name": "Off Limits shortcuts"
-      },
-      "acs": {
-        "name": "ACS"
-      }
-    },
-    "button": {
-      "edge_cut": {
-        "name": "Edge cut"
-      },
-      "reset_blade_time": {
-        "name": "Reset blade runtime"
-      },
-      "reset_battery_cycles": {
-        "name": "Reset battery cycles"
-      }
-    },
-    "number": {
-      "rain_delay": {
-        "name": "Rain delay"
-      },
-      "cutting_height": {
-        "name": "Cutting height"
-      },
-      "time_extension": {
-        "name": "Time extension"
-      },
-      "torque": {
-        "name": "Torque"
-      }
-    },
-    "select": {
-      "zone": {
-        "name": "Zone"
-      }
-    },
-    "lawn_mower": {
-      "mower": {
-        "state": {
-          "edgecut": "Cutting edge",
-          "escaped_digital_fence": "Escaped digital fence",
-          "idle": "Idle",
-          "searching_zone": "Searching for zone",
-          "starting": "Starting",
-          "zoning": "Zone training"
-        }
-      }
-    }
-  }
 }

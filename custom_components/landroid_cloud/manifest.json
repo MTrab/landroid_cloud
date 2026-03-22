@@ -1,19 +1,15 @@
 {
     "domain": "landroid_cloud",
     "name": "Landroid Cloud",
-    "codeowners": [
-        "@MTrab"
-    ],
+    "codeowners": ["@MTrab"],
     "config_flow": true,
     "documentation": "https://github.com/MTrab/landroid_cloud",
     "integration_type": "hub",
     "iot_class": "cloud_push",
     "issue_tracker": "https://github.com/MTrab/landroid_cloud/issues",
-    "loggers": [
-        "pyworxcloud"
-    ],
+    "loggers": ["pyworxcloud"],
     "requirements": [
-        "pyworxcloud@git+https://github.com/mtrab/pyworxcloud.git@master"
+        "pyworxcloud@git+https://github.com/mtrab/pyworxcloud.git@feature/auto-schedule-support"
     ],
-    "version": "7.0.0b3"
+    "version": "7.0.0b3",
 }

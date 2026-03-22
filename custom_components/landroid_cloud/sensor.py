@@ -29,12 +29,18 @@ from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from pyworxcloud.day_map import DAY_MAP
 
 from .const import ERROR_STATE_MAP, ERROR_STATE_OPTIONS
-from .entity import LandroidBaseEntity
+from .entity import (
+    LandroidBaseEntity,
+    auto_schedule,
+    auto_schedule_settings,
+)
 
 
 @dataclass(frozen=True, kw_only=True)
 class LandroidSensorDescription(SensorEntityDescription):
     """Description for Landroid sensors."""
+
+    requires_auto_schedule: bool = False
 
 
 def _battery_charging_attribute(device) -> dict[str, bool] | None:
@@ -123,6 +129,84 @@ def _schedule_attributes(device) -> dict[str, object] | None:
     return _schedule_attributes_with_normalized_schedule(device, None)
 
 
+def _nutrition_value(device) -> str | None:
+    """Return nutrition as an N/P/K string when configured."""
+    nutrition = auto_schedule_settings(device).get("nutrition")
+    if not isinstance(nutrition, dict):
+        return None
+
+    n = nutrition.get("n")
+    p = nutrition.get("p")
+    k = nutrition.get("k")
+    if not all(isinstance(value, int) for value in (n, p, k)):
+        return None
+
+    return f"N:{n} P:{p} K:{k}"
+
+
+def _nutrition_attributes(device) -> dict[str, int] | None:
+    """Return nutrition values as attributes when configured."""
+    nutrition = auto_schedule_settings(device).get("nutrition")
+    if not isinstance(nutrition, dict):
+        return None
+    if not all(isinstance(nutrition.get(key), int) for key in ("n", "p", "k")):
+        return None
+    return {key: int(nutrition[key]) for key in ("n", "p", "k")}
+
+
+def _exclusion_schedule_value(device) -> int:
+    """Return a compact count of configured exclusion rules."""
+    exclusion = auto_schedule_settings(device).get("exclusion_scheduler")
+    if not isinstance(exclusion, dict):
+        return 0
+
+    total = 1 if exclusion.get("exclude_nights") else 0
+    for day in exclusion.get("days", []):
+        if not isinstance(day, dict):
+            continue
+        if day.get("exclude_day"):
+            total += 1
+        slots = day.get("slots", [])
+        if isinstance(slots, list):
+            total += len([slot for slot in slots if isinstance(slot, dict)])
+    return total
+
+
+def _exclusion_schedule_attributes(device) -> dict[str, object] | None:
+    """Return structured exclusion-scheduler data."""
+    exclusion = auto_schedule_settings(device).get("exclusion_scheduler")
+    if not isinstance(exclusion, dict):
+        return None
+
+    days: list[dict[str, object]] = []
+    for index, raw_day in enumerate(exclusion.get("days", [])):
+        day = raw_day if isinstance(raw_day, dict) else {}
+        raw_slots = day.get("slots", [])
+        slots = raw_slots if isinstance(raw_slots, list) else []
+        days.append(
+            {
+                "day_index": index,
+                "day": DAY_MAP.get(index, str(index)),
+                "exclude_day": bool(day.get("exclude_day", False)),
+                "slots": [
+                    {
+                        "start_time": slot.get("start_time"),
+                        "duration": slot.get("duration"),
+                        "reason": slot.get("reason"),
+                    }
+                    for slot in slots
+                    if isinstance(slot, dict)
+                ],
+            }
+        )
+
+    return {
+        "enabled": bool(auto_schedule(device).get("enabled", False)),
+        "exclude_nights": bool(exclusion.get("exclude_nights", False)),
+        "days": days,
+    }
+
+
 def _normalized_schedule_attributes(schedule) -> dict[str, object] | None:
     """Return normalized schedule fields when available."""
     if schedule is None:
@@ -173,7 +257,6 @@ def _schedule_attributes_with_normalized_schedule(
             "slots",
             "pause_mode_enabled",
             "one_time_schedule",
-            "auto_schedule",
             "daily_progress",
             "next_schedule_start",
         )
@@ -299,6 +382,20 @@ SENSORS: tuple[LandroidSensorDescription, ...] = (
         translation_key="next_schedule",
         device_class=SensorDeviceClass.TIMESTAMP,
         entity_registry_enabled_default=False,
+    ),
+    LandroidSensorDescription(
+        key="nutrition",
+        translation_key="auto_schedule_nutrition",
+        entity_registry_enabled_default=False,
+        icon="mdi:leaf",
+        requires_auto_schedule=True,
+    ),
+    LandroidSensorDescription(
+        key="exclusion_schedules",
+        translation_key="auto_schedule_exclusion_schedules",
+        entity_registry_enabled_default=False,
+        icon="mdi:calendar-remove",
+        requires_auto_schedule=True,
     ),
     LandroidSensorDescription(
         key="rain_delay_remaining",
@@ -470,6 +567,7 @@ class LandroidSensor(LandroidBaseEntity, SensorEntity):
     ) -> None:
         """Initialize sensor entity."""
         self.entity_description = description
+        self._attr_requires_auto_schedule = description.requires_auto_schedule
         super().__init__(
             coordinator, config_entry, serial_number, self.entity_description.key
         )
@@ -485,6 +583,8 @@ class LandroidSensor(LandroidBaseEntity, SensorEntity):
             return _rain_delay_remaining_value(self.device) is not None
         if self.entity_description.key == "daily_progress":
             return _daily_progress_value(self.device) is not None
+        if self.entity_description.key == "nutrition":
+            return _nutrition_value(self.device) is not None
         return True
 
     @property
@@ -503,6 +603,10 @@ class LandroidSensor(LandroidBaseEntity, SensorEntity):
             return _daily_progress_value(device)
         if key == "next_schedule":
             return _next_schedule_value(device)
+        if key == "nutrition":
+            return _nutrition_value(device)
+        if key == "exclusion_schedules":
+            return _exclusion_schedule_value(device)
         if key == "rain_delay_remaining":
             return _rain_delay_remaining_value(device)
         if key == "last_update":
@@ -546,4 +650,8 @@ class LandroidSensor(LandroidBaseEntity, SensorEntity):
                 self.device,
                 self.coordinator.cloud.get_schedule(str(self.device.serial_number)),
             )
+        if self.entity_description.key == "nutrition":
+            return _nutrition_attributes(self.device)
+        if self.entity_description.key == "exclusion_schedules":
+            return _exclusion_schedule_attributes(self.device)
         return None
