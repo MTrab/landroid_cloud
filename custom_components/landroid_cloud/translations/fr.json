@@ -167,6 +167,9 @@
       }
     },
     "switch": {
+      "pause_mode": {
+        "name": "Mode pause"
+      },
       "lock": {
         "name": "Verrouillage"
       },
@@ -178,9 +181,6 @@
       },
       "acs": {
         "name": "ACS"
-      },
-      "party_mode": {
-        "name": "Mode pause"
       }
     },
     "button": {

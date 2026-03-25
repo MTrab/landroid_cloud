@@ -287,6 +287,9 @@
       }
     },
     "switch": {
+      "pause_mode": {
+        "name": "Pause tilstand"
+      },
       "lock": {
         "name": "Lås"
       },
@@ -298,9 +301,6 @@
       },
       "acs": {
         "name": "ACS"
-      },
-      "party_mode": {
-        "name": "Pause tilstand"
       }
     },
     "button": {

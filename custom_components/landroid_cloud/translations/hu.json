@@ -167,6 +167,9 @@
       }
     },
     "switch": {
+      "pause_mode": {
+        "name": "Szünet mód"
+      },
       "lock": {
         "name": "Zár"
       },
@@ -178,9 +181,6 @@
       },
       "acs": {
         "name": "ACS"
-      },
-      "party_mode": {
-        "name": "Szünet mód"
       }
     },
     "button": {

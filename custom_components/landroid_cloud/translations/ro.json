@@ -167,6 +167,9 @@
       }
     },
     "switch": {
+      "pause_mode": {
+        "name": "Mod pauza"
+      },
       "lock": {
         "name": "Blocare"
       },
@@ -178,9 +181,6 @@
       },
       "acs": {
         "name": "ACS"
-      },
-      "party_mode": {
-        "name": "Mod pauza"
       }
     },
     "button": {

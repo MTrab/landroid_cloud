@@ -167,6 +167,9 @@
       }
     },
     "switch": {
+      "pause_mode": {
+        "name": "Rezim pauzy"
+      },
       "lock": {
         "name": "Zámek"
       },
@@ -178,9 +181,6 @@
       },
       "acs": {
         "name": "ACS"
-      },
-      "party_mode": {
-        "name": "Rezim pauzy"
       }
     },
     "button": {
