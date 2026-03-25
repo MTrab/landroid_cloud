@@ -88,7 +88,6 @@ Expected impact:
 
 Known high-impact renames:
 
-- `partymode` -> `pause_mode`
 - `locked` -> `lock`
 - `offlimits` -> `off_limits`
 - `offlimits_shortcut` -> `off_limits_shortcut`
