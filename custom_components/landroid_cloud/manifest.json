@@ -11,5 +11,5 @@
     "requirements": [
         "pyworxcloud@git+https://github.com/mtrab/pyworxcloud.git@feature/auto-schedule-support"
     ],
-    "version": "7.0.0b3",
+    "version": "7.0.0b3"
 }

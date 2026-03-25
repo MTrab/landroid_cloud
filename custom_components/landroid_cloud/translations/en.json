@@ -7,8 +7,8 @@
                 "data": {
                     "email": "Email",
                     "password": "Password",
-                    "cloud": "Cloud provider",
-                },
+                    "cloud": "Cloud provider"
+                }
             }
         },
         "error": {
@@ -17,9 +17,9 @@
             "too_many_requests": "Too many requests",
             "api_error": "Cloud API rejected the request",
             "timeout": "Connection timed out",
-            "unknown": "Unexpected error",
+            "unknown": "Unexpected error"
         },
-        "abort": {"already_exists": "This account is already configured"},
+        "abort": {"already_exists": "This account is already configured"}
     },
     "selector": {
         "cloud": {
@@ -33,18 +33,18 @@
                 "thursday": "Thursday",
                 "friday": "Friday",
                 "saturday": "Saturday",
-                "sunday": "Sunday",
+                "sunday": "Sunday"
             }
         },
         "auto_schedule_exclusion_reason": {
             "options": {"generic": "Generic", "irrigation": "Irrigation"}
-        },
+        }
     },
     "options": {
         "step": {
             "init": {
                 "title": "Landroid Cloud options",
-                "data": {"command_timeout": "Command timeout (seconds)"},
+                "data": {"command_timeout": "Command timeout (seconds)"}
             }
         }
     },
@@ -55,10 +55,10 @@
             "fields": {
                 "boundary": {
                     "name": "Boundary",
-                    "description": "Whether to include a boundary cut.",
+                    "description": "Whether to include a boundary cut."
                 },
-                "runtime": {"name": "Run time", "description": "Run time in minutes."},
-            },
+                "runtime": {"name": "Run time", "description": "Run time in minutes."}
+            }
         },
         "add_schedule": {
             "name": "Add schedule",
@@ -66,18 +66,18 @@
             "fields": {
                 "days": {
                     "name": "Days",
-                    "description": "Days of week for the new schedule entry.",
+                    "description": "Days of week for the new schedule entry."
                 },
                 "start": {
                     "name": "Start",
-                    "description": "Start time in HH:MM format.",
+                    "description": "Start time in HH:MM format."
                 },
                 "duration": {"name": "Duration", "description": "Duration in minutes."},
                 "boundary": {
                     "name": "Boundary",
-                    "description": "Whether boundary cutting should be enabled for this entry.",
-                },
-            },
+                    "description": "Whether boundary cutting should be enabled for this entry."
+                }
+            }
         },
         "edit_schedule": {
             "name": "Edit schedule",
@@ -85,29 +85,29 @@
             "fields": {
                 "current_day": {
                     "name": "Current day",
-                    "description": "Day for the schedule you want to change.",
+                    "description": "Day for the schedule you want to change."
                 },
                 "current_start": {
                     "name": "Current start",
-                    "description": "Use this if the selected day has more than one schedule and you need to choose one by time.",
+                    "description": "Use this if the selected day has more than one schedule and you need to choose one by time."
                 },
                 "day": {
                     "name": "Day",
-                    "description": "New day of week for the schedule entry.",
+                    "description": "New day of week for the schedule entry."
                 },
                 "start": {
                     "name": "Start",
-                    "description": "New start time in HH:MM format.",
+                    "description": "New start time in HH:MM format."
                 },
                 "duration": {
                     "name": "Duration",
-                    "description": "New duration in minutes.",
+                    "description": "New duration in minutes."
                 },
                 "boundary": {
                     "name": "Boundary",
-                    "description": "Whether boundary cutting should be enabled for this entry.",
-                },
-            },
+                    "description": "Whether boundary cutting should be enabled for this entry."
+                }
+            }
         },
         "delete_schedule": {
             "name": "Delete schedule",
@@ -115,17 +115,17 @@
             "fields": {
                 "all_schedules": {
                     "name": "All schedules",
-                    "description": "Delete all schedules for this mower in one call.",
+                    "description": "Delete all schedules for this mower in one call."
                 },
                 "day": {
                     "name": "Day",
-                    "description": "Day for the schedule you want to delete.",
+                    "description": "Day for the schedule you want to delete."
                 },
                 "start": {
                     "name": "Start",
-                    "description": "Use this if the selected day has more than one schedule and you need to choose one by time.",
-                },
-            },
+                    "description": "Use this if the selected day has more than one schedule and you need to choose one by time."
+                }
+            }
         },
         "set_nutrition": {
             "name": "Set nutrition",
@@ -133,21 +133,21 @@
             "fields": {
                 "n": {
                     "name": "Nitrogen (N)",
-                    "description": "Nitrogen value for auto-schedule nutrition.",
+                    "description": "Nitrogen value for auto-schedule nutrition."
                 },
                 "p": {
                     "name": "Phosphorus (P)",
-                    "description": "Phosphorus value for auto-schedule nutrition.",
+                    "description": "Phosphorus value for auto-schedule nutrition."
                 },
                 "k": {
                     "name": "Potassium (K)",
-                    "description": "Potassium value for auto-schedule nutrition.",
-                },
-            },
+                    "description": "Potassium value for auto-schedule nutrition."
+                }
+            }
         },
         "clear_nutrition": {
             "name": "Clear nutrition",
-            "description": "Clear auto-schedule nutrition values.",
+            "description": "Clear auto-schedule nutrition values."
         },
         "set_exclusion_day": {
             "name": "Set exclusion day",
@@ -155,13 +155,13 @@
             "fields": {
                 "day": {
                     "name": "Day",
-                    "description": "Day to update in the exclusion scheduler.",
+                    "description": "Day to update in the exclusion scheduler."
                 },
                 "exclude_day": {
                     "name": "Exclude day",
-                    "description": "Whether the selected day should be fully excluded.",
-                },
-            },
+                    "description": "Whether the selected day should be fully excluded."
+                }
+            }
         },
         "add_exclusion_schedule": {
             "name": "Add exclusion schedule",
@@ -169,21 +169,21 @@
             "fields": {
                 "day": {
                     "name": "Day",
-                    "description": "Day of week for the new exclusion schedule entry.",
+                    "description": "Day of week for the new exclusion schedule entry."
                 },
                 "start": {
                     "name": "Start",
-                    "description": "Start time in HH:MM format.",
+                    "description": "Start time in HH:MM format."
                 },
                 "duration": {
                     "name": "Duration",
-                    "description": "Duration in minutes.",
+                    "description": "Duration in minutes."
                 },
                 "reason": {
                     "name": "Reason",
-                    "description": "Reason for the exclusion schedule entry.",
-                },
-            },
+                    "description": "Reason for the exclusion schedule entry."
+                }
+            }
         },
         "edit_exclusion_schedule": {
             "name": "Edit exclusion schedule",
@@ -191,29 +191,29 @@
             "fields": {
                 "current_day": {
                     "name": "Current day",
-                    "description": "Day for the exclusion schedule you want to change.",
+                    "description": "Day for the exclusion schedule you want to change."
                 },
                 "current_start": {
                     "name": "Current start",
-                    "description": "Start time for the exclusion schedule you want to change.",
+                    "description": "Start time for the exclusion schedule you want to change."
                 },
                 "day": {
                     "name": "Day",
-                    "description": "New day of week for the exclusion schedule entry.",
+                    "description": "New day of week for the exclusion schedule entry."
                 },
                 "start": {
                     "name": "Start",
-                    "description": "New start time in HH:MM format.",
+                    "description": "New start time in HH:MM format."
                 },
                 "duration": {
                     "name": "Duration",
-                    "description": "New duration in minutes.",
+                    "description": "New duration in minutes."
                 },
                 "reason": {
                     "name": "Reason",
-                    "description": "Reason for the exclusion schedule entry.",
-                },
-            },
+                    "description": "Reason for the exclusion schedule entry."
+                }
+            }
         },
         "delete_exclusion_schedule": {
             "name": "Delete exclusion schedule",
@@ -221,20 +221,20 @@
             "fields": {
                 "day": {
                     "name": "Day",
-                    "description": "Day for the exclusion schedule you want to delete.",
+                    "description": "Day for the exclusion schedule you want to delete."
                 },
                 "start": {
                     "name": "Start",
-                    "description": "Use this if the selected day has more than one exclusion schedule and you need to choose one by time.",
-                },
-            },
-        },
+                    "description": "Use this if the selected day has more than one exclusion schedule and you need to choose one by time."
+                }
+            }
+        }
     },
     "device_automation": {
         "action_type": {
             "start_mowing": "Let {entity_name} start mowing",
             "pause": "Pause {entity_name}",
-            "dock": "Let {entity_name} return to the charging station",
+            "dock": "Let {entity_name} return to the charging station"
         },
         "condition_type": {
             "is_mowing": "{entity_name} is mowing",
@@ -246,7 +246,7 @@
             "is_zoning": "{entity_name} is training a zone",
             "is_searching_zone": "{entity_name} is searching for a zone",
             "is_idle": "{entity_name} is idle",
-            "is_escaped_digital_fence": "{entity_name} is outside the digital fence",
+            "is_escaped_digital_fence": "{entity_name} is outside the digital fence"
         },
         "trigger_type": {
             "mowing": "{entity_name} started mowing",
@@ -258,9 +258,9 @@
             "zoning": "{entity_name} started zone training",
             "searching_zone": "{entity_name} started searching for a zone",
             "idle": "{entity_name} became idle",
-            "escaped_digital_fence": "{entity_name} escaped the digital fence",
+            "escaped_digital_fence": "{entity_name} escaped the digital fence"
         },
-        "extra_fields": {"for": "[%key:common::device_automation::extra_fields::for%]"},
+        "extra_fields": {"for": "[%key:common::device_automation::extra_fields::for%]"}
     },
     "entity": {
         "sensor": {
@@ -305,8 +305,8 @@
                     "rfid_reader_error": "RFID reader error",
                     "headlight_error": "Headlight error",
                     "missing_charging_station": "Missing charging station",
-                    "blade_height_adjustment_blocked": "Blade height adjustment blocked",
-                },
+                    "blade_height_adjustment_blocked": "Blade height adjustment blocked"
+                }
             },
             "rssi": {"name": "Signal strength"},
             "daily_progress": {"name": "Daily progress"},
@@ -329,11 +329,11 @@
             "mower_runtime_total": {"name": "Mower runtime total"},
             "pitch": {"name": "Pitch"},
             "roll": {"name": "Roll"},
-            "yaw": {"name": "Yaw"},
+            "yaw": {"name": "Yaw"}
         },
         "binary_sensor": {
             "rain_sensor": {"name": "Rain sensor"},
-            "charging": {"name": "Charging"},
+            "charging": {"name": "Charging"}
         },
         "switch": {
             "auto_schedule": {"name": "Auto schedule"},
@@ -343,23 +343,23 @@
             "lock": {"name": "Lock"},
             "off_limits": {"name": "Off Limits"},
             "off_limits_shortcut": {"name": "Off Limits shortcuts"},
-            "acs": {"name": "ACS"},
+            "acs": {"name": "ACS"}
         },
         "button": {
             "edge_cut": {"name": "Edge cut"},
             "reset_blade_time": {"name": "Reset blade runtime"},
-            "reset_battery_cycles": {"name": "Reset battery cycles"},
+            "reset_battery_cycles": {"name": "Reset battery cycles"}
         },
         "number": {
             "rain_delay": {"name": "Rain delay"},
             "cutting_height": {"name": "Cutting height"},
             "time_extension": {"name": "Time extension"},
-            "torque": {"name": "Torque"},
+            "torque": {"name": "Torque"}
         },
         "select": {
             "auto_schedule_boost": {
                 "name": "Boost",
-                "state": {"0": "Off", "1": "Eco", "2": "Max"},
+                "state": {"0": "Off", "1": "Eco", "2": "Max"}
             },
             "auto_schedule_grass_type": {
                 "name": "Grass type",
@@ -369,8 +369,8 @@
                     "lolium_perenne": "Perennial ryegrass",
                     "poa_pratensis": "Kentucky bluegrass",
                     "festuca_rubra": "Red fescue",
-                    "agrostis_stolonifera": "Creeping bentgrass",
-                },
+                    "agrostis_stolonifera": "Creeping bentgrass"
+                }
             },
             "auto_schedule_soil_type": {
                 "name": "Soil type",
@@ -378,10 +378,10 @@
                     "clay": "Clay",
                     "silt": "Silt",
                     "sand": "Sand",
-                    "ignore": "Ignore",
-                },
+                    "ignore": "Ignore"
+                }
             },
-            "zone": {"name": "Zone"},
+            "zone": {"name": "Zone"}
         },
         "lawn_mower": {
             "mower": {
@@ -391,9 +391,9 @@
                     "idle": "Idle",
                     "searching_zone": "Searching for zone",
                     "starting": "Starting",
-                    "zoning": "Zone training",
+                    "zoning": "Zone training"
                 }
             }
-        },
-    },
+        }
+    }
 }
