@@ -167,9 +167,6 @@
       }
     },
     "switch": {
-      "pause_mode": {
-        "name": "Tryb pauzy"
-      },
       "lock": {
         "name": "Blokada"
       },
@@ -181,6 +178,9 @@
       },
       "acs": {
         "name": "ACS"
+      },
+      "party_mode": {
+        "name": "Tryb pauzy"
       }
     },
     "button": {
