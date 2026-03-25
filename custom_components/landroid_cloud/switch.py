@@ -145,7 +145,7 @@ class LandroidSwitch(LandroidBaseEntity, SwitchEntity):
 
         if self.entity_description.key == "party_mode":
             await async_run_cloud_command(
-                lambda: self.coordinator.cloud.set_party_mode(serial_number, state)
+                lambda: self.coordinator.cloud.set_partymode(serial_number, state)
             )
         elif self.entity_description.key == "lock":
             await async_run_cloud_command(
