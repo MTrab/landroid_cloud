@@ -221,7 +221,8 @@
           "idle": "Tétlen",
           "searching_zone": "Zóna keresése",
           "starting": "Indulás",
-          "zoning": "Zóna betanítás"
+          "zoning": "Zóna betanítás",
+          "rain_delayed": "Esőkésleltetés"
         }
       }
     }
@@ -242,7 +243,8 @@
       "is_zoning": "A(z) {entity_name} zónát tanul",
       "is_searching_zone": "A(z) {entity_name} zónát keres",
       "is_idle": "A(z) {entity_name} tétlen",
-      "is_escaped_digital_fence": "A(z) {entity_name} a digitális kerítésen kívül van"
+      "is_escaped_digital_fence": "A(z) {entity_name} a digitális kerítésen kívül van",
+      "is_rain_delayed": "{entity_name} esőkésleltetésben van"
     },
     "trigger_type": {
       "mowing": "A(z) {entity_name} megkezdte a fűnyírást",
@@ -254,7 +256,8 @@
       "zoning": "A(z) {entity_name} megkezdte a zóna betanítását",
       "searching_zone": "A(z) {entity_name} megkezdte a zóna keresését",
       "idle": "A(z) {entity_name} tétlen állapotba került",
-      "escaped_digital_fence": "A(z) {entity_name} elhagyta a digitális kerítést"
+      "escaped_digital_fence": "A(z) {entity_name} elhagyta a digitális kerítést",
+      "rain_delayed": "{entity_name} esőkésleltetésbe lépett"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"

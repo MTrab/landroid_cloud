@@ -155,7 +155,8 @@
       "is_zoning": "{entity_name} is training a zone",
       "is_searching_zone": "{entity_name} is searching for a zone",
       "is_idle": "{entity_name} is idle",
-      "is_escaped_digital_fence": "{entity_name} is outside the digital fence"
+      "is_escaped_digital_fence": "{entity_name} is outside the digital fence",
+      "is_rain_delayed": "{entity_name} is in rain delay"
     },
     "trigger_type": {
       "mowing": "{entity_name} started mowing",
@@ -167,7 +168,8 @@
       "zoning": "{entity_name} started zone training",
       "searching_zone": "{entity_name} started searching for a zone",
       "idle": "{entity_name} became idle",
-      "escaped_digital_fence": "{entity_name} escaped the digital fence"
+      "escaped_digital_fence": "{entity_name} escaped the digital fence",
+      "rain_delayed": "{entity_name} entered rain delay"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"
@@ -341,7 +343,8 @@
           "idle": "Idle",
           "searching_zone": "Searching for zone",
           "starting": "Starting",
-          "zoning": "Zone training"
+          "zoning": "Zone training",
+          "rain_delayed": "Rain delay"
         }
       }
     }
