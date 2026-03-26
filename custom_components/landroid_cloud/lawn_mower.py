@@ -22,6 +22,7 @@ from .const import (
     MOWER_STATE_EDGECUT,
     MOWER_STATE_ESCAPED_DIGITAL_FENCE,
     MOWER_STATE_IDLE,
+    MOWER_STATE_RAIN_DELAY,
     MOWER_STATE_SEARCHING_ZONE,
     MOWER_STATE_STARTING,
     MOWER_STATE_ZONING,
@@ -107,6 +108,9 @@ class LandroidCloudMowerEntity(LandroidBaseEntity, LawnMowerEntity):
     @property
     def activity(self) -> str | None:
         """Return current mower activity."""
+        if self.device.raindelay_active:
+            return MOWER_STATE_RAIN_DELAY
+
         status_id = int(getattr(self.device.status, "id", -1))
         return STATUS_ACTIVITY_MAP.get(status_id, LawnMowerActivity.ERROR)
 

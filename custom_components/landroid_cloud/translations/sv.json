@@ -221,7 +221,8 @@
           "idle": "Inaktiv",
           "searching_zone": "Söker efter zon",
           "starting": "Startar",
-          "zoning": "Zonträning"
+          "zoning": "Zonträning",
+          "rain_delayed": "Rain delay"
         }
       }
     }
@@ -242,7 +243,8 @@
       "is_zoning": "{entity_name} tränar en zon",
       "is_searching_zone": "{entity_name} söker efter en zon",
       "is_idle": "{entity_name} är inaktiv",
-      "is_escaped_digital_fence": "{entity_name} är utanför det digitala staketet"
+      "is_escaped_digital_fence": "{entity_name} är utanför det digitala staketet",
+      "is_rain_delayed": "{entity_name} is in rain delay"
     },
     "trigger_type": {
       "mowing": "{entity_name} började klippa",
@@ -254,7 +256,8 @@
       "zoning": "{entity_name} började zonträningen",
       "searching_zone": "{entity_name} började söka efter en zon",
       "idle": "{entity_name} blev inaktiv",
-      "escaped_digital_fence": "{entity_name} kom utanför det digitala staketet"
+      "escaped_digital_fence": "{entity_name} kom utanför det digitala staketet",
+      "rain_delayed": "{entity_name} entered rain delay"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"

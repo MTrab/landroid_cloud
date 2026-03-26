@@ -221,7 +221,8 @@
           "idle": "Venter",
           "searching_zone": "Søker etter sone",
           "starting": "Starter",
-          "zoning": "Sonetrening"
+          "zoning": "Sonetrening",
+          "rain_delayed": "Rain delay"
         }
       }
     }
@@ -242,7 +243,8 @@
       "is_zoning": "{entity_name} trener på soner",
       "is_searching_zone": "{entity_name} søker etter en sone",
       "is_idle": "{entity_name} venter",
-      "is_escaped_digital_fence": "{entity_name} er utenfor det digitale gjerdet"
+      "is_escaped_digital_fence": "{entity_name} er utenfor det digitale gjerdet",
+      "is_rain_delayed": "{entity_name} is in rain delay"
     },
     "trigger_type": {
       "mowing": "{entity_name} begynte å klippe",
@@ -254,7 +256,8 @@
       "zoning": "{entity_name} begynte sonetreningen",
       "searching_zone": "{entity_name} begynte å søke etter en sone",
       "idle": "{entity_name} gikk til ventemodus",
-      "escaped_digital_fence": "{entity_name} kom utenfor det digitale gjerdet"
+      "escaped_digital_fence": "{entity_name} kom utenfor det digitale gjerdet",
+      "rain_delayed": "{entity_name} entered rain delay"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"

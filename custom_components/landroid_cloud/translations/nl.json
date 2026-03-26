@@ -221,7 +221,8 @@
           "idle": "Inactief",
           "searching_zone": "Zone zoeken",
           "starting": "Starten",
-          "zoning": "Zone-inleren"
+          "zoning": "Zone-inleren",
+          "rain_delayed": "Rain delay"
         }
       }
     }
@@ -242,7 +243,8 @@
       "is_zoning": "{entity_name} leert een zone in",
       "is_searching_zone": "{entity_name} zoekt naar een zone",
       "is_idle": "{entity_name} is inactief",
-      "is_escaped_digital_fence": "{entity_name} staat buiten het digitale hek"
+      "is_escaped_digital_fence": "{entity_name} staat buiten het digitale hek",
+      "is_rain_delayed": "{entity_name} is in rain delay"
     },
     "trigger_type": {
       "mowing": "{entity_name} is begonnen met maaien",
@@ -254,7 +256,8 @@
       "zoning": "{entity_name} begon met het inleren van een zone",
       "searching_zone": "{entity_name} begon naar een zone te zoeken",
       "idle": "{entity_name} werd inactief",
-      "escaped_digital_fence": "{entity_name} ging buiten het digitale hek"
+      "escaped_digital_fence": "{entity_name} ging buiten het digitale hek",
+      "rain_delayed": "{entity_name} entered rain delay"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"
