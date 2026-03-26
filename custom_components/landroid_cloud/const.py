@@ -43,6 +43,7 @@ MOWER_STATE_EDGECUT = "edgecut"
 MOWER_STATE_ZONING = "zoning"
 MOWER_STATE_SEARCHING_ZONE = "searching_zone"
 MOWER_STATE_ESCAPED_DIGITAL_FENCE = "escaped_digital_fence"
+MOWER_STATE_RAIN_DELAY = "rain_delayed"
 
 
 class CloudProvider(StrEnum):

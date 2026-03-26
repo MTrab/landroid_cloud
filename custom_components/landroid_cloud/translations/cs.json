@@ -221,7 +221,8 @@
           "idle": "Nečinný",
           "searching_zone": "Vyhledávání zóny",
           "starting": "Začínání",
-          "zoning": "Učení zóny"
+          "zoning": "Učení zóny",
+          "rain_delayed": "Rain delayed"
         }
       }
     }
@@ -242,7 +243,8 @@
       "is_zoning": "{entity_name} se učí zónu",
       "is_searching_zone": "{entity_name} hledá zónu",
       "is_idle": "{entity_name} je nečinný",
-      "is_escaped_digital_fence": "{entity_name} je mimo virtuální plot"
+      "is_escaped_digital_fence": "{entity_name} je mimo virtuální plot",
+      "is_rain_delayed": "Mower is rain delayed"
     },
     "trigger_type": {
       "mowing": "{entity_name} začal sekat",
@@ -254,7 +256,8 @@
       "zoning": "{entity_name} začal učit zónu",
       "searching_zone": "{entity_name} začal hledat zónu",
       "idle": "{entity_name} přešel do nečinného stavu",
-      "escaped_digital_fence": "{entity_name} opustil virtuální plot"
+      "escaped_digital_fence": "{entity_name} opustil virtuální plot",
+      "rain_delayed": "Rain delayed"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"
