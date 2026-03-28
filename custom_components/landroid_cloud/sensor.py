@@ -171,7 +171,7 @@ def _schedule_attributes_with_normalized_schedule(
             "active",
             "time_extension",
             "slots",
-            "pause_mode_enabled",
+            "party_mode_enabled",
             "one_time_schedule",
             "auto_schedule",
             "daily_progress",
