@@ -221,7 +221,8 @@
           "idle": "In attesa",
           "searching_zone": "Ricerca zona",
           "starting": "Partenza",
-          "zoning": "Apprendimento zone"
+          "zoning": "Apprendimento zone",
+          "rain_delayed": "Rain delayed"
         }
       }
     }
@@ -242,7 +243,8 @@
       "is_zoning": "{entity_name} sta apprendendo una zona",
       "is_searching_zone": "{entity_name} sta cercando una zona",
       "is_idle": "{entity_name} è in attesa",
-      "is_escaped_digital_fence": "{entity_name} è fuori dal recinto digitale"
+      "is_escaped_digital_fence": "{entity_name} è fuori dal recinto digitale",
+      "is_rain_delayed": "Mower is rain delayed"
     },
     "trigger_type": {
       "mowing": "{entity_name} ha iniziato a tagliare il prato",
@@ -254,7 +256,8 @@
       "zoning": "{entity_name} ha iniziato l'apprendimento di una zona",
       "searching_zone": "{entity_name} ha iniziato a cercare una zona",
       "idle": "{entity_name} è tornato in attesa",
-      "escaped_digital_fence": "{entity_name} è uscito dal recinto digitale"
+      "escaped_digital_fence": "{entity_name} è uscito dal recinto digitale",
+      "rain_delayed": "Rain delayed"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"
