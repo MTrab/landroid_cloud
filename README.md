@@ -167,6 +167,12 @@ The integration exposes control through native entities and custom `landroid_clo
 
 Supported device automation states include mowing, docked, returning, error, edge cut, starting, zoning, searching for zone, idle, and escaped digital fence.
 
+### Auto-schedule refresh behavior
+
+Auto-schedule settings are written through observed mower API calls, not through the MQTT push channel used for many runtime updates.
+
+Because of that, changes made from Home Assistant do not appear immediately in the vendor app, and changes made in the vendor app do not appear immediately in Home Assistant. Updated values become visible after the next API refresh cycle.
+
 ### Custom integration services
 
 All custom services target a `lawn_mower` entity from this integration.
