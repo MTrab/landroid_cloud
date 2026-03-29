@@ -17,7 +17,6 @@ from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from pyworxcloud.exceptions import APIException, NoConnectionError, OfflineError
-from pyworxcloud.exceptions import NotFoundError
 
 try:
     from pyworxcloud.exceptions import NoFirmwareAvailableError, NoFirmwareOtaError
@@ -146,7 +145,6 @@ async def async_setup_entry(
         except (
             APIException,
             NoConnectionError,
-            NotFoundError,
             OfflineError,
             ValueError,
         ) as err:
@@ -155,7 +153,7 @@ async def async_setup_entry(
                 serial_number,
                 err,
             )
-            info = {"ota_supported": False}
+            info = {}
 
         if info.get("ota_supported") is False:
             continue
@@ -205,7 +203,6 @@ class LandroidFirmwareUpdateEntity(LandroidBaseEntity, UpdateEntity):
             except (
                 APIException,
                 NoConnectionError,
-                NotFoundError,
                 OfflineError,
                 ValueError,
             ) as err:

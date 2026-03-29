@@ -8,12 +8,10 @@ from unittest.mock import AsyncMock, Mock
 import pytest
 from homeassistant.components.update import UpdateEntityFeature
 from homeassistant.exceptions import HomeAssistantError
-from pyworxcloud.exceptions import NotFoundError
 
 from custom_components.landroid_cloud.update import (
     LandroidFirmwareUpdateEntity,
     NoFirmwareAvailableError,
-    async_setup_entry,
     _release_notes_markdown,
 )
 
@@ -149,25 +147,3 @@ async def test_async_install_surfaces_no_firmware_available() -> None:
         HomeAssistantError, match="No firmware update is currently available"
     ):
         await entity.async_install(version=None, backup=False)
-
-
-@pytest.mark.asyncio
-async def test_async_setup_entry_skips_devices_without_firmware_endpoint() -> None:
-    """Update setup should skip mowers where the firmware endpoint returns 404."""
-    entities = []
-
-    def _async_add_entities(new_entities) -> None:
-        entities.extend(new_entities)
-
-    entry = SimpleNamespace(
-        runtime_data=SimpleNamespace(
-            coordinator=SimpleNamespace(
-                data={"serial": SimpleNamespace()},
-                async_get_firmware_update_info=AsyncMock(side_effect=NotFoundError()),
-            )
-        )
-    )
-
-    await async_setup_entry(SimpleNamespace(), entry, _async_add_entities)
-
-    assert entities == []
