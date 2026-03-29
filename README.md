@@ -84,6 +84,8 @@ Each mower creates one lawn mower entity with these actions:
 | Signal strength | Diagnostic | Disabled |
 | Daily progress | Standard | Disabled |
 | Next schedule | Standard | Disabled |
+| Auto schedule nutrition | Standard | Disabled |
+| Auto schedule exclusion schedules | Standard | Disabled |
 | Rain delay remaining | Standard | Disabled |
 | Last update | Standard | Disabled |
 | Battery charge cycles total | Diagnostic | Disabled |
@@ -103,6 +105,8 @@ Each mower creates one lawn mower entity with these actions:
 Notes:
 
 - `Next schedule` is exposed as a timestamp sensor and includes known schedule details as attributes.
+- `Auto schedule nutrition` exposes the configured N/P/K values when auto schedule provides them.
+- `Auto schedule exclusion schedules` summarizes exclusion rules and exposes the normalized schedule details as attributes.
 - `Rain delay remaining` is only available while a rain delay is active. When the mower reports `0` minutes remaining, the sensor is exposed as unavailable instead of reporting `0`.
 - Duration and distance sensors suggest user-friendly display units where Home Assistant supports conversion.
 
@@ -119,7 +123,10 @@ All switches are configuration entities and require the mower to be online.
 
 | Entity | Default | Notes |
 | --- | --- | --- |
-| Pause mode | Disabled | Requires pause mode support |
+| Auto schedule | Disabled | |
+| Party mode | Disabled | Requires party mode support |
+| Auto schedule irrigation | Disabled | Requires auto schedule to be enabled |
+| Auto schedule exclude nights | Disabled | Requires auto schedule to be enabled |
 | Lock | Disabled | |
 | Off Limits | Enabled | Requires Off Limits support |
 | Off Limits shortcuts | Enabled | Requires Off Limits support |
@@ -145,12 +152,17 @@ Numbers require the mower to be online and are disabled by default.
 | Cutting height | Configuration | 20-70 mm | 1 | Requires cutting height support |
 | Time extension | Configuration | -100% to 100% | 10 | |
 | Torque | Configuration | -50% to 50% | 1 | Requires torque support |
+| Lawn size | Configuration | 0-100000 m² | 1 | |
+| Lawn perimeter | Configuration | 0-100000 m | 1 | |
 
 #### Selects
 
 | Entity | Category | Default | Notes |
 | --- | --- | --- | --- |
 | Zone | Configuration | Disabled | Requires mower to be online |
+| Auto schedule boost | Configuration | Disabled | Requires auto schedule to be enabled |
+| Auto schedule grass type | Configuration | Disabled | Requires auto schedule to be enabled |
+| Auto schedule soil type | Configuration | Disabled | Requires auto schedule to be enabled |
 
 ## Actions and control model
 
@@ -159,19 +171,25 @@ The integration exposes control through native entities and custom `landroid_clo
 - Lawn mower actions for start, pause and dock
 - Device automations for mower actions, triggers, and conditions in Home Assistant automations
 - Buttons for one-shot actions such as edge cut and counter resets
-- Switches for boolean features such as ACS, lock and Off Limits
-- Numbers for writable values such as rain delay, cutting height, time extension and torque
-- Select for zone choice
+- Switches for boolean features such as auto schedule, party mode, ACS, lock and Off Limits
+- Numbers for writable values such as rain delay, cutting height, time extension, torque and lawn metadata
+- Select entities for zone choice and auto-schedule tuning
 - The `landroid_cloud.ots` service for starting a one-time schedule
 - The `landroid_cloud.add_schedule`, `landroid_cloud.edit_schedule`, and `landroid_cloud.delete_schedule` services for schedule management
+- Additional auto-schedule services for nutrition and exclusion schedule management
 
-Supported device automation states include mowing, docked, returning, error, edge cut, starting, zoning, searching for zone, idle, and escaped digital fence.
+Supported device automation states include mowing, docked, returning, error, edge cut, starting, zoning, searching for zone, idle, rain delayed, and escaped digital fence.
 
 ### Auto-schedule refresh behavior
 
 Auto-schedule settings are written through observed mower API calls, not through the MQTT push channel used for many runtime updates.
 
 Because of that, changes made from Home Assistant do not appear immediately in the vendor app, and changes made in the vendor app do not appear immediately in Home Assistant. Updated values become visible after the next API refresh cycle.
+
+### Zone handling
+
+Legacy mowers expose the configured start-point zones for selection.
+RTK/Vision style zone IDs are exposed read-only, and changing the selected RTK zone from Home Assistant is not supported yet.
 
 ### Custom integration services
 
