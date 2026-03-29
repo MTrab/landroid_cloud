@@ -75,6 +75,7 @@ AUTO_SCHEDULE_SELECTS: Final[tuple[LandroidSelectDescription, ...]] = (
         options=AUTO_SCHEDULE_BOOST_OPTIONS,
         entity_category=EntityCategory.CONFIG,
         entity_registry_enabled_default=False,
+        icon="mdi:speedometer",
     ),
     LandroidSelectDescription(
         key="auto_schedule_grass_type",
@@ -82,6 +83,7 @@ AUTO_SCHEDULE_SELECTS: Final[tuple[LandroidSelectDescription, ...]] = (
         options=AUTO_SCHEDULE_GRASS_TYPE_OPTIONS,
         entity_category=EntityCategory.CONFIG,
         entity_registry_enabled_default=False,
+        icon="mdi:grass",
     ),
     LandroidSelectDescription(
         key="auto_schedule_soil_type",
@@ -89,6 +91,7 @@ AUTO_SCHEDULE_SELECTS: Final[tuple[LandroidSelectDescription, ...]] = (
         options=AUTO_SCHEDULE_SOIL_TYPE_OPTIONS,
         entity_category=EntityCategory.CONFIG,
         entity_registry_enabled_default=False,
+        icon="mdi:shovel",
     ),
 )
 

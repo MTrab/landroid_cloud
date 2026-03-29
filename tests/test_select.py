@@ -52,6 +52,17 @@ def test_auto_schedule_selects_use_pyworxcloud_valid_options() -> None:
     )
 
 
+def test_auto_schedule_selects_have_distinct_icons() -> None:
+    """Auto-schedule selects should expose meaningful icons in the UI."""
+    descriptions = {
+        description.key: description for description in AUTO_SCHEDULE_SELECTS
+    }
+
+    assert descriptions["auto_schedule_boost"].icon == "mdi:speedometer"
+    assert descriptions["auto_schedule_grass_type"].icon == "mdi:grass"
+    assert descriptions["auto_schedule_soil_type"].icon == "mdi:shovel"
+
+
 def test_auto_schedule_select_is_unavailable_when_auto_schedule_is_disabled() -> None:
     """Dependent auto-schedule selects should be unavailable when disabled."""
     entity = object.__new__(LandroidAutoScheduleSelect)
