@@ -35,6 +35,12 @@ The rewrite now exposes these custom services instead:
 - `landroid_cloud.add_schedule`
 - `landroid_cloud.edit_schedule`
 - `landroid_cloud.delete_schedule`
+- `landroid_cloud.set_exclusion_day`
+- `landroid_cloud.add_exclusion_schedule`
+- `landroid_cloud.edit_exclusion_schedule`
+- `landroid_cloud.delete_exclusion_schedule`
+- `landroid_cloud.set_nutrition`
+- `landroid_cloud.clear_nutrition`
 
 This means old automations cannot be migrated by a simple rename.
 Schedule-related automations must be rewritten to use the new service names and field structure.
@@ -58,6 +64,7 @@ The current model includes detailed states such as:
 - `edgecut`
 - `zoning`
 - `searching_zone`
+- `rain_delayed`
 - `escaped_digital_fence`
 
 This reduces the migration gap versus legacy, but users should still verify any automation that depends on exact state names.
@@ -106,6 +113,20 @@ Known high-impact renames:
 - `worktime_total` -> `mower_runtime_total`
 - `edgecut` -> `edge_cut`
 - `reset_charge_cycles` -> `reset_battery_cycles`
+- `pause_mode` -> `party_mode`
+
+### New auto-schedule entity model
+
+The v7 rewrite now exposes auto-schedule controls as native Home Assistant entities instead of leaving them to app-only workflows.
+
+New entity areas include:
+
+- an `auto_schedule` switch plus related irrigation and exclude-night switches
+- auto-schedule tuning selects for boost, grass type, and soil type
+- auto-schedule nutrition and exclusion summary sensors
+- additional writable lawn metadata numbers such as lawn size and perimeter
+
+This improves coverage, but it also means more entity IDs and more disabled-by-default configuration entities for users to review after upgrade.
 
 ### Removed entities
 
@@ -128,11 +149,16 @@ Examples include:
 - cutting height
 - time extension
 - torque
-- pause mode
+- auto schedule
+- party mode
+- auto schedule irrigation
+- auto schedule exclude nights
 - lock
 - ACS
 - rain sensor
 - next schedule
+- auto schedule nutrition
+- auto schedule exclusion schedules
 - pitch
 - roll
 - yaw
@@ -149,6 +175,15 @@ Expected impact:
 
 - automations checking for a timestamp value should also handle `unavailable`
 - dashboards may now show no upcoming schedule more explicitly
+
+### Rain delay behavior changed
+
+The lawn mower entity and device automations now expose a dedicated `rain_delayed` state when the mower is still inside an active rain-delay countdown.
+
+Expected impact:
+
+- automations that previously only watched `docked` or generic idle-like states may need to include `rain_delayed`
+- users can now distinguish between a normal docked mower and one that is still waiting for rain delay to expire
 
 ### Availability changes
 
@@ -176,7 +211,9 @@ Users upgrading from legacy should be told to:
 4. update automations/scripts to use the new entity IDs
 5. remove or rewrite any automations using the removed legacy services
 6. rewrite schedule automations to use the new `landroid_cloud.add_schedule`, `landroid_cloud.edit_schedule`, and `landroid_cloud.delete_schedule` services
-7. update any automation using `next_schedule` so it handles `unavailable`
+7. review whether any app-only auto-schedule workflows should move to the new auto-schedule entities and exclusion/nutrition services
+8. update any automation using `next_schedule` so it handles `unavailable`
+9. update any automation that keys off mower states so it can handle `rain_delayed` where relevant
 
 ## Notes For Final Release Post
 
@@ -185,6 +222,8 @@ Recommended release-note sections:
 - breaking changes
 - removed services
 - new schedule service model
+- new auto-schedule entities and services
 - renamed entities
+- mower state changes
 - disabled-by-default entities
 - migration guidance
