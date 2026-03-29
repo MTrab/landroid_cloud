@@ -122,6 +122,13 @@ async def test_get_triggers_returns_supported_mower_triggers(monkeypatch) -> Non
             CONF_DEVICE_ID: "device-123",
             CONF_DOMAIN: DOMAIN,
             CONF_ENTITY_ID: "registry-entry-id",
+            CONF_TYPE: "rain_delayed",
+        },
+        {
+            CONF_PLATFORM: "device",
+            CONF_DEVICE_ID: "device-123",
+            CONF_DOMAIN: DOMAIN,
+            CONF_ENTITY_ID: "registry-entry-id",
             CONF_TYPE: "escaped_digital_fence",
         },
     ]

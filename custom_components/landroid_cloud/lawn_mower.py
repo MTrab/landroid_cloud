@@ -22,15 +22,22 @@ from .const import (
     MOWER_STATE_EDGECUT,
     MOWER_STATE_ESCAPED_DIGITAL_FENCE,
     MOWER_STATE_IDLE,
+    MOWER_STATE_RAIN_DELAY,
     MOWER_STATE_SEARCHING_ZONE,
     MOWER_STATE_STARTING,
     MOWER_STATE_ZONING,
 )
 from .services import (
     async_handle_add_schedule,
+    async_handle_add_exclusion_schedule,
+    async_handle_clear_nutrition,
     async_handle_delete_schedule,
+    async_handle_delete_exclusion_schedule,
     async_handle_edit_schedule,
+    async_handle_edit_exclusion_schedule,
     async_handle_ots,
+    async_handle_set_exclusion_day,
+    async_handle_set_nutrition,
     async_register_entity_services,
 )
 
@@ -64,6 +71,18 @@ SERVICE_OTS: Final = integration_services.SERVICE_OTS
 SERVICE_ADD_SCHEDULE: Final = integration_services.SERVICE_ADD_SCHEDULE
 SERVICE_EDIT_SCHEDULE: Final = integration_services.SERVICE_EDIT_SCHEDULE
 SERVICE_DELETE_SCHEDULE: Final = integration_services.SERVICE_DELETE_SCHEDULE
+SERVICE_SET_NUTRITION: Final = integration_services.SERVICE_SET_NUTRITION
+SERVICE_CLEAR_NUTRITION: Final = integration_services.SERVICE_CLEAR_NUTRITION
+SERVICE_SET_EXCLUSION_DAY: Final = integration_services.SERVICE_SET_EXCLUSION_DAY
+SERVICE_ADD_EXCLUSION_SCHEDULE: Final = (
+    integration_services.SERVICE_ADD_EXCLUSION_SCHEDULE
+)
+SERVICE_EDIT_EXCLUSION_SCHEDULE: Final = (
+    integration_services.SERVICE_EDIT_EXCLUSION_SCHEDULE
+)
+SERVICE_DELETE_EXCLUSION_SCHEDULE: Final = (
+    integration_services.SERVICE_DELETE_EXCLUSION_SCHEDULE
+)
 
 
 async def async_setup_entry(
@@ -107,6 +126,14 @@ class LandroidCloudMowerEntity(LandroidBaseEntity, LawnMowerEntity):
     @property
     def activity(self) -> str | None:
         """Return current mower activity."""
+        rain_remaining = getattr(
+            getattr(self.device, "rainsensor", {}), "get", lambda *_: None
+        )("remaining")
+        if self.device.raindelay_active or (
+            isinstance(rain_remaining, int) and rain_remaining > 0
+        ):
+            return MOWER_STATE_RAIN_DELAY
+
         status_id = int(getattr(self.device.status, "id", -1))
         return STATUS_ACTIVITY_MAP.get(status_id, LawnMowerActivity.ERROR)
 
@@ -183,6 +210,71 @@ class LandroidCloudMowerEntity(LandroidBaseEntity, LawnMowerEntity):
         await async_handle_delete_schedule(
             self,
             all_schedules=all_schedules,
+            day=day,
+            start=start,
+        )
+
+    async def _async_service_set_nutrition(self, *, n: int, p: int, k: int) -> None:
+        """Set auto-schedule nutrition values."""
+        await async_handle_set_nutrition(self, n=n, p=p, k=k)
+
+    async def _async_service_clear_nutrition(self) -> None:
+        """Clear auto-schedule nutrition values."""
+        await async_handle_clear_nutrition(self)
+
+    async def _async_service_set_exclusion_day(
+        self, *, day: str, exclude_day: bool
+    ) -> None:
+        """Set whether one weekday is fully excluded."""
+        await async_handle_set_exclusion_day(self, day=day, exclude_day=exclude_day)
+
+    async def _async_service_add_exclusion_schedule(
+        self,
+        *,
+        day: str,
+        start: str,
+        duration: int,
+        reason: str = "generic",
+    ) -> None:
+        """Add one exclusion slot."""
+        await async_handle_add_exclusion_schedule(
+            self,
+            day=day,
+            start=start,
+            duration=duration,
+            reason=reason,
+        )
+
+    async def _async_service_edit_exclusion_schedule(
+        self,
+        *,
+        current_day: str,
+        current_start: str,
+        day: str,
+        start: str,
+        duration: int,
+        reason: str = "generic",
+    ) -> None:
+        """Replace one exclusion slot."""
+        await async_handle_edit_exclusion_schedule(
+            self,
+            current_day=current_day,
+            current_start=current_start,
+            day=day,
+            start=start,
+            duration=duration,
+            reason=reason,
+        )
+
+    async def _async_service_delete_exclusion_schedule(
+        self,
+        *,
+        day: str,
+        start: str | None = None,
+    ) -> None:
+        """Delete one exclusion slot."""
+        await async_handle_delete_exclusion_schedule(
+            self,
             day=day,
             start=start,
         )

@@ -139,6 +139,17 @@ translation/<name> - for translation purposes
 
 All new branches MUST be based on `master`, unless the user explicitly instructs otherwise.
 
+All code changes MUST start from a dedicated `feature/...`, `fix/...`, or `chore/...` branch.
+
+The agent must NEVER push directly to `master` and NEVER merge directly to `master` unless the user explicitly asks for it in the current session.
+
+Before creating a commit, the agent MUST report the result of:
+
+- `git status`
+- `ruff format`
+- `ruff check`
+- the relevant tests run for the change
+
 Each PR must include:
 
 - A clear description of changes
@@ -155,6 +166,8 @@ The agent must NOT merge a PR without explicit permission
 The agent must NOT use administrative merge overrides (for example `gh pr merge --admin`).
 
 Before merging any PR, the agent MUST wait until all required CI/status checks are green/passing.
+
+If GitHub, CI, or local tooling is unstable or failing, the agent MUST stop and ask before taking any workaround that bypasses the normal branch -> PR -> merge flow.
 
 When a branch is merged it must also be deleted both local and remote, and changes merged to master must be pulled
 
