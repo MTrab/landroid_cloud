@@ -9,6 +9,7 @@ from typing import Any
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from pyworxcloud import DeviceHandler, LandroidEvent, WorxCloud
+from pyworxcloud.exceptions import NotFoundError
 
 from .const import DOMAIN
 
@@ -146,7 +147,28 @@ class LandroidCloudCoordinator(DataUpdateCoordinator[dict[str, DeviceHandler]]):
         self, serial_number: str
     ) -> dict[str, Any]:
         """Fetch and cache firmware update metadata for a mower."""
-        info = await self.cloud.get_firmware_upgrade_info(serial_number)
+        try:
+            info = await self.cloud.get_firmware_upgrade_info(serial_number)
+        except NotFoundError:
+            info = {
+                "current_version": getattr(
+                    getattr((self.data or {}).get(serial_number), "firmware", {}),
+                    "get",
+                    lambda *_: None,
+                )("version"),
+                "latest_version": None,
+                "update_available": False,
+                "ota_supported": False,
+                "auto_upgrade": getattr(
+                    getattr((self.data or {}).get(serial_number), "firmware", {}),
+                    "get",
+                    lambda *_: None,
+                )("auto_upgrade"),
+                "mandatory": False,
+                "upgrade_failed": False,
+                "product": None,
+                "head": None,
+            }
 
         async with self._event_lock:
             device = (self.data or {}).get(serial_number)

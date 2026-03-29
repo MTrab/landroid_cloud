@@ -17,16 +17,18 @@ from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from pyworxcloud.exceptions import APIException, NoConnectionError, OfflineError
+from pyworxcloud.exceptions import NotFoundError
 
 try:
     from pyworxcloud.exceptions import NoFirmwareAvailableError, NoFirmwareOtaError
 except ImportError:
+
     class NoFirmwareOtaError(Exception):
         """Fallback for older pyworxcloud versions without OTA exception support."""
 
-
     class NoFirmwareAvailableError(Exception):
         """Fallback for older pyworxcloud versions without OTA exception support."""
+
 
 from .entity import LandroidBaseEntity
 
@@ -141,13 +143,19 @@ async def async_setup_entry(
     for serial_number in coordinator.data:
         try:
             info = await coordinator.async_get_firmware_update_info(serial_number)
-        except (APIException, NoConnectionError, OfflineError, ValueError) as err:
+        except (
+            APIException,
+            NoConnectionError,
+            NotFoundError,
+            OfflineError,
+            ValueError,
+        ) as err:
             _LOGGER.debug(
                 "Unable to preload firmware update info for %s: %s",
                 serial_number,
                 err,
             )
-            info = {}
+            info = {"ota_supported": False}
 
         if info.get("ota_supported") is False:
             continue
@@ -194,7 +202,13 @@ class LandroidFirmwareUpdateEntity(LandroidBaseEntity, UpdateEntity):
                 await self.coordinator.async_refresh_firmware_update_info(
                     self._serial_number
                 )
-            except (APIException, NoConnectionError, OfflineError, ValueError) as err:
+            except (
+                APIException,
+                NoConnectionError,
+                NotFoundError,
+                OfflineError,
+                ValueError,
+            ) as err:
                 _LOGGER.debug(
                     "Unable to fetch firmware update info for %s: %s",
                     self._serial_number,
