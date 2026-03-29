@@ -12,6 +12,7 @@ from homeassistant.exceptions import HomeAssistantError
 from custom_components.landroid_cloud.update import (
     LandroidFirmwareUpdateEntity,
     NoFirmwareAvailableError,
+    _changelog_text,
     _release_notes_markdown,
 )
 
@@ -21,6 +22,7 @@ def _make_entity(
     firmware: dict | None = None,
     info: dict | None = None,
     start_firmware_upgrade: AsyncMock | None = None,
+    refresh_firmware_update_info: AsyncMock | None = None,
 ) -> LandroidFirmwareUpdateEntity:
     """Create a lightweight update entity for unit tests."""
     entity = object.__new__(LandroidFirmwareUpdateEntity)
@@ -39,6 +41,9 @@ def _make_entity(
             start_firmware_upgrade=start_firmware_upgrade or AsyncMock(),
         ),
         firmware_update_info=lambda _serial_number: info or {},
+        async_refresh_firmware_update_info=(
+            refresh_firmware_update_info or AsyncMock(return_value=info or {})
+        ),
         async_update_listeners=lambda: None,
     )
     return entity
@@ -100,6 +105,77 @@ def test_release_notes_markdown_includes_product_and_head_sections() -> None:
         "## Product firmware 3.31\n\nMain firmware fixes\n\n"
         "## Head firmware 1.02\n\nHead firmware fixes"
     )
+
+
+def test_changelog_text_prefers_english_from_localized_dict() -> None:
+    """Localized changelog dicts should prefer English text."""
+    assert _changelog_text({"da": "Danske noter", "en": "English notes"}) == (
+        "English notes"
+    )
+
+
+def test_release_summary_supports_localized_changelog_dict() -> None:
+    """Release summary should support pyworxcloud changelog dict payloads."""
+    entity = _make_entity(
+        info={
+            "product": {
+                "version": "3.31",
+                "changelog": {"en": "Main firmware fixes", "da": "Firmware rettelser"},
+            }
+        }
+    )
+
+    assert entity.release_summary == "Main firmware fixes"
+
+
+def test_release_summary_uses_changelog_excerpt() -> None:
+    """Release summary should expose the short changelog excerpt."""
+    entity = _make_entity(
+        info={
+            "product": {
+                "version": "3.31",
+                "changelog": "Main firmware fixes and stability improvements",
+            }
+        }
+    )
+
+    assert entity.release_summary == "Main firmware fixes and stability improvements"
+
+
+@pytest.mark.asyncio
+async def test_async_release_notes_returns_markdown() -> None:
+    """Release notes should be exposed through the update entity API."""
+    refresh_firmware_update_info = AsyncMock(
+        return_value={
+            "product": {
+                "version": "3.31",
+                "changelog": {"en": "Main firmware fixes"},
+            },
+            "head": {
+                "version": "1.02",
+                "changelog": {"en": "Head firmware fixes"},
+            },
+        }
+    )
+    entity = _make_entity(
+        info={
+            "product": {
+                "version": "3.31",
+                "changelog": {"en": "Main firmware fixes"},
+            },
+            "head": {
+                "version": "1.02",
+                "changelog": {"en": "Head firmware fixes"},
+            },
+        },
+        refresh_firmware_update_info=refresh_firmware_update_info,
+    )
+
+    assert await entity.async_release_notes() == (
+        "## Product firmware 3.31\n\nMain firmware fixes\n\n"
+        "## Head firmware 1.02\n\nHead firmware fixes"
+    )
+    refresh_firmware_update_info.assert_awaited_once_with("serial")
 
 
 @pytest.mark.asyncio

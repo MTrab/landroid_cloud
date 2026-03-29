@@ -50,6 +50,24 @@ def _normalized_version(value: Any) -> str | None:
     return version
 
 
+def _changelog_text(value: Any) -> str | None:
+    """Return changelog text from either a raw string or localized dict."""
+    if isinstance(value, str):
+        text = value.strip()
+        return text or None
+
+    if isinstance(value, dict):
+        english = value.get("en")
+        if isinstance(english, str) and english.strip():
+            return english.strip()
+
+        for localized in value.values():
+            if isinstance(localized, str) and localized.strip():
+                return localized.strip()
+
+    return None
+
+
 def _latest_firmware_info(device, cached_info: dict[str, Any] | None) -> dict[str, Any]:
     """Merge cached upgrade metadata with the latest device firmware payload."""
     merged = dict(cached_info or {})
@@ -78,15 +96,13 @@ def _release_summary(info: dict[str, Any]) -> str | None:
     """Return a short changelog summary when available."""
     product = info.get("product")
     if isinstance(product, dict):
-        changelog = product.get("changelog")
-        if isinstance(changelog, str) and changelog.strip():
-            return changelog.strip()[:255]
+        if changelog := _changelog_text(product.get("changelog")):
+            return changelog[:255]
 
     head = info.get("head")
     if isinstance(head, dict):
-        changelog = head.get("changelog")
-        if isinstance(changelog, str) and changelog.strip():
-            return changelog.strip()[:255]
+        if changelog := _changelog_text(head.get("changelog")):
+            return changelog[:255]
 
     return None
 
@@ -98,16 +114,14 @@ def _release_notes_markdown(info: dict[str, Any]) -> str | None:
     product = info.get("product")
     if isinstance(product, dict):
         version = _normalized_version(product.get("version")) or "Unknown"
-        changelog = product.get("changelog")
-        if isinstance(changelog, str) and changelog.strip():
-            sections.append(f"## Product firmware {version}\n\n{changelog.strip()}")
+        if changelog := _changelog_text(product.get("changelog")):
+            sections.append(f"## Product firmware {version}\n\n{changelog}")
 
     head = info.get("head")
     if isinstance(head, dict):
         version = _normalized_version(head.get("version")) or "Unknown"
-        changelog = head.get("changelog")
-        if isinstance(changelog, str) and changelog.strip():
-            sections.append(f"## Head firmware {version}\n\n{changelog.strip()}")
+        if changelog := _changelog_text(head.get("changelog")):
+            sections.append(f"## Head firmware {version}\n\n{changelog}")
 
     if not sections:
         return None
@@ -256,7 +270,33 @@ class LandroidFirmwareUpdateEntity(LandroidBaseEntity, UpdateEntity):
 
     async def async_release_notes(self) -> str | None:
         """Return full markdown release notes when available."""
-        return _release_notes_markdown(self._info)
+        try:
+            info = await self.coordinator.async_refresh_firmware_update_info(
+                self._serial_number
+            )
+        except (
+            APIException,
+            NoConnectionError,
+            OfflineError,
+            ValueError,
+        ) as err:
+            _LOGGER.debug(
+                "Unable to refresh firmware release notes for %s: %s",
+                self._serial_number,
+                err,
+            )
+            info = self._info
+        else:
+            info = _latest_firmware_info(self.device, info)
+
+        notes = _release_notes_markdown(info)
+        _LOGGER.debug(
+            "Firmware release notes requested for %s (%s): available=%s",
+            getattr(self.device, "name", self._serial_number),
+            self._serial_number,
+            notes is not None,
+        )
+        return notes
 
     async def async_install(
         self, version: str | None, backup: bool, **kwargs: Any
@@ -270,6 +310,14 @@ class LandroidFirmwareUpdateEntity(LandroidBaseEntity, UpdateEntity):
             raise HomeAssistantError(
                 f"Only the latest firmware version can be installed ({latest_version})"
             )
+
+        _LOGGER.debug(
+            "Firmware update triggered for %s (%s): installed=%s latest=%s",
+            getattr(self.device, "name", serial_number),
+            serial_number,
+            self.installed_version,
+            latest_version,
+        )
 
         try:
             await self.coordinator.cloud.start_firmware_upgrade(serial_number)
