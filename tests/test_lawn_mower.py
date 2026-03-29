@@ -21,9 +21,15 @@ from custom_components.landroid_cloud.lawn_mower import (
     LandroidCloudMowerEntity,
     STATUS_ACTIVITY_MAP,
     SERVICE_ADD_SCHEDULE,
+    SERVICE_ADD_EXCLUSION_SCHEDULE,
+    SERVICE_CLEAR_NUTRITION,
     SERVICE_DELETE_SCHEDULE,
+    SERVICE_DELETE_EXCLUSION_SCHEDULE,
     SERVICE_EDIT_SCHEDULE,
+    SERVICE_EDIT_EXCLUSION_SCHEDULE,
     SERVICE_OTS,
+    SERVICE_SET_EXCLUSION_DAY,
+    SERVICE_SET_NUTRITION,
     async_setup_entry,
 )
 
@@ -92,12 +98,34 @@ def _entity_with_cloud(protocol: int = 0) -> LandroidCloudMowerEntity:
         cloud=SimpleNamespace(
             ots=AsyncMock(),
             add_schedule_entry=AsyncMock(),
+            clear_auto_schedule_nutrition=AsyncMock(),
+            set_auto_schedule_exclusion_day=AsyncMock(),
+            set_auto_schedule_exclusion_slots=AsyncMock(),
+            set_auto_schedule_nutrition=AsyncMock(),
             set_schedule=AsyncMock(),
             update_schedule_entry=AsyncMock(),
             delete_schedule_entry=AsyncMock(),
             get_schedule=lambda serial_number: schedule,
         ),
-        data={"serial": SimpleNamespace(serial_number="serial")},
+        data={
+            "serial": SimpleNamespace(
+                serial_number="serial",
+                schedules={
+                    "auto_schedule": {
+                        "enabled": True,
+                        "settings": {
+                            "exclusion_scheduler": {
+                                "exclude_nights": False,
+                                "days": [
+                                    {"exclude_day": False, "slots": []}
+                                    for _ in range(7)
+                                ],
+                            }
+                        },
+                    }
+                },
+            )
+        },
     )
     return entity
 
@@ -768,6 +796,165 @@ async def test_protocol_one_schedule_forces_slot_source() -> None:
 
 
 @pytest.mark.asyncio
+async def test_set_nutrition_service_calls_cloud_helper() -> None:
+    """Nutrition service should forward N/P/K values to pyworxcloud."""
+    entity = _entity_with_cloud()
+
+    await entity._async_service_set_nutrition(n=10, p=20, k=5)
+
+    entity.coordinator.cloud.set_auto_schedule_nutrition.assert_awaited_once_with(
+        "serial", 10, 20, 5
+    )
+
+
+@pytest.mark.asyncio
+async def test_clear_nutrition_service_calls_cloud_helper() -> None:
+    """Clear nutrition should call the dedicated pyworxcloud helper."""
+    entity = _entity_with_cloud()
+
+    await entity._async_service_clear_nutrition()
+
+    entity.coordinator.cloud.clear_auto_schedule_nutrition.assert_awaited_once_with(
+        "serial"
+    )
+
+
+@pytest.mark.asyncio
+async def test_auto_schedule_services_require_auto_schedule_enabled() -> None:
+    """Auto-schedule services should fail clearly when auto schedule is disabled."""
+    entity = _entity_with_cloud()
+    entity.coordinator.data["serial"].schedules["auto_schedule"]["enabled"] = False
+
+    with pytest.raises(
+        HomeAssistantError,
+        match="Enable auto schedule before changing auto-schedule settings",
+    ):
+        await entity._async_service_set_nutrition(n=1, p=2, k=3)
+
+
+@pytest.mark.asyncio
+async def test_set_exclusion_day_service_calls_cloud_helper() -> None:
+    """Exclusion day service should translate weekday names to day indexes."""
+    entity = _entity_with_cloud()
+
+    await entity._async_service_set_exclusion_day(day="monday", exclude_day=True)
+
+    entity.coordinator.cloud.set_auto_schedule_exclusion_day.assert_awaited_once_with(
+        "serial", 1, True
+    )
+
+
+@pytest.mark.asyncio
+async def test_add_exclusion_schedule_calls_cloud_helper() -> None:
+    """Add exclusion service should send one normalized slot list."""
+    entity = _entity_with_cloud()
+
+    await entity._async_service_add_exclusion_schedule(
+        day="monday",
+        start="09:00",
+        duration=45,
+        reason="generic",
+    )
+
+    entity.coordinator.cloud.set_auto_schedule_exclusion_slots.assert_awaited_once_with(
+        "serial",
+        1,
+        [{"start_time": 540, "duration": 45, "reason": "generic"}],
+    )
+
+
+@pytest.mark.asyncio
+async def test_edit_exclusion_schedule_replaces_same_day_slot() -> None:
+    """Edit exclusion service should replace the selected same-day slot."""
+    entity = _entity_with_cloud()
+    entity.coordinator.data["serial"].schedules["auto_schedule"]["settings"][
+        "exclusion_scheduler"
+    ]["days"][1]["slots"] = [{"start_time": 540, "duration": 45, "reason": "generic"}]
+
+    await entity._async_service_edit_exclusion_schedule(
+        current_day="monday",
+        current_start="09:00",
+        day="monday",
+        start="10:30",
+        duration=60,
+        reason="irrigation",
+    )
+
+    entity.coordinator.cloud.set_auto_schedule_exclusion_slots.assert_awaited_once_with(
+        "serial",
+        1,
+        [{"start_time": 630, "duration": 60, "reason": "irrigation"}],
+    )
+
+
+@pytest.mark.asyncio
+async def test_edit_exclusion_schedule_moves_slot_across_days() -> None:
+    """Edit exclusion service should update both weekdays when moving a slot."""
+    entity = _entity_with_cloud()
+    entity.coordinator.data["serial"].schedules["auto_schedule"]["settings"][
+        "exclusion_scheduler"
+    ]["days"][1]["slots"] = [{"start_time": 540, "duration": 45, "reason": "generic"}]
+
+    await entity._async_service_edit_exclusion_schedule(
+        current_day="monday",
+        current_start="09:00",
+        day="wednesday",
+        start="14:00",
+        duration=30,
+        reason="generic",
+    )
+
+    assert entity.coordinator.cloud.set_auto_schedule_exclusion_slots.await_args_list[
+        0
+    ].args == ("serial", 1, [])
+    assert entity.coordinator.cloud.set_auto_schedule_exclusion_slots.await_args_list[
+        1
+    ].args == (
+        "serial",
+        3,
+        [{"start_time": 840, "duration": 30, "reason": "generic"}],
+    )
+
+
+@pytest.mark.asyncio
+async def test_delete_exclusion_schedule_removes_selected_slot() -> None:
+    """Delete exclusion service should remove one matching slot."""
+    entity = _entity_with_cloud()
+    entity.coordinator.data["serial"].schedules["auto_schedule"]["settings"][
+        "exclusion_scheduler"
+    ]["days"][1]["slots"] = [
+        {"start_time": 540, "duration": 45, "reason": "generic"},
+        {"start_time": 720, "duration": 30, "reason": "irrigation"},
+    ]
+
+    await entity._async_service_delete_exclusion_schedule(
+        day="monday",
+        start="12:00",
+    )
+
+    entity.coordinator.cloud.set_auto_schedule_exclusion_slots.assert_awaited_once_with(
+        "serial",
+        1,
+        [{"start_time": 540, "duration": 45, "reason": "generic"}],
+    )
+
+
+@pytest.mark.asyncio
+async def test_delete_exclusion_schedule_requires_start_when_day_has_multiple() -> None:
+    """Delete exclusion service should ask for a start time on ambiguous days."""
+    entity = _entity_with_cloud()
+    entity.coordinator.data["serial"].schedules["auto_schedule"]["settings"][
+        "exclusion_scheduler"
+    ]["days"][1]["slots"] = [
+        {"start_time": 540, "duration": 45, "reason": "generic"},
+        {"start_time": 720, "duration": 30, "reason": "irrigation"},
+    ]
+
+    with pytest.raises(HomeAssistantError, match="Select a start time"):
+        await entity._async_service_delete_exclusion_schedule(day="monday")
+
+
+@pytest.mark.asyncio
 async def test_async_setup_entry_registers_schedule_services(monkeypatch) -> None:
     """Setup should register OTS and schedule services on the mower platform."""
     registrations: list[tuple[str, str]] = []
@@ -797,4 +984,10 @@ async def test_async_setup_entry_registers_schedule_services(monkeypatch) -> Non
         (SERVICE_ADD_SCHEDULE, "_async_service_add_schedule"),
         (SERVICE_EDIT_SCHEDULE, "_async_service_edit_schedule"),
         (SERVICE_DELETE_SCHEDULE, "_async_service_delete_schedule"),
+        (SERVICE_SET_NUTRITION, "_async_service_set_nutrition"),
+        (SERVICE_CLEAR_NUTRITION, "_async_service_clear_nutrition"),
+        (SERVICE_SET_EXCLUSION_DAY, "_async_service_set_exclusion_day"),
+        (SERVICE_ADD_EXCLUSION_SCHEDULE, "_async_service_add_exclusion_schedule"),
+        (SERVICE_EDIT_EXCLUSION_SCHEDULE, "_async_service_edit_exclusion_schedule"),
+        (SERVICE_DELETE_EXCLUSION_SCHEDULE, "_async_service_delete_exclusion_schedule"),
     ]

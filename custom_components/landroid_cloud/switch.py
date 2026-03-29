@@ -12,7 +12,7 @@ from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from pyworxcloud import DeviceCapability
 
 from .commands import async_run_cloud_command
-from .entity import LandroidBaseEntity
+from .entity import LandroidBaseEntity, auto_schedule, auto_schedule_settings
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -20,9 +20,17 @@ class LandroidSwitchDescription(SwitchEntityDescription):
     """Description for Landroid switches."""
 
     capability: DeviceCapability | None = None
+    requires_auto_schedule: bool = False
 
 
 SWITCHES: tuple[LandroidSwitchDescription, ...] = (
+    LandroidSwitchDescription(
+        key="auto_schedule",
+        translation_key="auto_schedule",
+        icon="mdi:calendar-sync",
+        entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
+    ),
     LandroidSwitchDescription(
         key="party_mode",
         translation_key="party_mode",
@@ -30,6 +38,22 @@ SWITCHES: tuple[LandroidSwitchDescription, ...] = (
         entity_category=EntityCategory.CONFIG,
         entity_registry_enabled_default=False,
         capability=DeviceCapability.PARTY_MODE,
+    ),
+    LandroidSwitchDescription(
+        key="irrigation",
+        translation_key="auto_schedule_irrigation",
+        icon="mdi:sprinkler-variant",
+        entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
+        requires_auto_schedule=True,
+    ),
+    LandroidSwitchDescription(
+        key="exclude_nights",
+        translation_key="auto_schedule_exclude_nights",
+        icon="mdi:weather-night",
+        entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
+        requires_auto_schedule=True,
     ),
     LandroidSwitchDescription(
         key="lock",
@@ -106,6 +130,7 @@ class LandroidSwitch(LandroidBaseEntity, SwitchEntity):
     ) -> None:
         """Initialize switch entity."""
         self.entity_description = description
+        self._attr_requires_auto_schedule = description.requires_auto_schedule
         super().__init__(
             coordinator, config_entry, serial_number, self.entity_description.key
         )
@@ -114,8 +139,19 @@ class LandroidSwitch(LandroidBaseEntity, SwitchEntity):
     def is_on(self) -> bool | None:
         """Return true if switch is on."""
         key = self.entity_description.key
+        if key == "auto_schedule":
+            return bool(auto_schedule(self.device).get("enabled", False))
         if key == "party_mode":
             return bool(self.device.schedules.get("party_mode_enabled", False))
+        if key == "irrigation":
+            value = auto_schedule_settings(self.device).get("irrigation")
+            return None if value is None else bool(value)
+        if key == "exclude_nights":
+            exclusion = auto_schedule_settings(self.device).get("exclusion_scheduler")
+            if not isinstance(exclusion, dict):
+                return None
+            value = exclusion.get("exclude_nights")
+            return None if value is None else bool(value)
         if key == "lock":
             locked = getattr(self.device, "locked", None)
             return None if locked is None else bool(locked)
@@ -143,9 +179,27 @@ class LandroidSwitch(LandroidBaseEntity, SwitchEntity):
         """Apply the selected switch state in the cloud API."""
         serial_number = str(self.device.serial_number)
 
-        if self.entity_description.key == "party_mode":
+        if self.entity_description.key == "auto_schedule":
+            await async_run_cloud_command(
+                lambda: self.coordinator.cloud.toggle_auto_schedule(
+                    serial_number, state
+                )
+            )
+        elif self.entity_description.key == "party_mode":
             await async_run_cloud_command(
                 lambda: self.coordinator.cloud.set_partymode(serial_number, state)
+            )
+        elif self.entity_description.key == "irrigation":
+            await async_run_cloud_command(
+                lambda: self.coordinator.cloud.set_auto_schedule_irrigation(
+                    serial_number, state
+                )
+            )
+        elif self.entity_description.key == "exclude_nights":
+            await async_run_cloud_command(
+                lambda: self.coordinator.cloud.set_auto_schedule_exclude_nights(
+                    serial_number, state
+                )
             )
         elif self.entity_description.key == "lock":
             await async_run_cloud_command(

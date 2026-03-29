@@ -137,6 +137,108 @@
           "description": "Brug denne hvis den valgte dag har mere end én tidsplan, og du skal vælge den rigtige via starttid."
         }
       }
+    },
+    "set_nutrition": {
+      "name": "Sæt næring",
+      "description": "Sæt næringsværdier for auto-tidsplan.",
+      "fields": {
+        "n": {
+          "name": "Nitrogen (N)",
+          "description": "Nitrogenværdi for auto-tidsplanens næring."
+        },
+        "p": {
+          "name": "Fosfor (P)",
+          "description": "Fosforværdi for auto-tidsplanens næring."
+        },
+        "k": {
+          "name": "Kalium (K)",
+          "description": "Kaliumværdi for auto-tidsplanens næring."
+        }
+      }
+    },
+    "clear_nutrition": {
+      "name": "Ryd næring",
+      "description": "Ryd næringsværdier for auto-tidsplan."
+    },
+    "set_exclusion_day": {
+      "name": "Sæt eksklusionsdag",
+      "description": "Ekskludér eller inkludér en ugedag i auto-tidsplan.",
+      "fields": {
+        "day": {
+          "name": "Dag",
+          "description": "Dag der skal opdateres i eksklusionsplanen."
+        },
+        "exclude_day": {
+          "name": "Ekskludér dag",
+          "description": "Om den valgte dag skal ekskluderes helt."
+        }
+      }
+    },
+    "add_exclusion_schedule": {
+      "name": "Tilføj eksklusionsplan",
+      "description": "Tilføj en eksklusionspost til auto-tidsplan.",
+      "fields": {
+        "day": {
+          "name": "Dag",
+          "description": "Ugedag for den nye eksklusionspost."
+        },
+        "start": {
+          "name": "Start",
+          "description": "Starttid i formatet TT:MM."
+        },
+        "duration": {
+          "name": "Varighed",
+          "description": "Varighed i minutter."
+        },
+        "reason": {
+          "name": "Årsag",
+          "description": "Årsag til eksklusionsposten."
+        }
+      }
+    },
+    "edit_exclusion_schedule": {
+      "name": "Redigér eksklusionsplan",
+      "description": "Erstat en eksisterende eksklusionspost i auto-tidsplan.",
+      "fields": {
+        "current_day": {
+          "name": "Nuværende dag",
+          "description": "Dag for den eksklusionspost du vil ændre."
+        },
+        "current_start": {
+          "name": "Nuværende start",
+          "description": "Starttid for den eksklusionspost du vil ændre."
+        },
+        "day": {
+          "name": "Dag",
+          "description": "Ny ugedag for eksklusionsposten."
+        },
+        "start": {
+          "name": "Start",
+          "description": "Ny starttid i formatet TT:MM."
+        },
+        "duration": {
+          "name": "Varighed",
+          "description": "Ny varighed i minutter."
+        },
+        "reason": {
+          "name": "Årsag",
+          "description": "Årsag til eksklusionsposten."
+        }
+      }
+    },
+    "delete_exclusion_schedule": {
+      "name": "Slet eksklusionsplan",
+      "description": "Slet en eksklusionspost fra auto-tidsplan.",
+      "fields": {
+        "day": {
+          "name": "Dag",
+          "description": "Dag for den eksklusionspost du vil slette."
+        },
+        "start": {
+          "name": "Start",
+          "description": "Brug denne hvis den valgte dag har mere end én eksklusionspost, og du skal vælge den rigtige via starttid."
+        }
+      }
     }
   },
   "device_automation": {
@@ -278,6 +380,12 @@
       },
       "yaw": {
         "name": "Yaw"
+      },
+      "auto_schedule_nutrition": {
+        "name": "Auto-tidsplan: Næring"
+      },
+      "auto_schedule_exclusion_schedules": {
+        "name": "Auto-tidsplan: Eksklusionsplaner"
       }
     },
     "binary_sensor": {
@@ -300,6 +408,15 @@
       },
       "acs": {
         "name": "ACS"
+      },
+      "auto_schedule": {
+        "name": "Auto-tidsplan"
+      },
+      "auto_schedule_irrigation": {
+        "name": "Auto-tidsplan: Vanding"
+      },
+      "auto_schedule_exclude_nights": {
+        "name": "Auto-tidsplan: Udeluk nætter"
       },
       "party_mode": {
         "name": "Pause tilstand"
@@ -328,11 +445,45 @@
       },
       "torque": {
         "name": "Moment"
+      },
+      "lawn_size": {
+        "name": "Plænestørrelse"
+      },
+      "lawn_perimeter": {
+        "name": "Plæneomkreds"
       }
     },
     "select": {
       "zone": {
         "name": "Område"
+      },
+      "auto_schedule_boost": {
+        "name": "Auto-tidsplan: Boost",
+        "state": {
+          "0": "0",
+          "1": "1",
+          "2": "2"
+        }
+      },
+      "auto_schedule_grass_type": {
+        "name": "Auto-tidsplan: Græstype",
+        "state": {
+          "mixed_species": "Mixed species",
+          "festuca_arundinacea": "Tall fescue",
+          "lolium_perenne": "Perennial ryegrass",
+          "poa_pratensis": "Kentucky bluegrass",
+          "festuca_rubra": "Red fescue",
+          "agrostis_stolonifera": "Creeping bentgrass"
+        }
+      },
+      "auto_schedule_soil_type": {
+        "name": "Auto-tidsplan: Jordtype",
+        "state": {
+          "clay": "Ler",
+          "silt": "Silt",
+          "sand": "Sand",
+          "ignore": "Ukendt"
+        }
       }
     },
     "lawn_mower": {

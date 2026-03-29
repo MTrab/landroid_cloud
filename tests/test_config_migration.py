@@ -97,7 +97,9 @@ async def test_async_migrate_entry_moves_legacy_type_to_cloud_and_unique_id() ->
 
 
 @pytest.mark.asyncio
-async def test_async_migrate_entry_defaults_cloud_and_skips_unique_id_conflict() -> None:
+async def test_async_migrate_entry_defaults_cloud_and_skips_unique_id_conflict() -> (
+    None
+):
     """Migration should fall back to Worx and avoid unique id clashes."""
     entry = _make_config_entry(
         entry_id="entry-1",

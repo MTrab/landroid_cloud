@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
-from homeassistant.components.select import SelectEntity
+from dataclasses import dataclass
+from typing import Final
+
+from homeassistant.components.select import SelectEntity, SelectEntityDescription
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
@@ -10,7 +13,18 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
 from .commands import async_run_cloud_command
-from .entity import LandroidBaseEntity
+from .entity import LandroidBaseEntity, auto_schedule_settings
+
+AUTO_SCHEDULE_BOOST_OPTIONS: Final = ("0", "1", "2")
+AUTO_SCHEDULE_GRASS_TYPE_OPTIONS: Final = (
+    "mixed_species",
+    "festuca_arundinacea",
+    "lolium_perenne",
+    "poa_pratensis",
+    "festuca_rubra",
+    "agrostis_stolonifera",
+)
+AUTO_SCHEDULE_SOIL_TYPE_OPTIONS: Final = ("clay", "silt", "sand", "ignore")
 
 
 def _configured_legacy_zone_options(device) -> list[str]:
@@ -68,6 +82,49 @@ def _current_zone_option(device) -> str | None:
     return None
 
 
+def _auto_schedule_setting_option(device, key: str) -> str | None:
+    """Return one auto-schedule setting as a string option."""
+    value = auto_schedule_settings(device).get(key)
+    if value is None:
+        return None
+    return str(value)
+
+
+@dataclass(frozen=True, kw_only=True)
+class LandroidSelectDescription(SelectEntityDescription):
+    """Description for auto-schedule selects."""
+
+    options: tuple[str, ...]
+
+
+AUTO_SCHEDULE_SELECTS: Final[tuple[LandroidSelectDescription, ...]] = (
+    LandroidSelectDescription(
+        key="auto_schedule_boost",
+        translation_key="auto_schedule_boost",
+        options=AUTO_SCHEDULE_BOOST_OPTIONS,
+        entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
+        icon="mdi:speedometer",
+    ),
+    LandroidSelectDescription(
+        key="auto_schedule_grass_type",
+        translation_key="auto_schedule_grass_type",
+        options=AUTO_SCHEDULE_GRASS_TYPE_OPTIONS,
+        entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
+        icon="mdi:grass",
+    ),
+    LandroidSelectDescription(
+        key="auto_schedule_soil_type",
+        translation_key="auto_schedule_soil_type",
+        options=AUTO_SCHEDULE_SOIL_TYPE_OPTIONS,
+        entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
+        icon="mdi:shovel",
+    ),
+)
+
+
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: ConfigEntry,
@@ -75,14 +132,27 @@ async def async_setup_entry(
 ) -> None:
     """Set up Landroid Cloud select entities."""
     coordinator = entry.runtime_data.coordinator
-    async_add_entities(
-        LandroidZoneSelect(
-            coordinator=coordinator,
-            config_entry=entry,
-            serial_number=serial_number,
+    entities: list[SelectEntity] = []
+
+    for serial_number in coordinator.data:
+        entities.append(
+            LandroidZoneSelect(
+                coordinator=coordinator,
+                config_entry=entry,
+                serial_number=serial_number,
+            )
         )
-        for serial_number in coordinator.data
-    )
+        entities.extend(
+            LandroidAutoScheduleSelect(
+                coordinator=coordinator,
+                config_entry=entry,
+                serial_number=serial_number,
+                description=description,
+            )
+            for description in AUTO_SCHEDULE_SELECTS
+        )
+
+    async_add_entities(entities)
 
 
 class LandroidZoneSelect(LandroidBaseEntity, SelectEntity):
@@ -123,3 +193,67 @@ class LandroidZoneSelect(LandroidBaseEntity, SelectEntity):
         await async_run_cloud_command(
             lambda: self.coordinator.cloud.setzone(serial_number, zone)
         )
+
+
+class LandroidAutoScheduleSelect(LandroidBaseEntity, SelectEntity):
+    """Representation of one auto-schedule select."""
+
+    entity_description: LandroidSelectDescription
+    _attr_requires_online = True
+    _attr_requires_auto_schedule = True
+
+    def __init__(
+        self,
+        coordinator,
+        config_entry,
+        serial_number: str,
+        description: LandroidSelectDescription,
+    ) -> None:
+        """Initialize auto-schedule select entity."""
+        self.entity_description = description
+        super().__init__(
+            coordinator, config_entry, serial_number, self.entity_description.key
+        )
+
+    @property
+    def options(self) -> list[str]:
+        """Return valid options from pyworxcloud."""
+        return list(self.entity_description.options)
+
+    @property
+    def current_option(self) -> str | None:
+        """Return the current selected option."""
+        key = self.entity_description.key
+        if key == "auto_schedule_boost":
+            return _auto_schedule_setting_option(self.device, "boost")
+        if key == "auto_schedule_grass_type":
+            return _auto_schedule_setting_option(self.device, "grass_type")
+        if key == "auto_schedule_soil_type":
+            return _auto_schedule_setting_option(self.device, "soil_type")
+        return None
+
+    async def async_select_option(self, option: str) -> None:
+        """Apply the selected option."""
+        serial_number = str(self.device.serial_number)
+
+        if option not in self.entity_description.options:
+            raise HomeAssistantError(f"Invalid option: {option}")
+
+        if self.entity_description.key == "auto_schedule_boost":
+            await async_run_cloud_command(
+                lambda: self.coordinator.cloud.set_auto_schedule_boost(
+                    serial_number, int(option)
+                )
+            )
+        elif self.entity_description.key == "auto_schedule_grass_type":
+            await async_run_cloud_command(
+                lambda: self.coordinator.cloud.set_auto_schedule_grass_type(
+                    serial_number, option
+                )
+            )
+        elif self.entity_description.key == "auto_schedule_soil_type":
+            await async_run_cloud_command(
+                lambda: self.coordinator.cloud.set_auto_schedule_soil_type(
+                    serial_number, option
+                )
+            )

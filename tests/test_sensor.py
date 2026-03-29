@@ -21,8 +21,12 @@ from custom_components.landroid_cloud.sensor import (
     _daily_progress_value,
     _last_update_value,
     _next_schedule_value,
+    _nutrition_attributes,
+    _nutrition_value,
     _normalized_schedule_attributes,
     _orientation_value,
+    _exclusion_schedule_attributes,
+    _exclusion_schedule_value,
     _rain_delay_remaining_value,
     _schedule_attributes,
     _schedule_attributes_with_normalized_schedule,
@@ -167,9 +171,8 @@ def test_schedule_attributes_expose_known_schedule_fields() -> None:
         "active": True,
         "time_extension": 10,
         "slots": [{"day": "mon", "start": "10:00", "end": "11:00"}],
-        "pause_mode_enabled": False,
+        "party_mode_enabled": False,
         "one_time_schedule": True,
-        "auto_schedule": {"enabled": True, "settings": {"boost": 1}},
         "daily_progress": 75,
         "next_schedule_start": "2026-03-12 10:30:00+01:00",
         "ignored": "value",
@@ -180,11 +183,95 @@ def test_schedule_attributes_expose_known_schedule_fields() -> None:
         "active": True,
         "time_extension": 10,
         "slots": [{"day": "mon", "start": "10:00", "end": "11:00"}],
-        "pause_mode_enabled": False,
+        "party_mode_enabled": False,
         "one_time_schedule": True,
-        "auto_schedule": {"enabled": True, "settings": {"boost": 1}},
         "daily_progress": 75,
     }
+
+
+def test_nutrition_value_is_exposed_as_npk_string() -> None:
+    """Nutrition sensor should expose the normalized N/P/K format."""
+    device = SimpleNamespace(
+        schedules={
+            "auto_schedule": {
+                "enabled": True,
+                "settings": {"nutrition": {"n": 10, "p": 20, "k": 5}},
+            }
+        }
+    )
+
+    assert _nutrition_value(device) == "N:10 P:20 K:5"
+    assert _nutrition_attributes(device) == {"n": 10, "p": 20, "k": 5}
+
+
+def test_exclusion_schedule_attributes_include_days_and_slots() -> None:
+    """Exclusion schedule sensor should expose the normalized weekly structure."""
+    days = [{"exclude_day": False, "slots": []} for _ in range(7)]
+    days[1] = {
+        "exclude_day": True,
+        "slots": [{"start_time": 360, "duration": 45, "reason": "generic"}],
+    }
+    days[4] = {
+        "exclude_day": False,
+        "slots": [{"start_time": 900, "duration": 60, "reason": "irrigation"}],
+    }
+    device = SimpleNamespace(
+        schedules={
+            "auto_schedule": {
+                "enabled": True,
+                "settings": {
+                    "exclusion_scheduler": {
+                        "exclude_nights": True,
+                        "days": days,
+                    }
+                },
+            }
+        }
+    )
+
+    assert _exclusion_schedule_value(device) == 3
+    assert _exclusion_schedule_attributes(device) == {
+        "enabled": True,
+        "exclude_nights": True,
+        "days": [
+            {"day_index": 0, "day": "sunday", "exclude_day": False, "slots": []},
+            {
+                "day_index": 1,
+                "day": "monday",
+                "exclude_day": True,
+                "slots": [{"start_time": 360, "duration": 45, "reason": "generic"}],
+            },
+            {"day_index": 2, "day": "tuesday", "exclude_day": False, "slots": []},
+            {"day_index": 3, "day": "wednesday", "exclude_day": False, "slots": []},
+            {
+                "day_index": 4,
+                "day": "thursday",
+                "exclude_day": False,
+                "slots": [{"start_time": 900, "duration": 60, "reason": "irrigation"}],
+            },
+            {"day_index": 5, "day": "friday", "exclude_day": False, "slots": []},
+            {"day_index": 6, "day": "saturday", "exclude_day": False, "slots": []},
+        ],
+    }
+
+
+def test_exclusion_schedule_value_ignores_exclude_nights_only() -> None:
+    """Exclude nights alone should not count as an exclusion schedule entry."""
+    device = SimpleNamespace(
+        schedules={
+            "auto_schedule": {
+                "enabled": True,
+                "settings": {
+                    "exclusion_scheduler": {
+                        "exclude_nights": True,
+                        "days": [{"exclude_day": False, "slots": []} for _ in range(7)],
+                    }
+                },
+            }
+        }
+    )
+
+    assert _exclusion_schedule_value(device) == 0
 
 
 def test_normalized_schedule_attributes_include_entry_metadata() -> None:
@@ -344,9 +431,7 @@ def test_next_schedule_returns_none_when_no_valid_slots_exist(monkeypatch) -> No
                     "duration_extended": 0,
                 }
             ],
-            "next_schedule_start": datetime(
-                2026, 3, 12, 11, 0, tzinfo=ZoneInfo("UTC")
-            ),
+            "next_schedule_start": datetime(2026, 3, 12, 11, 0, tzinfo=ZoneInfo("UTC")),
         },
     )
 
@@ -433,7 +518,9 @@ def test_rain_delay_remaining_sensor_is_unavailable_when_zero() -> None:
     """Rain delay remaining sensor should be unavailable when delay is inactive."""
     entity = object.__new__(LandroidSensor)
     entity.entity_description = next(
-        description for description in SENSORS if description.key == "rain_delay_remaining"
+        description
+        for description in SENSORS
+        if description.key == "rain_delay_remaining"
     )
     entity.coordinator = SimpleNamespace(
         last_update_success=True,

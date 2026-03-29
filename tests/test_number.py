@@ -6,6 +6,7 @@ from homeassistant.helpers.entity import EntityCategory
 
 from custom_components.landroid_cloud.number import (
     NUMBERS,
+    _lawn_value,
     _rain_delay_value,
     _torque_value,
     _time_extension_value,
@@ -46,6 +47,14 @@ def test_torque_value_is_exposed_without_decimals() -> None:
     assert value == -13
 
 
+def test_lawn_values_are_exposed_without_decimals() -> None:
+    """Lawn size and perimeter should be represented as integer values."""
+    device = SimpleNamespace(lawn={"size": 250, "perimeter": 115})
+
+    assert _lawn_value(device, "size") == 250
+    assert _lawn_value(device, "perimeter") == 115
+
+
 def test_time_extension_is_configuration_entity() -> None:
     """Time extension should be exposed as a configuration number."""
     description = next(
@@ -71,3 +80,26 @@ def test_torque_is_configuration_entity() -> None:
     assert description.native_step == 1
     assert description.native_unit_of_measurement == "%"
     assert description.icon == "mdi:gauge"
+
+
+def test_lawn_numbers_are_configuration_entities() -> None:
+    """Lawn size and perimeter should be exposed as disabled configuration numbers."""
+    descriptions = {description.key: description for description in NUMBERS}
+
+    lawn_size = descriptions["lawn_size"]
+    assert lawn_size.entity_category is EntityCategory.CONFIG
+    assert lawn_size.entity_registry_enabled_default is False
+    assert lawn_size.native_min_value == 0
+    assert lawn_size.native_max_value == 100000
+    assert lawn_size.native_step == 1
+    assert lawn_size.native_unit_of_measurement == "m²"
+    assert lawn_size.icon == "mdi:texture-box"
+
+    lawn_perimeter = descriptions["lawn_perimeter"]
+    assert lawn_perimeter.entity_category is EntityCategory.CONFIG
+    assert lawn_perimeter.entity_registry_enabled_default is False
+    assert lawn_perimeter.native_min_value == 0
+    assert lawn_perimeter.native_max_value == 100000
+    assert lawn_perimeter.native_step == 1
+    assert lawn_perimeter.native_unit_of_measurement == "m"
+    assert lawn_perimeter.icon == "mdi:ruler-square"
