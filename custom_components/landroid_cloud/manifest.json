@@ -9,7 +9,7 @@
     "issue_tracker": "https://github.com/MTrab/landroid_cloud/issues",
     "loggers": ["pyworxcloud"],
     "requirements": [
-        "pyworxcloud@git+https://github.com/mtrab/pyworxcloud.git@master"
+        "pyworxcloud==6.2.0"
     ],
     "version": "7.0.0b3"
 }
