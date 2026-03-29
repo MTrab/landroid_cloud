@@ -15,7 +15,9 @@ def test_removed_buttons_are_not_exposed() -> None:
 def test_reset_buttons_are_configuration_entities() -> None:
     """Reset buttons should be categorized as configuration entities."""
     reset_keys = {"reset_blade_time", "reset_battery_cycles"}
-    reset_buttons = [description for description in BUTTONS if description.key in reset_keys]
+    reset_buttons = [
+        description for description in BUTTONS if description.key in reset_keys
+    ]
 
     assert len(reset_buttons) == 2
     assert all(
@@ -26,6 +28,8 @@ def test_reset_buttons_are_configuration_entities() -> None:
 
 def test_edge_cut_is_disabled_by_default() -> None:
     """Edge cut should be disabled by default."""
-    edge_cut = next(description for description in BUTTONS if description.key == "edge_cut")
+    edge_cut = next(
+        description for description in BUTTONS if description.key == "edge_cut"
+    )
 
     assert edge_cut.entity_registry_enabled_default is False

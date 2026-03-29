@@ -2,7 +2,10 @@
 
 from types import SimpleNamespace
 
-from custom_components.landroid_cloud.entity import LandroidBaseEntity, _firmware_version
+from custom_components.landroid_cloud.entity import (
+    LandroidBaseEntity,
+    _firmware_version,
+)
 
 
 def test_firmware_version_from_dict() -> None:

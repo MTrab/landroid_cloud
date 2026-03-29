@@ -42,6 +42,7 @@ class LandroidBaseEntity(CoordinatorEntity[LandroidCloudCoordinator]):
 
     _attr_has_entity_name = True
     _attr_requires_online = False
+    _attr_requires_auto_schedule = False
 
     def __init__(
         self,
@@ -68,6 +69,8 @@ class LandroidBaseEntity(CoordinatorEntity[LandroidCloudCoordinator]):
             return False
         if self._serial_number not in self.coordinator.data:
             return False
+        if self._attr_requires_auto_schedule and not auto_schedule_enabled(self.device):
+            return False
         if self._attr_requires_online:
             return bool(getattr(self.device, "online", False))
         return True
@@ -93,3 +96,23 @@ class LandroidBaseEntity(CoordinatorEntity[LandroidCloudCoordinator]):
             info["connections"] = {(CONNECTION_NETWORK_MAC, mac_address)}
 
         return DeviceInfo(**info)
+
+
+def auto_schedule(device: DeviceHandler) -> dict:
+    """Return the normalized auto-schedule block when available."""
+    schedules = getattr(device, "schedules", None)
+    if not isinstance(schedules, dict):
+        return {}
+    value = schedules.get("auto_schedule")
+    return value if isinstance(value, dict) else {}
+
+
+def auto_schedule_settings(device: DeviceHandler) -> dict:
+    """Return normalized auto-schedule settings when available."""
+    value = auto_schedule(device).get("settings")
+    return value if isinstance(value, dict) else {}
+
+
+def auto_schedule_enabled(device: DeviceHandler) -> bool:
+    """Return whether auto-schedule is enabled for the device."""
+    return bool(auto_schedule(device).get("enabled", False))

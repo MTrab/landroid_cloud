@@ -26,6 +26,7 @@ from .const import (
     MOWER_STATE_EDGECUT,
     MOWER_STATE_ESCAPED_DIGITAL_FENCE,
     MOWER_STATE_IDLE,
+    MOWER_STATE_RAIN_DELAY,
     MOWER_STATE_SEARCHING_ZONE,
     MOWER_STATE_STARTING,
     MOWER_STATE_ZONING,
@@ -42,6 +43,7 @@ TRIGGER_STATE_MAP: Final[dict[str, str]] = {
     "zoning": MOWER_STATE_ZONING,
     "searching_zone": MOWER_STATE_SEARCHING_ZONE,
     "idle": MOWER_STATE_IDLE,
+    "rain_delayed": MOWER_STATE_RAIN_DELAY,
     "escaped_digital_fence": MOWER_STATE_ESCAPED_DIGITAL_FENCE,
 }
 

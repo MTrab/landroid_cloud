@@ -60,10 +60,11 @@ async def test_get_actions_returns_supported_mower_actions(monkeypatch) -> None:
     )
     monkeypatch.setattr(
         "custom_components.landroid_cloud.device_action.get_supported_features",
-        lambda hass, entity_id: LawnMowerEntityFeature.START_MOWING
-        | LawnMowerEntityFeature.DOCK
-        if entity_id == mower_entry.entity_id
-        else LawnMowerEntityFeature(0),
+        lambda hass, entity_id: (
+            LawnMowerEntityFeature.START_MOWING | LawnMowerEntityFeature.DOCK
+            if entity_id == mower_entry.entity_id
+            else LawnMowerEntityFeature(0)
+        ),
     )
 
     actions = await async_get_actions(SimpleNamespace(), "device-123")
@@ -95,9 +96,9 @@ async def test_validate_action_config_resolves_registry_entry(monkeypatch) -> No
     )
     monkeypatch.setattr(
         "custom_components.landroid_cloud.device_action.er.async_resolve_entity_id",
-        lambda registry, entity_id: "lawn_mower.front_yard"
-        if entity_id == registry_entry_id
-        else entity_id,
+        lambda registry, entity_id: (
+            "lawn_mower.front_yard" if entity_id == registry_entry_id else entity_id
+        ),
     )
 
     validated = await async_validate_action_config(

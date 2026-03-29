@@ -10,7 +10,7 @@ from homeassistant.components.number import (
     NumberMode,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import EntityCategory
+from homeassistant.const import EntityCategory, UnitOfArea, UnitOfLength
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from pyworxcloud import DeviceCapability
@@ -42,6 +42,12 @@ def _time_extension_value(device) -> int | None:
 def _torque_value(device) -> int | None:
     """Return torque as an integer percentage when available."""
     value = getattr(device, "torque", None)
+    return None if value is None else int(value)
+
+
+def _lawn_value(device, key: str) -> int | None:
+    """Return one lawn parameter as an integer when available."""
+    value = getattr(device, "lawn", {}).get(key)
     return None if value is None else int(value)
 
 
@@ -94,6 +100,30 @@ NUMBERS: tuple[LandroidNumberDescription, ...] = (
         mode=NumberMode.SLIDER,
         icon="mdi:gauge",
         capability=DeviceCapability.TORQUE,
+    ),
+    LandroidNumberDescription(
+        key="lawn_size",
+        translation_key="lawn_size",
+        entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
+        native_min_value=0,
+        native_max_value=100000,
+        native_step=1,
+        native_unit_of_measurement=UnitOfArea.SQUARE_METERS,
+        mode=NumberMode.BOX,
+        icon="mdi:texture-box",
+    ),
+    LandroidNumberDescription(
+        key="lawn_perimeter",
+        translation_key="lawn_perimeter",
+        entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
+        native_min_value=0,
+        native_max_value=100000,
+        native_step=1,
+        native_unit_of_measurement=UnitOfLength.METERS,
+        mode=NumberMode.BOX,
+        icon="mdi:ruler-square",
     ),
 )
 
@@ -165,6 +195,12 @@ class LandroidNumber(LandroidBaseEntity, NumberEntity):
         if self.entity_description.key == "torque":
             return _torque_value(self.device)
 
+        if self.entity_description.key == "lawn_size":
+            return _lawn_value(self.device, "size")
+
+        if self.entity_description.key == "lawn_perimeter":
+            return _lawn_value(self.device, "perimeter")
+
         return None
 
     async def async_set_native_value(self, value: float) -> None:
@@ -190,4 +226,14 @@ class LandroidNumber(LandroidBaseEntity, NumberEntity):
         elif self.entity_description.key == "torque":
             await async_run_cloud_command(
                 lambda: self.coordinator.cloud.set_torque(serial_number, int(value))
+            )
+        elif self.entity_description.key == "lawn_size":
+            await async_run_cloud_command(
+                lambda: self.coordinator.cloud.set_lawn_size(serial_number, int(value))
+            )
+        elif self.entity_description.key == "lawn_perimeter":
+            await async_run_cloud_command(
+                lambda: self.coordinator.cloud.set_lawn_perimeter(
+                    serial_number, int(value)
+                )
             )
