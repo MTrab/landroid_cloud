@@ -222,7 +222,7 @@
           "searching_zone": "Vyhledávání zóny",
           "starting": "Začínání",
           "zoning": "Učení zóny",
-          "rain_delayed": "Rain delay"
+          "rain_delayed": "Dešťové zpoždění"
         }
       }
     }
@@ -244,7 +244,7 @@
       "is_searching_zone": "{entity_name} hledá zónu",
       "is_idle": "{entity_name} je nečinný",
       "is_escaped_digital_fence": "{entity_name} je mimo virtuální plot",
-      "is_rain_delayed": "{entity_name} is in rain delay"
+      "is_rain_delayed": "{entity_name} je v dešťovém zpoždění"
     },
     "trigger_type": {
       "mowing": "{entity_name} začal sekat",
@@ -257,7 +257,7 @@
       "searching_zone": "{entity_name} začal hledat zónu",
       "idle": "{entity_name} přešel do nečinného stavu",
       "escaped_digital_fence": "{entity_name} opustil virtuální plot",
-      "rain_delayed": "{entity_name} entered rain delay"
+      "rain_delayed": "{entity_name} přešel do dešťového zpoždění"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"

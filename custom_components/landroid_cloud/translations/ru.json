@@ -222,7 +222,7 @@
           "searching_zone": "Поиск зоны",
           "starting": "Запуск",
           "zoning": "Обучение зоне",
-          "rain_delayed": "Rain delay"
+          "rain_delayed": "Задержка из-за дождя"
         }
       }
     }
@@ -244,7 +244,7 @@
       "is_searching_zone": "{entity_name} ищет зону",
       "is_idle": "{entity_name} находится в ожидании",
       "is_escaped_digital_fence": "{entity_name} находится за пределами цифрового ограждения",
-      "is_rain_delayed": "{entity_name} is in rain delay"
+      "is_rain_delayed": "{entity_name} находится в режиме задержки из-за дождя"
     },
     "trigger_type": {
       "mowing": "{entity_name} начал косить",
@@ -257,7 +257,7 @@
       "searching_zone": "{entity_name} начал поиск зоны",
       "idle": "{entity_name} перешёл в режим ожидания",
       "escaped_digital_fence": "{entity_name} вышел за пределы цифрового ограждения",
-      "rain_delayed": "{entity_name} entered rain delay"
+      "rain_delayed": "{entity_name} перешла в режим задержки из-за дождя"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"

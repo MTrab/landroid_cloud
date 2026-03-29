@@ -222,7 +222,7 @@
           "searching_zone": "Buscando zona",
           "starting": "Iniciando",
           "zoning": "Aprendizaje de zonas",
-          "rain_delayed": "Rain delay"
+          "rain_delayed": "Retraso por lluvia"
         }
       }
     }
@@ -244,7 +244,7 @@
       "is_searching_zone": "{entity_name} está buscando una zona",
       "is_idle": "{entity_name} está inactivo",
       "is_escaped_digital_fence": "{entity_name} está fuera del cercado digital",
-      "is_rain_delayed": "{entity_name} is in rain delay"
+      "is_rain_delayed": "{entity_name} está en retraso por lluvia"
     },
     "trigger_type": {
       "mowing": "{entity_name} comenzó a cortar el césped",
@@ -257,7 +257,7 @@
       "searching_zone": "{entity_name} comenzó a buscar una zona",
       "idle": "{entity_name} quedó inactivo",
       "escaped_digital_fence": "{entity_name} salió del cercado digital",
-      "rain_delayed": "{entity_name} entered rain delay"
+      "rain_delayed": "{entity_name} entró en retraso por lluvia"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"

@@ -156,7 +156,7 @@
       "is_searching_zone": "{entity_name} søger efter en zone",
       "is_idle": "{entity_name} afventer",
       "is_escaped_digital_fence": "{entity_name} er uden for det digitale hegn",
-      "is_rain_delayed": "{entity_name} is in rain delay"
+      "is_rain_delayed": "{entity_name} er i regnforsinkelse"
     },
     "trigger_type": {
       "mowing": "{entity_name} begyndte at klippe",
@@ -169,7 +169,7 @@
       "searching_zone": "{entity_name} begyndte at søge efter en zone",
       "idle": "{entity_name} gik i ventetilstand",
       "escaped_digital_fence": "{entity_name} kom uden for det digitale hegn",
-      "rain_delayed": "{entity_name} entered rain delay"
+      "rain_delayed": "{entity_name} gik i regnforsinkelse"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"
@@ -344,7 +344,7 @@
           "searching_zone": "Søger efter zone",
           "starting": "Starter",
           "zoning": "Zone-træning",
-          "rain_delayed": "Rain delay"
+          "rain_delayed": "Regnforsinkelse"
         }
       }
     }

@@ -222,7 +222,7 @@
           "searching_zone": "Zone wird gesucht",
           "starting": "Startet",
           "zoning": "Zonentraining",
-          "rain_delayed": "Rain delay"
+          "rain_delayed": "Regenverzögerung"
         }
       }
     }
@@ -244,7 +244,7 @@
       "is_searching_zone": "{entity_name} sucht nach einer Zone",
       "is_idle": "{entity_name} ist untätig",
       "is_escaped_digital_fence": "{entity_name} ist außerhalb der digitalen Begrenzung",
-      "is_rain_delayed": "{entity_name} is in rain delay"
+      "is_rain_delayed": "{entity_name} ist in Regenverzögerung"
     },
     "trigger_type": {
       "mowing": "{entity_name} hat mit dem Mähen begonnen",
@@ -257,7 +257,7 @@
       "searching_zone": "{entity_name} hat mit der Zonensuche begonnen",
       "idle": "{entity_name} wurde untätig",
       "escaped_digital_fence": "{entity_name} hat die digitale Begrenzung verlassen",
-      "rain_delayed": "{entity_name} entered rain delay"
+      "rain_delayed": "{entity_name} wechselte in die Regenverzögerung"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"

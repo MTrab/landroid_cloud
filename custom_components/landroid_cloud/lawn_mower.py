@@ -108,7 +108,12 @@ class LandroidCloudMowerEntity(LandroidBaseEntity, LawnMowerEntity):
     @property
     def activity(self) -> str | None:
         """Return current mower activity."""
-        if self.device.raindelay_active:
+        rain_remaining = getattr(
+            getattr(self.device, "rainsensor", {}), "get", lambda *_: None
+        )("remaining")
+        if self.device.raindelay_active or (
+            isinstance(rain_remaining, int) and rain_remaining > 0
+        ):
             return MOWER_STATE_RAIN_DELAY
 
         status_id = int(getattr(self.device.status, "id", -1))

@@ -222,7 +222,7 @@
           "searching_zone": "Tsooni otsimine",
           "starting": "Käivitamine",
           "zoning": "Tsooni treening",
-          "rain_delayed": "Rain delay"
+          "rain_delayed": "Vihma viivitus"
         }
       }
     }
@@ -244,7 +244,7 @@
       "is_searching_zone": "{entity_name} otsib tsooni",
       "is_idle": "{entity_name} on ootel",
       "is_escaped_digital_fence": "{entity_name} on digitaalsest piirdest väljas",
-      "is_rain_delayed": "{entity_name} is in rain delay"
+      "is_rain_delayed": "{entity_name} on vihma viivituses"
     },
     "trigger_type": {
       "mowing": "{entity_name} alustas niitmist",
@@ -257,7 +257,7 @@
       "searching_zone": "{entity_name} alustas tsooni otsimist",
       "idle": "{entity_name} läks ootele",
       "escaped_digital_fence": "{entity_name} väljus digitaalsest piirdest",
-      "rain_delayed": "{entity_name} entered rain delay"
+      "rain_delayed": "{entity_name} läks vihma viivituse olekusse"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"
