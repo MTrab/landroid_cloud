@@ -10,7 +10,9 @@ from homeassistant.exceptions import HomeAssistantError
 from pyworxcloud import ScheduleEntry, ScheduleModel
 from pyworxcloud.day_map import DAY_MAP
 from pyworxcloud.exceptions import NoOneTimeScheduleError
-from pyworxcloud.utils.schedule_codec import add_schedule_entry as add_schedule_entry_model
+from pyworxcloud.utils.schedule_codec import (
+    add_schedule_entry as add_schedule_entry_model,
+)
 
 from .commands import async_run_cloud_command
 
@@ -38,15 +40,11 @@ DAYS: Final = tuple(DAY_MAP[index] for index in sorted(DAY_MAP))
 def _normalize_day(day: str | None, field_name: str) -> str:
     """Validate and normalize a weekday value."""
     if not isinstance(day, str):
-        raise HomeAssistantError(
-            f"{field_name} must be one of: {', '.join(DAYS)}"
-        )
+        raise HomeAssistantError(f"{field_name} must be one of: {', '.join(DAYS)}")
 
     normalized_day = day.lower()
     if normalized_day not in DAYS:
-        raise HomeAssistantError(
-            f"{field_name} must be one of: {', '.join(DAYS)}"
-        )
+        raise HomeAssistantError(f"{field_name} must be one of: {', '.join(DAYS)}")
 
     return normalized_day
 
@@ -155,7 +153,9 @@ async def async_handle_ots(
         )
     except HomeAssistantError as err:
         if isinstance(err.__cause__, NoOneTimeScheduleError):
-            raise HomeAssistantError("Mower does not support one-time schedule") from err
+            raise HomeAssistantError(
+                "Mower does not support one-time schedule"
+            ) from err
         raise
 
 
@@ -245,9 +245,7 @@ def _resolve_schedule_entry(
 ) -> ScheduleEntry:
     """Resolve one schedule entry from a day and optional start time."""
     normalized_day = _normalize_day(day, ATTR_DAY)
-    normalized_start = (
-        None if start is None else _normalize_start(start, ATTR_START)
-    )
+    normalized_start = None if start is None else _normalize_start(start, ATTR_START)
     entries = [
         entry
         for entry in getattr(_schedule_for_write(entity), "entries", [])

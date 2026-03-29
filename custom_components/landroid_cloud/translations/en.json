@@ -156,7 +156,7 @@
       "is_searching_zone": "{entity_name} is searching for a zone",
       "is_idle": "{entity_name} is idle",
       "is_escaped_digital_fence": "{entity_name} is outside the digital fence",
-      "is_rain_delayed": "{entity_name} is in rain delay"
+      "is_rain_delayed": "Mower is rain delayed"
     },
     "trigger_type": {
       "mowing": "{entity_name} started mowing",
@@ -169,7 +169,7 @@
       "searching_zone": "{entity_name} started searching for a zone",
       "idle": "{entity_name} became idle",
       "escaped_digital_fence": "{entity_name} escaped the digital fence",
-      "rain_delayed": "{entity_name} entered rain delay"
+      "rain_delayed": "Rain delayed"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"
@@ -289,9 +289,6 @@
       }
     },
     "switch": {
-      "pause_mode": {
-        "name": "Pause mode"
-      },
       "lock": {
         "name": "Lock"
       },
@@ -303,6 +300,9 @@
       },
       "acs": {
         "name": "ACS"
+      },
+      "party_mode": {
+        "name": "Party mode"
       }
     },
     "button": {
@@ -344,7 +344,7 @@
           "searching_zone": "Searching for zone",
           "starting": "Starting",
           "zoning": "Zone training",
-          "rain_delayed": "Rain delay"
+          "rain_delayed": "Rain delayed"
         }
       }
     }

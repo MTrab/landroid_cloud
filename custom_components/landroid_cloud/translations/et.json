@@ -167,9 +167,6 @@
       }
     },
     "switch": {
-      "pause_mode": {
-        "name": "Pausireziim"
-      },
       "lock": {
         "name": "Lukk"
       },
@@ -181,6 +178,9 @@
       },
       "acs": {
         "name": "ACS"
+      },
+      "party_mode": {
+        "name": "Pausireziim"
       }
     },
     "button": {
