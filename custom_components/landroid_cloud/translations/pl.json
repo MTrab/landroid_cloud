@@ -222,7 +222,7 @@
           "searching_zone": "Szukanie strefy",
           "starting": "Rozpoczynanie",
           "zoning": "Przyuczanie strefy",
-          "rain_delayed": "Rain delayed"
+          "rain_delayed": "Opóźnienie z powodu deszczu"
         }
       }
     }
@@ -244,7 +244,7 @@
       "is_searching_zone": "{entity_name} szuka strefy",
       "is_idle": "{entity_name} jest bezczynna",
       "is_escaped_digital_fence": "{entity_name} znajduje się poza cyfrowym ogrodzeniem",
-      "is_rain_delayed": "Mower is rain delayed"
+      "is_rain_delayed": "{entity_name} jest w opóźnieniu z powodu deszczu"
     },
     "trigger_type": {
       "mowing": "{entity_name} rozpoczęła koszenie",
@@ -257,7 +257,7 @@
       "searching_zone": "{entity_name} rozpoczęła szukanie strefy",
       "idle": "{entity_name} przeszła w stan bezczynności",
       "escaped_digital_fence": "{entity_name} opuściła cyfrowe ogrodzenie",
-      "rain_delayed": "Rain delayed"
+      "rain_delayed": "{entity_name} przeszła w opóźnienie z powodu deszczu"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"
