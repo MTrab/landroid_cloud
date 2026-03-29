@@ -32,12 +32,12 @@ SWITCHES: tuple[LandroidSwitchDescription, ...] = (
         entity_registry_enabled_default=False,
     ),
     LandroidSwitchDescription(
-        key="pause_mode",
-        translation_key="pause_mode",
-        icon="mdi:pause-circle",
+        key="party_mode",
+        translation_key="party_mode",
+        icon="mdi:party-popper",
         entity_category=EntityCategory.CONFIG,
         entity_registry_enabled_default=False,
-        capability=DeviceCapability.PAUSE_MODE,
+        capability=DeviceCapability.PARTY_MODE,
     ),
     LandroidSwitchDescription(
         key="irrigation",
@@ -141,8 +141,8 @@ class LandroidSwitch(LandroidBaseEntity, SwitchEntity):
         key = self.entity_description.key
         if key == "auto_schedule":
             return bool(auto_schedule(self.device).get("enabled", False))
-        if key == "pause_mode":
-            return bool(self.device.schedules.get("pause_mode_enabled", False))
+        if key == "party_mode":
+            return bool(self.device.schedules.get("party_mode_enabled", False))
         if key == "irrigation":
             value = auto_schedule_settings(self.device).get("irrigation")
             return None if value is None else bool(value)
@@ -185,9 +185,9 @@ class LandroidSwitch(LandroidBaseEntity, SwitchEntity):
                     serial_number, state
                 )
             )
-        elif self.entity_description.key == "pause_mode":
+        elif self.entity_description.key == "party_mode":
             await async_run_cloud_command(
-                lambda: self.coordinator.cloud.set_pause_mode(serial_number, state)
+                lambda: self.coordinator.cloud.set_partymode(serial_number, state)
             )
         elif self.entity_description.key == "irrigation":
             await async_run_cloud_command(

@@ -173,9 +173,6 @@
       }
     },
     "switch": {
-      "pause_mode": {
-        "name": "Mode pause"
-      },
       "lock": {
         "name": "Verrouillage"
       },
@@ -196,6 +193,9 @@
       },
       "auto_schedule_exclude_nights": {
         "name": "Auto schedule: Exclude nights"
+      },
+      "party_mode": {
+        "name": "Mode pause"
       }
     },
     "button": {
@@ -270,7 +270,8 @@
           "idle": "Au repos",
           "searching_zone": "Recherche de zone",
           "starting": "Démarrage",
-          "zoning": "Entraînement de zone"
+          "zoning": "Entraînement de zone",
+          "rain_delayed": "Délai pluie"
         }
       }
     }
@@ -291,7 +292,8 @@
       "is_zoning": "{entity_name} est en entraînement de zone",
       "is_searching_zone": "{entity_name} recherche une zone",
       "is_idle": "{entity_name} est au repos",
-      "is_escaped_digital_fence": "{entity_name} est hors de la barrière numérique"
+      "is_escaped_digital_fence": "{entity_name} est hors de la barrière numérique",
+      "is_rain_delayed": "{entity_name} est en délai pluie"
     },
     "trigger_type": {
       "mowing": "{entity_name} a commencé à tondre",
@@ -303,7 +305,8 @@
       "zoning": "{entity_name} a commencé l'entraînement de zone",
       "searching_zone": "{entity_name} a commencé à rechercher une zone",
       "idle": "{entity_name} est passé au repos",
-      "escaped_digital_fence": "{entity_name} est sorti de la barrière numérique"
+      "escaped_digital_fence": "{entity_name} est sorti de la barrière numérique",
+      "rain_delayed": "{entity_name} est entré en délai pluie"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"

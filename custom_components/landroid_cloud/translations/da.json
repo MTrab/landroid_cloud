@@ -257,7 +257,8 @@
       "is_zoning": "{entity_name} er i gang med zone-træning",
       "is_searching_zone": "{entity_name} søger efter en zone",
       "is_idle": "{entity_name} afventer",
-      "is_escaped_digital_fence": "{entity_name} er uden for det digitale hegn"
+      "is_escaped_digital_fence": "{entity_name} er uden for det digitale hegn",
+      "is_rain_delayed": "{entity_name} er i regnforsinkelse"
     },
     "trigger_type": {
       "mowing": "{entity_name} begyndte at klippe",
@@ -269,7 +270,8 @@
       "zoning": "{entity_name} begyndte zone-træning",
       "searching_zone": "{entity_name} begyndte at søge efter en zone",
       "idle": "{entity_name} gik i ventetilstand",
-      "escaped_digital_fence": "{entity_name} kom uden for det digitale hegn"
+      "escaped_digital_fence": "{entity_name} kom uden for det digitale hegn",
+      "rain_delayed": "{entity_name} gik i regnforsinkelse"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"
@@ -395,9 +397,6 @@
       }
     },
     "switch": {
-      "pause_mode": {
-        "name": "Pause tilstand"
-      },
       "lock": {
         "name": "Lås"
       },
@@ -418,6 +417,9 @@
       },
       "auto_schedule_exclude_nights": {
         "name": "Auto-tidsplan: Udeluk nætter"
+      },
+      "party_mode": {
+        "name": "Pause tilstand"
       }
     },
     "button": {
@@ -492,7 +494,8 @@
           "idle": "Afventer",
           "searching_zone": "Søger efter zone",
           "starting": "Starter",
-          "zoning": "Zone-træning"
+          "zoning": "Zone-træning",
+          "rain_delayed": "Regnforsinkelse"
         }
       }
     }

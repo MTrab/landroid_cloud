@@ -19,6 +19,7 @@ from custom_components.landroid_cloud.const import (
     MOWER_STATE_EDGECUT,
     MOWER_STATE_ESCAPED_DIGITAL_FENCE,
     MOWER_STATE_IDLE,
+    MOWER_STATE_RAIN_DELAY,
     MOWER_STATE_SEARCHING_ZONE,
     MOWER_STATE_STARTING,
     MOWER_STATE_ZONING,
@@ -128,6 +129,13 @@ async def test_get_conditions_returns_supported_mower_conditions(
             CONF_DEVICE_ID: "device-123",
             CONF_DOMAIN: DOMAIN,
             CONF_ENTITY_ID: "registry-entry-id",
+            CONF_TYPE: "is_rain_delayed",
+        },
+        {
+            CONF_CONDITION: "device",
+            CONF_DEVICE_ID: "device-123",
+            CONF_DOMAIN: DOMAIN,
+            CONF_ENTITY_ID: "registry-entry-id",
             CONF_TYPE: "is_escaped_digital_fence",
         },
     ]
@@ -145,9 +153,11 @@ def test_condition_from_config_matches_resolved_entity_state(monkeypatch) -> Non
     )
     hass = SimpleNamespace(
         states=SimpleNamespace(
-            get=lambda entity_id: SimpleNamespace(state=LawnMowerActivity.RETURNING)
-            if entity_id == "lawn_mower.front_yard"
-            else None
+            get=lambda entity_id: (
+                SimpleNamespace(state=LawnMowerActivity.RETURNING)
+                if entity_id == "lawn_mower.front_yard"
+                else None
+            )
         )
     )
 

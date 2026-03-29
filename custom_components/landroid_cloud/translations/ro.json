@@ -173,9 +173,6 @@
       }
     },
     "switch": {
-      "pause_mode": {
-        "name": "Mod pauza"
-      },
       "lock": {
         "name": "Blocare"
       },
@@ -196,6 +193,9 @@
       },
       "auto_schedule_exclude_nights": {
         "name": "Auto schedule: Exclude nights"
+      },
+      "party_mode": {
+        "name": "Mod pauza"
       }
     },
     "button": {
@@ -270,7 +270,8 @@
           "idle": "În așteptare",
           "searching_zone": "În căutarea zonei",
           "starting": "Pornire",
-          "zoning": "Antrenament pentru zonă"
+          "zoning": "Antrenament pentru zonă",
+          "rain_delayed": "Întârziere de ploaie"
         }
       }
     }
@@ -291,7 +292,8 @@
       "is_zoning": "{entity_name} învață o zonă",
       "is_searching_zone": "{entity_name} caută o zonă",
       "is_idle": "{entity_name} este în așteptare",
-      "is_escaped_digital_fence": "{entity_name} este în afara gardului digital"
+      "is_escaped_digital_fence": "{entity_name} este în afara gardului digital",
+      "is_rain_delayed": "{entity_name} este în întârziere de ploaie"
     },
     "trigger_type": {
       "mowing": "{entity_name} a început să tundă",
@@ -303,7 +305,8 @@
       "zoning": "{entity_name} a început antrenamentul pentru zonă",
       "searching_zone": "{entity_name} a început să caute o zonă",
       "idle": "{entity_name} a intrat în așteptare",
-      "escaped_digital_fence": "{entity_name} a ieșit din gardul digital"
+      "escaped_digital_fence": "{entity_name} a ieșit din gardul digital",
+      "rain_delayed": "{entity_name} a intrat în întârziere de ploaie"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"

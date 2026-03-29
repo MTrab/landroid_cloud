@@ -14,13 +14,13 @@ def test_switches_are_configuration_entities() -> None:
     )
 
 
-def test_pause_mode_is_disabled_by_default() -> None:
-    """Pause mode should be disabled by default."""
-    pause_mode = next(
-        description for description in SWITCHES if description.key == "pause_mode"
+def test_party_mode_is_disabled_by_default() -> None:
+    """Party mode should be disabled by default."""
+    party_mode = next(
+        description for description in SWITCHES if description.key == "party_mode"
     )
 
-    assert pause_mode.entity_registry_enabled_default is False
+    assert party_mode.entity_registry_enabled_default is False
 
 
 def test_auto_schedule_switch_is_disabled_by_default() -> None:

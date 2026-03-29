@@ -173,9 +173,6 @@
       }
     },
     "switch": {
-      "pause_mode": {
-        "name": "Pauzemodus"
-      },
       "lock": {
         "name": "Vergrendeling"
       },
@@ -196,6 +193,9 @@
       },
       "auto_schedule_exclude_nights": {
         "name": "Auto schedule: Exclude nights"
+      },
+      "party_mode": {
+        "name": "Pauzemodus"
       }
     },
     "button": {
@@ -270,7 +270,8 @@
           "idle": "Inactief",
           "searching_zone": "Zone zoeken",
           "starting": "Starten",
-          "zoning": "Zone-inleren"
+          "zoning": "Zone-inleren",
+          "rain_delayed": "Regenvertraging"
         }
       }
     }
@@ -291,7 +292,8 @@
       "is_zoning": "{entity_name} leert een zone in",
       "is_searching_zone": "{entity_name} zoekt naar een zone",
       "is_idle": "{entity_name} is inactief",
-      "is_escaped_digital_fence": "{entity_name} staat buiten het digitale hek"
+      "is_escaped_digital_fence": "{entity_name} staat buiten het digitale hek",
+      "is_rain_delayed": "{entity_name} staat in regenvertraging"
     },
     "trigger_type": {
       "mowing": "{entity_name} is begonnen met maaien",
@@ -303,7 +305,8 @@
       "zoning": "{entity_name} begon met het inleren van een zone",
       "searching_zone": "{entity_name} begon naar een zone te zoeken",
       "idle": "{entity_name} werd inactief",
-      "escaped_digital_fence": "{entity_name} ging buiten het digitale hek"
+      "escaped_digital_fence": "{entity_name} ging buiten het digitale hek",
+      "rain_delayed": "{entity_name} ging naar regenvertraging"
     },
     "extra_fields": {
       "for": "[%key:common::device_automation::extra_fields::for%]"

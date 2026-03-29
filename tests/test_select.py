@@ -80,3 +80,21 @@ def test_auto_schedule_select_is_unavailable_when_auto_schedule_is_disabled() ->
     )
 
     assert entity.available is False
+
+
+def test_zone_options_only_include_configured_legacy_zones() -> None:
+    """Legacy devices should only expose zones with configured start points."""
+    device = SimpleNamespace(
+        zone={"ids": [], "starting_point": [1, 7, 0, 0], "current": 1, "index": 3}
+    )
+
+    assert _zone_options(device) == ["1", "2"]
+
+
+def test_current_zone_option_prefers_reported_legacy_zone() -> None:
+    """Legacy devices should display the reported current zone before fallback index."""
+    device = SimpleNamespace(
+        zone={"ids": [], "starting_point": [1, 7, 0, 0], "current": 1, "index": 3}
+    )
+
+    assert _current_zone_option(device) == "1"

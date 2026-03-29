@@ -12,6 +12,7 @@ from custom_components.landroid_cloud.const import (
     MOWER_STATE_EDGECUT,
     MOWER_STATE_ESCAPED_DIGITAL_FENCE,
     MOWER_STATE_IDLE,
+    MOWER_STATE_RAIN_DELAY,
     MOWER_STATE_SEARCHING_ZONE,
     MOWER_STATE_STARTING,
     MOWER_STATE_ZONING,
@@ -54,6 +55,23 @@ def test_unknown_state_defaults_to_error() -> None:
     assert (
         STATUS_ACTIVITY_MAP.get(999, LawnMowerActivity.ERROR) is LawnMowerActivity.ERROR
     )
+
+
+def test_rain_delay_activity_overrides_docked_when_remaining_minutes_exist() -> None:
+    """Rain delay should win over docked when a countdown is still active."""
+    entity = object.__new__(LandroidCloudMowerEntity)
+    entity._serial_number = "serial"
+    entity.coordinator = SimpleNamespace(
+        data={
+            "serial": SimpleNamespace(
+                raindelay_active=False,
+                rainsensor={"remaining": 16},
+                status=SimpleNamespace(id=1),
+            )
+        }
+    )
+
+    assert entity.activity == MOWER_STATE_RAIN_DELAY
 
 
 @pytest.mark.asyncio

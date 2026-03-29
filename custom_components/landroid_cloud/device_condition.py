@@ -27,6 +27,7 @@ from .const import (
     MOWER_STATE_EDGECUT,
     MOWER_STATE_ESCAPED_DIGITAL_FENCE,
     MOWER_STATE_IDLE,
+    MOWER_STATE_RAIN_DELAY,
     MOWER_STATE_SEARCHING_ZONE,
     MOWER_STATE_STARTING,
     MOWER_STATE_ZONING,
@@ -43,6 +44,7 @@ CONDITION_STATE_MAP: Final[dict[str, tuple[str, ...]]] = {
     "is_zoning": (MOWER_STATE_ZONING,),
     "is_searching_zone": (MOWER_STATE_SEARCHING_ZONE,),
     "is_idle": (MOWER_STATE_IDLE,),
+    "is_rain_delayed": (MOWER_STATE_RAIN_DELAY,),
     "is_escaped_digital_fence": (MOWER_STATE_ESCAPED_DIGITAL_FENCE,),
 }
 

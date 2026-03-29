@@ -27,11 +27,25 @@ AUTO_SCHEDULE_GRASS_TYPE_OPTIONS: Final = (
 AUTO_SCHEDULE_SOIL_TYPE_OPTIONS: Final = ("clay", "silt", "sand", "ignore")
 
 
+def _configured_legacy_zone_options(device) -> list[str]:
+    """Return configured legacy zone numbers when start points are known."""
+    starting_points = device.zone.get("starting_point", [])
+    return [
+        str(index + 1)
+        for index, start in enumerate(starting_points)
+        if isinstance(start, int) and start > 0
+    ]
+
+
 def _zone_options(device) -> list[str]:
     """Return available zone options for legacy and RTK devices."""
     zone_ids = device.zone.get("ids", [])
     if zone_ids:
         return [str(zone_id) for zone_id in zone_ids]
+
+    configured_zones = _configured_legacy_zone_options(device)
+    if configured_zones:
+        return configured_zones
 
     starting_points = device.zone.get("starting_point", [])
     zone_count = len(starting_points)
@@ -49,8 +63,23 @@ def _current_zone_option(device) -> str | None:
             return str(int(current))
         return None
 
+    options = _zone_options(device)
+    current = device.zone.get("current")
+    if isinstance(current, int):
+        current_option = str(current)
+        if current_option in options:
+            return current_option
+
+        current_option = str(current + 1)
+        if current_option in options:
+            return current_option
+
     index = device.zone.get("index", 0)
-    return str(int(index) + 1)
+    current_option = str(int(index) + 1)
+    if current_option in options:
+        return current_option
+
+    return None
 
 
 def _auto_schedule_setting_option(device, key: str) -> str | None:
