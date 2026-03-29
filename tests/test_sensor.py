@@ -229,7 +229,7 @@ def test_exclusion_schedule_attributes_include_days_and_slots() -> None:
         }
     )
 
-    assert _exclusion_schedule_value(device) == 4
+    assert _exclusion_schedule_value(device) == 3
     assert _exclusion_schedule_attributes(device) == {
         "enabled": True,
         "exclude_nights": True,
@@ -253,6 +253,25 @@ def test_exclusion_schedule_attributes_include_days_and_slots() -> None:
             {"day_index": 6, "day": "saturday", "exclude_day": False, "slots": []},
         ],
     }
+
+
+def test_exclusion_schedule_value_ignores_exclude_nights_only() -> None:
+    """Exclude nights alone should not count as an exclusion schedule entry."""
+    device = SimpleNamespace(
+        schedules={
+            "auto_schedule": {
+                "enabled": True,
+                "settings": {
+                    "exclusion_scheduler": {
+                        "exclude_nights": True,
+                        "days": [{"exclude_day": False, "slots": []} for _ in range(7)],
+                    }
+                },
+            }
+        }
+    )
+
+    assert _exclusion_schedule_value(device) == 0
 
 
 def test_normalized_schedule_attributes_include_entry_metadata() -> None:

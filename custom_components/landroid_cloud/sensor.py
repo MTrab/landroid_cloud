@@ -160,7 +160,7 @@ def _exclusion_schedule_value(device) -> int:
     if not isinstance(exclusion, dict):
         return 0
 
-    total = 1 if exclusion.get("exclude_nights") else 0
+    total = 0
     for day in exclusion.get("days", []):
         if not isinstance(day, dict):
             continue
