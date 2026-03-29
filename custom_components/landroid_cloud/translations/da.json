@@ -397,6 +397,9 @@
       }
     },
     "switch": {
+      "firmware_auto_update": {
+        "name": "Firmware autoopdatering"
+      },
       "lock": {
         "name": "Lås"
       },
