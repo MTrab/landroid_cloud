@@ -489,6 +489,11 @@
         }
       }
     },
+    "update": {
+      "firmware": {
+        "name": "Firmware"
+      }
+    },
     "lawn_mower": {
       "mower": {
         "state": {

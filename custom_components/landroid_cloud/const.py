@@ -16,6 +16,7 @@ PLATFORMS: list[Platform] = [
     Platform.BUTTON,
     Platform.SWITCH,
     Platform.BINARY_SENSOR,
+    Platform.UPDATE,
 ]
 
 STARTUP = """
