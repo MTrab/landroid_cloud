@@ -114,13 +114,17 @@ def _release_notes_markdown(info: dict[str, Any]) -> str | None:
     product = info.get("product")
     if isinstance(product, dict):
         version = _normalized_version(product.get("version")) or "Unknown"
-        if changelog := _changelog_text(product.get("changelog")):
+        if changelog := _changelog_text(
+            product.get("changelog_markdown", product.get("changelog"))
+        ):
             sections.append(f"## Product firmware {version}\n\n{changelog}")
 
     head = info.get("head")
     if isinstance(head, dict):
         version = _normalized_version(head.get("version")) or "Unknown"
-        if changelog := _changelog_text(head.get("changelog")):
+        if changelog := _changelog_text(
+            head.get("changelog_markdown", head.get("changelog"))
+        ):
             sections.append(f"## Head firmware {version}\n\n{changelog}")
 
     if not sections:

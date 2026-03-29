@@ -107,6 +107,21 @@ def test_release_notes_markdown_includes_product_and_head_sections() -> None:
     )
 
 
+def test_release_notes_markdown_prefers_markdown_payload() -> None:
+    """Markdown release notes should prefer changelog_markdown when available."""
+    notes = _release_notes_markdown(
+        {
+            "product": {
+                "version": "3.31",
+                "changelog": {"en": "Plain text notes"},
+                "changelog_markdown": {"en": "## Markdown notes"},
+            }
+        }
+    )
+
+    assert notes == "## Product firmware 3.31\n\n## Markdown notes"
+
+
 def test_changelog_text_prefers_english_from_localized_dict() -> None:
     """Localized changelog dicts should prefer English text."""
     assert _changelog_text({"da": "Danske noter", "en": "English notes"}) == (
@@ -150,10 +165,12 @@ async def test_async_release_notes_returns_markdown() -> None:
             "product": {
                 "version": "3.31",
                 "changelog": {"en": "Main firmware fixes"},
+                "changelog_markdown": {"en": "## Main firmware fixes"},
             },
             "head": {
                 "version": "1.02",
                 "changelog": {"en": "Head firmware fixes"},
+                "changelog_markdown": {"en": "## Head firmware fixes"},
             },
         }
     )
@@ -162,18 +179,20 @@ async def test_async_release_notes_returns_markdown() -> None:
             "product": {
                 "version": "3.31",
                 "changelog": {"en": "Main firmware fixes"},
+                "changelog_markdown": {"en": "## Main firmware fixes"},
             },
             "head": {
                 "version": "1.02",
                 "changelog": {"en": "Head firmware fixes"},
+                "changelog_markdown": {"en": "## Head firmware fixes"},
             },
         },
         refresh_firmware_update_info=refresh_firmware_update_info,
     )
 
     assert await entity.async_release_notes() == (
-        "## Product firmware 3.31\n\nMain firmware fixes\n\n"
-        "## Head firmware 1.02\n\nHead firmware fixes"
+        "## Product firmware 3.31\n\n## Main firmware fixes\n\n"
+        "## Head firmware 1.02\n\n## Head firmware fixes"
     )
     refresh_firmware_update_info.assert_awaited_once_with("serial")
 
