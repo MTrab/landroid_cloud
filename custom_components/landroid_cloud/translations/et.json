@@ -158,10 +158,10 @@
         "name": "Yaw"
       },
       "auto_schedule_nutrition": {
-        "name": "Nutrition"
+        "name": "Auto schedule: Nutrition"
       },
       "auto_schedule_exclusion_schedules": {
-        "name": "Exclusion schedules"
+        "name": "Auto schedule: Exclusion schedules"
       }
     },
     "binary_sensor": {
@@ -192,10 +192,10 @@
         "name": "Auto schedule"
       },
       "auto_schedule_irrigation": {
-        "name": "Irrigation"
+        "name": "Auto schedule: Irrigation"
       },
       "auto_schedule_exclude_nights": {
-        "name": "Exclude nights"
+        "name": "Auto schedule: Exclude nights"
       }
     },
     "button": {
@@ -221,6 +221,12 @@
       },
       "torque": {
         "name": "Pöördemoment"
+      },
+      "lawn_size": {
+        "name": "Lawn size"
+      },
+      "lawn_perimeter": {
+        "name": "Lawn perimeter"
       }
     },
     "select": {
@@ -228,7 +234,7 @@
         "name": "Tsoon"
       },
       "auto_schedule_boost": {
-        "name": "Boost",
+        "name": "Auto schedule: Boost",
         "state": {
           "0": "0",
           "1": "1",
@@ -236,7 +242,7 @@
         }
       },
       "auto_schedule_grass_type": {
-        "name": "Grass type",
+        "name": "Auto schedule: Grass type",
         "state": {
           "mixed_species": "Mixed species",
           "festuca_arundinacea": "Tall fescue",
@@ -247,7 +253,7 @@
         }
       },
       "auto_schedule_soil_type": {
-        "name": "Soil type",
+        "name": "Auto schedule: Soil type",
         "state": {
           "clay": "Clay",
           "silt": "Silt",

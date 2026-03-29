@@ -380,10 +380,10 @@
         "name": "Yaw"
       },
       "auto_schedule_nutrition": {
-        "name": "Næring"
+        "name": "Auto-tidsplan: Næring"
       },
       "auto_schedule_exclusion_schedules": {
-        "name": "Eksklusionsplaner"
+        "name": "Auto-tidsplan: Eksklusionsplaner"
       }
     },
     "binary_sensor": {
@@ -414,10 +414,10 @@
         "name": "Auto-tidsplan"
       },
       "auto_schedule_irrigation": {
-        "name": "Vanding"
+        "name": "Auto-tidsplan: Vanding"
       },
       "auto_schedule_exclude_nights": {
-        "name": "Udeluk nætter"
+        "name": "Auto-tidsplan: Udeluk nætter"
       }
     },
     "button": {
@@ -443,6 +443,12 @@
       },
       "torque": {
         "name": "Moment"
+      },
+      "lawn_size": {
+        "name": "Plænestørrelse"
+      },
+      "lawn_perimeter": {
+        "name": "Plæneomkreds"
       }
     },
     "select": {
@@ -450,7 +456,7 @@
         "name": "Område"
       },
       "auto_schedule_boost": {
-        "name": "Boost",
+        "name": "Auto-tidsplan: Boost",
         "state": {
           "0": "0",
           "1": "1",
@@ -458,7 +464,7 @@
         }
       },
       "auto_schedule_grass_type": {
-        "name": "Græstype",
+        "name": "Auto-tidsplan: Græstype",
         "state": {
           "mixed_species": "Mixed species",
           "festuca_arundinacea": "Tall fescue",
@@ -469,7 +475,7 @@
         }
       },
       "auto_schedule_soil_type": {
-        "name": "Jordtype",
+        "name": "Auto-tidsplan: Jordtype",
         "state": {
           "clay": "Ler",
           "silt": "Silt",
