@@ -2,17 +2,16 @@
 
 from types import SimpleNamespace
 
-from custom_components.landroid_cloud.select import AUTO_SCHEDULE_SELECTS
 from custom_components.landroid_cloud.select import LandroidAutoScheduleSelect
-from custom_components.landroid_cloud.select import LandroidZoneSelect
+from custom_components.landroid_cloud.select import SELECTS
 from custom_components.landroid_cloud.select import _current_zone_option, _zone_options
 
 
 def test_zone_select_is_disabled_by_default() -> None:
     """Zone select should be disabled by default."""
-    entity = object.__new__(LandroidZoneSelect)
+    descriptions = {description.key: description for description in SELECTS}
 
-    assert entity.entity_registry_enabled_default is False
+    assert descriptions["zone"].entity_registry_enabled_default is False
 
 
 def test_zone_options_use_rtk_zone_ids_when_available() -> None:
@@ -31,9 +30,7 @@ def test_current_zone_option_uses_rtk_current_zone() -> None:
 
 def test_auto_schedule_selects_use_pyworxcloud_valid_options() -> None:
     """Auto-schedule selects should only expose pyworxcloud-supported values."""
-    descriptions = {
-        description.key: description for description in AUTO_SCHEDULE_SELECTS
-    }
+    descriptions = {description.key: description for description in SELECTS}
 
     assert descriptions["auto_schedule_boost"].options == ("0", "1", "2")
     assert descriptions["auto_schedule_grass_type"].options == (
@@ -54,9 +51,7 @@ def test_auto_schedule_selects_use_pyworxcloud_valid_options() -> None:
 
 def test_auto_schedule_selects_have_distinct_icons() -> None:
     """Auto-schedule selects should expose meaningful icons in the UI."""
-    descriptions = {
-        description.key: description for description in AUTO_SCHEDULE_SELECTS
-    }
+    descriptions = {description.key: description for description in SELECTS}
 
     assert descriptions["auto_schedule_boost"].icon == "mdi:speedometer"
     assert descriptions["auto_schedule_grass_type"].icon == "mdi:grass"
