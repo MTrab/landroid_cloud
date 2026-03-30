@@ -37,6 +37,7 @@ class LandroidCloudCoordinator(DataUpdateCoordinator[dict[str, DeviceHandler]]):
         )
         self.cloud = cloud
         self._event_lock = asyncio.Lock()
+        self._firmware_update_info: dict[str, dict[str, Any]] = {}
 
     async def async_setup(self) -> None:
         """Attach callbacks for push updates."""
@@ -68,12 +69,16 @@ class LandroidCloudCoordinator(DataUpdateCoordinator[dict[str, DeviceHandler]]):
         async with self._event_lock:
             data = dict(self.data) if self.data else {}
             data[str(serial_number)] = device
+            self._sync_firmware_update_info(str(serial_number), device)
             self.async_set_updated_data(data)
 
     async def _refresh_from_cloud(self) -> None:
         """Refresh local state from cloud cache in a race-safe manner."""
         async with self._event_lock:
-            self.async_set_updated_data(_device_map(self.cloud))
+            data = _device_map(self.cloud)
+            for serial_number, device in data.items():
+                self._sync_firmware_update_info(serial_number, device)
+            self.async_set_updated_data(data)
 
     def _schedule_push_update(self, device: DeviceHandler) -> None:
         """Schedule push update handling on Home Assistant's event loop."""
@@ -100,3 +105,62 @@ class LandroidCloudCoordinator(DataUpdateCoordinator[dict[str, DeviceHandler]]):
     async def _async_update_data(self) -> dict[str, DeviceHandler]:
         """Return current cloud cache without triggering device updates."""
         return _device_map(self.cloud)
+
+    def firmware_update_info(self, serial_number: str) -> dict[str, Any]:
+        """Return cached firmware update metadata for a mower."""
+        return dict(self._firmware_update_info.get(serial_number, {}))
+
+    def _sync_firmware_update_info(
+        self, serial_number: str, device: DeviceHandler | None
+    ) -> None:
+        """Merge live firmware payload data into cached update metadata."""
+        cached = self._firmware_update_info.get(serial_number)
+        if cached is None or device is None:
+            return
+
+        firmware = getattr(device, "firmware", None)
+        if not isinstance(firmware, dict):
+            return
+
+        merged = dict(cached)
+        upgrade = firmware.get("upgrade")
+        if isinstance(upgrade, dict):
+            merged.update(upgrade)
+
+        for source_key, target_key in (
+            ("auto_upgrade", "auto_upgrade"),
+            ("latest_version", "latest_version"),
+            ("mandatory", "mandatory"),
+            ("ota_supported", "ota_supported"),
+            ("update_available", "update_available"),
+            ("upgrade_failed", "upgrade_failed"),
+            ("version", "current_version"),
+        ):
+            value = firmware.get(source_key)
+            if value is not None:
+                merged[target_key] = value
+
+        self._firmware_update_info[serial_number] = merged
+
+    async def async_refresh_firmware_update_info(
+        self, serial_number: str
+    ) -> dict[str, Any]:
+        """Fetch and cache firmware update metadata for a mower."""
+        info = await self.cloud.get_firmware_upgrade_info(serial_number)
+
+        async with self._event_lock:
+            device = (self.data or {}).get(serial_number)
+            self._firmware_update_info[serial_number] = dict(info)
+            self._sync_firmware_update_info(serial_number, device)
+            cached = dict(self._firmware_update_info[serial_number])
+
+        self.async_update_listeners()
+        return cached
+
+    async def async_get_firmware_update_info(
+        self, serial_number: str
+    ) -> dict[str, Any]:
+        """Return cached firmware metadata, fetching it on first access."""
+        if serial_number not in self._firmware_update_info:
+            return await self.async_refresh_firmware_update_info(serial_number)
+        return self.firmware_update_info(serial_number)

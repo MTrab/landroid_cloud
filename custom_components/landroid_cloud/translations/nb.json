@@ -188,6 +188,9 @@
       "auto_schedule": {
         "name": "Auto schedule"
       },
+      "firmware_auto_update": {
+        "name": "Automatisk firmwareoppdatering"
+      },
       "auto_schedule_irrigation": {
         "name": "Auto schedule: Irrigation"
       },
@@ -260,6 +263,11 @@
           "sand": "Sand",
           "ignore": "Unknown"
         }
+      }
+    },
+    "update": {
+      "firmware": {
+        "name": "Fastvare"
       }
     },
     "lawn_mower": {

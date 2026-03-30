@@ -134,12 +134,13 @@ feature/<name> - for introducing new features
 fix/<name> - fixing bugs
 enhancement/<name> - for code or stability enhancements
 chore/<name> - for repository and code chores
+dependency/<name> - for dependency version updates
 translation/<name> - for translation purposes
 ```
 
 All new branches MUST be based on `master`, unless the user explicitly instructs otherwise.
 
-All code changes MUST start from a dedicated `feature/...`, `fix/...`, or `chore/...` branch.
+All code changes MUST start from a dedicated `feature/...`, `fix/...`, `chore/...`, `translation/...`, `enhancement/...` or `dependency/...` branch.
 
 The agent must NEVER push directly to `master` and NEVER merge directly to `master` unless the user explicitly asks for it in the current session.
 
@@ -157,7 +158,7 @@ Each PR must include:
 - Known limitations
 - Any required configuration changes
 - The correct semver label (`patch`, `minor`, or `major`) before merge
-- A proposed semver label that is explicitly verified with the user before the label is set or changed
+- A proposed semver label that is explicitly verified with the user before the label is set or changed - all other semver labels MUST be removed before merge
 - If the PR resolves an issue, include the text `Fixes #<issue-id>`
 - A shout, descriptive and human readable title
 
