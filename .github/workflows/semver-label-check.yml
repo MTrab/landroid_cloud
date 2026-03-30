@@ -1,0 +1,36 @@
+name: Semver Label Check
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - labeled
+      - unlabeled
+      - ready_for_review
+
+jobs:
+  validate-semver-label:
+    name: Validate semver label
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    steps:
+      - name: Ensure exactly one semver label is present
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const semverLabels = ["major", "minor", "patch"];
+            const labels = context.payload.pull_request.labels.map((label) => label.name);
+            const matched = labels.filter((label) => semverLabels.includes(label));
+
+            if (matched.length !== 1) {
+              core.setFailed(
+                `Pull request must have exactly one semver label (${semverLabels.join(", ")}). ` +
+                `Found ${matched.length}: ${matched.length ? matched.join(", ") : "none"}.`,
+              );
+              return;
+            }
+
+            core.info(`Validated semver label: ${matched[0]}`);
