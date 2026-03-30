@@ -188,6 +188,9 @@
       "auto_schedule": {
         "name": "Auto schedule"
       },
+      "firmware_auto_update": {
+        "name": "Actualizare automată de firmware"
+      },
       "auto_schedule_irrigation": {
         "name": "Auto schedule: Irrigation"
       },
@@ -260,6 +263,11 @@
           "sand": "Sand",
           "ignore": "Unknown"
         }
+      }
+    },
+    "update": {
+      "firmware": {
+        "name": "Firmware"
       }
     },
     "lawn_mower": {

@@ -32,6 +32,13 @@ SWITCHES: tuple[LandroidSwitchDescription, ...] = (
         entity_registry_enabled_default=False,
     ),
     LandroidSwitchDescription(
+        key="firmware_auto_update",
+        translation_key="firmware_auto_update",
+        icon="mdi:update-auto",
+        entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
+    ),
+    LandroidSwitchDescription(
         key="party_mode",
         translation_key="party_mode",
         icon="mdi:party-popper",
@@ -145,6 +152,9 @@ class LandroidSwitch(LandroidBaseEntity, SwitchEntity):
             return bool(auto_schedule(self.device).get("enabled", False))
         if key == "party_mode":
             return bool(self.device.schedules.get("party_mode_enabled", False))
+        if key == "firmware_auto_update":
+            value = getattr(self.device, "firmware", {}).get("auto_upgrade")
+            return value if isinstance(value, bool) else None
         if key == "irrigation":
             value = auto_schedule_settings(self.device).get("irrigation")
             return None if value is None else bool(value)
@@ -190,6 +200,12 @@ class LandroidSwitch(LandroidBaseEntity, SwitchEntity):
         elif self.entity_description.key == "party_mode":
             await async_run_cloud_command(
                 lambda: self.coordinator.cloud.set_partymode(serial_number, state)
+            )
+        elif self.entity_description.key == "firmware_auto_update":
+            await async_run_cloud_command(
+                lambda: self.coordinator.cloud.set_firmware_auto_upgrade(
+                    serial_number, state
+                )
             )
         elif self.entity_description.key == "irrigation":
             await async_run_cloud_command(

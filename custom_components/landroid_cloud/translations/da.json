@@ -397,6 +397,9 @@
       }
     },
     "switch": {
+      "firmware_auto_update": {
+        "name": "Firmware autoopdatering"
+      },
       "lock": {
         "name": "Lås"
       },
@@ -484,6 +487,11 @@
           "sand": "Sand",
           "ignore": "Ukendt"
         }
+      }
+    },
+    "update": {
+      "firmware": {
+        "name": "Firmware"
       }
     },
     "lawn_mower": {

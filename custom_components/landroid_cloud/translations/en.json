@@ -406,6 +406,9 @@
       "auto_schedule": {
         "name": "Auto schedule"
       },
+      "firmware_auto_update": {
+        "name": "Firmware auto update"
+      },
       "auto_schedule_irrigation": {
         "name": "Auto schedule: Irrigation"
       },
@@ -490,6 +493,11 @@
       },
       "zone": {
         "name": "Zone"
+      }
+    },
+    "update": {
+      "firmware": {
+        "name": "Firmware"
       }
     },
     "lawn_mower": {
