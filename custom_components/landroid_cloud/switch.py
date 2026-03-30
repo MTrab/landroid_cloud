@@ -67,6 +67,7 @@ SWITCHES: tuple[LandroidSwitchDescription, ...] = (
         translation_key="off_limits",
         icon="mdi:border-none-variant",
         entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
         capability=DeviceCapability.OFF_LIMITS,
     ),
     LandroidSwitchDescription(
@@ -74,6 +75,7 @@ SWITCHES: tuple[LandroidSwitchDescription, ...] = (
         translation_key="off_limits_shortcut",
         icon="mdi:transit-detour",
         entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
         capability=DeviceCapability.OFF_LIMITS,
     ),
     LandroidSwitchDescription(
