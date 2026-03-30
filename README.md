@@ -64,6 +64,9 @@ Write-capable entities become unavailable while the mower is offline. Read-only 
 - Kress
 - LandXcape
 
+Fleet is not supported at the moment.
+The Fleet API is still in an early alpha state, so this integration does not currently expose Fleet devices or controls.
+
 ### Exposed entities
 
 #### Lawn mower
@@ -117,6 +120,20 @@ Notes:
 | Charging | Diagnostic | Enabled |
 | Rain sensor | Diagnostic | Disabled |
 
+#### Updates
+
+Firmware updates are exposed through a native Home Assistant update entity when the mower reports OTA firmware support.
+
+| Entity | Category | Default | Notes |
+| --- | --- | --- | --- |
+| Firmware | Standard | Enabled | Requires OTA firmware support |
+
+Notes:
+
+- The update entity exposes the installed version, the latest available version, and release notes when the cloud API provides them.
+- Release notes prefer the Markdown-friendly changelog from the API when available.
+- Installing an update queues the latest available firmware from the vendor cloud. Older firmware versions cannot be selected manually.
+
 #### Switches
 
 All switches are configuration entities and require the mower to be online.
@@ -124,6 +141,7 @@ All switches are configuration entities and require the mower to be online.
 | Entity | Default | Notes |
 | --- | --- | --- |
 | Auto schedule | Disabled | |
+| Firmware auto update | Disabled | Requires OTA firmware support |
 | Party mode | Disabled | Requires party mode support |
 | Auto schedule irrigation | Disabled | Requires auto schedule to be enabled |
 | Auto schedule exclude nights | Disabled | Requires auto schedule to be enabled |
@@ -170,8 +188,9 @@ The integration exposes control through native entities and custom `landroid_clo
 
 - Lawn mower actions for start, pause and dock
 - Device automations for mower actions, triggers, and conditions in Home Assistant automations
+- Update entities for firmware version tracking, release notes, and OTA install actions
 - Buttons for one-shot actions such as edge cut and counter resets
-- Switches for boolean features such as auto schedule, party mode, ACS, lock and Off Limits
+- Switches for boolean features such as auto schedule, firmware auto update, party mode, ACS, lock and Off Limits
 - Numbers for writable values such as rain delay, cutting height, time extension, torque and lawn metadata
 - Select entities for zone choice and auto-schedule tuning
 - The `landroid_cloud.ots` service for starting a one-time schedule
@@ -190,6 +209,12 @@ Because of that, changes made from Home Assistant do not appear immediately in t
 
 Legacy mowers expose the configured start-point zones for selection.
 RTK/Vision style zone IDs are exposed read-only, and changing the selected RTK zone from Home Assistant is not supported yet.
+
+### Firmware updates
+
+Firmware update metadata is read from the vendor cloud API and merged with the mower's live firmware payload when available.
+
+Because availability and release notes come from cloud lookups instead of the normal push updates, Home Assistant may show new firmware details only after the next refresh or when the update entity explicitly refreshes its metadata.
 
 ### Custom integration services
 
