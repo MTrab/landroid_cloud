@@ -72,15 +72,3 @@ autolabeler:
   - label: 'documentation'
     branch:
       - '/documentation\/.+/'
-  - label: 'patch'
-    branch:
-      - '/patch\/.+/'
-      - '/dependabot\/.+/'
-      - '/dependencies\/.+/'
-      - '/dependency\/.+/'
-      - '/chore\/.+/'
-      - '/translation\/.+/'
-      - '/feature\/.+/'
-      - '/fix\/.+/'
-      - '/enhancement\/.+/'
-      - '/documentation\/.+/'
