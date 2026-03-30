@@ -92,12 +92,20 @@ def _auto_schedule_setting_option(device, key: str) -> str | None:
 
 @dataclass(frozen=True, kw_only=True)
 class LandroidSelectDescription(SelectEntityDescription):
-    """Description for auto-schedule selects."""
+    """Description for Landroid selects."""
 
     options: tuple[str, ...]
 
 
-AUTO_SCHEDULE_SELECTS: Final[tuple[LandroidSelectDescription, ...]] = (
+SELECTS: Final[tuple[LandroidSelectDescription, ...]] = (
+    LandroidSelectDescription(
+        key="zone",
+        translation_key="zone",
+        options=(),
+        entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
+        icon="mdi:map-clock",
+    ),
     LandroidSelectDescription(
         key="auto_schedule_boost",
         translation_key="auto_schedule_boost",
@@ -135,22 +143,26 @@ async def async_setup_entry(
     entities: list[SelectEntity] = []
 
     for serial_number in coordinator.data:
-        entities.append(
-            LandroidZoneSelect(
-                coordinator=coordinator,
-                config_entry=entry,
-                serial_number=serial_number,
+        for description in SELECTS:
+            if description.key == "zone":
+                entities.append(
+                    LandroidZoneSelect(
+                        coordinator=coordinator,
+                        config_entry=entry,
+                        serial_number=serial_number,
+                        description=description,
+                    )
+                )
+                continue
+
+            entities.append(
+                LandroidAutoScheduleSelect(
+                    coordinator=coordinator,
+                    config_entry=entry,
+                    serial_number=serial_number,
+                    description=description,
+                )
             )
-        )
-        entities.extend(
-            LandroidAutoScheduleSelect(
-                coordinator=coordinator,
-                config_entry=entry,
-                serial_number=serial_number,
-                description=description,
-            )
-            for description in AUTO_SCHEDULE_SELECTS
-        )
 
     async_add_entities(entities)
 
@@ -158,19 +170,21 @@ async def async_setup_entry(
 class LandroidZoneSelect(LandroidBaseEntity, SelectEntity):
     """Representation of zone selection."""
 
-    _attr_icon = "mdi:map-clock"
-    _attr_entity_category = EntityCategory.CONFIG
+    entity_description: LandroidSelectDescription
     _attr_requires_online = True
-    _attr_translation_key = "zone"
 
-    def __init__(self, coordinator, config_entry, serial_number: str) -> None:
+    def __init__(
+        self,
+        coordinator,
+        config_entry,
+        serial_number: str,
+        description: LandroidSelectDescription,
+    ) -> None:
         """Initialize select entity."""
-        super().__init__(coordinator, config_entry, serial_number, "zone")
-
-    @property
-    def entity_registry_enabled_default(self) -> bool:
-        """Disable zone select by default."""
-        return False
+        self.entity_description = description
+        super().__init__(
+            coordinator, config_entry, serial_number, self.entity_description.key
+        )
 
     @property
     def options(self) -> list[str]:
