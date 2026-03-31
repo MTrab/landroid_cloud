@@ -12,12 +12,11 @@ from homeassistant.components.lawn_mower import (
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers import entity_platform
+from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
-from .commands import async_run_cloud_command
-from .entity import LandroidBaseEntity
 from . import services as integration_services
+from .commands import async_run_cloud_command
 from .const import (
     MOWER_STATE_EDGECUT,
     MOWER_STATE_ESCAPED_DIGITAL_FENCE,
@@ -27,14 +26,15 @@ from .const import (
     MOWER_STATE_STARTING,
     MOWER_STATE_ZONING,
 )
+from .entity import LandroidBaseEntity
 from .services import (
-    async_handle_add_schedule,
     async_handle_add_exclusion_schedule,
+    async_handle_add_schedule,
     async_handle_clear_nutrition,
-    async_handle_delete_schedule,
     async_handle_delete_exclusion_schedule,
-    async_handle_edit_schedule,
+    async_handle_delete_schedule,
     async_handle_edit_exclusion_schedule,
+    async_handle_edit_schedule,
     async_handle_ots,
     async_handle_set_exclusion_day,
     async_handle_set_nutrition,

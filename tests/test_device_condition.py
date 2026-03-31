@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
+import pytest
 from homeassistant.components.lawn_mower import LawnMowerActivity
 from homeassistant.const import (
     CONF_CONDITION,
@@ -12,7 +13,6 @@ from homeassistant.const import (
     CONF_ENTITY_ID,
     CONF_TYPE,
 )
-import pytest
 
 from custom_components.landroid_cloud import DOMAIN
 from custom_components.landroid_cloud.const import (

@@ -6,7 +6,7 @@ from unittest.mock import AsyncMock
 import pytest
 from homeassistant.helpers.entity import EntityCategory
 
-from custom_components.landroid_cloud.switch import LandroidSwitch, SWITCHES
+from custom_components.landroid_cloud.switch import SWITCHES, LandroidSwitch
 
 
 def test_switches_are_configuration_entities() -> None:

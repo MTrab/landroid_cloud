@@ -18,8 +18,8 @@ from homeassistant.const import (
     DEGREE,
     PERCENTAGE,
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
-    UnitOfLength,
     UnitOfElectricPotential,
+    UnitOfLength,
     UnitOfTemperature,
     UnitOfTime,
 )
@@ -29,11 +29,7 @@ from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from pyworxcloud.day_map import DAY_MAP
 
 from .const import ERROR_STATE_MAP, ERROR_STATE_OPTIONS
-from .entity import (
-    LandroidBaseEntity,
-    auto_schedule,
-    auto_schedule_settings,
-)
+from .entity import LandroidBaseEntity, auto_schedule, auto_schedule_settings
 
 
 @dataclass(frozen=True, kw_only=True)

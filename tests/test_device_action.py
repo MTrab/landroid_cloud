@@ -5,6 +5,7 @@ from __future__ import annotations
 from types import SimpleNamespace
 from unittest.mock import AsyncMock
 
+import pytest
 from homeassistant.components.lawn_mower import LawnMowerEntityFeature
 from homeassistant.const import (
     ATTR_ENTITY_ID,
@@ -13,7 +14,6 @@ from homeassistant.const import (
     CONF_ENTITY_ID,
     CONF_TYPE,
 )
-import pytest
 
 from custom_components.landroid_cloud import DOMAIN
 from custom_components.landroid_cloud.device_action import (

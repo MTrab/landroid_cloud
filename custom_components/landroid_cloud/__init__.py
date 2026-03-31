@@ -26,7 +26,6 @@ from pyworxcloud.exceptions import (
 
 from .awsiot import async_prime_awsiot_metrics
 from .const import (
-    CloudProvider,
     CONF_CLOUD,
     CONF_COMMAND_TIMEOUT,
     DEFAULT_CLOUD,
@@ -34,6 +33,7 @@ from .const import (
     DOMAIN,
     PLATFORMS,
     STARTUP,
+    CloudProvider,
 )
 from .coordinator import LandroidCloudCoordinator
 from .models import LandroidRuntimeData

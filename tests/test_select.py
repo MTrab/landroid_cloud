@@ -2,9 +2,12 @@
 
 from types import SimpleNamespace
 
-from custom_components.landroid_cloud.select import LandroidAutoScheduleSelect
-from custom_components.landroid_cloud.select import SELECTS
-from custom_components.landroid_cloud.select import _current_zone_option, _zone_options
+from custom_components.landroid_cloud.select import (
+    SELECTS,
+    LandroidAutoScheduleSelect,
+    _current_zone_option,
+    _zone_options,
+)
 
 
 def test_zone_select_is_disabled_by_default() -> None:

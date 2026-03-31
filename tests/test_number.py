@@ -8,8 +8,8 @@ from custom_components.landroid_cloud.number import (
     NUMBERS,
     _lawn_value,
     _rain_delay_value,
-    _torque_value,
     _time_extension_value,
+    _torque_value,
 )
 
 

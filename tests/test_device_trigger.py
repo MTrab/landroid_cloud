@@ -5,6 +5,7 @@ from __future__ import annotations
 from datetime import timedelta
 from types import SimpleNamespace
 
+import pytest
 from homeassistant.components.lawn_mower import LawnMowerActivity
 from homeassistant.const import (
     CONF_DEVICE_ID,
@@ -14,7 +15,6 @@ from homeassistant.const import (
     CONF_PLATFORM,
     CONF_TYPE,
 )
-import pytest
 
 from custom_components.landroid_cloud import DOMAIN
 from custom_components.landroid_cloud.const import MOWER_STATE_SEARCHING_ZONE
