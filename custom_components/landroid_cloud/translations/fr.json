@@ -286,12 +286,12 @@
   },
   "device_automation": {
     "action_type": {
-      "start_mowing": "Lancer la tonte de {entity_name}",
+      "start_mowing": "Commencer la tonte avec {entity_name}",
       "pause": "Mettre {entity_name} en pause",
       "dock": "Faire revenir {entity_name} à la station de charge"
     },
     "condition_type": {
-      "is_mowing": "{entity_name} est en train de tondre",
+      "is_mowing": "{entity_name} tond",
       "is_docked": "{entity_name} est à la station de charge",
       "has_error": "{entity_name} est en erreur",
       "is_returning": "{entity_name} retourne à la station de charge",
@@ -307,12 +307,12 @@
       "mowing": "{entity_name} commence à tondre",
       "docked": "{entity_name} est revenu à la station de charge",
       "error": "{entity_name} est passé en erreur",
-      "returning": "{entity_name} commence à revenir vers la station de charge",
-      "edgecut": "{entity_name} commence la coupe des bordures",
+      "returning": "{entity_name} revenient vers la station de charge",
+      "edgecut": "{entity_name} coupe les bordures",
       "starting": "{entity_name} démarre",
       "zoning": "{entity_name} commence l'entraînement de zone",
-      "searching_zone": "{entity_name} commence à rechercher une zone",
-      "idle": "{entity_name} est passé au repos",
+      "searching_zone": "{entity_name} recherche une zone",
+      "idle": "{entity_name} est au repos",
       "escaped_digital_fence": "{entity_name} est sorti de la barrière numérique",
       "rain_delayed": "{entity_name} est entré en délai pluie"
     },
