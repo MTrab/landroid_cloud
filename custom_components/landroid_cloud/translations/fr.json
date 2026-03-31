@@ -295,7 +295,7 @@
       "is_docked": "{entity_name} est à la station de charge",
       "has_error": "{entity_name} est en erreur",
       "is_returning": "{entity_name} retourne à la station de charge",
-      "is_edgecut": "{entity_name} effectue la coupe des bordures",
+      "is_edgecut": "{entity_name} coupe les bordures",
       "is_starting": "{entity_name} démarre",
       "is_zoning": "{entity_name} est en entraînement de zone",
       "is_searching_zone": "{entity_name} recherche une zone",
@@ -304,10 +304,10 @@
       "is_rain_delayed": "{entity_name} est en délai pluie"
     },
     "trigger_type": {
-      "mowing": "{entity_name} commence à tondre",
-      "docked": "{entity_name} est revenu à la station de charge",
+      "mowing": "{entity_name} tond",
+      "docked": "{entity_name} est à la station de charge",
       "error": "{entity_name} est passé en erreur",
-      "returning": "{entity_name} revenient vers la station de charge",
+      "returning": "{entity_name} retourne à la station de charge",
       "edgecut": "{entity_name} coupe les bordures",
       "starting": "{entity_name} démarre",
       "zoning": "{entity_name} commence l'entraînement de zone",
