@@ -56,7 +56,7 @@
   "entity": {
     "sensor": {
       "battery": {
-        "name": "Batterie"
+        "name": "Charge batterie"
       },
       "status": {
         "name": "Statut"
@@ -107,22 +107,22 @@
         "name": "Puissance du signal"
       },
       "daily_progress": {
-        "name": "Progression quotidienne"
+        "name": "Avancement du jour"
       },
       "next_schedule": {
-        "name": "Prochain programme"
+        "name": "Prochain départ programmé"
       },
       "rain_delay_remaining": {
-        "name": "Délai pluie restant"
+        "name": "Délai de pluie restant"
       },
       "last_update": {
         "name": "Dernière mise à jour"
       },
       "battery_charge_cycles_total": {
-        "name": "Cycles de charge batterie totaux"
+        "name": "Nb total de charges batterie"
       },
       "battery_charge_cycles_current": {
-        "name": "Cycles de charge batterie depuis la réinitialisation"
+        "name": "Nb de charges batterie depuis RàZ"
       },
       "battery_temperature": {
         "name": "Température de la batterie"
@@ -131,16 +131,16 @@
         "name": "Tension de la batterie"
       },
       "blade_runtime_total": {
-        "name": "Temps total de fonctionnement des lames"
+        "name": "Temps total de travail  des lames"
       },
       "blade_runtime_current": {
-        "name": "Temps de fonctionnement des lames depuis la réinitialisation"
+        "name": "Temps de travail  des lames depuis la RàZ"
       },
       "blade_runtime_reset_at": {
-        "name": "Temps de fonctionnement des lames lors de la dernière réinitialisation"
+        "name": "Temps de travail des lames lors de la RàZ"
       },
       "blade_runtime_reset_time": {
-        "name": "Heure de réinitialisation du temps des lames"
+        "name": "Date de RàZ du temps des lames"
       },
       "distance_driven_total": {
         "name": "Distance totale parcourue"
@@ -158,10 +158,10 @@
         "name": "Lacet"
       },
       "auto_schedule_nutrition": {
-        "name": "Auto schedule: Nutrition"
+        "name": "Progr. Auto : Nutritionn"
       },
       "auto_schedule_exclusion_schedules": {
-        "name": "Auto schedule: Exclusion schedules"
+        "name": "Progr. Auto: Horaires d'exclusio"
       }
     },
     "binary_sensor": {
@@ -177,39 +177,39 @@
         "name": "Verrouillage"
       },
       "off_limits": {
-        "name": "Off Limits"
+        "name": "NoGo"
       },
       "off_limits_shortcut": {
-        "name": "Raccourcis Off Limits"
+        "name": "Fast2Base"
       },
       "acs": {
-        "name": "ACS"
+        "name": "Système Anti Collision"
       },
       "auto_schedule": {
-        "name": "Auto schedule"
+        "name": "Progr. Auto"
       },
       "firmware_auto_update": {
         "name": "Mise à jour automatique du firmware"
       },
       "auto_schedule_irrigation": {
-        "name": "Auto schedule: Irrigation"
+        "name": "Progr. Auto: Arrosage"
       },
       "auto_schedule_exclude_nights": {
-        "name": "Auto schedule: Exclude nights"
+        "name": "Progr. Auto: Exclure les nuits"
       },
       "party_mode": {
-        "name": "Mode pause"
+        "name": "Mode festif"
       }
     },
     "button": {
       "edge_cut": {
-        "name": "Coupe des bords"
+        "name": "Routine de bord"
       },
       "reset_blade_time": {
-        "name": "Réinitialiser le temps des lames"
+        "name": "RàZ du temps des lames"
       },
       "reset_battery_cycles": {
-        "name": "Réinitialiser les cycles batterie"
+        "name": "RàZ des charges batterie"
       }
     },
     "number": {
@@ -220,16 +220,16 @@
         "name": "Hauteur de coupe"
       },
       "time_extension": {
-        "name": "Extension de temps"
+        "name": "Modifier le temps de travail"
       },
       "torque": {
         "name": "Couple"
       },
       "lawn_size": {
-        "name": "Lawn size"
+        "name": "Surface de la pelouse"
       },
       "lawn_perimeter": {
-        "name": "Lawn perimeter"
+        "name": "Périmètre de la pelouse"
       }
     },
     "select": {
@@ -237,7 +237,7 @@
         "name": "Zone"
       },
       "auto_schedule_boost": {
-        "name": "Auto schedule: Boost",
+        "name": "Progr. Auto: Boost",
         "state": {
           "0": "0",
           "1": "1",
@@ -245,23 +245,23 @@
         }
       },
       "auto_schedule_grass_type": {
-        "name": "Auto schedule: Grass type",
+        "name": "Progr. Auto: Espèce d'herbe",
         "state": {
-          "mixed_species": "Mixed species",
-          "festuca_arundinacea": "Tall fescue",
-          "lolium_perenne": "Perennial ryegrass",
-          "poa_pratensis": "Kentucky bluegrass",
-          "festuca_rubra": "Red fescue",
-          "agrostis_stolonifera": "Creeping bentgrass"
+          "mixed_species": "Espèces Mixtes",
+          "festuca_arundinacea": "Fétuque élevée",
+          "lolium_perenne": "Ray-grass vivace",
+          "poa_pratensis": "Pâturin des prés",
+          "festuca_rubra": "Fétuque rouge",
+          "agrostis_stolonifera": "Agrostide stolonifère"
         }
       },
       "auto_schedule_soil_type": {
-        "name": "Auto schedule: Soil type",
+        "name": "Progr. Auto: Type de sol",
         "state": {
-          "clay": "Clay",
-          "silt": "Silt",
-          "sand": "Sand",
-          "ignore": "Unknown"
+          "clay": "Argile",
+          "silt": "Limon",
+          "sand": "Sable",
+          "ignore": "Inconnu"
         }
       }
     },
@@ -273,7 +273,7 @@
     "lawn_mower": {
       "mower": {
         "state": {
-          "edgecut": "Coupe des bordures",
+          "edgecut": "Routine de bord",
           "escaped_digital_fence": "Hors de la barrière numérique",
           "idle": "Au repos",
           "searching_zone": "Recherche de zone",
@@ -304,14 +304,14 @@
       "is_rain_delayed": "{entity_name} est en délai pluie"
     },
     "trigger_type": {
-      "mowing": "{entity_name} a commencé à tondre",
+      "mowing": "{entity_name} commence à tondre",
       "docked": "{entity_name} est revenu à la station de charge",
       "error": "{entity_name} est passé en erreur",
-      "returning": "{entity_name} a commencé à revenir vers la station de charge",
-      "edgecut": "{entity_name} a commencé la coupe des bordures",
-      "starting": "{entity_name} a commencé à démarrer",
-      "zoning": "{entity_name} a commencé l'entraînement de zone",
-      "searching_zone": "{entity_name} a commencé à rechercher une zone",
+      "returning": "{entity_name} commence à revenir vers la station de charge",
+      "edgecut": "{entity_name} commence la coupe des bordures",
+      "starting": "{entity_name} démarre",
+      "zoning": "{entity_name} commence l'entraînement de zone",
+      "searching_zone": "{entity_name} commence à rechercher une zone",
       "idle": "{entity_name} est passé au repos",
       "escaped_digital_fence": "{entity_name} est sorti de la barrière numérique",
       "rain_delayed": "{entity_name} est entré en délai pluie"
@@ -322,104 +322,104 @@
   },
   "services": {
     "set_nutrition": {
-      "name": "Set nutrition",
-      "description": "Set auto-schedule nutrition values.",
+      "name": "Définir la nutrition",
+      "description": "Définit les valeur de nutrition (NPK) pour l'Auto Programmation.",
       "fields": {
         "n": {
-          "name": "Nitrogen (N)",
-          "description": "Nitrogen value for auto-schedule nutrition."
+          "name": "Azote  (N)",
+          "description": "Quantité d'Azote."
         },
         "p": {
-          "name": "Phosphorus (P)",
-          "description": "Phosphorus value for auto-schedule nutrition."
+          "name": "Phosphore (P)",
+          "description": "Quantité de Phosphore."
         },
         "k": {
           "name": "Potassium (K)",
-          "description": "Potassium value for auto-schedule nutrition."
+          "description": "Quantité de Potassium."
         }
       }
     },
     "clear_nutrition": {
-      "name": "Clear nutrition",
-      "description": "Clear auto-schedule nutrition values."
+      "name": "Annuler nutrition",
+      "description": "Supprime les  proportion de nutrition NPK."
     },
     "set_exclusion_day": {
-      "name": "Set exclusion day",
-      "description": "Exclude or include one weekday in auto schedule.",
+      "name": "Non temps de travail",
+      "description": "Supprime ou ajoute un jour de semaine dans le programme.",
       "fields": {
         "day": {
-          "name": "Day",
-          "description": "Day to update in the exclusion scheduler."
+          "name": "Jour",
+          "description": "Jour à modifier pour le programme d'exclusion."
         },
         "exclude_day": {
-          "name": "Exclude day",
-          "description": "Whether the selected day should be fully excluded."
+          "name": "Exclure le Jour",
+          "description": "Faut-il exclure totalement la date sélectionnée ?"
         }
       }
     },
     "add_exclusion_schedule": {
-      "name": "Add exclusion schedule",
-      "description": "Add an exclusion schedule entry to auto schedule.",
+      "name": "Ajouter un calendrier d'exclusion",
+      "description": "Ajouter une entrée d'exclusion à la planification automatique.",
       "fields": {
         "day": {
-          "name": "Day",
-          "description": "Day of week for the new exclusion schedule entry."
+          "name": "Jour",
+          "description": "Jour de la semaine pour la nouvelle inscription au calendrier d'exclusion."
         },
         "start": {
-          "name": "Start",
-          "description": "Start time in HH:MM format."
+          "name": "Démarrage",
+          "description": "Heure de démarrage au format HH:MM."
         },
         "duration": {
-          "name": "Duration",
-          "description": "Duration in minutes."
+          "name": "Durée",
+          "description": "Durée en minutes."
         },
         "reason": {
-          "name": "Reason",
-          "description": "Reason for the exclusion schedule entry."
+          "name": "Motif",
+          "description": "Motif de l'inscription au tableau d'exclusion."
         }
       }
     },
     "edit_exclusion_schedule": {
-      "name": "Edit exclusion schedule",
-      "description": "Replace an existing exclusion schedule entry in auto schedule.",
+      "name": "Modifier le calendrier d'exclusion",
+      "description": "Remplacer une entrée d'exclusion existante dans la planification automatique.",
       "fields": {
         "current_day": {
-          "name": "Current day",
-          "description": "Day for the exclusion schedule you want to change."
+          "name": "Jour actuel",
+          "description": "Jour du calendrier d'exclusion que vous souhaitez modifier."
         },
         "current_start": {
-          "name": "Current start",
-          "description": "Start time for the exclusion schedule you want to change."
+          "name": "Début actuel",
+          "description": "Heure de début du calendrier d'exclusion que vous souhaitez modifier."
         },
         "day": {
-          "name": "Day",
-          "description": "New day of week for the exclusion schedule entry."
+          "name": "Jour",
+          "description": "Nouveau jour de la semaine pour l'inscription au calendrier d'exclusion."
         },
         "start": {
-          "name": "Start",
-          "description": "New start time in HH:MM format."
+          "name": "Début",
+          "description": "Nouvelle heure de début au format HH:MM."
         },
         "duration": {
-          "name": "Duration",
-          "description": "New duration in minutes."
+          "name": "Durée",
+          "description": "Nouvelle durée en minutes."
         },
         "reason": {
-          "name": "Reason",
-          "description": "Reason for the exclusion schedule entry."
+          "name": "Motif",
+          "description": "Motif de l'inscription au tableau d'exclusion."
         }
       }
     },
     "delete_exclusion_schedule": {
-      "name": "Delete exclusion schedule",
-      "description": "Delete an exclusion schedule entry from auto schedule.",
+      "name": "Supprimer le calendrier d'exclusion",
+      "description": "Supprimer une entrée d'exclusion de la planification automatique.",
       "fields": {
         "day": {
-          "name": "Day",
-          "description": "Day for the exclusion schedule you want to delete."
+          "name": "Jour",
+          "description": "Jour de la période d'exclusion que vous souhaitez supprimer."
         },
         "start": {
-          "name": "Start",
-          "description": "Use this if the selected day has more than one exclusion schedule and you need to choose one by time."
+          "name": "Départ",
+          "description": "Utilisez cette option si le jour sélectionné comporte plusieurs horaires d'exclusion et que vous devez en choisir un par heure."
         }
       }
     }
