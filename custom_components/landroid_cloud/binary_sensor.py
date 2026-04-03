@@ -21,6 +21,8 @@ from .entity import LandroidBaseEntity
 class LandroidBinarySensorDescription(BinarySensorEntityDescription):
     """Description for Landroid binary sensors."""
 
+    requires_online: bool = False
+
 
 BINARY_SENSORS: tuple[LandroidBinarySensorDescription, ...] = (
     LandroidBinarySensorDescription(
@@ -35,6 +37,7 @@ BINARY_SENSORS: tuple[LandroidBinarySensorDescription, ...] = (
         translation_key="charging",
         device_class=BinarySensorDeviceClass.BATTERY_CHARGING,
         entity_category=EntityCategory.DIAGNOSTIC,
+        requires_online=True,
     ),
 )
 
@@ -76,6 +79,7 @@ class LandroidBinarySensor(LandroidBaseEntity, BinarySensorEntity):
     ) -> None:
         """Initialize binary sensor entity."""
         self.entity_description = description
+        self._attr_requires_online = description.requires_online
         super().__init__(
             coordinator, config_entry, serial_number, self.entity_description.key
         )

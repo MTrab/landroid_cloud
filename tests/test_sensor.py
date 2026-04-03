@@ -561,6 +561,25 @@ def test_daily_progress_sensor_stays_available_with_zero() -> None:
     assert entity.available is True
 
 
+def test_battery_sensor_is_unavailable_when_mower_is_offline() -> None:
+    """Battery sensor should be unavailable while the mower is offline."""
+    entity = object.__new__(LandroidSensor)
+    entity.entity_description = next(
+        description for description in SENSORS if description.key == "battery"
+    )
+    entity.coordinator = SimpleNamespace(
+        last_update_success=True,
+        data={"serial": SimpleNamespace(online=False, battery={"percent": 87})},
+    )
+    entity._serial_number = "serial"
+    entity._attr_requires_auto_schedule = (
+        entity.entity_description.requires_auto_schedule
+    )
+    entity._attr_requires_online = entity.entity_description.requires_online
+
+    assert entity.available is False
+
+
 def test_battery_cycle_value_returns_integer() -> None:
     """Battery cycle values should be exposed when present."""
     device = SimpleNamespace(battery={"cycles": {"total": 3014, "current": 14}})
