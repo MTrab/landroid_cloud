@@ -4,11 +4,9 @@
 
 # Landroid Cloud
 
-This integration is designed for Home Assistant.
+This is a Home Assistant integration for cloud-connected Landroid mowers.
 
-Landroid Cloud lets you connect your cloud-compatible mower to Home Assistant.
-
-### Currently these vendors are supported:
+### Supported vendors
 
 - Worx Landroid
 - Kress
@@ -19,18 +17,18 @@ Landroid Cloud lets you connect your cloud-compatible mower to Home Assistant.
 ### HACS
 
 - Ensure that HACS is installed.
-- Search for and install the `Landroid Cloud` integration (or click the blue button below to go there directly).
+- Search for `Landroid Cloud` and install it, or use the button below.
 - Restart Home Assistant.
-- Go to Integrations and add the Landroid Cloud integration
+- Go to Integrations and add `Landroid Cloud`.
 
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=MTrab&repository=landroid_cloud)
 
 ### Manual installation
 
 - Download the latest release.
-- Unpack the release and copy the custom_components/landroid_cloud directory into the custom_components directory of your Home Assistant installation.
+- Unpack it and copy `custom_components/landroid_cloud` into your Home Assistant `custom_components` directory.
 - Restart Home Assistant.
-- Go to Integrations and add the Landroid Cloud integration
+- Go to Integrations and add `Landroid Cloud`.
 
 ## Setup
 
@@ -38,25 +36,25 @@ Open the integration setup directly:
 
 [![](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=landroid_cloud)
 
-Or go to `Home Assistant` > `Settings` > `Devices & services`
+Or go to `Home Assistant` > `Settings` > `Devices & services`.
 
-Add the `Landroid Cloud` integration _(If it doesn't show, try CTRL+F5 to force a refresh of the page)_
+Add `Landroid Cloud`. If it doesn't show up, try `CTRL+F5` to refresh the page.
 
 Use the same credentials as in your mower app.
 
-If you are upgrading from v6, existing config entries should now migrate into v7 automatically instead of requiring a full remove and re-add.
+If you're upgrading from v6, existing config entries should migrate to v7 automatically. You shouldn't need to remove and add the integration again.
 
-## Landroid Card
+## Landroid card
 
 [Barma-lej](https://github.com/barma-lej) has created a custom card for the Landroid Cloud integration.<br/>
-You can find installation instructions on [this Github repo](https://github.com/Barma-lej/landroid-card)
+Installation instructions are in [the GitHub repository](https://github.com/Barma-lej/landroid-card).
 
 
 ## Integration overview
 
-The integration exposes each mower as a Home Assistant device with a native lawn mower entity and a set of related entities for telemetry, diagnostics and configuration.
+Each mower is added as a Home Assistant device. The integration creates a native lawn mower entity plus related entities for status, diagnostics, and configuration.
 
-Write-capable entities become unavailable while the mower is offline. Read-only entities remain available so status and diagnostics can still be inspected.
+Entities that can change mower settings go unavailable while the mower is offline. Read-only entities stay available, so you can still see status and diagnostics.
 
 ### Supported vendors
 
@@ -64,10 +62,15 @@ Write-capable entities become unavailable while the mower is offline. Read-only 
 - Kress
 - LandXcape
 
-Fleet is not supported at the moment.
-The Fleet API is still in an early alpha state, so this integration does not currently expose Fleet devices or controls.
+Fleet is not supported right now.
+The Fleet API is still in early alpha, so this integration does not expose Fleet devices or controls.
 
-### Exposed entities
+### Known limitations
+
+On Kress RTK Mission and Landroid Vision mowers, zones and schedules are read-only in this integration.
+They can be read from the mower, but they cannot be changed from Home Assistant.
+
+### Entities
 
 #### Lawn mower
 
@@ -107,10 +110,10 @@ Each mower creates one lawn mower entity with these actions:
 
 Notes:
 
-- `Next schedule` is exposed as a timestamp sensor and includes known schedule details as attributes.
+- `Next schedule` is a timestamp sensor and includes known schedule details as attributes.
 - `Auto schedule nutrition` exposes the configured N/P/K values when auto schedule provides them.
 - `Auto schedule exclusion schedules` summarizes exclusion rules and exposes the normalized schedule details as attributes.
-- `Rain delay remaining` is only available while a rain delay is active. When the mower reports `0` minutes remaining, the sensor is exposed as unavailable instead of reporting `0`.
+- `Rain delay remaining` is only available while a rain delay is active. When the mower reports `0` minutes left, the sensor becomes unavailable instead of showing `0`.
 - Duration and distance sensors suggest user-friendly display units where Home Assistant supports conversion.
 
 #### Binary sensors
@@ -122,7 +125,7 @@ Notes:
 
 #### Updates
 
-Firmware updates are exposed through a native Home Assistant update entity when the mower reports OTA firmware support.
+If the mower reports OTA firmware support, firmware updates are exposed through a native Home Assistant update entity.
 
 | Entity | Category | Default | Notes |
 | --- | --- | --- | --- |
@@ -131,8 +134,8 @@ Firmware updates are exposed through a native Home Assistant update entity when 
 Notes:
 
 - The update entity exposes the installed version, the latest available version, and release notes when the cloud API provides them.
-- Release notes prefer the Markdown-friendly changelog from the API when available.
-- Installing an update queues the latest available firmware from the vendor cloud. Older firmware versions cannot be selected manually.
+- If the API provides a Markdown-friendly changelog, that version is used for release notes.
+- Installing an update queues the latest available firmware from the vendor cloud. You can't pick an older version manually.
 
 #### Switches
 
@@ -182,16 +185,16 @@ Numbers require the mower to be online and are disabled by default.
 | Auto schedule grass type | Configuration | Disabled | Requires auto schedule to be enabled |
 | Auto schedule soil type | Configuration | Disabled | Requires auto schedule to be enabled |
 
-## Actions and control model
+## Control and services
 
-The integration exposes control through native entities and custom `landroid_cloud` services:
+You can control the mower through native entities and custom `landroid_cloud` services:
 
-- Lawn mower actions for start, pause and dock
-- Device automations for mower actions, triggers, and conditions in Home Assistant automations
-- Update entities for firmware version tracking, release notes, and OTA install actions
+- Lawn mower actions for start, pause, and dock
+- Device automations for mower actions, triggers, and conditions
+- Update entities for firmware version tracking, release notes, and OTA installs
 - Buttons for one-shot actions such as edge cut and counter resets
-- Switches for boolean features such as auto schedule, firmware auto update, party mode, ACS, lock and Off Limits
-- Numbers for writable values such as rain delay, cutting height, time extension, torque and lawn metadata
+- Switches for boolean features such as auto schedule, firmware auto update, party mode, ACS, lock, and Off Limits
+- Numbers for writable values such as rain delay, cutting height, time extension, torque, and lawn metadata
 - Select entities for zone choice and auto-schedule tuning
 - The `landroid_cloud.ots` service for starting a one-time schedule
 - The `landroid_cloud.add_schedule`, `landroid_cloud.edit_schedule`, and `landroid_cloud.delete_schedule` services for schedule management
@@ -201,20 +204,22 @@ Supported device automation states include mowing, docked, returning, error, edg
 
 ### Auto-schedule refresh behavior
 
-Auto-schedule settings are written through observed mower API calls, not through the MQTT push channel used for many runtime updates.
+Auto-schedule settings are written through observed mower API calls, not through the MQTT push channel used for many live updates.
 
-Because of that, changes made from Home Assistant do not appear immediately in the vendor app, and changes made in the vendor app do not appear immediately in Home Assistant. Updated values become visible after the next API refresh cycle.
+That means changes made in Home Assistant do not show up right away in the vendor app, and changes made in the vendor app do not show up right away in Home Assistant. Updated values appear after the next API refresh.
+
+On Kress RTK Mission and Landroid Vision mowers, schedules are read-only. The integration can show them, but it cannot create, edit, or delete them.
 
 ### Zone handling
 
-Legacy mowers expose the configured start-point zones for selection.
-RTK/Vision style zone IDs are exposed read-only, and changing the selected RTK zone from Home Assistant is not supported yet.
+Legacy mowers expose their configured start-point zones for selection.
+RTK/Vision-style zone IDs are exposed as read-only. Changing the selected RTK zone from Home Assistant is not supported yet.
 
 ### Firmware updates
 
 Firmware update metadata is read from the vendor cloud API and merged with the mower's live firmware payload when available.
 
-Because availability and release notes come from cloud lookups instead of the normal push updates, Home Assistant may show new firmware details only after the next refresh or when the update entity explicitly refreshes its metadata.
+Because availability and release notes come from cloud lookups instead of the usual push updates, Home Assistant may only show new firmware details after the next refresh or when the update entity refreshes its metadata.
 
 ### Custom integration services
 
@@ -242,7 +247,7 @@ data:
 
 #### `landroid_cloud.add_schedule`
 
-Creates one or more recurring schedule entries in a single action call.
+Creates one or more recurring schedule entries in a single action.
 
 Fields:
 
@@ -254,8 +259,8 @@ Fields:
 Behavior:
 
 - If you select multiple days, the same schedule is created for each selected day
-- On mowers with two slots per day, the integration automatically chooses the first or second free slot
-- On mowers that support more than two daily entries, the integration will keep adding entries on the selected day as long as the mower accepts them
+- On mowers with two slots per day, the integration picks the first or second free slot automatically
+- On mowers that support more than two daily entries, the integration keeps adding entries on the selected day as long as the mower accepts them
 
 Example:
 
@@ -290,7 +295,7 @@ Behavior:
 
 - If the selected current day only has one schedule, `current_start` is not needed
 - If the day has multiple schedules, you must provide `current_start` so the integration knows which one to edit
-- When moving an entry to a different day, the integration automatically resolves the correct slot behind the scenes
+- When moving an entry to a different day, the integration resolves the correct slot automatically
 
 Example:
 
@@ -342,26 +347,28 @@ data:
   all_schedules: true
 ```
 
-### Finding the right schedule to edit or delete
+### Finding the schedule you want to edit or delete
 
-Enable the `Next schedule` sensor if you want a simple view of the normalized schedule data the integration uses. Its attributes include `schedule_entries`, which can help you see which days and start times currently exist for the mower.
+Enable the `Next schedule` sensor if you want an easy way to inspect the normalized schedule data used by the integration. Its attributes include `schedule_entries`, which can help you see which days and start times currently exist for the mower.
 
 ## Availability behavior
 
 - Read-only entities stay available when the mower is offline
-- Write-capable entities are marked unavailable when the mower is offline
-- If coordinator data itself is unavailable, all related entities become unavailable
+- Entities that can change mower settings are marked unavailable when the mower is offline
+- If coordinator data is unavailable, all related entities become unavailable
 
 ## Diagnostics and issue reporting
 
-If you open an issue, include a Home Assistant diagnostics download whenever possible. Diagnostics are much more useful than pasted JSON fragments or screenshots of attributes.
+If you open an issue, include a Home Assistant diagnostics download when possible. It is usually much more useful than pasted JSON fragments or screenshots of attributes.
 
 ## Other useful information
+
 ### Services and app stopped working
 
-You might experience being banned from Worx Landroid Cloud service.
-Follow this simple guide to make it work again:
-* Go to [My Landroids](https://account.worxlandroid.com/product-items)
-* Unlink your Landroid(s)
-* Open app on mobile device
-* Add Landroid(s)
+You may have been temporarily blocked by the Worx Landroid cloud service.
+To restore access:
+
+- Go to [My Landroids](https://account.worxlandroid.com/product-items)
+- Unlink your Landroid(s)
+- Open the mobile app
+- Add the Landroid(s) again
