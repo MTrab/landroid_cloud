@@ -193,6 +193,7 @@ class LandroidFirmwareUpdateEntity(LandroidBaseEntity, UpdateEntity):
     """Representation of a Landroid firmware update entity."""
 
     entity_description: LandroidUpdateDescription
+    _attr_requires_online = True
     _attr_supported_features = (
         UpdateEntityFeature.INSTALL | UpdateEntityFeature.RELEASE_NOTES
     )

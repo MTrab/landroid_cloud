@@ -92,6 +92,14 @@ def test_update_entity_supports_install_and_release_notes() -> None:
     )
 
 
+def test_update_entity_is_unavailable_when_mower_is_offline() -> None:
+    """Firmware update entity should be unavailable while the mower is offline."""
+    entity = _make_entity()
+    entity.coordinator.data["serial"].online = False
+
+    assert entity.available is False
+
+
 def test_release_notes_markdown_includes_product_and_head_sections() -> None:
     """Release notes should include both product and head changelogs."""
     notes = _release_notes_markdown(

@@ -41,6 +41,7 @@ class LandroidSensorDescription(SensorEntityDescription):
     """Description for Landroid sensors."""
 
     requires_auto_schedule: bool = False
+    requires_online: bool = False
 
 
 def _battery_charging_attribute(device) -> dict[str, bool] | None:
@@ -351,6 +352,7 @@ SENSORS: tuple[LandroidSensorDescription, ...] = (
         native_unit_of_measurement=PERCENTAGE,
         device_class=SensorDeviceClass.BATTERY,
         state_class=SensorStateClass.MEASUREMENT,
+        requires_online=True,
     ),
     LandroidSensorDescription(
         key="error",
@@ -568,6 +570,7 @@ class LandroidSensor(LandroidBaseEntity, SensorEntity):
         """Initialize sensor entity."""
         self.entity_description = description
         self._attr_requires_auto_schedule = description.requires_auto_schedule
+        self._attr_requires_online = description.requires_online
         super().__init__(
             coordinator, config_entry, serial_number, self.entity_description.key
         )
