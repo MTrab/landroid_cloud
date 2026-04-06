@@ -199,7 +199,7 @@ class LandroidSwitch(LandroidBaseEntity, SwitchEntity):
             )
         elif self.entity_description.key == "party_mode":
             await async_run_cloud_command(
-                lambda: self.coordinator.cloud.set_partymode(serial_number, state)
+                lambda: self.coordinator.cloud.set_party_mode(serial_number, state)
             )
         elif self.entity_description.key == "firmware_auto_update":
             await async_run_cloud_command(
