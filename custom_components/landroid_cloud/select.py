@@ -66,11 +66,11 @@ def _current_zone_option(device) -> str | None:
     options = _zone_options(device)
     current = device.zone.get("current")
     if isinstance(current, int):
-        current_option = str(current)
+        current_option = str(current + 1)
         if current_option in options:
             return current_option
 
-        current_option = str(current + 1)
+        current_option = str(current)
         if current_option in options:
             return current_option
 
@@ -200,7 +200,7 @@ class LandroidZoneSelect(LandroidBaseEntity, SelectEntity):
         """Set selected zone."""
         if self.device.zone.get("ids", []):
             raise HomeAssistantError(
-                "Zone selection for RTK devices is not supported yet"
+                "Zone selection for RTK/Vision devices is not supported yet"
             )
         zone = int(option)
         serial_number = str(self.device.serial_number)
