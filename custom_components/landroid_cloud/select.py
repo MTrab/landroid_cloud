@@ -66,11 +66,11 @@ def _current_zone_option(device) -> str | None:
     options = _zone_options(device)
     current = device.zone.get("current")
     if isinstance(current, int):
-        current_option = str(current)
+        current_option = str(current + 1)
         if current_option in options:
             return current_option
 
-        current_option = str(current + 1)
+        current_option = str(current)
         if current_option in options:
             return current_option
 
