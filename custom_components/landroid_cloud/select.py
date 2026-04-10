@@ -200,7 +200,7 @@ class LandroidZoneSelect(LandroidBaseEntity, SelectEntity):
         """Set selected zone."""
         if self.device.zone.get("ids", []):
             raise HomeAssistantError(
-                "Zone selection for RTK devices is not supported yet"
+                "Zone selection for RTK/Vision devices is not supported yet"
             )
         zone = int(option)
         serial_number = str(self.device.serial_number)
