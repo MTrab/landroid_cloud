@@ -1,1 +1,13 @@
-{"domain": "landroid_cloud", "name": "Landroid Cloud", "codeowners": ["@MTrab"], "config_flow": true, "documentation": "https://github.com/MTrab/landroid_cloud", "integration_type": "hub", "iot_class": "cloud_push", "issue_tracker": "https://github.com/MTrab/landroid_cloud/issues", "loggers": ["pyworxcloud"], "requirements": ["pyworxcloud==6.3.2"], "version": "7.0.1"}
+{
+  "domain": "landroid_cloud",
+  "name": "Landroid Cloud",
+  "codeowners": ["@MTrab"],
+  "config_flow": true,
+  "documentation": "https://github.com/MTrab/landroid_cloud",
+  "integration_type": "hub",
+  "iot_class": "cloud_push",
+  "issue_tracker": "https://github.com/MTrab/landroid_cloud/issues",
+  "loggers": ["pyworxcloud"],
+  "requirements": ["pyworxcloud==6.3.3"],
+  "version": "7.0.1"
+}
