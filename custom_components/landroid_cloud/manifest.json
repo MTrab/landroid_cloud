@@ -6,7 +6,7 @@
     ],
     "config_flow": true,
     "documentation": "https://github.com/MTrab/landroid_cloud",
-    "integration_type": "hub",
+    "integration_type": "device",
     "iot_class": "cloud_push",
     "issue_tracker": "https://github.com/MTrab/landroid_cloud/issues",
     "loggers": [
