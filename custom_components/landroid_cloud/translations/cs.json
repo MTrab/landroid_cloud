@@ -20,7 +20,8 @@
       "unknown": "Neočekávaná chyba"
     },
     "abort": {
-      "already_exists": "Tento uživatelský účet již byl nastaven"
+      "already_exists": "Tento uživatelský účet již byl nastaven",
+      "already_in_progress": "Nastavení již probíhá"
     }
   },
   "selector": {

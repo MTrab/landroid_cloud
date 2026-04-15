@@ -20,7 +20,8 @@
       "unknown": "Error inesperado"
     },
     "abort": {
-      "already_exists": "Esta cuenta de usuario ya ha sido configurada"
+      "already_exists": "Esta cuenta de usuario ya ha sido configurada",
+      "already_in_progress": "El flujo de configuración ya está en curso"
     }
   },
   "selector": {

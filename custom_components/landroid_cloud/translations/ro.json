@@ -20,7 +20,8 @@
       "unknown": "Eroare neașteptată"
     },
     "abort": {
-      "already_exists": "Acest cont a fost deja configurat"
+      "already_exists": "Acest cont a fost deja configurat",
+      "already_in_progress": "Fluxul de configurație este deja în desfășurare"
     }
   },
   "selector": {

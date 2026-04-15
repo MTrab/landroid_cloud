@@ -20,7 +20,8 @@
       "unknown": "Ootamatu viga"
     },
     "abort": {
-      "already_exists": "See kasutajakonto on juba konfigureeritud"
+      "already_exists": "See kasutajakonto on juba konfigureeritud",
+      "already_in_progress": "Seadistamine on juba käimas"
     }
   },
   "selector": {

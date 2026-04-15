@@ -20,7 +20,8 @@
       "unknown": "Unerwarteter Fehler"
     },
     "abort": {
-      "already_exists": "Dieses Benutzerkonto wurde bereits konfiguriert"
+      "already_exists": "Dieses Benutzerkonto wurde bereits konfiguriert",
+      "already_in_progress": "Konfigurationsablauf wird bereits ausgeführt"
     }
   },
   "selector": {

@@ -20,7 +20,8 @@
       "unknown": "Niespodziewany błąd"
     },
     "abort": {
-      "already_exists": "Ta nazwa użytkownika jest już skonfigurowana"
+      "already_exists": "Ta nazwa użytkownika jest już skonfigurowana",
+      "already_in_progress": "Proces konfiguracji już trwa"
     }
   },
   "selector": {

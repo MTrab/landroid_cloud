@@ -20,7 +20,8 @@
       "unknown": "Onverwachtse fout"
     },
     "abort": {
-      "already_exists": "Deze gebruiker is al geconfigureerd"
+      "already_exists": "Deze gebruiker is al geconfigureerd",
+      "already_in_progress": "De configuratie is momenteel al bezig"
     }
   },
   "selector": {

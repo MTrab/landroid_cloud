@@ -20,7 +20,8 @@
       "unknown": "Váratlan hiba"
     },
     "abort": {
-      "already_exists": "Ez a felhasználói fiók már be van állítva"
+      "already_exists": "Ez a felhasználói fiók már be van állítva",
+      "already_in_progress": "A konfigurálás már folyamatban van"
     }
   },
   "selector": {
