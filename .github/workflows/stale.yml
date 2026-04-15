@@ -27,7 +27,7 @@ jobs:
           days-before-pr-close: 14
           stale-issue-label: stale
           stale-pr-label: stale
-          exempt-issue-labels: pinned,security
-          exempt-pr-labels: pinned,security
+          exempt-issue-labels: pinned,security,no-stale-check
+          exempt-pr-labels: pinned,security,no-stale-check
           remove-stale-when-updated: true
           operations-per-run: 200
