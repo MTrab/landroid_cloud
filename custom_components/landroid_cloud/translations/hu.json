@@ -1,428 +1,350 @@
 {
-  "config": {
-    "step": {
-      "user": {
-        "title": "Kapcsolódás a felhőszolgáltatásokhoz",
-        "description": "Adja meg a felhő-hozzáférési adatokat, és válassza ki a felhőszolgáltatót.",
-        "data": {
-          "email": "E-mail",
-          "password": "Jelszó",
-          "cloud": "Felhőszolgáltató"
-        }
-      }
-    },
-    "error": {
-      "cannot_connect": "Kapcsolódási hiba",
-      "invalid_auth": "Hitelesítési hiba",
-      "too_many_requests": "Túl sok API hívás. Próbálja meg 24 óra múlva",
-      "api_error": "A felhő API elutasította a kérést",
-      "timeout": "Kapcsolódási időtúllépés",
-      "unknown": "Váratlan hiba"
-    },
-    "abort": {
-      "already_exists": "Ez a felhasználói fiók már be van állítva",
-      "already_in_progress": "A konfigurálás már folyamatban van"
-    }
-  },
-  "selector": {
-    "cloud": {
-      "options": {
-        "worx": "Worx",
-        "kress": "Kress",
-        "landxcape": "LandXcape"
-      }
-    },
-    "days_of_week": {
-      "options": {
-        "monday": "Hétfő",
-        "tuesday": "Kedd",
-        "wednesday": "Szerda",
-        "thursday": "Csütörtök",
-        "friday": "Péntek",
-        "saturday": "Szombat",
-        "sunday": "Vasárnap"
-      }
-    }
-  },
-  "options": {
-    "step": {
-      "init": {
-        "title": "Landroid Cloud beállítások",
-        "data": {
-          "command_timeout": "Parancs időtúllépés (másodperc)"
-        }
-      }
-    }
-  },
-  "entity": {
-    "sensor": {
-      "battery": {
-        "name": "Akkumulátor"
-      },
-      "status": {
-        "name": "Állapot"
-      },
-      "error": {
-        "name": "Hiba",
-        "state": {
-          "unknown": "Ismeretlen",
-          "no_error": "Nincs hiba",
-          "trapped": "Megakadt",
-          "lifted": "Felemelve",
-          "wire_missing": "Hiányzó vezetődrót",
-          "outside_wire": "Vezetődróton kívül",
-          "rain_delay": "Az eső késleltetése aktív",
-          "close_door_to_mow": "Csukja be az ajtót a fűnyíráshoz",
-          "close_door_to_go_home": "Csukja be az ajtót a haza induláshoz",
-          "blade_motor_blocked": "A vágómotor blokkolva van",
-          "wheel_motor_blocked": "A kerékmotor blokkolva van",
-          "trapped_timeout": "Időtúllépés megakadás közben",
-          "upside_down": "A fűnyíró fejjel lefelé van",
-          "battery_low": "Az akkumulátor lemerült",
-          "reverse_wire": "A vezetődrót fodított irányú",
-          "charge_error": "Töltési hiba",
-          "timeout_finding_home": "Időtúllépés dokkoló keresése közben",
-          "locked": "A fűnyíró le van zárva",
-          "battery_temperature_error": "Akkumulátor hőmérsékleti hiba",
-          "battery_trunk_open_timeout": "Az akkutartó túl sokáig van nyitva",
-          "wire_sync": "Vezetődrót szinkronizálás",
-          "charging_station_docking_error": "Töltőállomás dokkolási hiba",
-          "hbi_error": "HBI hiba",
-          "ota_error": "OTA hiba",
-          "map_error": "Térképhiba",
-          "excessive_slope": "A lejtő túl meredek",
-          "unreachable_zone": "Elérhetetlen zóna",
-          "unreachable_charging_station": "A töltőállomás nem elérhető",
-          "insufficient_sensor_data": "Nincs elegendő érzékelő adat",
-          "training_start_disallowed": "A betanítás elindítása nem engedélyezett",
-          "camera_error": "Kamera hiba",
-          "mapping_exploration_required": "Térképfelderítés szükséges",
-          "mapping_exploration_failed": "Térképfelderítés sikertelen",
-          "rfid_reader_error": "RFID olvasó hiba",
-          "headlight_error": "Fényszóró hiba",
-          "missing_charging_station": "A töltőállomás hiányzik",
-          "blade_height_adjustment_blocked": "A penge magasság állítása meghiúsult."
-        }
-      },
-      "rssi": {
-        "name": "Jelerősség"
-      },
-      "daily_progress": {
-        "name": "Napi előrehaladás"
-      },
-      "next_schedule": {
-        "name": "Következő ütemezés"
-      },
-      "rain_delay_remaining": {
-        "name": "Hátralévő esőkésleltetés"
-      },
-      "last_update": {
-        "name": "Utolsó frissítés"
-      },
-      "battery_charge_cycles_total": {
-        "name": "Akkumulátor töltési ciklusok összesen"
-      },
-      "battery_charge_cycles_current": {
-        "name": "Akkumulátor töltési ciklusok a visszaállítás óta"
-      },
-      "battery_temperature": {
-        "name": "Akkumulátor hőmérséklete"
-      },
-      "battery_voltage": {
-        "name": "Akkumulátor feszültsége"
-      },
-      "blade_runtime_total": {
-        "name": "Kések teljes üzemideje"
-      },
-      "blade_runtime_current": {
-        "name": "Kések üzemideje a visszaállítás óta"
-      },
-      "blade_runtime_reset_at": {
-        "name": "Kések üzemideje az utolsó visszaállításnál"
-      },
-      "blade_runtime_reset_time": {
-        "name": "Késüzemidő-visszaállítás ideje"
-      },
-      "distance_driven_total": {
-        "name": "Összes megtett távolság"
-      },
-      "mower_runtime_total": {
-        "name": "Fűnyíró teljes üzemideje"
-      },
-      "pitch": {
-        "name": "Pitch"
-      },
-      "roll": {
-        "name": "Roll"
-      },
-      "yaw": {
-        "name": "Yaw"
-      },
-      "auto_schedule_nutrition": {
-        "name": "Auto schedule: Nutrition"
-      },
-      "auto_schedule_exclusion_schedules": {
-        "name": "Auto schedule: Exclusion schedules"
-      }
-    },
-    "binary_sensor": {
-      "rain_sensor": {
-        "name": "Esőérzékelő"
-      },
-      "charging": {
-        "name": "Töltés"
-      }
-    },
-    "switch": {
-      "lock": {
-        "name": "Zár"
-      },
-      "off_limits": {
-        "name": "Off Limits"
-      },
-      "off_limits_shortcut": {
-        "name": "Off Limits parancsikonok"
-      },
-      "acs": {
-        "name": "ACS"
-      },
-      "auto_schedule": {
-        "name": "Auto schedule"
-      },
-      "firmware_auto_update": {
-        "name": "Automatikus firmware-frissítés"
-      },
-      "auto_schedule_irrigation": {
-        "name": "Auto schedule: Irrigation"
-      },
-      "auto_schedule_exclude_nights": {
-        "name": "Auto schedule: Exclude nights"
-      },
-      "party_mode": {
-        "name": "Szünet mód"
-      }
-    },
-    "button": {
-      "edge_cut": {
-        "name": "Szegélynyírás"
-      },
-      "reset_blade_time": {
-        "name": "Kés üzemidő visszaállítása"
-      },
-      "reset_battery_cycles": {
-        "name": "Akkumulátor ciklusok visszaállítása"
-      }
-    },
-    "number": {
-      "rain_delay": {
-        "name": "Esőkésleltetés"
-      },
-      "cutting_height": {
-        "name": "Vágási magasság"
-      },
-      "time_extension": {
-        "name": "Időkiterjesztés"
-      },
-      "torque": {
-        "name": "Nyomaték"
-      },
-      "lawn_size": {
-        "name": "Lawn size"
-      },
-      "lawn_perimeter": {
-        "name": "Lawn perimeter"
-      }
-    },
-    "select": {
-      "zone": {
-        "name": "Zóna"
-      },
-      "auto_schedule_boost": {
-        "name": "Auto schedule: Boost",
-        "state": {
-          "0": "0",
-          "1": "1",
-          "2": "2"
-        }
-      },
-      "auto_schedule_grass_type": {
-        "name": "Auto schedule: Grass type",
-        "state": {
-          "mixed_species": "Mixed species",
-          "festuca_arundinacea": "Tall fescue",
-          "lolium_perenne": "Perennial ryegrass",
-          "poa_pratensis": "Kentucky bluegrass",
-          "festuca_rubra": "Red fescue",
-          "agrostis_stolonifera": "Creeping bentgrass"
-        }
-      },
-      "auto_schedule_soil_type": {
-        "name": "Auto schedule: Soil type",
-        "state": {
-          "clay": "Clay",
-          "silt": "Silt",
-          "sand": "Sand",
-          "ignore": "Unknown"
-        }
-      }
-    },
-    "update": {
-      "firmware": {
-        "name": "Firmware"
-      }
-    },
-    "lawn_mower": {
-      "mower": {
-        "state": {
-          "edgecut": "Szélvágás",
-          "escaped_digital_fence": "A digitális kerítésen kívül",
-          "idle": "Tétlen",
-          "searching_zone": "Zóna keresése",
-          "starting": "Indulás",
-          "zoning": "Zóna betanítás",
-          "rain_delayed": "Esőkésleltetés"
-        }
-      }
-    }
-  },
-  "device_automation": {
-    "action_type": {
-      "start_mowing": "A(z) {entity_name} kezdje meg a fűnyírást",
-      "pause": "A(z) {entity_name} szüneteltetése",
-      "dock": "A(z) {entity_name} térjen vissza a töltőállomásra"
-    },
-    "condition_type": {
-      "is_mowing": "A(z) {entity_name} füvet nyír",
-      "is_docked": "A(z) {entity_name} a töltőállomáson van",
-      "has_error": "A(z) {entity_name} hibát jelez",
-      "is_returning": "A(z) {entity_name} visszatér a töltőállomásra",
-      "is_edgecut": "A(z) {entity_name} szélvágást végez",
-      "is_starting": "A(z) {entity_name} indul",
-      "is_zoning": "A(z) {entity_name} zónát tanul",
-      "is_searching_zone": "A(z) {entity_name} zónát keres",
-      "is_idle": "A(z) {entity_name} tétlen",
-      "is_escaped_digital_fence": "A(z) {entity_name} a digitális kerítésen kívül van",
-      "is_rain_delayed": "{entity_name} esőkésleltetésben van"
-    },
-    "trigger_type": {
-      "mowing": "A(z) {entity_name} megkezdte a fűnyírást",
-      "docked": "A(z) {entity_name} elérte a töltőállomást",
-      "error": "A(z) {entity_name} hibás állapotba került",
-      "returning": "A(z) {entity_name} megkezdte a visszatérést a töltőállomásra",
-      "edgecut": "A(z) {entity_name} megkezdte a szélvágást",
-      "starting": "A(z) {entity_name} megkezdte az indulást",
-      "zoning": "A(z) {entity_name} megkezdte a zóna betanítását",
-      "searching_zone": "A(z) {entity_name} megkezdte a zóna keresését",
-      "idle": "A(z) {entity_name} tétlen állapotba került",
-      "escaped_digital_fence": "A(z) {entity_name} elhagyta a digitális kerítést",
-      "rain_delayed": "{entity_name} esőkésleltetésbe lépett"
-    },
-    "extra_fields": {
-      "for": "[%key:common::device_automation::extra_fields::for%]"
-    }
-  },
-  "services": {
-    "set_nutrition": {
-      "name": "Set nutrition",
-      "description": "Set auto-schedule nutrition values.",
-      "fields": {
-        "n": {
-          "name": "Nitrogen (N)",
-          "description": "Nitrogen value for auto-schedule nutrition."
+    "config": {
+        "step": {
+            "user": {
+                "title": "Kapcsolódás a felhőszolgáltatásokhoz",
+                "description": "Adja meg a felhő-hozzáférési adatokat, és válassza ki a felhőszolgáltatót.",
+                "data": {
+                    "email": "E-mail",
+                    "password": "Jelszó",
+                    "cloud": "Felhőszolgáltató",
+                },
+            }
         },
-        "p": {
-          "name": "Phosphorus (P)",
-          "description": "Phosphorus value for auto-schedule nutrition."
+        "error": {
+            "cannot_connect": "Kapcsolódási hiba",
+            "invalid_auth": "Hitelesítési hiba",
+            "too_many_requests": "Túl sok API hívás. Próbálja meg 24 óra múlva",
+            "api_error": "A felhő API elutasította a kérést",
+            "timeout": "Kapcsolódási időtúllépés",
+            "unknown": "Váratlan hiba",
         },
-        "k": {
-          "name": "Potassium (K)",
-          "description": "Potassium value for auto-schedule nutrition."
-        }
-      }
+        "abort": {
+            "already_exists": "Ez a felhasználói fiók már be van állítva",
+            "already_in_progress": "A konfigurálás már folyamatban van",
+        },
     },
-    "clear_nutrition": {
-      "name": "Clear nutrition",
-      "description": "Clear auto-schedule nutrition values."
+    "selector": {
+        "cloud": {
+            "options": {"worx": "Worx", "kress": "Kress", "landxcape": "LandXcape"}
+        },
+        "days_of_week": {
+            "options": {
+                "monday": "Hétfő",
+                "tuesday": "Kedd",
+                "wednesday": "Szerda",
+                "thursday": "Csütörtök",
+                "friday": "Péntek",
+                "saturday": "Szombat",
+                "sunday": "Vasárnap",
+            }
+        },
     },
-    "set_exclusion_day": {
-      "name": "Set exclusion day",
-      "description": "Exclude or include one weekday in auto schedule.",
-      "fields": {
-        "day": {
-          "name": "Day",
-          "description": "Day to update in the exclusion scheduler."
-        },
-        "exclude_day": {
-          "name": "Exclude day",
-          "description": "Whether the selected day should be fully excluded."
+    "options": {
+        "step": {
+            "init": {
+                "title": "Landroid Cloud beállítások",
+                "data": {"command_timeout": "Parancs időtúllépés (másodperc)"},
+            }
         }
-      }
     },
-    "add_exclusion_schedule": {
-      "name": "Add exclusion schedule",
-      "description": "Add an exclusion schedule entry to auto schedule.",
-      "fields": {
-        "day": {
-          "name": "Day",
-          "description": "Day of week for the new exclusion schedule entry."
+    "entity": {
+        "sensor": {
+            "battery": {"name": "Akkumulátor"},
+            "status": {"name": "Állapot"},
+            "error": {
+                "name": "Hiba",
+                "state": {
+                    "unknown": "Ismeretlen",
+                    "no_error": "Nincs hiba",
+                    "trapped": "Megakadt",
+                    "lifted": "Felemelve",
+                    "wire_missing": "Hiányzó vezetődrót",
+                    "outside_wire": "Vezetődróton kívül",
+                    "rain_delay": "Az eső késleltetése aktív",
+                    "close_door_to_mow": "Csukja be az ajtót a fűnyíráshoz",
+                    "close_door_to_go_home": "Csukja be az ajtót a haza induláshoz",
+                    "blade_motor_blocked": "A vágómotor blokkolva van",
+                    "wheel_motor_blocked": "A kerékmotor blokkolva van",
+                    "trapped_timeout": "Időtúllépés megakadás közben",
+                    "upside_down": "A fűnyíró fejjel lefelé van",
+                    "battery_low": "Az akkumulátor lemerült",
+                    "reverse_wire": "A vezetődrót fodított irányú",
+                    "charge_error": "Töltési hiba",
+                    "timeout_finding_home": "Időtúllépés dokkoló keresése közben",
+                    "locked": "A fűnyíró le van zárva",
+                    "battery_temperature_error": "Akkumulátor hőmérsékleti hiba",
+                    "battery_trunk_open_timeout": "Az akkutartó túl sokáig van nyitva",
+                    "wire_sync": "Vezetődrót szinkronizálás",
+                    "charging_station_docking_error": "Töltőállomás dokkolási hiba",
+                    "hbi_error": "HBI hiba",
+                    "ota_error": "OTA hiba",
+                    "map_error": "Térképhiba",
+                    "excessive_slope": "A lejtő túl meredek",
+                    "unreachable_zone": "Elérhetetlen zóna",
+                    "unreachable_charging_station": "A töltőállomás nem elérhető",
+                    "insufficient_sensor_data": "Nincs elegendő érzékelő adat",
+                    "training_start_disallowed": "A betanítás elindítása nem engedélyezett",
+                    "camera_error": "Kamera hiba",
+                    "mapping_exploration_required": "Térképfelderítés szükséges",
+                    "mapping_exploration_failed": "Térképfelderítés sikertelen",
+                    "rfid_reader_error": "RFID olvasó hiba",
+                    "headlight_error": "Fényszóró hiba",
+                    "missing_charging_station": "A töltőállomás hiányzik",
+                    "blade_height_adjustment_blocked": "A penge magasság állítása meghiúsult.",
+                },
+            },
+            "rssi": {"name": "Jelerősség"},
+            "daily_progress": {"name": "Napi előrehaladás"},
+            "next_schedule": {"name": "Következő ütemezés"},
+            "rain_delay_remaining": {"name": "Hátralévő esőkésleltetés"},
+            "last_update": {"name": "Utolsó frissítés"},
+            "battery_charge_cycles_total": {
+                "name": "Akkumulátor töltési ciklusok összesen"
+            },
+            "battery_charge_cycles_current": {
+                "name": "Akkumulátor töltési ciklusok a visszaállítás óta"
+            },
+            "battery_temperature": {"name": "Akkumulátor hőmérséklete"},
+            "battery_voltage": {"name": "Akkumulátor feszültsége"},
+            "blade_runtime_total": {"name": "Kések teljes üzemideje"},
+            "blade_runtime_current": {"name": "Kések üzemideje a visszaállítás óta"},
+            "blade_runtime_reset_at": {
+                "name": "Kések üzemideje az utolsó visszaállításnál"
+            },
+            "blade_runtime_reset_time": {"name": "Késüzemidő-visszaállítás ideje"},
+            "distance_driven_total": {"name": "Összes megtett távolság"},
+            "mower_runtime_total": {"name": "Fűnyíró teljes üzemideje"},
+            "pitch": {"name": "Pitch"},
+            "roll": {"name": "Roll"},
+            "yaw": {"name": "Yaw"},
+            "auto_schedule_nutrition": {"name": "Auto schedule: Nutrition"},
+            "auto_schedule_exclusion_schedules": {
+                "name": "Auto schedule: Exclusion schedules"
+            },
         },
-        "start": {
-          "name": "Start",
-          "description": "Start time in HH:MM format."
+        "binary_sensor": {
+            "rain_sensor": {"name": "Esőérzékelő"},
+            "charging": {"name": "Töltés"},
         },
-        "duration": {
-          "name": "Duration",
-          "description": "Duration in minutes."
+        "switch": {
+            "lock": {"name": "Zár"},
+            "off_limits": {"name": "Off Limits"},
+            "off_limits_shortcut": {"name": "Off Limits parancsikonok"},
+            "acs": {"name": "ACS"},
+            "auto_schedule": {"name": "Auto schedule"},
+            "firmware_auto_update": {"name": "Automatikus firmware-frissítés"},
+            "auto_schedule_irrigation": {"name": "Auto schedule: Irrigation"},
+            "auto_schedule_exclude_nights": {"name": "Auto schedule: Exclude nights"},
+            "party_mode": {"name": "Szünet mód"},
         },
-        "reason": {
-          "name": "Reason",
-          "description": "Reason for the exclusion schedule entry."
-        }
-      }
+        "button": {
+            "edge_cut": {"name": "Szegélynyírás"},
+            "reset_blade_time": {"name": "Kés üzemidő visszaállítása"},
+            "reset_battery_cycles": {"name": "Akkumulátor ciklusok visszaállítása"},
+        },
+        "number": {
+            "rain_delay": {"name": "Esőkésleltetés"},
+            "cutting_height": {"name": "Vágási magasság"},
+            "time_extension": {"name": "Időkiterjesztés"},
+            "torque": {"name": "Nyomaték"},
+            "lawn_size": {"name": "Lawn size"},
+            "lawn_perimeter": {"name": "Lawn perimeter"},
+        },
+        "select": {
+            "zone": {"name": "Zóna"},
+            "auto_schedule_boost": {
+                "name": "Auto schedule: Boost",
+                "state": {"0": "0", "1": "1", "2": "2"},
+            },
+            "auto_schedule_grass_type": {
+                "name": "Auto schedule: Grass type",
+                "state": {
+                    "mixed_species": "Mixed species",
+                    "festuca_arundinacea": "Tall fescue",
+                    "lolium_perenne": "Perennial ryegrass",
+                    "poa_pratensis": "Kentucky bluegrass",
+                    "festuca_rubra": "Red fescue",
+                    "agrostis_stolonifera": "Creeping bentgrass",
+                },
+            },
+            "auto_schedule_soil_type": {
+                "name": "Auto schedule: Soil type",
+                "state": {
+                    "clay": "Clay",
+                    "silt": "Silt",
+                    "sand": "Sand",
+                    "ignore": "Unknown",
+                },
+            },
+        },
+        "update": {"firmware": {"name": "Firmware"}},
+        "lawn_mower": {
+            "mower": {
+                "state": {
+                    "edgecut": "Szélvágás",
+                    "escaped_digital_fence": "A digitális kerítésen kívül",
+                    "idle": "Tétlen",
+                    "searching_zone": "Zóna keresése",
+                    "starting": "Indulás",
+                    "zoning": "Zóna betanítás",
+                    "rain_delayed": "Esőkésleltetés",
+                }
+            }
+        },
     },
-    "edit_exclusion_schedule": {
-      "name": "Edit exclusion schedule",
-      "description": "Replace an existing exclusion schedule entry in auto schedule.",
-      "fields": {
-        "current_day": {
-          "name": "Current day",
-          "description": "Day for the exclusion schedule you want to change."
+    "device_automation": {
+        "action_type": {
+            "start_mowing": "A(z) {entity_name} kezdje meg a fűnyírást",
+            "pause": "A(z) {entity_name} szüneteltetése",
+            "dock": "A(z) {entity_name} térjen vissza a töltőállomásra",
         },
-        "current_start": {
-          "name": "Current start",
-          "description": "Start time for the exclusion schedule you want to change."
+        "condition_type": {
+            "is_mowing": "A(z) {entity_name} füvet nyír",
+            "is_docked": "A(z) {entity_name} a töltőállomáson van",
+            "has_error": "A(z) {entity_name} hibát jelez",
+            "is_returning": "A(z) {entity_name} visszatér a töltőállomásra",
+            "is_edgecut": "A(z) {entity_name} szélvágást végez",
+            "is_starting": "A(z) {entity_name} indul",
+            "is_zoning": "A(z) {entity_name} zónát tanul",
+            "is_searching_zone": "A(z) {entity_name} zónát keres",
+            "is_idle": "A(z) {entity_name} tétlen",
+            "is_escaped_digital_fence": "A(z) {entity_name} a digitális kerítésen kívül van",
+            "is_rain_delayed": "{entity_name} esőkésleltetésben van",
         },
-        "day": {
-          "name": "Day",
-          "description": "New day of week for the exclusion schedule entry."
+        "trigger_type": {
+            "mowing": "A(z) {entity_name} megkezdte a fűnyírást",
+            "docked": "A(z) {entity_name} elérte a töltőállomást",
+            "error": "A(z) {entity_name} hibás állapotba került",
+            "returning": "A(z) {entity_name} megkezdte a visszatérést a töltőállomásra",
+            "edgecut": "A(z) {entity_name} megkezdte a szélvágást",
+            "starting": "A(z) {entity_name} megkezdte az indulást",
+            "zoning": "A(z) {entity_name} megkezdte a zóna betanítását",
+            "searching_zone": "A(z) {entity_name} megkezdte a zóna keresését",
+            "idle": "A(z) {entity_name} tétlen állapotba került",
+            "escaped_digital_fence": "A(z) {entity_name} elhagyta a digitális kerítést",
+            "rain_delayed": "{entity_name} esőkésleltetésbe lépett",
         },
-        "start": {
-          "name": "Start",
-          "description": "New start time in HH:MM format."
-        },
-        "duration": {
-          "name": "Duration",
-          "description": "New duration in minutes."
-        },
-        "reason": {
-          "name": "Reason",
-          "description": "Reason for the exclusion schedule entry."
-        }
-      }
+        "extra_fields": {"for": "[%key:common::device_automation::extra_fields::for%]"},
     },
-    "delete_exclusion_schedule": {
-      "name": "Delete exclusion schedule",
-      "description": "Delete an exclusion schedule entry from auto schedule.",
-      "fields": {
-        "day": {
-          "name": "Day",
-          "description": "Day for the exclusion schedule you want to delete."
+    "services": {
+        "ots": {
+            "name": "Egyszeri ütemezés indítása",
+            "description": "Egyszeri nyírást indít, ha a fűnyíró támogatja.",
+            "fields": {
+                "boundary": {
+                    "name": "Szegély",
+                    "description": "Legyen-e szegélynyírás.",
+                },
+                "runtime": {"name": "Futási idő", "description": "Futási idő percben."},
+                "cut_over_border": {
+                    "name": "Vágás a határon túl",
+                    "description": "Ha a fűnyíró támogatja, meghatározza, hogy az egyszeri szegélynyírás áthaladhat-e a gyep szélén.",
+                },
+                "border_distance_cm": {
+                    "name": "Szegélytávolság",
+                    "description": "Ha a fűnyíró támogatja, és a határon túli vágás ki van kapcsolva, beállítja a szegélytávolságot centiméterben.",
+                },
+            },
         },
-        "start": {
-          "name": "Start",
-          "description": "Use this if the selected day has more than one exclusion schedule and you need to choose one by time."
-        }
-      }
-    }
-  }
+        "set_nutrition": {
+            "name": "Set nutrition",
+            "description": "Set auto-schedule nutrition values.",
+            "fields": {
+                "n": {
+                    "name": "Nitrogen (N)",
+                    "description": "Nitrogen value for auto-schedule nutrition.",
+                },
+                "p": {
+                    "name": "Phosphorus (P)",
+                    "description": "Phosphorus value for auto-schedule nutrition.",
+                },
+                "k": {
+                    "name": "Potassium (K)",
+                    "description": "Potassium value for auto-schedule nutrition.",
+                },
+            },
+        },
+        "clear_nutrition": {
+            "name": "Clear nutrition",
+            "description": "Clear auto-schedule nutrition values.",
+        },
+        "set_exclusion_day": {
+            "name": "Set exclusion day",
+            "description": "Exclude or include one weekday in auto schedule.",
+            "fields": {
+                "day": {
+                    "name": "Day",
+                    "description": "Day to update in the exclusion scheduler.",
+                },
+                "exclude_day": {
+                    "name": "Exclude day",
+                    "description": "Whether the selected day should be fully excluded.",
+                },
+            },
+        },
+        "add_exclusion_schedule": {
+            "name": "Add exclusion schedule",
+            "description": "Add an exclusion schedule entry to auto schedule.",
+            "fields": {
+                "day": {
+                    "name": "Day",
+                    "description": "Day of week for the new exclusion schedule entry.",
+                },
+                "start": {
+                    "name": "Start",
+                    "description": "Start time in HH:MM format.",
+                },
+                "duration": {"name": "Duration", "description": "Duration in minutes."},
+                "reason": {
+                    "name": "Reason",
+                    "description": "Reason for the exclusion schedule entry.",
+                },
+            },
+        },
+        "edit_exclusion_schedule": {
+            "name": "Edit exclusion schedule",
+            "description": "Replace an existing exclusion schedule entry in auto schedule.",
+            "fields": {
+                "current_day": {
+                    "name": "Current day",
+                    "description": "Day for the exclusion schedule you want to change.",
+                },
+                "current_start": {
+                    "name": "Current start",
+                    "description": "Start time for the exclusion schedule you want to change.",
+                },
+                "day": {
+                    "name": "Day",
+                    "description": "New day of week for the exclusion schedule entry.",
+                },
+                "start": {
+                    "name": "Start",
+                    "description": "New start time in HH:MM format.",
+                },
+                "duration": {
+                    "name": "Duration",
+                    "description": "New duration in minutes.",
+                },
+                "reason": {
+                    "name": "Reason",
+                    "description": "Reason for the exclusion schedule entry.",
+                },
+            },
+        },
+        "delete_exclusion_schedule": {
+            "name": "Delete exclusion schedule",
+            "description": "Delete an exclusion schedule entry from auto schedule.",
+            "fields": {
+                "day": {
+                    "name": "Day",
+                    "description": "Day for the exclusion schedule you want to delete.",
+                },
+                "start": {
+                    "name": "Start",
+                    "description": "Use this if the selected day has more than one exclusion schedule and you need to choose one by time.",
+                },
+            },
+        },
+    },
 }

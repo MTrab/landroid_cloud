@@ -45,9 +45,12 @@ ATTR_DAY: Final = "day"
 ATTR_DAYS: Final = "days"
 ATTR_DURATION: Final = "duration"
 ATTR_RUNTIME: Final = "runtime"
+ATTR_CUT_OVER_BORDER: Final = "cut_over_border"
+ATTR_BORDER_DISTANCE_CM: Final = "border_distance_cm"
 ATTR_START: Final = "start"
 DAYS: Final = tuple(DAY_MAP[index] for index in sorted(DAY_MAP))
 EXCLUSION_REASONS: Final = ("generic", "irrigation")
+VISION_BORDER_DISTANCE_CM_VALUES: Final = (5, 10, 15, 20)
 
 
 def _normalize_day(day: str | None, field_name: str) -> str:
@@ -146,6 +149,10 @@ def async_register_entity_services(platform: EntityPlatform) -> None:
             vol.Required(ATTR_BOUNDARY): bool,
             vol.Required(ATTR_RUNTIME): vol.All(
                 vol.Coerce(int), vol.Range(min=10, max=120)
+            ),
+            vol.Optional(ATTR_CUT_OVER_BORDER): bool,
+            vol.Optional(ATTR_BORDER_DISTANCE_CM): vol.In(
+                VISION_BORDER_DISTANCE_CM_VALUES
             ),
         },
         "_async_service_ots",
@@ -341,19 +348,45 @@ def _resolve_exclusion_slot(
 
 
 async def async_handle_ots(
-    entity: LandroidCloudMowerEntity, *, boundary: bool, runtime: int
+    entity: LandroidCloudMowerEntity,
+    *,
+    boundary: bool,
+    runtime: int,
+    cut_over_border: bool | None = None,
+    border_distance_cm: int | None = None,
 ) -> None:
     """Handle legacy OTS service call."""
+    if border_distance_cm is not None and cut_over_border is not False:
+        raise HomeAssistantError(
+            "border_distance_cm can only be used when cut_over_border is false"
+        )
+    if (cut_over_border is not None or border_distance_cm is not None) and not boundary:
+        raise HomeAssistantError(
+            "Vision border-cut settings require boundary to be true"
+        )
     try:
         await async_run_cloud_command(
             lambda: entity.coordinator.cloud.ots(
-                str(entity.device.serial_number), boundary, runtime
+                str(entity.device.serial_number),
+                boundary,
+                runtime,
+                cut_over_border=cut_over_border,
+                border_distance=(
+                    None if border_distance_cm is None else border_distance_cm * 10
+                ),
             )
         )
     except HomeAssistantError as err:
         if isinstance(err.__cause__, NoOneTimeScheduleError):
             raise HomeAssistantError(
                 "Mower does not support one-time schedule"
+            ) from err
+        if (
+            str(err)
+            == "Vision border-cut settings are only supported for protocol 1 devices"
+        ):
+            raise HomeAssistantError(
+                "Your mower doesn't support this function"
             ) from err
         raise
 

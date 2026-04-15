@@ -1,34 +1,14 @@
 {
-  "services": {
-    "ots": {
-      "service": "mdi:calendar-play"
-    },
-    "add_schedule": {
-      "service": "mdi:calendar-plus"
-    },
-    "edit_schedule": {
-      "service": "mdi:calendar-edit"
-    },
-    "delete_schedule": {
-      "service": "mdi:calendar-remove"
-    },
-    "set_nutrition": {
-      "service": "mdi:leaf"
-    },
-    "clear_nutrition": {
-      "service": "mdi:leaf-off"
-    },
-    "set_exclusion_day": {
-      "service": "mdi:calendar-minus"
-    },
-    "add_exclusion_schedule": {
-      "service": "mdi:calendar-plus"
-    },
-    "edit_exclusion_schedule": {
-      "service": "mdi:calendar-edit"
-    },
-    "delete_exclusion_schedule": {
-      "service": "mdi:calendar-remove"
+    "services": {
+        "ots": {"service": "mdi:calendar-start"},
+        "add_schedule": {"service": "mdi:calendar-plus"},
+        "edit_schedule": {"service": "mdi:calendar-edit"},
+        "delete_schedule": {"service": "mdi:calendar-remove"},
+        "set_nutrition": {"service": "mdi:leaf"},
+        "clear_nutrition": {"service": "mdi:leaf-off"},
+        "set_exclusion_day": {"service": "mdi:calendar-minus"},
+        "add_exclusion_schedule": {"service": "mdi:calendar-plus"},
+        "edit_exclusion_schedule": {"service": "mdi:calendar-edit"},
+        "delete_exclusion_schedule": {"service": "mdi:calendar-remove"},
     }
-  }
 }

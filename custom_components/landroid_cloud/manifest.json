@@ -1,19 +1,15 @@
 {
     "domain": "landroid_cloud",
     "name": "Landroid Cloud",
-    "codeowners": [
-        "@MTrab"
-    ],
+    "codeowners": ["@MTrab"],
     "config_flow": true,
     "documentation": "https://github.com/MTrab/landroid_cloud",
     "integration_type": "device",
     "iot_class": "cloud_push",
     "issue_tracker": "https://github.com/MTrab/landroid_cloud/issues",
-    "loggers": [
-        "pyworxcloud"
-    ],
+    "loggers": ["pyworxcloud"],
     "requirements": [
-        "pyworxcloud==6.3.4"
+        "pyworxcloud@git+https://github.com/mtrab/pyworxcloud.git@feature/issue-876-border-cut-settings"
     ],
-    "version": "7.0.3"
+    "version": "7.0.3",
 }
