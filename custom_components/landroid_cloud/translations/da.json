@@ -1,408 +1,520 @@
 {
-    "config": {
-        "step": {
-            "user": {
-                "title": "Forbind til cloud-tjenester",
-                "description": "Indtast dine cloud-oplysninger og vælg din cloud-udbyder.",
-                "data": {
-                    "email": "E-mail",
-                    "password": "Kodeord",
-                    "cloud": "Cloud-udbyder",
-                },
-            }
-        },
-        "error": {
-            "cannot_connect": "Kunne ikke forbinde",
-            "invalid_auth": "Fejl i brugernavn og/eller password",
-            "too_many_requests": "For mange forespørgsler mod API - Prøv igen om 24 timer",
-            "api_error": "Cloud-API afviste forespørgslen",
-            "timeout": "Forbindelsen fik timeout",
-            "unknown": "Ukendt fejl",
-        },
-        "abort": {
-            "already_exists": "Denne konto er allerede konfigureret",
-            "already_in_progress": "Konfigurationsflow er allerede i gang",
-        },
-    },
-    "selector": {
-        "cloud": {
-            "options": {"worx": "Worx", "kress": "Kress", "landxcape": "LandXcape"}
-        },
-        "days_of_week": {
-            "options": {
-                "monday": "Mandag",
-                "tuesday": "Tirsdag",
-                "wednesday": "Onsdag",
-                "thursday": "Torsdag",
-                "friday": "Fredag",
-                "saturday": "Lørdag",
-                "sunday": "Søndag",
-            }
-        },
-    },
-    "options": {
-        "step": {
-            "init": {
-                "title": "Landroid Cloud-indstillinger",
-                "data": {"command_timeout": "Kommandotimeout (sekunder)"},
-            }
+  "config": {
+    "step": {
+      "user": {
+        "title": "Forbind til cloud-tjenester",
+        "description": "Indtast dine cloud-oplysninger og vælg din cloud-udbyder.",
+        "data": {
+          "email": "E-mail",
+          "password": "Kodeord",
+          "cloud": "Cloud-udbyder"
         }
+      }
     },
-    "services": {
-        "ots": {
-            "name": "Start engangstidsplan",
-            "description": "Start en engangsklipning, hvis klipperen understøtter det.",
-            "fields": {
-                "boundary": {
-                    "name": "Kant",
-                    "description": "Om der skal køres kantklip.",
-                },
-                "runtime": {"name": "Køretid", "description": "Køretid i minutter."},
-                "cut_over_border": {
-                    "name": "Kør over kant",
-                    "description": "Hvis din klipper understøtter det, tilsidesætter dette om engangskantklip må krydse plænens kant.",
-                },
-                "border_distance_cm": {
-                    "name": "Kantafstand",
-                    "description": "Hvis din klipper understøtter det, og kør over kant er slået fra, sættes kantafstanden i centimeter.",
-                },
-            },
-        },
-        "add_schedule": {
-            "name": "Tilføj tidsplan",
-            "description": "Tilføj en post til klippetidsplanen.",
-            "fields": {
-                "days": {
-                    "name": "Dage",
-                    "description": "Ugedage for den nye tidsplan.",
-                },
-                "start": {"name": "Start", "description": "Starttid i formatet TT:MM."},
-                "duration": {"name": "Varighed", "description": "Varighed i minutter."},
-                "boundary": {
-                    "name": "Kant",
-                    "description": "Om kantklip skal være aktivt for denne tidsplan.",
-                },
-            },
-        },
-        "edit_schedule": {
-            "name": "Rediger tidsplan",
-            "description": "Erstat en eksisterende post i klippetidsplanen.",
-            "fields": {
-                "current_day": {
-                    "name": "Nuværende dag",
-                    "description": "Dag for den tidsplan du vil ændre.",
-                },
-                "current_start": {
-                    "name": "Nuværende start",
-                    "description": "Brug denne hvis den valgte dag har mere end én tidsplan, og du skal vælge den rigtige via starttid.",
-                },
-                "day": {"name": "Dag", "description": "Ny ugedag for tidsplanen."},
-                "start": {
-                    "name": "Start",
-                    "description": "Ny starttid i formatet TT:MM.",
-                },
-                "duration": {
-                    "name": "Varighed",
-                    "description": "Ny varighed i minutter.",
-                },
-                "boundary": {
-                    "name": "Kant",
-                    "description": "Om kantklip skal være aktivt for denne tidsplan.",
-                },
-            },
-        },
-        "delete_schedule": {
-            "name": "Slet tidsplan",
-            "description": "Slet en eksisterende post i klippetidsplanen.",
-            "fields": {
-                "all_schedules": {
-                    "name": "Alle tidsplaner",
-                    "description": "Slet alle tidsplaner for denne klipper i ét kald.",
-                },
-                "day": {
-                    "name": "Dag",
-                    "description": "Dag for den tidsplan du vil slette.",
-                },
-                "start": {
-                    "name": "Start",
-                    "description": "Brug denne hvis den valgte dag har mere end én tidsplan, og du skal vælge den rigtige via starttid.",
-                },
-            },
-        },
-        "set_nutrition": {
-            "name": "Sæt næring",
-            "description": "Sæt næringsværdier for auto-tidsplan.",
-            "fields": {
-                "n": {
-                    "name": "Nitrogen (N)",
-                    "description": "Nitrogenværdi for auto-tidsplanens næring.",
-                },
-                "p": {
-                    "name": "Fosfor (P)",
-                    "description": "Fosforværdi for auto-tidsplanens næring.",
-                },
-                "k": {
-                    "name": "Kalium (K)",
-                    "description": "Kaliumværdi for auto-tidsplanens næring.",
-                },
-            },
-        },
-        "clear_nutrition": {
-            "name": "Ryd næring",
-            "description": "Ryd næringsværdier for auto-tidsplan.",
-        },
-        "set_exclusion_day": {
-            "name": "Sæt eksklusionsdag",
-            "description": "Ekskludér eller inkludér en ugedag i auto-tidsplan.",
-            "fields": {
-                "day": {
-                    "name": "Dag",
-                    "description": "Dag der skal opdateres i eksklusionsplanen.",
-                },
-                "exclude_day": {
-                    "name": "Ekskludér dag",
-                    "description": "Om den valgte dag skal ekskluderes helt.",
-                },
-            },
-        },
-        "add_exclusion_schedule": {
-            "name": "Tilføj eksklusionsplan",
-            "description": "Tilføj en eksklusionspost til auto-tidsplan.",
-            "fields": {
-                "day": {
-                    "name": "Dag",
-                    "description": "Ugedag for den nye eksklusionspost.",
-                },
-                "start": {"name": "Start", "description": "Starttid i formatet TT:MM."},
-                "duration": {"name": "Varighed", "description": "Varighed i minutter."},
-                "reason": {
-                    "name": "Årsag",
-                    "description": "Årsag til eksklusionsposten.",
-                },
-            },
-        },
-        "edit_exclusion_schedule": {
-            "name": "Redigér eksklusionsplan",
-            "description": "Erstat en eksisterende eksklusionspost i auto-tidsplan.",
-            "fields": {
-                "current_day": {
-                    "name": "Nuværende dag",
-                    "description": "Dag for den eksklusionspost du vil ændre.",
-                },
-                "current_start": {
-                    "name": "Nuværende start",
-                    "description": "Starttid for den eksklusionspost du vil ændre.",
-                },
-                "day": {
-                    "name": "Dag",
-                    "description": "Ny ugedag for eksklusionsposten.",
-                },
-                "start": {
-                    "name": "Start",
-                    "description": "Ny starttid i formatet TT:MM.",
-                },
-                "duration": {
-                    "name": "Varighed",
-                    "description": "Ny varighed i minutter.",
-                },
-                "reason": {
-                    "name": "Årsag",
-                    "description": "Årsag til eksklusionsposten.",
-                },
-            },
-        },
-        "delete_exclusion_schedule": {
-            "name": "Slet eksklusionsplan",
-            "description": "Slet en eksklusionspost fra auto-tidsplan.",
-            "fields": {
-                "day": {
-                    "name": "Dag",
-                    "description": "Dag for den eksklusionspost du vil slette.",
-                },
-                "start": {
-                    "name": "Start",
-                    "description": "Brug denne hvis den valgte dag har mere end én eksklusionspost, og du skal vælge den rigtige via starttid.",
-                },
-            },
-        },
+    "error": {
+      "cannot_connect": "Kunne ikke forbinde",
+      "invalid_auth": "Fejl i brugernavn og/eller password",
+      "too_many_requests": "For mange forespørgsler mod API - Prøv igen om 24 timer",
+      "api_error": "Cloud-API afviste forespørgslen",
+      "timeout": "Forbindelsen fik timeout",
+      "unknown": "Ukendt fejl"
     },
-    "device_automation": {
-        "action_type": {
-            "start_mowing": "Lad {entity_name} starte klipningen",
-            "pause": "Sæt {entity_name} på pause",
-            "dock": "Lad {entity_name} køre tilbage til ladestationen",
-        },
-        "condition_type": {
-            "is_mowing": "{entity_name} klipper",
-            "is_docked": "{entity_name} er i ladestationen",
-            "has_error": "{entity_name} har en fejl",
-            "is_returning": "{entity_name} er på vej tilbage til ladestationen",
-            "is_edgecut": "{entity_name} klipper kanten",
-            "is_starting": "{entity_name} starter",
-            "is_zoning": "{entity_name} er i gang med zone-træning",
-            "is_searching_zone": "{entity_name} søger efter en zone",
-            "is_idle": "{entity_name} afventer",
-            "is_escaped_digital_fence": "{entity_name} er uden for det digitale hegn",
-            "is_rain_delayed": "{entity_name} er i regnforsinkelse",
-        },
-        "trigger_type": {
-            "mowing": "{entity_name} begyndte at klippe",
-            "docked": "{entity_name} kørte ind i ladestationen",
-            "error": "{entity_name} gik i fejltilstand",
-            "returning": "{entity_name} begyndte at køre tilbage til ladestationen",
-            "edgecut": "{entity_name} begyndte at klippe kanten",
-            "starting": "{entity_name} begyndte at starte op",
-            "zoning": "{entity_name} begyndte zone-træning",
-            "searching_zone": "{entity_name} begyndte at søge efter en zone",
-            "idle": "{entity_name} gik i ventetilstand",
-            "escaped_digital_fence": "{entity_name} kom uden for det digitale hegn",
-            "rain_delayed": "{entity_name} gik i regnforsinkelse",
-        },
-        "extra_fields": {"for": "[%key:common::device_automation::extra_fields::for%]"},
+    "abort": {
+      "already_exists": "Denne konto er allerede konfigureret",
+      "already_in_progress": "Konfigurationsflow er allerede i gang"
+    }
+  },
+  "selector": {
+    "cloud": {
+      "options": {
+        "worx": "Worx",
+        "kress": "Kress",
+        "landxcape": "LandXcape"
+      }
     },
-    "entity": {
-        "sensor": {
-            "battery": {"name": "Batteri"},
-            "status": {"name": "Tilstand"},
-            "error": {
-                "name": "Fejl",
-                "state": {
-                    "unknown": "Ukendt fejl",
-                    "no_error": "Ingen fejl",
-                    "trapped": "Fanget",
-                    "lifted": "Løftet",
-                    "wire_missing": "Kanttråd mangler",
-                    "outside_wire": "Udenfor kanttråden",
-                    "rain_delay": "Regnforsinkelse aktivt",
-                    "close_door_to_mow": "Luk låget for at klippe",
-                    "close_door_to_go_home": "Luk låget for at køre hjem",
-                    "blade_motor_blocked": "Klippemotor blokeret",
-                    "wheel_motor_blocked": "Hjulmotor blokeret",
-                    "trapped_timeout": "Timeout mens fanget",
-                    "upside_down": "Klipperen vender på hovedet",
-                    "battery_low": "Lavt batteriniveau",
-                    "reverse_wire": "Kanttråd påsat omvendt",
-                    "charge_error": "Fejl ved opladning",
-                    "timeout_finding_home": "Timede ud på vej hjem",
-                    "locked": "Klipperen er låst",
-                    "battery_temperature_error": "Batteritemperatur fejl",
-                    "battery_trunk_open_timeout": "Klap til batterirummet åben",
-                    "wire_sync": "Trådsynkronisering",
-                    "charging_station_docking_error": "Fejl ved docking til ladestation",
-                    "hbi_error": "HBI fejl",
-                    "ota_error": "Fejl ved OTA",
-                    "map_error": "Kortfejl",
-                    "excessive_slope": "For stor hældning registreret",
-                    "unreachable_zone": "Uopnåelig zone",
-                    "unreachable_charging_station": "Uopnåelig ladestation",
-                    "insufficient_sensor_data": "Utilstrækkelige sensor data",
-                    "training_start_disallowed": "Træningsstart ikke tilladt",
-                    "camera_error": "Kamerafejl",
-                    "mapping_exploration_required": "Kortlægning er påkrævet",
-                    "mapping_exploration_failed": "Kortlægningsudforskning mislykkedes",
-                    "rfid_reader_error": "Fejl på RFID læser",
-                    "headlight_error": "Fejl på forlygte",
-                    "missing_charging_station": "Kunne ikke finde ladestation",
-                    "blade_height_adjustment_blocked": "Klipper højdejustering blokeret",
-                },
-            },
-            "rssi": {"name": "Signalstyrke"},
-            "daily_progress": {"name": "Dagens fremdrift"},
-            "next_schedule": {"name": "Næste tidsplan"},
-            "rain_delay_remaining": {"name": "Resterende regnforsinkelse"},
-            "last_update": {"name": "Seneste opdatering"},
-            "battery_charge_cycles_total": {"name": "Batteriets samlede ladecyklusser"},
-            "battery_charge_cycles_current": {
-                "name": "Batteriets ladecyklusser siden nulstilling"
-            },
-            "battery_temperature": {"name": "Batteritemperatur"},
-            "battery_voltage": {"name": "Batterispænding"},
-            "blade_runtime_total": {"name": "Knivenes samlede driftstid"},
-            "blade_runtime_current": {"name": "Knivenes driftstid siden nulstilling"},
-            "blade_runtime_reset_at": {
-                "name": "Knivenes driftstid ved seneste nulstilling"
-            },
-            "blade_runtime_reset_time": {
-                "name": "Tidspunkt for nulstilling af knivenes driftstid"
-            },
-            "distance_driven_total": {"name": "Samlet kørt distance"},
-            "mower_runtime_total": {"name": "Klipperens samlede driftstid"},
-            "pitch": {"name": "Pitch"},
-            "roll": {"name": "Roll"},
-            "yaw": {"name": "Yaw"},
-            "auto_schedule_nutrition": {"name": "Auto-tidsplan: Næring"},
-            "auto_schedule_exclusion_schedules": {
-                "name": "Auto-tidsplan: Eksklusionsplaner"
-            },
+    "days_of_week": {
+      "options": {
+        "monday": "Mandag",
+        "tuesday": "Tirsdag",
+        "wednesday": "Onsdag",
+        "thursday": "Torsdag",
+        "friday": "Fredag",
+        "saturday": "Lørdag",
+        "sunday": "Søndag"
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Landroid Cloud-indstillinger",
+        "data": {
+          "command_timeout": "Kommandotimeout (sekunder)"
+        }
+      }
+    }
+  },
+  "services": {
+    "ots": {
+      "name": "Start engangstidsplan",
+      "description": "Start en engangsklipning, hvis klipperen understøtter det.",
+      "fields": {
+        "boundary": {
+          "name": "Kant",
+          "description": "Om der skal køres kantklip."
         },
-        "binary_sensor": {
-            "rain_sensor": {"name": "Regnsensor"},
-            "charging": {"name": "Opladning"},
+        "runtime": {
+          "name": "Køretid",
+          "description": "Køretid i minutter."
         },
-        "switch": {
-            "firmware_auto_update": {"name": "Firmware autoopdatering"},
-            "lock": {"name": "Lås"},
-            "off_limits": {"name": "Off Limits"},
-            "off_limits_shortcut": {"name": "Off Limits-genveje"},
-            "acs": {"name": "ACS"},
-            "auto_schedule": {"name": "Auto-tidsplan"},
-            "auto_schedule_irrigation": {"name": "Auto-tidsplan: Vanding"},
-            "auto_schedule_exclude_nights": {"name": "Auto-tidsplan: Udeluk nætter"},
-            "party_mode": {"name": "Pause tilstand"},
+        "cut_over_border": {
+          "name": "Kør over kant",
+          "description": "Hvis din klipper understøtter det, tilsidesætter dette om engangskantklip må krydse plænens kant."
         },
-        "button": {
-            "edge_cut": {"name": "Kantklip"},
-            "reset_blade_time": {"name": "Nulstil knivenes driftstid"},
-            "reset_battery_cycles": {"name": "Nulstil battericyklusser"},
-        },
-        "number": {
-            "rain_delay": {"name": "Regnforsinkelse"},
-            "cutting_height": {"name": "Klippehøjde"},
-            "time_extension": {"name": "Tidsforlængelse"},
-            "torque": {"name": "Moment"},
-            "lawn_size": {"name": "Plænestørrelse"},
-            "lawn_perimeter": {"name": "Plæneomkreds"},
-        },
-        "select": {
-            "zone": {"name": "Område"},
-            "auto_schedule_boost": {
-                "name": "Auto-tidsplan: Boost",
-                "state": {"0": "0", "1": "1", "2": "2"},
-            },
-            "auto_schedule_grass_type": {
-                "name": "Auto-tidsplan: Græstype",
-                "state": {
-                    "mixed_species": "Mixed species",
-                    "festuca_arundinacea": "Tall fescue",
-                    "lolium_perenne": "Perennial ryegrass",
-                    "poa_pratensis": "Kentucky bluegrass",
-                    "festuca_rubra": "Red fescue",
-                    "agrostis_stolonifera": "Creeping bentgrass",
-                },
-            },
-            "auto_schedule_soil_type": {
-                "name": "Auto-tidsplan: Jordtype",
-                "state": {
-                    "clay": "Ler",
-                    "silt": "Silt",
-                    "sand": "Sand",
-                    "ignore": "Ukendt",
-                },
-            },
-        },
-        "update": {"firmware": {"name": "Firmware"}},
-        "lawn_mower": {
-            "mower": {
-                "state": {
-                    "edgecut": "Klipper kant",
-                    "escaped_digital_fence": "Uden for det digitale hegn",
-                    "idle": "Afventer",
-                    "searching_zone": "Søger efter zone",
-                    "starting": "Starter",
-                    "zoning": "Zone-træning",
-                    "rain_delayed": "Regnforsinkelse",
-                }
-            }
-        },
+        "border_distance_cm": {
+          "name": "Kantafstand",
+          "description": "Hvis din klipper understøtter det, og kør over kant er slået fra, sættes kantafstanden i centimeter."
+        }
+      }
     },
+    "add_schedule": {
+      "name": "Tilføj tidsplan",
+      "description": "Tilføj en post til klippetidsplanen.",
+      "fields": {
+        "days": {
+          "name": "Dage",
+          "description": "Ugedage for den nye tidsplan."
+        },
+        "start": {
+          "name": "Start",
+          "description": "Starttid i formatet TT:MM."
+        },
+        "duration": {
+          "name": "Varighed",
+          "description": "Varighed i minutter."
+        },
+        "boundary": {
+          "name": "Kant",
+          "description": "Om kantklip skal være aktivt for denne tidsplan."
+        }
+      }
+    },
+    "edit_schedule": {
+      "name": "Rediger tidsplan",
+      "description": "Erstat en eksisterende post i klippetidsplanen.",
+      "fields": {
+        "current_day": {
+          "name": "Nuværende dag",
+          "description": "Dag for den tidsplan du vil ændre."
+        },
+        "current_start": {
+          "name": "Nuværende start",
+          "description": "Brug denne hvis den valgte dag har mere end én tidsplan, og du skal vælge den rigtige via starttid."
+        },
+        "day": {
+          "name": "Dag",
+          "description": "Ny ugedag for tidsplanen."
+        },
+        "start": {
+          "name": "Start",
+          "description": "Ny starttid i formatet TT:MM."
+        },
+        "duration": {
+          "name": "Varighed",
+          "description": "Ny varighed i minutter."
+        },
+        "boundary": {
+          "name": "Kant",
+          "description": "Om kantklip skal være aktivt for denne tidsplan."
+        }
+      }
+    },
+    "delete_schedule": {
+      "name": "Slet tidsplan",
+      "description": "Slet en eksisterende post i klippetidsplanen.",
+      "fields": {
+        "all_schedules": {
+          "name": "Alle tidsplaner",
+          "description": "Slet alle tidsplaner for denne klipper i ét kald."
+        },
+        "day": {
+          "name": "Dag",
+          "description": "Dag for den tidsplan du vil slette."
+        },
+        "start": {
+          "name": "Start",
+          "description": "Brug denne hvis den valgte dag har mere end én tidsplan, og du skal vælge den rigtige via starttid."
+        }
+      }
+    },
+    "set_nutrition": {
+      "name": "Sæt næring",
+      "description": "Sæt næringsværdier for auto-tidsplan.",
+      "fields": {
+        "n": {
+          "name": "Nitrogen (N)",
+          "description": "Nitrogenværdi for auto-tidsplanens næring."
+        },
+        "p": {
+          "name": "Fosfor (P)",
+          "description": "Fosforværdi for auto-tidsplanens næring."
+        },
+        "k": {
+          "name": "Kalium (K)",
+          "description": "Kaliumværdi for auto-tidsplanens næring."
+        }
+      }
+    },
+    "clear_nutrition": {
+      "name": "Ryd næring",
+      "description": "Ryd næringsværdier for auto-tidsplan."
+    },
+    "set_exclusion_day": {
+      "name": "Sæt eksklusionsdag",
+      "description": "Ekskludér eller inkludér en ugedag i auto-tidsplan.",
+      "fields": {
+        "day": {
+          "name": "Dag",
+          "description": "Dag der skal opdateres i eksklusionsplanen."
+        },
+        "exclude_day": {
+          "name": "Ekskludér dag",
+          "description": "Om den valgte dag skal ekskluderes helt."
+        }
+      }
+    },
+    "add_exclusion_schedule": {
+      "name": "Tilføj eksklusionsplan",
+      "description": "Tilføj en eksklusionspost til auto-tidsplan.",
+      "fields": {
+        "day": {
+          "name": "Dag",
+          "description": "Ugedag for den nye eksklusionspost."
+        },
+        "start": {
+          "name": "Start",
+          "description": "Starttid i formatet TT:MM."
+        },
+        "duration": {
+          "name": "Varighed",
+          "description": "Varighed i minutter."
+        },
+        "reason": {
+          "name": "Årsag",
+          "description": "Årsag til eksklusionsposten."
+        }
+      }
+    },
+    "edit_exclusion_schedule": {
+      "name": "Redigér eksklusionsplan",
+      "description": "Erstat en eksisterende eksklusionspost i auto-tidsplan.",
+      "fields": {
+        "current_day": {
+          "name": "Nuværende dag",
+          "description": "Dag for den eksklusionspost du vil ændre."
+        },
+        "current_start": {
+          "name": "Nuværende start",
+          "description": "Starttid for den eksklusionspost du vil ændre."
+        },
+        "day": {
+          "name": "Dag",
+          "description": "Ny ugedag for eksklusionsposten."
+        },
+        "start": {
+          "name": "Start",
+          "description": "Ny starttid i formatet TT:MM."
+        },
+        "duration": {
+          "name": "Varighed",
+          "description": "Ny varighed i minutter."
+        },
+        "reason": {
+          "name": "Årsag",
+          "description": "Årsag til eksklusionsposten."
+        }
+      }
+    },
+    "delete_exclusion_schedule": {
+      "name": "Slet eksklusionsplan",
+      "description": "Slet en eksklusionspost fra auto-tidsplan.",
+      "fields": {
+        "day": {
+          "name": "Dag",
+          "description": "Dag for den eksklusionspost du vil slette."
+        },
+        "start": {
+          "name": "Start",
+          "description": "Brug denne hvis den valgte dag har mere end én eksklusionspost, og du skal vælge den rigtige via starttid."
+        }
+      }
+    }
+  },
+  "device_automation": {
+    "action_type": {
+      "start_mowing": "Lad {entity_name} starte klipningen",
+      "pause": "Sæt {entity_name} på pause",
+      "dock": "Lad {entity_name} køre tilbage til ladestationen"
+    },
+    "condition_type": {
+      "is_mowing": "{entity_name} klipper",
+      "is_docked": "{entity_name} er i ladestationen",
+      "has_error": "{entity_name} har en fejl",
+      "is_returning": "{entity_name} er på vej tilbage til ladestationen",
+      "is_edgecut": "{entity_name} klipper kanten",
+      "is_starting": "{entity_name} starter",
+      "is_zoning": "{entity_name} er i gang med zone-træning",
+      "is_searching_zone": "{entity_name} søger efter en zone",
+      "is_idle": "{entity_name} afventer",
+      "is_escaped_digital_fence": "{entity_name} er uden for det digitale hegn",
+      "is_rain_delayed": "{entity_name} er i regnforsinkelse"
+    },
+    "trigger_type": {
+      "mowing": "{entity_name} begyndte at klippe",
+      "docked": "{entity_name} kørte ind i ladestationen",
+      "error": "{entity_name} gik i fejltilstand",
+      "returning": "{entity_name} begyndte at køre tilbage til ladestationen",
+      "edgecut": "{entity_name} begyndte at klippe kanten",
+      "starting": "{entity_name} begyndte at starte op",
+      "zoning": "{entity_name} begyndte zone-træning",
+      "searching_zone": "{entity_name} begyndte at søge efter en zone",
+      "idle": "{entity_name} gik i ventetilstand",
+      "escaped_digital_fence": "{entity_name} kom uden for det digitale hegn",
+      "rain_delayed": "{entity_name} gik i regnforsinkelse"
+    },
+    "extra_fields": {
+      "for": "[%key:common::device_automation::extra_fields::for%]"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "battery": {
+        "name": "Batteri"
+      },
+      "status": {
+        "name": "Tilstand"
+      },
+      "error": {
+        "name": "Fejl",
+        "state": {
+          "unknown": "Ukendt fejl",
+          "no_error": "Ingen fejl",
+          "trapped": "Fanget",
+          "lifted": "Løftet",
+          "wire_missing": "Kanttråd mangler",
+          "outside_wire": "Udenfor kanttråden",
+          "rain_delay": "Regnforsinkelse aktivt",
+          "close_door_to_mow": "Luk låget for at klippe",
+          "close_door_to_go_home": "Luk låget for at køre hjem",
+          "blade_motor_blocked": "Klippemotor blokeret",
+          "wheel_motor_blocked": "Hjulmotor blokeret",
+          "trapped_timeout": "Timeout mens fanget",
+          "upside_down": "Klipperen vender på hovedet",
+          "battery_low": "Lavt batteriniveau",
+          "reverse_wire": "Kanttråd påsat omvendt",
+          "charge_error": "Fejl ved opladning",
+          "timeout_finding_home": "Timede ud på vej hjem",
+          "locked": "Klipperen er låst",
+          "battery_temperature_error": "Batteritemperatur fejl",
+          "battery_trunk_open_timeout": "Klap til batterirummet åben",
+          "wire_sync": "Trådsynkronisering",
+          "charging_station_docking_error": "Fejl ved docking til ladestation",
+          "hbi_error": "HBI fejl",
+          "ota_error": "Fejl ved OTA",
+          "map_error": "Kortfejl",
+          "excessive_slope": "For stor hældning registreret",
+          "unreachable_zone": "Uopnåelig zone",
+          "unreachable_charging_station": "Uopnåelig ladestation",
+          "insufficient_sensor_data": "Utilstrækkelige sensor data",
+          "training_start_disallowed": "Træningsstart ikke tilladt",
+          "camera_error": "Kamerafejl",
+          "mapping_exploration_required": "Kortlægning er påkrævet",
+          "mapping_exploration_failed": "Kortlægningsudforskning mislykkedes",
+          "rfid_reader_error": "Fejl på RFID læser",
+          "headlight_error": "Fejl på forlygte",
+          "missing_charging_station": "Kunne ikke finde ladestation",
+          "blade_height_adjustment_blocked": "Klipper højdejustering blokeret"
+        }
+      },
+      "rssi": {
+        "name": "Signalstyrke"
+      },
+      "daily_progress": {
+        "name": "Dagens fremdrift"
+      },
+      "next_schedule": {
+        "name": "Næste tidsplan"
+      },
+      "rain_delay_remaining": {
+        "name": "Resterende regnforsinkelse"
+      },
+      "last_update": {
+        "name": "Seneste opdatering"
+      },
+      "battery_charge_cycles_total": {
+        "name": "Batteriets samlede ladecyklusser"
+      },
+      "battery_charge_cycles_current": {
+        "name": "Batteriets ladecyklusser siden nulstilling"
+      },
+      "battery_temperature": {
+        "name": "Batteritemperatur"
+      },
+      "battery_voltage": {
+        "name": "Batterispænding"
+      },
+      "blade_runtime_total": {
+        "name": "Knivenes samlede driftstid"
+      },
+      "blade_runtime_current": {
+        "name": "Knivenes driftstid siden nulstilling"
+      },
+      "blade_runtime_reset_at": {
+        "name": "Knivenes driftstid ved seneste nulstilling"
+      },
+      "blade_runtime_reset_time": {
+        "name": "Tidspunkt for nulstilling af knivenes driftstid"
+      },
+      "distance_driven_total": {
+        "name": "Samlet kørt distance"
+      },
+      "mower_runtime_total": {
+        "name": "Klipperens samlede driftstid"
+      },
+      "pitch": {
+        "name": "Pitch"
+      },
+      "roll": {
+        "name": "Roll"
+      },
+      "yaw": {
+        "name": "Yaw"
+      },
+      "auto_schedule_nutrition": {
+        "name": "Auto-tidsplan: Næring"
+      },
+      "auto_schedule_exclusion_schedules": {
+        "name": "Auto-tidsplan: Eksklusionsplaner"
+      }
+    },
+    "binary_sensor": {
+      "rain_sensor": {
+        "name": "Regnsensor"
+      },
+      "charging": {
+        "name": "Opladning"
+      }
+    },
+    "switch": {
+      "firmware_auto_update": {
+        "name": "Firmware autoopdatering"
+      },
+      "lock": {
+        "name": "Lås"
+      },
+      "off_limits": {
+        "name": "Off Limits"
+      },
+      "off_limits_shortcut": {
+        "name": "Off Limits-genveje"
+      },
+      "acs": {
+        "name": "ACS"
+      },
+      "auto_schedule": {
+        "name": "Auto-tidsplan"
+      },
+      "auto_schedule_irrigation": {
+        "name": "Auto-tidsplan: Vanding"
+      },
+      "auto_schedule_exclude_nights": {
+        "name": "Auto-tidsplan: Udeluk nætter"
+      },
+      "party_mode": {
+        "name": "Pause tilstand"
+      }
+    },
+    "button": {
+      "edge_cut": {
+        "name": "Kantklip"
+      },
+      "reset_blade_time": {
+        "name": "Nulstil knivenes driftstid"
+      },
+      "reset_battery_cycles": {
+        "name": "Nulstil battericyklusser"
+      }
+    },
+    "number": {
+      "rain_delay": {
+        "name": "Regnforsinkelse"
+      },
+      "cutting_height": {
+        "name": "Klippehøjde"
+      },
+      "time_extension": {
+        "name": "Tidsforlængelse"
+      },
+      "torque": {
+        "name": "Moment"
+      },
+      "lawn_size": {
+        "name": "Plænestørrelse"
+      },
+      "lawn_perimeter": {
+        "name": "Plæneomkreds"
+      }
+    },
+    "select": {
+      "zone": {
+        "name": "Område"
+      },
+      "auto_schedule_boost": {
+        "name": "Auto-tidsplan: Boost",
+        "state": {
+          "0": "0",
+          "1": "1",
+          "2": "2"
+        }
+      },
+      "auto_schedule_grass_type": {
+        "name": "Auto-tidsplan: Græstype",
+        "state": {
+          "mixed_species": "Mixed species",
+          "festuca_arundinacea": "Tall fescue",
+          "lolium_perenne": "Perennial ryegrass",
+          "poa_pratensis": "Kentucky bluegrass",
+          "festuca_rubra": "Red fescue",
+          "agrostis_stolonifera": "Creeping bentgrass"
+        }
+      },
+      "auto_schedule_soil_type": {
+        "name": "Auto-tidsplan: Jordtype",
+        "state": {
+          "clay": "Ler",
+          "silt": "Silt",
+          "sand": "Sand",
+          "ignore": "Ukendt"
+        }
+      }
+    },
+    "update": {
+      "firmware": {
+        "name": "Firmware"
+      }
+    },
+    "lawn_mower": {
+      "mower": {
+        "state": {
+          "edgecut": "Klipper kant",
+          "escaped_digital_fence": "Uden for det digitale hegn",
+          "idle": "Afventer",
+          "searching_zone": "Søger efter zone",
+          "starting": "Starter",
+          "zoning": "Zone-træning",
+          "rain_delayed": "Regnforsinkelse"
+        }
+      }
+    }
+  }
 }

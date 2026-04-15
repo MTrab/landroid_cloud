@@ -1,348 +1,450 @@
 {
-    "config": {
-        "step": {
-            "user": {
-                "title": "Verbinden met cloudservices",
-                "description": "Voer uw cloudgegevens in en selecteer uw cloudprovider.",
-                "data": {
-                    "email": "E-mail",
-                    "password": "Wachtwoord",
-                    "cloud": "Cloudprovider",
-                },
-            }
-        },
-        "error": {
-            "cannot_connect": "Kan geen verbinding maken",
-            "invalid_auth": "Fout in authenticatie",
-            "too_many_requests": "Te veel verzoeken aan de API - Probeer het opnieuw binnen 24 uur",
-            "api_error": "De cloud-API heeft de aanvraag afgewezen",
-            "timeout": "Verbindingstime-out",
-            "unknown": "Onverwachtse fout",
-        },
-        "abort": {
-            "already_exists": "Deze gebruiker is al geconfigureerd",
-            "already_in_progress": "De configuratie is momenteel al bezig",
-        },
-    },
-    "selector": {
-        "cloud": {
-            "options": {"worx": "Worx", "kress": "Kress", "landxcape": "LandXcape"}
-        },
-        "days_of_week": {
-            "options": {
-                "monday": "Maandag",
-                "tuesday": "Dinsdag",
-                "wednesday": "Woensdag",
-                "thursday": "Donderdag",
-                "friday": "Vrijdag",
-                "saturday": "Zaterdag",
-                "sunday": "Zondag",
-            }
-        },
-    },
-    "options": {
-        "step": {
-            "init": {
-                "title": "Landroid Cloud-opties",
-                "data": {"command_timeout": "Time-out voor opdracht (seconden)"},
-            }
+  "config": {
+    "step": {
+      "user": {
+        "title": "Verbinden met cloudservices",
+        "description": "Voer uw cloudgegevens in en selecteer uw cloudprovider.",
+        "data": {
+          "email": "E-mail",
+          "password": "Wachtwoord",
+          "cloud": "Cloudprovider"
         }
+      }
     },
-    "entity": {
-        "sensor": {
-            "battery": {"name": "Batterij"},
-            "status": {"name": "Status"},
-            "error": {
-                "name": "Fout",
-                "state": {
-                    "unknown": "Onbekend",
-                    "no_error": "Geen fout",
-                    "trapped": "Vast",
-                    "lifted": "Opgetild",
-                    "wire_missing": "Draad ontbreekt",
-                    "outside_wire": "Buiten de draad",
-                    "rain_delay": "Regenvertraging actief",
-                    "close_door_to_mow": "Sluit de deur om te maaien",
-                    "close_door_to_go_home": "Sluit de deur om naar laadstation te gaan",
-                    "blade_motor_blocked": "Motor mes is geblokkeerd",
-                    "wheel_motor_blocked": "Motor wiel is geblokkeerd",
-                    "trapped_timeout": "Time-out terwijl hij vastzit",
-                    "upside_down": "Maaier staat ondersteboven",
-                    "battery_low": "Batterij bijna leeg",
-                    "reverse_wire": "Draad is omgekeerd",
-                    "charge_error": "Fout bij opladen",
-                    "timeout_finding_home": "Time-out tijdens het vinden van laadstation",
-                    "locked": "Maaier is vergrendeld",
-                    "battery_temperature_error": "Fout met batterijtemperatuur",
-                    "battery_trunk_open_timeout": "Time-out voor open batterijkofferbak",
-                    "wire_sync": "Draad synchronisatie",
-                    "charging_station_docking_error": "Dockingfout bij laadstation",
-                    "hbi_error": "HBI fout",
-                    "ota_error": "OTA fout",
-                    "map_error": "Kaart fout",
-                    "excessive_slope": "Er is een te grote helling gedetecteerd",
-                    "unreachable_zone": "Onbereikbare zone",
-                    "unreachable_charging_station": "Laadstation onbereikbaar",
-                    "insufficient_sensor_data": "Onvoldoende sensorgegevens",
-                    "training_start_disallowed": "Trainingsstart afgekeurd",
-                    "camera_error": "Camerafout",
-                    "mapping_exploration_required": "Verkenning in kaart brengen vereist",
-                    "mapping_exploration_failed": "Kaartverkenning mislukt",
-                    "rfid_reader_error": "Fout met RFID-lezer",
-                    "headlight_error": "Koplampfout",
-                    "missing_charging_station": "Laadstation ontbreekt",
-                    "blade_height_adjustment_blocked": "Hoogte-instelling mes geblokkeerd",
-                },
-            },
-            "rssi": {"name": "Signaalsterkte"},
-            "daily_progress": {"name": "Dagelijkse voortgang"},
-            "next_schedule": {"name": "Volgend schema"},
-            "rain_delay_remaining": {"name": "Resterende regenvertraging"},
-            "last_update": {"name": "Laatste update"},
-            "battery_charge_cycles_total": {"name": "Totaal aantal batterijlaadcycli"},
-            "battery_charge_cycles_current": {"name": "Batterijlaadcycli sinds reset"},
-            "battery_temperature": {"name": "Batterijtemperatuur"},
-            "battery_voltage": {"name": "Batterijspanning"},
-            "blade_runtime_total": {"name": "Totale looptijd van de messen"},
-            "blade_runtime_current": {"name": "Looptijd van de messen sinds reset"},
-            "blade_runtime_reset_at": {
-                "name": "Looptijd van de messen bij laatste reset"
-            },
-            "blade_runtime_reset_time": {
-                "name": "Tijdstip van reset van de messentijd"
-            },
-            "distance_driven_total": {"name": "Totaal afgelegde afstand"},
-            "mower_runtime_total": {"name": "Totale looptijd van de maaier"},
-            "pitch": {"name": "Pitch"},
-            "roll": {"name": "Roll"},
-            "yaw": {"name": "Yaw"},
-            "auto_schedule_nutrition": {"name": "Auto schedule: Nutrition"},
-            "auto_schedule_exclusion_schedules": {
-                "name": "Auto schedule: Exclusion schedules"
-            },
-        },
-        "binary_sensor": {
-            "rain_sensor": {"name": "Regensensor"},
-            "charging": {"name": "Opladen"},
-        },
-        "switch": {
-            "lock": {"name": "Vergrendeling"},
-            "off_limits": {"name": "Off Limits"},
-            "off_limits_shortcut": {"name": "Off Limits-snelkoppelingen"},
-            "acs": {"name": "ACS"},
-            "auto_schedule": {"name": "Auto schedule"},
-            "firmware_auto_update": {"name": "Automatische firmware-update"},
-            "auto_schedule_irrigation": {"name": "Auto schedule: Irrigation"},
-            "auto_schedule_exclude_nights": {"name": "Auto schedule: Exclude nights"},
-            "party_mode": {"name": "Pauzemodus"},
-        },
-        "button": {
-            "edge_cut": {"name": "Randmaaien"},
-            "reset_blade_time": {"name": "Meslooptijd resetten"},
-            "reset_battery_cycles": {"name": "Batterijcycli resetten"},
-        },
-        "number": {
-            "rain_delay": {"name": "Regenvertraging"},
-            "cutting_height": {"name": "Maaihoogte"},
-            "time_extension": {"name": "Tijdsverlenging"},
-            "torque": {"name": "Koppel"},
-            "lawn_size": {"name": "Lawn size"},
-            "lawn_perimeter": {"name": "Lawn perimeter"},
-        },
-        "select": {
-            "zone": {"name": "Zone"},
-            "auto_schedule_boost": {
-                "name": "Auto schedule: Boost",
-                "state": {"0": "0", "1": "1", "2": "2"},
-            },
-            "auto_schedule_grass_type": {
-                "name": "Auto schedule: Grass type",
-                "state": {
-                    "mixed_species": "Mixed species",
-                    "festuca_arundinacea": "Tall fescue",
-                    "lolium_perenne": "Perennial ryegrass",
-                    "poa_pratensis": "Kentucky bluegrass",
-                    "festuca_rubra": "Red fescue",
-                    "agrostis_stolonifera": "Creeping bentgrass",
-                },
-            },
-            "auto_schedule_soil_type": {
-                "name": "Auto schedule: Soil type",
-                "state": {
-                    "clay": "Clay",
-                    "silt": "Silt",
-                    "sand": "Sand",
-                    "ignore": "Unknown",
-                },
-            },
-        },
-        "update": {"firmware": {"name": "Firmware"}},
-        "lawn_mower": {
-            "mower": {
-                "state": {
-                    "edgecut": "Randroutine",
-                    "escaped_digital_fence": "Buiten het digitale hek",
-                    "idle": "Inactief",
-                    "searching_zone": "Zone zoeken",
-                    "starting": "Starten",
-                    "zoning": "Zone-inleren",
-                    "rain_delayed": "Regenvertraging",
-                }
-            }
-        },
+    "error": {
+      "cannot_connect": "Kan geen verbinding maken",
+      "invalid_auth": "Fout in authenticatie",
+      "too_many_requests": "Te veel verzoeken aan de API - Probeer het opnieuw binnen 24 uur",
+      "api_error": "De cloud-API heeft de aanvraag afgewezen",
+      "timeout": "Verbindingstime-out",
+      "unknown": "Onverwachtse fout"
     },
-    "device_automation": {
-        "action_type": {
-            "start_mowing": "Laat {entity_name} beginnen met maaien",
-            "pause": "Pauzeer {entity_name}",
-            "dock": "Laat {entity_name} terugkeren naar het laadstation",
-        },
-        "condition_type": {
-            "is_mowing": "{entity_name} maait",
-            "is_docked": "{entity_name} staat in het laadstation",
-            "has_error": "{entity_name} heeft een fout",
-            "is_returning": "{entity_name} keert terug naar het laadstation",
-            "is_edgecut": "{entity_name} voert de randroutine uit",
-            "is_starting": "{entity_name} start op",
-            "is_zoning": "{entity_name} leert een zone in",
-            "is_searching_zone": "{entity_name} zoekt naar een zone",
-            "is_idle": "{entity_name} is inactief",
-            "is_escaped_digital_fence": "{entity_name} staat buiten het digitale hek",
-            "is_rain_delayed": "{entity_name} staat in regenvertraging",
-        },
-        "trigger_type": {
-            "mowing": "{entity_name} is begonnen met maaien",
-            "docked": "{entity_name} is teruggekeerd naar het laadstation",
-            "error": "{entity_name} is in een foutstatus gekomen",
-            "returning": "{entity_name} is begonnen met terugkeren naar het laadstation",
-            "edgecut": "{entity_name} begon met de randroutine",
-            "starting": "{entity_name} begon op te starten",
-            "zoning": "{entity_name} begon met het inleren van een zone",
-            "searching_zone": "{entity_name} begon naar een zone te zoeken",
-            "idle": "{entity_name} werd inactief",
-            "escaped_digital_fence": "{entity_name} ging buiten het digitale hek",
-            "rain_delayed": "{entity_name} ging naar regenvertraging",
-        },
-        "extra_fields": {"for": "[%key:common::device_automation::extra_fields::for%]"},
+    "abort": {
+      "already_exists": "Deze gebruiker is al geconfigureerd",
+      "already_in_progress": "De configuratie is momenteel al bezig"
+    }
+  },
+  "selector": {
+    "cloud": {
+      "options": {
+        "worx": "Worx",
+        "kress": "Kress",
+        "landxcape": "LandXcape"
+      }
     },
-    "services": {
-        "ots": {
-            "name": "Eenmalig schema starten",
-            "description": "Start een eenmalige maaibeurt als de maaier dit ondersteunt.",
-            "fields": {
-                "boundary": {
-                    "name": "Rand",
-                    "description": "Of er een randmaaibeurt moet worden meegenomen.",
-                },
-                "runtime": {"name": "Looptijd", "description": "Looptijd in minuten."},
-                "cut_over_border": {
-                    "name": "Over de rand maaien",
-                    "description": "Als uw maaier dit ondersteunt, bepaalt dit of de eenmalige randmaaibeurt over de gazonrand mag gaan.",
-                },
-                "border_distance_cm": {
-                    "name": "Randafstand",
-                    "description": "Als uw maaier dit ondersteunt en over de rand maaien is uitgeschakeld, stelt dit de randafstand in centimeters in.",
-                },
-            },
-        },
-        "set_nutrition": {
-            "name": "Set nutrition",
-            "description": "Set auto-schedule nutrition values.",
-            "fields": {
-                "n": {
-                    "name": "Nitrogen (N)",
-                    "description": "Nitrogen value for auto-schedule nutrition.",
-                },
-                "p": {
-                    "name": "Phosphorus (P)",
-                    "description": "Phosphorus value for auto-schedule nutrition.",
-                },
-                "k": {
-                    "name": "Potassium (K)",
-                    "description": "Potassium value for auto-schedule nutrition.",
-                },
-            },
-        },
-        "clear_nutrition": {
-            "name": "Clear nutrition",
-            "description": "Clear auto-schedule nutrition values.",
-        },
-        "set_exclusion_day": {
-            "name": "Set exclusion day",
-            "description": "Exclude or include one weekday in auto schedule.",
-            "fields": {
-                "day": {
-                    "name": "Day",
-                    "description": "Day to update in the exclusion scheduler.",
-                },
-                "exclude_day": {
-                    "name": "Exclude day",
-                    "description": "Whether the selected day should be fully excluded.",
-                },
-            },
-        },
-        "add_exclusion_schedule": {
-            "name": "Add exclusion schedule",
-            "description": "Add an exclusion schedule entry to auto schedule.",
-            "fields": {
-                "day": {
-                    "name": "Day",
-                    "description": "Day of week for the new exclusion schedule entry.",
-                },
-                "start": {
-                    "name": "Start",
-                    "description": "Start time in HH:MM format.",
-                },
-                "duration": {"name": "Duration", "description": "Duration in minutes."},
-                "reason": {
-                    "name": "Reason",
-                    "description": "Reason for the exclusion schedule entry.",
-                },
-            },
-        },
-        "edit_exclusion_schedule": {
-            "name": "Edit exclusion schedule",
-            "description": "Replace an existing exclusion schedule entry in auto schedule.",
-            "fields": {
-                "current_day": {
-                    "name": "Current day",
-                    "description": "Day for the exclusion schedule you want to change.",
-                },
-                "current_start": {
-                    "name": "Current start",
-                    "description": "Start time for the exclusion schedule you want to change.",
-                },
-                "day": {
-                    "name": "Day",
-                    "description": "New day of week for the exclusion schedule entry.",
-                },
-                "start": {
-                    "name": "Start",
-                    "description": "New start time in HH:MM format.",
-                },
-                "duration": {
-                    "name": "Duration",
-                    "description": "New duration in minutes.",
-                },
-                "reason": {
-                    "name": "Reason",
-                    "description": "Reason for the exclusion schedule entry.",
-                },
-            },
-        },
-        "delete_exclusion_schedule": {
-            "name": "Delete exclusion schedule",
-            "description": "Delete an exclusion schedule entry from auto schedule.",
-            "fields": {
-                "day": {
-                    "name": "Day",
-                    "description": "Day for the exclusion schedule you want to delete.",
-                },
-                "start": {
-                    "name": "Start",
-                    "description": "Use this if the selected day has more than one exclusion schedule and you need to choose one by time.",
-                },
-            },
-        },
+    "days_of_week": {
+      "options": {
+        "monday": "Maandag",
+        "tuesday": "Dinsdag",
+        "wednesday": "Woensdag",
+        "thursday": "Donderdag",
+        "friday": "Vrijdag",
+        "saturday": "Zaterdag",
+        "sunday": "Zondag"
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Landroid Cloud-opties",
+        "data": {
+          "command_timeout": "Time-out voor opdracht (seconden)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "battery": {
+        "name": "Batterij"
+      },
+      "status": {
+        "name": "Status"
+      },
+      "error": {
+        "name": "Fout",
+        "state": {
+          "unknown": "Onbekend",
+          "no_error": "Geen fout",
+          "trapped": "Vast",
+          "lifted": "Opgetild",
+          "wire_missing": "Draad ontbreekt",
+          "outside_wire": "Buiten de draad",
+          "rain_delay": "Regenvertraging actief",
+          "close_door_to_mow": "Sluit de deur om te maaien",
+          "close_door_to_go_home": "Sluit de deur om naar laadstation te gaan",
+          "blade_motor_blocked": "Motor mes is geblokkeerd",
+          "wheel_motor_blocked": "Motor wiel is geblokkeerd",
+          "trapped_timeout": "Time-out terwijl hij vastzit",
+          "upside_down": "Maaier staat ondersteboven",
+          "battery_low": "Batterij bijna leeg",
+          "reverse_wire": "Draad is omgekeerd",
+          "charge_error": "Fout bij opladen",
+          "timeout_finding_home": "Time-out tijdens het vinden van laadstation",
+          "locked": "Maaier is vergrendeld",
+          "battery_temperature_error": "Fout met batterijtemperatuur",
+          "battery_trunk_open_timeout": "Time-out voor open batterijkofferbak",
+          "wire_sync": "Draad synchronisatie",
+          "charging_station_docking_error": "Dockingfout bij laadstation",
+          "hbi_error": "HBI fout",
+          "ota_error": "OTA fout",
+          "map_error": "Kaart fout",
+          "excessive_slope": "Er is een te grote helling gedetecteerd",
+          "unreachable_zone": "Onbereikbare zone",
+          "unreachable_charging_station": "Laadstation onbereikbaar",
+          "insufficient_sensor_data": "Onvoldoende sensorgegevens",
+          "training_start_disallowed": "Trainingsstart afgekeurd",
+          "camera_error": "Camerafout",
+          "mapping_exploration_required": "Verkenning in kaart brengen vereist",
+          "mapping_exploration_failed": "Kaartverkenning mislukt",
+          "rfid_reader_error": "Fout met RFID-lezer",
+          "headlight_error": "Koplampfout",
+          "missing_charging_station": "Laadstation ontbreekt",
+          "blade_height_adjustment_blocked": "Hoogte-instelling mes geblokkeerd"
+        }
+      },
+      "rssi": {
+        "name": "Signaalsterkte"
+      },
+      "daily_progress": {
+        "name": "Dagelijkse voortgang"
+      },
+      "next_schedule": {
+        "name": "Volgend schema"
+      },
+      "rain_delay_remaining": {
+        "name": "Resterende regenvertraging"
+      },
+      "last_update": {
+        "name": "Laatste update"
+      },
+      "battery_charge_cycles_total": {
+        "name": "Totaal aantal batterijlaadcycli"
+      },
+      "battery_charge_cycles_current": {
+        "name": "Batterijlaadcycli sinds reset"
+      },
+      "battery_temperature": {
+        "name": "Batterijtemperatuur"
+      },
+      "battery_voltage": {
+        "name": "Batterijspanning"
+      },
+      "blade_runtime_total": {
+        "name": "Totale looptijd van de messen"
+      },
+      "blade_runtime_current": {
+        "name": "Looptijd van de messen sinds reset"
+      },
+      "blade_runtime_reset_at": {
+        "name": "Looptijd van de messen bij laatste reset"
+      },
+      "blade_runtime_reset_time": {
+        "name": "Tijdstip van reset van de messentijd"
+      },
+      "distance_driven_total": {
+        "name": "Totaal afgelegde afstand"
+      },
+      "mower_runtime_total": {
+        "name": "Totale looptijd van de maaier"
+      },
+      "pitch": {
+        "name": "Pitch"
+      },
+      "roll": {
+        "name": "Roll"
+      },
+      "yaw": {
+        "name": "Yaw"
+      },
+      "auto_schedule_nutrition": {
+        "name": "Auto schedule: Nutrition"
+      },
+      "auto_schedule_exclusion_schedules": {
+        "name": "Auto schedule: Exclusion schedules"
+      }
     },
+    "binary_sensor": {
+      "rain_sensor": {
+        "name": "Regensensor"
+      },
+      "charging": {
+        "name": "Opladen"
+      }
+    },
+    "switch": {
+      "lock": {
+        "name": "Vergrendeling"
+      },
+      "off_limits": {
+        "name": "Off Limits"
+      },
+      "off_limits_shortcut": {
+        "name": "Off Limits-snelkoppelingen"
+      },
+      "acs": {
+        "name": "ACS"
+      },
+      "auto_schedule": {
+        "name": "Auto schedule"
+      },
+      "firmware_auto_update": {
+        "name": "Automatische firmware-update"
+      },
+      "auto_schedule_irrigation": {
+        "name": "Auto schedule: Irrigation"
+      },
+      "auto_schedule_exclude_nights": {
+        "name": "Auto schedule: Exclude nights"
+      },
+      "party_mode": {
+        "name": "Pauzemodus"
+      }
+    },
+    "button": {
+      "edge_cut": {
+        "name": "Randmaaien"
+      },
+      "reset_blade_time": {
+        "name": "Meslooptijd resetten"
+      },
+      "reset_battery_cycles": {
+        "name": "Batterijcycli resetten"
+      }
+    },
+    "number": {
+      "rain_delay": {
+        "name": "Regenvertraging"
+      },
+      "cutting_height": {
+        "name": "Maaihoogte"
+      },
+      "time_extension": {
+        "name": "Tijdsverlenging"
+      },
+      "torque": {
+        "name": "Koppel"
+      },
+      "lawn_size": {
+        "name": "Lawn size"
+      },
+      "lawn_perimeter": {
+        "name": "Lawn perimeter"
+      }
+    },
+    "select": {
+      "zone": {
+        "name": "Zone"
+      },
+      "auto_schedule_boost": {
+        "name": "Auto schedule: Boost",
+        "state": {
+          "0": "0",
+          "1": "1",
+          "2": "2"
+        }
+      },
+      "auto_schedule_grass_type": {
+        "name": "Auto schedule: Grass type",
+        "state": {
+          "mixed_species": "Mixed species",
+          "festuca_arundinacea": "Tall fescue",
+          "lolium_perenne": "Perennial ryegrass",
+          "poa_pratensis": "Kentucky bluegrass",
+          "festuca_rubra": "Red fescue",
+          "agrostis_stolonifera": "Creeping bentgrass"
+        }
+      },
+      "auto_schedule_soil_type": {
+        "name": "Auto schedule: Soil type",
+        "state": {
+          "clay": "Clay",
+          "silt": "Silt",
+          "sand": "Sand",
+          "ignore": "Unknown"
+        }
+      }
+    },
+    "update": {
+      "firmware": {
+        "name": "Firmware"
+      }
+    },
+    "lawn_mower": {
+      "mower": {
+        "state": {
+          "edgecut": "Randroutine",
+          "escaped_digital_fence": "Buiten het digitale hek",
+          "idle": "Inactief",
+          "searching_zone": "Zone zoeken",
+          "starting": "Starten",
+          "zoning": "Zone-inleren",
+          "rain_delayed": "Regenvertraging"
+        }
+      }
+    }
+  },
+  "device_automation": {
+    "action_type": {
+      "start_mowing": "Laat {entity_name} beginnen met maaien",
+      "pause": "Pauzeer {entity_name}",
+      "dock": "Laat {entity_name} terugkeren naar het laadstation"
+    },
+    "condition_type": {
+      "is_mowing": "{entity_name} maait",
+      "is_docked": "{entity_name} staat in het laadstation",
+      "has_error": "{entity_name} heeft een fout",
+      "is_returning": "{entity_name} keert terug naar het laadstation",
+      "is_edgecut": "{entity_name} voert de randroutine uit",
+      "is_starting": "{entity_name} start op",
+      "is_zoning": "{entity_name} leert een zone in",
+      "is_searching_zone": "{entity_name} zoekt naar een zone",
+      "is_idle": "{entity_name} is inactief",
+      "is_escaped_digital_fence": "{entity_name} staat buiten het digitale hek",
+      "is_rain_delayed": "{entity_name} staat in regenvertraging"
+    },
+    "trigger_type": {
+      "mowing": "{entity_name} is begonnen met maaien",
+      "docked": "{entity_name} is teruggekeerd naar het laadstation",
+      "error": "{entity_name} is in een foutstatus gekomen",
+      "returning": "{entity_name} is begonnen met terugkeren naar het laadstation",
+      "edgecut": "{entity_name} begon met de randroutine",
+      "starting": "{entity_name} begon op te starten",
+      "zoning": "{entity_name} begon met het inleren van een zone",
+      "searching_zone": "{entity_name} begon naar een zone te zoeken",
+      "idle": "{entity_name} werd inactief",
+      "escaped_digital_fence": "{entity_name} ging buiten het digitale hek",
+      "rain_delayed": "{entity_name} ging naar regenvertraging"
+    },
+    "extra_fields": {
+      "for": "[%key:common::device_automation::extra_fields::for%]"
+    }
+  },
+  "services": {
+    "ots": {
+      "name": "Eenmalig schema starten",
+      "description": "Start een eenmalige maaibeurt als de maaier dit ondersteunt.",
+      "fields": {
+        "boundary": {
+          "name": "Rand",
+          "description": "Of er een randmaaibeurt moet worden meegenomen."
+        },
+        "runtime": {
+          "name": "Looptijd",
+          "description": "Looptijd in minuten."
+        },
+        "cut_over_border": {
+          "name": "Over de rand maaien",
+          "description": "Als uw maaier dit ondersteunt, bepaalt dit of de eenmalige randmaaibeurt over de gazonrand mag gaan."
+        },
+        "border_distance_cm": {
+          "name": "Randafstand",
+          "description": "Als uw maaier dit ondersteunt en over de rand maaien is uitgeschakeld, stelt dit de randafstand in centimeters in."
+        }
+      }
+    },
+    "set_nutrition": {
+      "name": "Set nutrition",
+      "description": "Set auto-schedule nutrition values.",
+      "fields": {
+        "n": {
+          "name": "Nitrogen (N)",
+          "description": "Nitrogen value for auto-schedule nutrition."
+        },
+        "p": {
+          "name": "Phosphorus (P)",
+          "description": "Phosphorus value for auto-schedule nutrition."
+        },
+        "k": {
+          "name": "Potassium (K)",
+          "description": "Potassium value for auto-schedule nutrition."
+        }
+      }
+    },
+    "clear_nutrition": {
+      "name": "Clear nutrition",
+      "description": "Clear auto-schedule nutrition values."
+    },
+    "set_exclusion_day": {
+      "name": "Set exclusion day",
+      "description": "Exclude or include one weekday in auto schedule.",
+      "fields": {
+        "day": {
+          "name": "Day",
+          "description": "Day to update in the exclusion scheduler."
+        },
+        "exclude_day": {
+          "name": "Exclude day",
+          "description": "Whether the selected day should be fully excluded."
+        }
+      }
+    },
+    "add_exclusion_schedule": {
+      "name": "Add exclusion schedule",
+      "description": "Add an exclusion schedule entry to auto schedule.",
+      "fields": {
+        "day": {
+          "name": "Day",
+          "description": "Day of week for the new exclusion schedule entry."
+        },
+        "start": {
+          "name": "Start",
+          "description": "Start time in HH:MM format."
+        },
+        "duration": {
+          "name": "Duration",
+          "description": "Duration in minutes."
+        },
+        "reason": {
+          "name": "Reason",
+          "description": "Reason for the exclusion schedule entry."
+        }
+      }
+    },
+    "edit_exclusion_schedule": {
+      "name": "Edit exclusion schedule",
+      "description": "Replace an existing exclusion schedule entry in auto schedule.",
+      "fields": {
+        "current_day": {
+          "name": "Current day",
+          "description": "Day for the exclusion schedule you want to change."
+        },
+        "current_start": {
+          "name": "Current start",
+          "description": "Start time for the exclusion schedule you want to change."
+        },
+        "day": {
+          "name": "Day",
+          "description": "New day of week for the exclusion schedule entry."
+        },
+        "start": {
+          "name": "Start",
+          "description": "New start time in HH:MM format."
+        },
+        "duration": {
+          "name": "Duration",
+          "description": "New duration in minutes."
+        },
+        "reason": {
+          "name": "Reason",
+          "description": "Reason for the exclusion schedule entry."
+        }
+      }
+    },
+    "delete_exclusion_schedule": {
+      "name": "Delete exclusion schedule",
+      "description": "Delete an exclusion schedule entry from auto schedule.",
+      "fields": {
+        "day": {
+          "name": "Day",
+          "description": "Day for the exclusion schedule you want to delete."
+        },
+        "start": {
+          "name": "Start",
+          "description": "Use this if the selected day has more than one exclusion schedule and you need to choose one by time."
+        }
+      }
+    }
+  }
 }

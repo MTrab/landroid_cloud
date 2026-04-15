@@ -1,351 +1,450 @@
 {
-    "config": {
-        "step": {
-            "user": {
-                "title": "Připojit ke cloudovým službám",
-                "description": "Zadejte své cloudové přihlašovací údaje a vyberte poskytovatele cloudové služby.",
-                "data": {
-                    "email": "Email",
-                    "password": "Heslo",
-                    "cloud": "Poskytovatel cloudu",
-                },
-            }
-        },
-        "error": {
-            "cannot_connect": "Chyba připojení",
-            "invalid_auth": "Chyba přihlášení",
-            "too_many_requests": "Příliš mnoho požadavků na API – Zkuste to znovu za 24 hodin.",
-            "api_error": "Cloud API požadavek odmítlo",
-            "timeout": "Vypršel časový limit připojení",
-            "unknown": "Neočekávaná chyba",
-        },
-        "abort": {
-            "already_exists": "Tento uživatelský účet již byl nastaven",
-            "already_in_progress": "Nastavení již probíhá",
-        },
-    },
-    "selector": {
-        "cloud": {
-            "options": {"worx": "Worx", "kress": "Kress", "landxcape": "LandXcape"}
-        },
-        "days_of_week": {
-            "options": {
-                "monday": "Pondělí",
-                "tuesday": "Úterý",
-                "wednesday": "Středa",
-                "thursday": "Čtvrtek",
-                "friday": "Pátek",
-                "saturday": "Sobota",
-                "sunday": "Neděle",
-            }
-        },
-    },
-    "options": {
-        "step": {
-            "init": {
-                "title": "Možnosti Landroid Cloud",
-                "data": {"command_timeout": "Časový limit příkazu (sekundy)"},
-            }
+  "config": {
+    "step": {
+      "user": {
+        "title": "Připojit ke cloudovým službám",
+        "description": "Zadejte své cloudové přihlašovací údaje a vyberte poskytovatele cloudové služby.",
+        "data": {
+          "email": "Email",
+          "password": "Heslo",
+          "cloud": "Poskytovatel cloudu"
         }
+      }
     },
-    "entity": {
-        "sensor": {
-            "battery": {"name": "Baterie"},
-            "status": {"name": "Stav"},
-            "error": {
-                "name": "Chyba",
-                "state": {
-                    "unknown": "Neznámý",
-                    "no_error": "Žádná chyba",
-                    "trapped": "Uváznutí",
-                    "lifted": "Zvednuto",
-                    "wire_missing": "Chybí ohraničující drát",
-                    "outside_wire": "Mimo sekací prostor",
-                    "rain_delay": "Zpoždění po dešti je aktivní",
-                    "close_door_to_mow": "Zavřete dvířka pro sekání",
-                    "close_door_to_go_home": "Zavřete dvířka pro návrat do doku",
-                    "blade_motor_blocked": "Nože jsou zablokovány",
-                    "wheel_motor_blocked": "Pohon kol je zablokován",
-                    "trapped_timeout": "Vypršel časový limit při uváznutí",
-                    "upside_down": "Sekačka je vzhůru nohama",
-                    "battery_low": "Vybitá baterie",
-                    "reverse_wire": "Drát je obrácený",
-                    "charge_error": "Chyba nabíjení",
-                    "timeout_finding_home": "Vypršel časový limit při hledání doku",
-                    "locked": "Sekačka je uzamčena",
-                    "battery_temperature_error": "Chyba teploty baterie",
-                    "battery_trunk_open_timeout": "Vypršel časový limit otevření přihrádky na baterii",
-                    "wire_sync": "Synchronizace kabelem",
-                    "charging_station_docking_error": "Chyba dokování nabíjecí stanice",
-                    "hbi_error": "Chyba HBI (rozpoznání okraje)",
-                    "ota_error": "Chyba OTA",
-                    "map_error": "Chyba mapy",
-                    "excessive_slope": "Zjištěn nadměrný sklon",
-                    "unreachable_zone": "Nedosažitelná zóna",
-                    "unreachable_charging_station": "Nedosažitelná nabíjecí stanice",
-                    "insufficient_sensor_data": "Nedostatek dat ze senzorů",
-                    "training_start_disallowed": "Spuštění učení nepovoleno",
-                    "camera_error": "Chyba kamery",
-                    "mapping_exploration_required": "Je vyžadováno průzkumné mapování",
-                    "mapping_exploration_failed": "Průzkumné mapování selhalo",
-                    "rfid_reader_error": "Chyba čtečky RFID",
-                    "headlight_error": "Chyba světlometu",
-                    "missing_charging_station": "Chybí nabíjecí stanice",
-                    "blade_height_adjustment_blocked": "Zablokované nastavení výšky nožů",
-                },
-            },
-            "rssi": {"name": "Síla signálu"},
-            "daily_progress": {"name": "Denní průběh"},
-            "next_schedule": {"name": "Další plán"},
-            "rain_delay_remaining": {"name": "Zbývající dešťová prodleva"},
-            "last_update": {"name": "Poslední aktualizace"},
-            "battery_charge_cycles_total": {
-                "name": "Celkový počet nabíjecích cyklů baterie"
-            },
-            "battery_charge_cycles_current": {
-                "name": "Nabíjecí cykly baterie od resetu"
-            },
-            "battery_temperature": {"name": "Teplota baterie"},
-            "battery_voltage": {"name": "Napětí baterie"},
-            "blade_runtime_total": {"name": "Celková doba chodu nožů"},
-            "blade_runtime_current": {"name": "Doba chodu nožů od resetu"},
-            "blade_runtime_reset_at": {"name": "Doba chodu nožů při posledním resetu"},
-            "blade_runtime_reset_time": {"name": "Čas resetu doby chodu nožů"},
-            "distance_driven_total": {"name": "Celková ujetá vzdálenost"},
-            "mower_runtime_total": {"name": "Celková doba provozu sekačky"},
-            "pitch": {"name": "Pitch"},
-            "roll": {"name": "Roll"},
-            "yaw": {"name": "Yaw"},
-            "auto_schedule_nutrition": {"name": "Auto schedule: Nutrition"},
-            "auto_schedule_exclusion_schedules": {
-                "name": "Auto schedule: Exclusion schedules"
-            },
-        },
-        "binary_sensor": {
-            "rain_sensor": {"name": "Dešťový senzor"},
-            "charging": {"name": "Nabíjení"},
-        },
-        "switch": {
-            "lock": {"name": "Zámek"},
-            "off_limits": {"name": "Off Limits"},
-            "off_limits_shortcut": {"name": "Zkratky Off Limits"},
-            "acs": {"name": "ACS"},
-            "auto_schedule": {"name": "Auto schedule"},
-            "firmware_auto_update": {"name": "Automatická aktualizace firmwaru"},
-            "auto_schedule_irrigation": {"name": "Auto schedule: Irrigation"},
-            "auto_schedule_exclude_nights": {"name": "Auto schedule: Exclude nights"},
-            "party_mode": {"name": "Rezim pauzy"},
-        },
-        "button": {
-            "edge_cut": {"name": "Sekání okraje"},
-            "reset_blade_time": {"name": "Resetovat dobu chodu nožů"},
-            "reset_battery_cycles": {"name": "Resetovat cykly baterie"},
-        },
-        "number": {
-            "rain_delay": {"name": "Dešťová prodleva"},
-            "cutting_height": {"name": "Výška sečení"},
-            "time_extension": {"name": "Časové prodloužení"},
-            "torque": {"name": "Krouticí moment"},
-            "lawn_size": {"name": "Lawn size"},
-            "lawn_perimeter": {"name": "Lawn perimeter"},
-        },
-        "select": {
-            "zone": {"name": "Zóna"},
-            "auto_schedule_boost": {
-                "name": "Auto schedule: Boost",
-                "state": {"0": "0", "1": "1", "2": "2"},
-            },
-            "auto_schedule_grass_type": {
-                "name": "Auto schedule: Grass type",
-                "state": {
-                    "mixed_species": "Mixed species",
-                    "festuca_arundinacea": "Tall fescue",
-                    "lolium_perenne": "Perennial ryegrass",
-                    "poa_pratensis": "Kentucky bluegrass",
-                    "festuca_rubra": "Red fescue",
-                    "agrostis_stolonifera": "Creeping bentgrass",
-                },
-            },
-            "auto_schedule_soil_type": {
-                "name": "Auto schedule: Soil type",
-                "state": {
-                    "clay": "Clay",
-                    "silt": "Silt",
-                    "sand": "Sand",
-                    "ignore": "Unknown",
-                },
-            },
-        },
-        "update": {"firmware": {"name": "Firmware"}},
-        "lawn_mower": {
-            "mower": {
-                "state": {
-                    "edgecut": "Sekání podél okraje",
-                    "escaped_digital_fence": "Sekačka překročila virtuální plot",
-                    "idle": "Nečinný",
-                    "searching_zone": "Vyhledávání zóny",
-                    "starting": "Začínání",
-                    "zoning": "Učení zóny",
-                    "rain_delayed": "Dešťové zpoždění",
-                }
-            }
-        },
+    "error": {
+      "cannot_connect": "Chyba připojení",
+      "invalid_auth": "Chyba přihlášení",
+      "too_many_requests": "Příliš mnoho požadavků na API – Zkuste to znovu za 24 hodin.",
+      "api_error": "Cloud API požadavek odmítlo",
+      "timeout": "Vypršel časový limit připojení",
+      "unknown": "Neočekávaná chyba"
     },
-    "device_automation": {
-        "action_type": {
-            "start_mowing": "Nechte {entity_name} začít sekat",
-            "pause": "Pozastavit {entity_name}",
-            "dock": "Poslat {entity_name} zpět do nabíjecí stanice",
-        },
-        "condition_type": {
-            "is_mowing": "{entity_name} seká",
-            "is_docked": "{entity_name} je v nabíjecí stanici",
-            "has_error": "{entity_name} hlásí chybu",
-            "is_returning": "{entity_name} se vrací do nabíjecí stanice",
-            "is_edgecut": "{entity_name} seká podél okraje",
-            "is_starting": "{entity_name} se spouští",
-            "is_zoning": "{entity_name} se učí zónu",
-            "is_searching_zone": "{entity_name} hledá zónu",
-            "is_idle": "{entity_name} je nečinný",
-            "is_escaped_digital_fence": "{entity_name} je mimo virtuální plot",
-            "is_rain_delayed": "{entity_name} je v dešťovém zpoždění",
-        },
-        "trigger_type": {
-            "mowing": "{entity_name} začal sekat",
-            "docked": "{entity_name} dorazil do nabíjecí stanice",
-            "error": "{entity_name} přešel do chybového stavu",
-            "returning": "{entity_name} se začal vracet do nabíjecí stanice",
-            "edgecut": "{entity_name} začal sekat podél okraje",
-            "starting": "{entity_name} se začal spouštět",
-            "zoning": "{entity_name} začal učit zónu",
-            "searching_zone": "{entity_name} začal hledat zónu",
-            "idle": "{entity_name} přešel do nečinného stavu",
-            "escaped_digital_fence": "{entity_name} opustil virtuální plot",
-            "rain_delayed": "{entity_name} přešel do dešťového zpoždění",
-        },
-        "extra_fields": {"for": "[%key:common::device_automation::extra_fields::for%]"},
+    "abort": {
+      "already_exists": "Tento uživatelský účet již byl nastaven",
+      "already_in_progress": "Nastavení již probíhá"
+    }
+  },
+  "selector": {
+    "cloud": {
+      "options": {
+        "worx": "Worx",
+        "kress": "Kress",
+        "landxcape": "LandXcape"
+      }
     },
-    "services": {
-        "ots": {
-            "name": "Spustit jednorázový plán",
-            "description": "Spustí jednorázové sečení, pokud ho sekačka podporuje.",
-            "fields": {
-                "boundary": {
-                    "name": "Okraj",
-                    "description": "Zda zahrnout sekání okraje.",
-                },
-                "runtime": {
-                    "name": "Doba běhu",
-                    "description": "Doba běhu v minutách.",
-                },
-                "cut_over_border": {
-                    "name": "Sekat přes okraj",
-                    "description": "Pokud to vaše sekačka podporuje, určuje, zda jednorázové sekání okraje smí přejet přes okraj trávníku.",
-                },
-                "border_distance_cm": {
-                    "name": "Vzdálenost od okraje",
-                    "description": "Pokud to vaše sekačka podporuje a sekání přes okraj je vypnuto, nastaví vzdálenost od okraje v centimetrech.",
-                },
-            },
-        },
-        "set_nutrition": {
-            "name": "Set nutrition",
-            "description": "Set auto-schedule nutrition values.",
-            "fields": {
-                "n": {
-                    "name": "Nitrogen (N)",
-                    "description": "Nitrogen value for auto-schedule nutrition.",
-                },
-                "p": {
-                    "name": "Phosphorus (P)",
-                    "description": "Phosphorus value for auto-schedule nutrition.",
-                },
-                "k": {
-                    "name": "Potassium (K)",
-                    "description": "Potassium value for auto-schedule nutrition.",
-                },
-            },
-        },
-        "clear_nutrition": {
-            "name": "Clear nutrition",
-            "description": "Clear auto-schedule nutrition values.",
-        },
-        "set_exclusion_day": {
-            "name": "Set exclusion day",
-            "description": "Exclude or include one weekday in auto schedule.",
-            "fields": {
-                "day": {
-                    "name": "Day",
-                    "description": "Day to update in the exclusion scheduler.",
-                },
-                "exclude_day": {
-                    "name": "Exclude day",
-                    "description": "Whether the selected day should be fully excluded.",
-                },
-            },
-        },
-        "add_exclusion_schedule": {
-            "name": "Add exclusion schedule",
-            "description": "Add an exclusion schedule entry to auto schedule.",
-            "fields": {
-                "day": {
-                    "name": "Day",
-                    "description": "Day of week for the new exclusion schedule entry.",
-                },
-                "start": {
-                    "name": "Start",
-                    "description": "Start time in HH:MM format.",
-                },
-                "duration": {"name": "Duration", "description": "Duration in minutes."},
-                "reason": {
-                    "name": "Reason",
-                    "description": "Reason for the exclusion schedule entry.",
-                },
-            },
-        },
-        "edit_exclusion_schedule": {
-            "name": "Edit exclusion schedule",
-            "description": "Replace an existing exclusion schedule entry in auto schedule.",
-            "fields": {
-                "current_day": {
-                    "name": "Current day",
-                    "description": "Day for the exclusion schedule you want to change.",
-                },
-                "current_start": {
-                    "name": "Current start",
-                    "description": "Start time for the exclusion schedule you want to change.",
-                },
-                "day": {
-                    "name": "Day",
-                    "description": "New day of week for the exclusion schedule entry.",
-                },
-                "start": {
-                    "name": "Start",
-                    "description": "New start time in HH:MM format.",
-                },
-                "duration": {
-                    "name": "Duration",
-                    "description": "New duration in minutes.",
-                },
-                "reason": {
-                    "name": "Reason",
-                    "description": "Reason for the exclusion schedule entry.",
-                },
-            },
-        },
-        "delete_exclusion_schedule": {
-            "name": "Delete exclusion schedule",
-            "description": "Delete an exclusion schedule entry from auto schedule.",
-            "fields": {
-                "day": {
-                    "name": "Day",
-                    "description": "Day for the exclusion schedule you want to delete.",
-                },
-                "start": {
-                    "name": "Start",
-                    "description": "Use this if the selected day has more than one exclusion schedule and you need to choose one by time.",
-                },
-            },
-        },
+    "days_of_week": {
+      "options": {
+        "monday": "Pondělí",
+        "tuesday": "Úterý",
+        "wednesday": "Středa",
+        "thursday": "Čtvrtek",
+        "friday": "Pátek",
+        "saturday": "Sobota",
+        "sunday": "Neděle"
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Možnosti Landroid Cloud",
+        "data": {
+          "command_timeout": "Časový limit příkazu (sekundy)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "battery": {
+        "name": "Baterie"
+      },
+      "status": {
+        "name": "Stav"
+      },
+      "error": {
+        "name": "Chyba",
+        "state": {
+          "unknown": "Neznámý",
+          "no_error": "Žádná chyba",
+          "trapped": "Uváznutí",
+          "lifted": "Zvednuto",
+          "wire_missing": "Chybí ohraničující drát",
+          "outside_wire": "Mimo sekací prostor",
+          "rain_delay": "Zpoždění po dešti je aktivní",
+          "close_door_to_mow": "Zavřete dvířka pro sekání",
+          "close_door_to_go_home": "Zavřete dvířka pro návrat do doku",
+          "blade_motor_blocked": "Nože jsou zablokovány",
+          "wheel_motor_blocked": "Pohon kol je zablokován",
+          "trapped_timeout": "Vypršel časový limit při uváznutí",
+          "upside_down": "Sekačka je vzhůru nohama",
+          "battery_low": "Vybitá baterie",
+          "reverse_wire": "Drát je obrácený",
+          "charge_error": "Chyba nabíjení",
+          "timeout_finding_home": "Vypršel časový limit při hledání doku",
+          "locked": "Sekačka je uzamčena",
+          "battery_temperature_error": "Chyba teploty baterie",
+          "battery_trunk_open_timeout": "Vypršel časový limit otevření přihrádky na baterii",
+          "wire_sync": "Synchronizace kabelem",
+          "charging_station_docking_error": "Chyba dokování nabíjecí stanice",
+          "hbi_error": "Chyba HBI (rozpoznání okraje)",
+          "ota_error": "Chyba OTA",
+          "map_error": "Chyba mapy",
+          "excessive_slope": "Zjištěn nadměrný sklon",
+          "unreachable_zone": "Nedosažitelná zóna",
+          "unreachable_charging_station": "Nedosažitelná nabíjecí stanice",
+          "insufficient_sensor_data": "Nedostatek dat ze senzorů",
+          "training_start_disallowed": "Spuštění učení nepovoleno",
+          "camera_error": "Chyba kamery",
+          "mapping_exploration_required": "Je vyžadováno průzkumné mapování",
+          "mapping_exploration_failed": "Průzkumné mapování selhalo",
+          "rfid_reader_error": "Chyba čtečky RFID",
+          "headlight_error": "Chyba světlometu",
+          "missing_charging_station": "Chybí nabíjecí stanice",
+          "blade_height_adjustment_blocked": "Zablokované nastavení výšky nožů"
+        }
+      },
+      "rssi": {
+        "name": "Síla signálu"
+      },
+      "daily_progress": {
+        "name": "Denní průběh"
+      },
+      "next_schedule": {
+        "name": "Další plán"
+      },
+      "rain_delay_remaining": {
+        "name": "Zbývající dešťová prodleva"
+      },
+      "last_update": {
+        "name": "Poslední aktualizace"
+      },
+      "battery_charge_cycles_total": {
+        "name": "Celkový počet nabíjecích cyklů baterie"
+      },
+      "battery_charge_cycles_current": {
+        "name": "Nabíjecí cykly baterie od resetu"
+      },
+      "battery_temperature": {
+        "name": "Teplota baterie"
+      },
+      "battery_voltage": {
+        "name": "Napětí baterie"
+      },
+      "blade_runtime_total": {
+        "name": "Celková doba chodu nožů"
+      },
+      "blade_runtime_current": {
+        "name": "Doba chodu nožů od resetu"
+      },
+      "blade_runtime_reset_at": {
+        "name": "Doba chodu nožů při posledním resetu"
+      },
+      "blade_runtime_reset_time": {
+        "name": "Čas resetu doby chodu nožů"
+      },
+      "distance_driven_total": {
+        "name": "Celková ujetá vzdálenost"
+      },
+      "mower_runtime_total": {
+        "name": "Celková doba provozu sekačky"
+      },
+      "pitch": {
+        "name": "Pitch"
+      },
+      "roll": {
+        "name": "Roll"
+      },
+      "yaw": {
+        "name": "Yaw"
+      },
+      "auto_schedule_nutrition": {
+        "name": "Auto schedule: Nutrition"
+      },
+      "auto_schedule_exclusion_schedules": {
+        "name": "Auto schedule: Exclusion schedules"
+      }
     },
+    "binary_sensor": {
+      "rain_sensor": {
+        "name": "Dešťový senzor"
+      },
+      "charging": {
+        "name": "Nabíjení"
+      }
+    },
+    "switch": {
+      "lock": {
+        "name": "Zámek"
+      },
+      "off_limits": {
+        "name": "Off Limits"
+      },
+      "off_limits_shortcut": {
+        "name": "Zkratky Off Limits"
+      },
+      "acs": {
+        "name": "ACS"
+      },
+      "auto_schedule": {
+        "name": "Auto schedule"
+      },
+      "firmware_auto_update": {
+        "name": "Automatická aktualizace firmwaru"
+      },
+      "auto_schedule_irrigation": {
+        "name": "Auto schedule: Irrigation"
+      },
+      "auto_schedule_exclude_nights": {
+        "name": "Auto schedule: Exclude nights"
+      },
+      "party_mode": {
+        "name": "Rezim pauzy"
+      }
+    },
+    "button": {
+      "edge_cut": {
+        "name": "Sekání okraje"
+      },
+      "reset_blade_time": {
+        "name": "Resetovat dobu chodu nožů"
+      },
+      "reset_battery_cycles": {
+        "name": "Resetovat cykly baterie"
+      }
+    },
+    "number": {
+      "rain_delay": {
+        "name": "Dešťová prodleva"
+      },
+      "cutting_height": {
+        "name": "Výška sečení"
+      },
+      "time_extension": {
+        "name": "Časové prodloužení"
+      },
+      "torque": {
+        "name": "Krouticí moment"
+      },
+      "lawn_size": {
+        "name": "Lawn size"
+      },
+      "lawn_perimeter": {
+        "name": "Lawn perimeter"
+      }
+    },
+    "select": {
+      "zone": {
+        "name": "Zóna"
+      },
+      "auto_schedule_boost": {
+        "name": "Auto schedule: Boost",
+        "state": {
+          "0": "0",
+          "1": "1",
+          "2": "2"
+        }
+      },
+      "auto_schedule_grass_type": {
+        "name": "Auto schedule: Grass type",
+        "state": {
+          "mixed_species": "Mixed species",
+          "festuca_arundinacea": "Tall fescue",
+          "lolium_perenne": "Perennial ryegrass",
+          "poa_pratensis": "Kentucky bluegrass",
+          "festuca_rubra": "Red fescue",
+          "agrostis_stolonifera": "Creeping bentgrass"
+        }
+      },
+      "auto_schedule_soil_type": {
+        "name": "Auto schedule: Soil type",
+        "state": {
+          "clay": "Clay",
+          "silt": "Silt",
+          "sand": "Sand",
+          "ignore": "Unknown"
+        }
+      }
+    },
+    "update": {
+      "firmware": {
+        "name": "Firmware"
+      }
+    },
+    "lawn_mower": {
+      "mower": {
+        "state": {
+          "edgecut": "Sekání podél okraje",
+          "escaped_digital_fence": "Sekačka překročila virtuální plot",
+          "idle": "Nečinný",
+          "searching_zone": "Vyhledávání zóny",
+          "starting": "Začínání",
+          "zoning": "Učení zóny",
+          "rain_delayed": "Dešťové zpoždění"
+        }
+      }
+    }
+  },
+  "device_automation": {
+    "action_type": {
+      "start_mowing": "Nechte {entity_name} začít sekat",
+      "pause": "Pozastavit {entity_name}",
+      "dock": "Poslat {entity_name} zpět do nabíjecí stanice"
+    },
+    "condition_type": {
+      "is_mowing": "{entity_name} seká",
+      "is_docked": "{entity_name} je v nabíjecí stanici",
+      "has_error": "{entity_name} hlásí chybu",
+      "is_returning": "{entity_name} se vrací do nabíjecí stanice",
+      "is_edgecut": "{entity_name} seká podél okraje",
+      "is_starting": "{entity_name} se spouští",
+      "is_zoning": "{entity_name} se učí zónu",
+      "is_searching_zone": "{entity_name} hledá zónu",
+      "is_idle": "{entity_name} je nečinný",
+      "is_escaped_digital_fence": "{entity_name} je mimo virtuální plot",
+      "is_rain_delayed": "{entity_name} je v dešťovém zpoždění"
+    },
+    "trigger_type": {
+      "mowing": "{entity_name} začal sekat",
+      "docked": "{entity_name} dorazil do nabíjecí stanice",
+      "error": "{entity_name} přešel do chybového stavu",
+      "returning": "{entity_name} se začal vracet do nabíjecí stanice",
+      "edgecut": "{entity_name} začal sekat podél okraje",
+      "starting": "{entity_name} se začal spouštět",
+      "zoning": "{entity_name} začal učit zónu",
+      "searching_zone": "{entity_name} začal hledat zónu",
+      "idle": "{entity_name} přešel do nečinného stavu",
+      "escaped_digital_fence": "{entity_name} opustil virtuální plot",
+      "rain_delayed": "{entity_name} přešel do dešťového zpoždění"
+    },
+    "extra_fields": {
+      "for": "[%key:common::device_automation::extra_fields::for%]"
+    }
+  },
+  "services": {
+    "ots": {
+      "name": "Spustit jednorázový plán",
+      "description": "Spustí jednorázové sečení, pokud ho sekačka podporuje.",
+      "fields": {
+        "boundary": {
+          "name": "Okraj",
+          "description": "Zda zahrnout sekání okraje."
+        },
+        "runtime": {
+          "name": "Doba běhu",
+          "description": "Doba běhu v minutách."
+        },
+        "cut_over_border": {
+          "name": "Sekat přes okraj",
+          "description": "Pokud to vaše sekačka podporuje, určuje, zda jednorázové sekání okraje smí přejet přes okraj trávníku."
+        },
+        "border_distance_cm": {
+          "name": "Vzdálenost od okraje",
+          "description": "Pokud to vaše sekačka podporuje a sekání přes okraj je vypnuto, nastaví vzdálenost od okraje v centimetrech."
+        }
+      }
+    },
+    "set_nutrition": {
+      "name": "Set nutrition",
+      "description": "Set auto-schedule nutrition values.",
+      "fields": {
+        "n": {
+          "name": "Nitrogen (N)",
+          "description": "Nitrogen value for auto-schedule nutrition."
+        },
+        "p": {
+          "name": "Phosphorus (P)",
+          "description": "Phosphorus value for auto-schedule nutrition."
+        },
+        "k": {
+          "name": "Potassium (K)",
+          "description": "Potassium value for auto-schedule nutrition."
+        }
+      }
+    },
+    "clear_nutrition": {
+      "name": "Clear nutrition",
+      "description": "Clear auto-schedule nutrition values."
+    },
+    "set_exclusion_day": {
+      "name": "Set exclusion day",
+      "description": "Exclude or include one weekday in auto schedule.",
+      "fields": {
+        "day": {
+          "name": "Day",
+          "description": "Day to update in the exclusion scheduler."
+        },
+        "exclude_day": {
+          "name": "Exclude day",
+          "description": "Whether the selected day should be fully excluded."
+        }
+      }
+    },
+    "add_exclusion_schedule": {
+      "name": "Add exclusion schedule",
+      "description": "Add an exclusion schedule entry to auto schedule.",
+      "fields": {
+        "day": {
+          "name": "Day",
+          "description": "Day of week for the new exclusion schedule entry."
+        },
+        "start": {
+          "name": "Start",
+          "description": "Start time in HH:MM format."
+        },
+        "duration": {
+          "name": "Duration",
+          "description": "Duration in minutes."
+        },
+        "reason": {
+          "name": "Reason",
+          "description": "Reason for the exclusion schedule entry."
+        }
+      }
+    },
+    "edit_exclusion_schedule": {
+      "name": "Edit exclusion schedule",
+      "description": "Replace an existing exclusion schedule entry in auto schedule.",
+      "fields": {
+        "current_day": {
+          "name": "Current day",
+          "description": "Day for the exclusion schedule you want to change."
+        },
+        "current_start": {
+          "name": "Current start",
+          "description": "Start time for the exclusion schedule you want to change."
+        },
+        "day": {
+          "name": "Day",
+          "description": "New day of week for the exclusion schedule entry."
+        },
+        "start": {
+          "name": "Start",
+          "description": "New start time in HH:MM format."
+        },
+        "duration": {
+          "name": "Duration",
+          "description": "New duration in minutes."
+        },
+        "reason": {
+          "name": "Reason",
+          "description": "Reason for the exclusion schedule entry."
+        }
+      }
+    },
+    "delete_exclusion_schedule": {
+      "name": "Delete exclusion schedule",
+      "description": "Delete an exclusion schedule entry from auto schedule.",
+      "fields": {
+        "day": {
+          "name": "Day",
+          "description": "Day for the exclusion schedule you want to delete."
+        },
+        "start": {
+          "name": "Start",
+          "description": "Use this if the selected day has more than one exclusion schedule and you need to choose one by time."
+        }
+      }
+    }
+  }
 }

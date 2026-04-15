@@ -1,359 +1,450 @@
 {
-    "config": {
-        "step": {
-            "user": {
-                "title": "Conectar con servicios en la nube",
-                "description": "Introduzca sus credenciales de la nube y seleccione su proveedor de nube.",
-                "data": {
-                    "email": "Envíe un correo electrónico a",
-                    "password": "Contraseña",
-                    "cloud": "Proveedor de nube",
-                },
-            }
-        },
-        "error": {
-            "cannot_connect": "Fallo en la conexión",
-            "invalid_auth": "Error en la autentificación",
-            "too_many_requests": "Demasiadas solicitudes a la API: vuelva a intentarlo en 24 horas",
-            "api_error": "La API en la nube rechazó la solicitud",
-            "timeout": "Tiempo de espera de conexión agotado",
-            "unknown": "Error inesperado",
-        },
-        "abort": {
-            "already_exists": "Esta cuenta de usuario ya ha sido configurada",
-            "already_in_progress": "El flujo de configuración ya está en curso",
-        },
-    },
-    "selector": {
-        "cloud": {
-            "options": {"worx": "Worx", "kress": "Kress", "landxcape": "LandXcape"}
-        },
-        "days_of_week": {
-            "options": {
-                "monday": "Lunes",
-                "tuesday": "Martes",
-                "wednesday": "Miércoles",
-                "thursday": "Jueves",
-                "friday": "Viernes",
-                "saturday": "Sábado",
-                "sunday": "Domingo",
-            }
-        },
-    },
-    "options": {
-        "step": {
-            "init": {
-                "title": "Opciones de Landroid Cloud",
-                "data": {"command_timeout": "Tiempo de espera del comando (segundos)"},
-            }
+  "config": {
+    "step": {
+      "user": {
+        "title": "Conectar con servicios en la nube",
+        "description": "Introduzca sus credenciales de la nube y seleccione su proveedor de nube.",
+        "data": {
+          "email": "Envíe un correo electrónico a",
+          "password": "Contraseña",
+          "cloud": "Proveedor de nube"
         }
+      }
     },
-    "entity": {
-        "sensor": {
-            "battery": {"name": "Batería"},
-            "status": {"name": "Estado"},
-            "error": {
-                "name": "Error",
-                "state": {
-                    "unknown": "Desconocido",
-                    "no_error": "Sin errores",
-                    "trapped": "Atrapado",
-                    "lifted": "Levantado",
-                    "wire_missing": "Falta el cable",
-                    "outside_wire": "Fuera del cable",
-                    "rain_delay": "Retraso por lluvia activo",
-                    "close_door_to_mow": "Cerrar la puerta para cortar el césped",
-                    "close_door_to_go_home": "Cerrar la puerta para ir a la base",
-                    "blade_motor_blocked": "El motor de la cuchilla está bloqueado",
-                    "wheel_motor_blocked": "El motor de la rueda está bloqueado",
-                    "trapped_timeout": "Tiempo de espera agotado mientras estaba atrapado",
-                    "upside_down": "El cortacésped está del revés",
-                    "battery_low": "Batería baja",
-                    "reverse_wire": "El cable está invertido",
-                    "charge_error": "Error de carga",
-                    "timeout_finding_home": "Tiempo de espera agotado mientras se buscaba la base",
-                    "locked": "El cortacésped está bloqueado",
-                    "battery_temperature_error": "Error de temperatura de la batería",
-                    "battery_trunk_open_timeout": "Tiempo de espera de apertura del baúl de la batería",
-                    "wire_sync": "Sincronización del cable",
-                    "charging_station_docking_error": "Error de acoplamiento a la base",
-                    "hbi_error": "Error de HBI",
-                    "ota_error": "Error de OTA",
-                    "map_error": "Error de mapa",
-                    "excessive_slope": "Pendiente excesiva detectada",
-                    "unreachable_zone": "Zona inalcanzable",
-                    "unreachable_charging_station": "Base inalcanzable",
-                    "insufficient_sensor_data": "Datos del sensor insuficientes",
-                    "training_start_disallowed": "Inicio de entrenamiento no permitido",
-                    "camera_error": "Error de cámara",
-                    "mapping_exploration_required": "Exploración de mapas requerida",
-                    "mapping_exploration_failed": "Error de exploración de mapas",
-                    "rfid_reader_error": "Error del lector RFID",
-                    "headlight_error": "Error de faro",
-                    "missing_charging_station": "Perdida la base",
-                    "blade_height_adjustment_blocked": "Ajuste de altura de la cuchilla bloqueado",
-                },
-            },
-            "rssi": {"name": "Intensidad de señal"},
-            "daily_progress": {"name": "Progreso diario"},
-            "next_schedule": {"name": "Próximo horario"},
-            "rain_delay_remaining": {"name": "Retraso por lluvia restante"},
-            "last_update": {"name": "Última actualización"},
-            "battery_charge_cycles_total": {
-                "name": "Ciclos de carga totales de la batería"
-            },
-            "battery_charge_cycles_current": {
-                "name": "Ciclos de carga de la batería desde el reinicio"
-            },
-            "battery_temperature": {"name": "Temperatura de la batería"},
-            "battery_voltage": {"name": "Voltaje de la batería"},
-            "blade_runtime_total": {"name": "Tiempo total de uso de las cuchillas"},
-            "blade_runtime_current": {
-                "name": "Tiempo de uso de las cuchillas desde el reinicio"
-            },
-            "blade_runtime_reset_at": {
-                "name": "Tiempo de uso de las cuchillas en el último reinicio"
-            },
-            "blade_runtime_reset_time": {
-                "name": "Momento del reinicio del tiempo de cuchillas"
-            },
-            "distance_driven_total": {"name": "Distancia total recorrida"},
-            "mower_runtime_total": {
-                "name": "Tiempo total de funcionamiento del cortacésped"
-            },
-            "pitch": {"name": "Cabeceo"},
-            "roll": {"name": "Alabeo"},
-            "yaw": {"name": "Guiñada"},
-            "auto_schedule_nutrition": {"name": "Auto schedule: Nutrition"},
-            "auto_schedule_exclusion_schedules": {
-                "name": "Auto schedule: Exclusion schedules"
-            },
-        },
-        "binary_sensor": {
-            "rain_sensor": {"name": "Sensor de lluvia"},
-            "charging": {"name": "Cargando"},
-        },
-        "switch": {
-            "lock": {"name": "Bloqueo"},
-            "off_limits": {"name": "Off Limits"},
-            "off_limits_shortcut": {"name": "Accesos directos de Off Limits"},
-            "acs": {"name": "ACS"},
-            "auto_schedule": {"name": "Auto schedule"},
-            "firmware_auto_update": {"name": "Actualización automática de firmware"},
-            "auto_schedule_irrigation": {"name": "Auto schedule: Irrigation"},
-            "auto_schedule_exclude_nights": {"name": "Auto schedule: Exclude nights"},
-            "party_mode": {"name": "Modo pausa"},
-        },
-        "button": {
-            "edge_cut": {"name": "Corte de bordes"},
-            "reset_blade_time": {"name": "Restablecer tiempo de cuchillas"},
-            "reset_battery_cycles": {"name": "Restablecer ciclos de batería"},
-        },
-        "number": {
-            "rain_delay": {"name": "Retraso por lluvia"},
-            "cutting_height": {"name": "Altura de corte"},
-            "time_extension": {"name": "Extensión de tiempo"},
-            "torque": {"name": "Par motor"},
-            "lawn_size": {"name": "Lawn size"},
-            "lawn_perimeter": {"name": "Lawn perimeter"},
-        },
-        "select": {
-            "zone": {"name": "Zona"},
-            "auto_schedule_boost": {
-                "name": "Auto schedule: Boost",
-                "state": {"0": "0", "1": "1", "2": "2"},
-            },
-            "auto_schedule_grass_type": {
-                "name": "Auto schedule: Grass type",
-                "state": {
-                    "mixed_species": "Mixed species",
-                    "festuca_arundinacea": "Tall fescue",
-                    "lolium_perenne": "Perennial ryegrass",
-                    "poa_pratensis": "Kentucky bluegrass",
-                    "festuca_rubra": "Red fescue",
-                    "agrostis_stolonifera": "Creeping bentgrass",
-                },
-            },
-            "auto_schedule_soil_type": {
-                "name": "Auto schedule: Soil type",
-                "state": {
-                    "clay": "Clay",
-                    "silt": "Silt",
-                    "sand": "Sand",
-                    "ignore": "Unknown",
-                },
-            },
-        },
-        "update": {"firmware": {"name": "Firmware"}},
-        "lawn_mower": {
-            "mower": {
-                "state": {
-                    "edgecut": "Corte de borde",
-                    "escaped_digital_fence": "Fuera del cercado digital",
-                    "idle": "Inactivo",
-                    "searching_zone": "Buscando zona",
-                    "starting": "Iniciando",
-                    "zoning": "Aprendizaje de zonas",
-                    "rain_delayed": "Retraso por lluvia",
-                }
-            }
-        },
+    "error": {
+      "cannot_connect": "Fallo en la conexión",
+      "invalid_auth": "Error en la autentificación",
+      "too_many_requests": "Demasiadas solicitudes a la API: vuelva a intentarlo en 24 horas",
+      "api_error": "La API en la nube rechazó la solicitud",
+      "timeout": "Tiempo de espera de conexión agotado",
+      "unknown": "Error inesperado"
     },
-    "device_automation": {
-        "action_type": {
-            "start_mowing": "Haz que {entity_name} empiece a cortar el césped",
-            "pause": "Pausa {entity_name}",
-            "dock": "Haz que {entity_name} vuelva a la estación de carga",
-        },
-        "condition_type": {
-            "is_mowing": "{entity_name} está cortando el césped",
-            "is_docked": "{entity_name} está en la estación de carga",
-            "has_error": "{entity_name} tiene un error",
-            "is_returning": "{entity_name} está volviendo a la estación de carga",
-            "is_edgecut": "{entity_name} está realizando el corte de borde",
-            "is_starting": "{entity_name} está iniciando",
-            "is_zoning": "{entity_name} está aprendiendo una zona",
-            "is_searching_zone": "{entity_name} está buscando una zona",
-            "is_idle": "{entity_name} está inactivo",
-            "is_escaped_digital_fence": "{entity_name} está fuera del cercado digital",
-            "is_rain_delayed": "{entity_name} está en retraso por lluvia",
-        },
-        "trigger_type": {
-            "mowing": "{entity_name} comenzó a cortar el césped",
-            "docked": "{entity_name} llegó a la estación de carga",
-            "error": "{entity_name} entró en estado de error",
-            "returning": "{entity_name} comenzó a volver a la estación de carga",
-            "edgecut": "{entity_name} comenzó el corte de borde",
-            "starting": "{entity_name} comenzó a iniciarse",
-            "zoning": "{entity_name} comenzó el aprendizaje de una zona",
-            "searching_zone": "{entity_name} comenzó a buscar una zona",
-            "idle": "{entity_name} quedó inactivo",
-            "escaped_digital_fence": "{entity_name} salió del cercado digital",
-            "rain_delayed": "{entity_name} entró en retraso por lluvia",
-        },
-        "extra_fields": {"for": "[%key:common::device_automation::extra_fields::for%]"},
+    "abort": {
+      "already_exists": "Esta cuenta de usuario ya ha sido configurada",
+      "already_in_progress": "El flujo de configuración ya está en curso"
+    }
+  },
+  "selector": {
+    "cloud": {
+      "options": {
+        "worx": "Worx",
+        "kress": "Kress",
+        "landxcape": "LandXcape"
+      }
     },
-    "services": {
-        "ots": {
-            "name": "Iniciar programación única",
-            "description": "Inicia una programación de corte única si el cortacésped la admite.",
-            "fields": {
-                "boundary": {
-                    "name": "Borde",
-                    "description": "Si se debe incluir un corte de borde.",
-                },
-                "runtime": {
-                    "name": "Tiempo de ejecución",
-                    "description": "Tiempo de ejecución en minutos.",
-                },
-                "cut_over_border": {
-                    "name": "Cortar sobre el borde",
-                    "description": "Si su cortacésped lo admite, indica si el corte de borde puntual puede cruzar el borde del césped.",
-                },
-                "border_distance_cm": {
-                    "name": "Distancia al borde",
-                    "description": "Si su cortacésped lo admite y cortar sobre el borde está desactivado, establece la distancia al borde en centímetros.",
-                },
-            },
-        },
-        "set_nutrition": {
-            "name": "Set nutrition",
-            "description": "Set auto-schedule nutrition values.",
-            "fields": {
-                "n": {
-                    "name": "Nitrogen (N)",
-                    "description": "Nitrogen value for auto-schedule nutrition.",
-                },
-                "p": {
-                    "name": "Phosphorus (P)",
-                    "description": "Phosphorus value for auto-schedule nutrition.",
-                },
-                "k": {
-                    "name": "Potassium (K)",
-                    "description": "Potassium value for auto-schedule nutrition.",
-                },
-            },
-        },
-        "clear_nutrition": {
-            "name": "Clear nutrition",
-            "description": "Clear auto-schedule nutrition values.",
-        },
-        "set_exclusion_day": {
-            "name": "Set exclusion day",
-            "description": "Exclude or include one weekday in auto schedule.",
-            "fields": {
-                "day": {
-                    "name": "Day",
-                    "description": "Day to update in the exclusion scheduler.",
-                },
-                "exclude_day": {
-                    "name": "Exclude day",
-                    "description": "Whether the selected day should be fully excluded.",
-                },
-            },
-        },
-        "add_exclusion_schedule": {
-            "name": "Add exclusion schedule",
-            "description": "Add an exclusion schedule entry to auto schedule.",
-            "fields": {
-                "day": {
-                    "name": "Day",
-                    "description": "Day of week for the new exclusion schedule entry.",
-                },
-                "start": {
-                    "name": "Start",
-                    "description": "Start time in HH:MM format.",
-                },
-                "duration": {"name": "Duration", "description": "Duration in minutes."},
-                "reason": {
-                    "name": "Reason",
-                    "description": "Reason for the exclusion schedule entry.",
-                },
-            },
-        },
-        "edit_exclusion_schedule": {
-            "name": "Edit exclusion schedule",
-            "description": "Replace an existing exclusion schedule entry in auto schedule.",
-            "fields": {
-                "current_day": {
-                    "name": "Current day",
-                    "description": "Day for the exclusion schedule you want to change.",
-                },
-                "current_start": {
-                    "name": "Current start",
-                    "description": "Start time for the exclusion schedule you want to change.",
-                },
-                "day": {
-                    "name": "Day",
-                    "description": "New day of week for the exclusion schedule entry.",
-                },
-                "start": {
-                    "name": "Start",
-                    "description": "New start time in HH:MM format.",
-                },
-                "duration": {
-                    "name": "Duration",
-                    "description": "New duration in minutes.",
-                },
-                "reason": {
-                    "name": "Reason",
-                    "description": "Reason for the exclusion schedule entry.",
-                },
-            },
-        },
-        "delete_exclusion_schedule": {
-            "name": "Delete exclusion schedule",
-            "description": "Delete an exclusion schedule entry from auto schedule.",
-            "fields": {
-                "day": {
-                    "name": "Day",
-                    "description": "Day for the exclusion schedule you want to delete.",
-                },
-                "start": {
-                    "name": "Start",
-                    "description": "Use this if the selected day has more than one exclusion schedule and you need to choose one by time.",
-                },
-            },
-        },
+    "days_of_week": {
+      "options": {
+        "monday": "Lunes",
+        "tuesday": "Martes",
+        "wednesday": "Miércoles",
+        "thursday": "Jueves",
+        "friday": "Viernes",
+        "saturday": "Sábado",
+        "sunday": "Domingo"
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opciones de Landroid Cloud",
+        "data": {
+          "command_timeout": "Tiempo de espera del comando (segundos)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "battery": {
+        "name": "Batería"
+      },
+      "status": {
+        "name": "Estado"
+      },
+      "error": {
+        "name": "Error",
+        "state": {
+          "unknown": "Desconocido",
+          "no_error": "Sin errores",
+          "trapped": "Atrapado",
+          "lifted": "Levantado",
+          "wire_missing": "Falta el cable",
+          "outside_wire": "Fuera del cable",
+          "rain_delay": "Retraso por lluvia activo",
+          "close_door_to_mow": "Cerrar la puerta para cortar el césped",
+          "close_door_to_go_home": "Cerrar la puerta para ir a la base",
+          "blade_motor_blocked": "El motor de la cuchilla está bloqueado",
+          "wheel_motor_blocked": "El motor de la rueda está bloqueado",
+          "trapped_timeout": "Tiempo de espera agotado mientras estaba atrapado",
+          "upside_down": "El cortacésped está del revés",
+          "battery_low": "Batería baja",
+          "reverse_wire": "El cable está invertido",
+          "charge_error": "Error de carga",
+          "timeout_finding_home": "Tiempo de espera agotado mientras se buscaba la base",
+          "locked": "El cortacésped está bloqueado",
+          "battery_temperature_error": "Error de temperatura de la batería",
+          "battery_trunk_open_timeout": "Tiempo de espera de apertura del baúl de la batería",
+          "wire_sync": "Sincronización del cable",
+          "charging_station_docking_error": "Error de acoplamiento a la base",
+          "hbi_error": "Error de HBI",
+          "ota_error": "Error de OTA",
+          "map_error": "Error de mapa",
+          "excessive_slope": "Pendiente excesiva detectada",
+          "unreachable_zone": "Zona inalcanzable",
+          "unreachable_charging_station": "Base inalcanzable",
+          "insufficient_sensor_data": "Datos del sensor insuficientes",
+          "training_start_disallowed": "Inicio de entrenamiento no permitido",
+          "camera_error": "Error de cámara",
+          "mapping_exploration_required": "Exploración de mapas requerida",
+          "mapping_exploration_failed": "Error de exploración de mapas",
+          "rfid_reader_error": "Error del lector RFID",
+          "headlight_error": "Error de faro",
+          "missing_charging_station": "Perdida la base",
+          "blade_height_adjustment_blocked": "Ajuste de altura de la cuchilla bloqueado"
+        }
+      },
+      "rssi": {
+        "name": "Intensidad de señal"
+      },
+      "daily_progress": {
+        "name": "Progreso diario"
+      },
+      "next_schedule": {
+        "name": "Próximo horario"
+      },
+      "rain_delay_remaining": {
+        "name": "Retraso por lluvia restante"
+      },
+      "last_update": {
+        "name": "Última actualización"
+      },
+      "battery_charge_cycles_total": {
+        "name": "Ciclos de carga totales de la batería"
+      },
+      "battery_charge_cycles_current": {
+        "name": "Ciclos de carga de la batería desde el reinicio"
+      },
+      "battery_temperature": {
+        "name": "Temperatura de la batería"
+      },
+      "battery_voltage": {
+        "name": "Voltaje de la batería"
+      },
+      "blade_runtime_total": {
+        "name": "Tiempo total de uso de las cuchillas"
+      },
+      "blade_runtime_current": {
+        "name": "Tiempo de uso de las cuchillas desde el reinicio"
+      },
+      "blade_runtime_reset_at": {
+        "name": "Tiempo de uso de las cuchillas en el último reinicio"
+      },
+      "blade_runtime_reset_time": {
+        "name": "Momento del reinicio del tiempo de cuchillas"
+      },
+      "distance_driven_total": {
+        "name": "Distancia total recorrida"
+      },
+      "mower_runtime_total": {
+        "name": "Tiempo total de funcionamiento del cortacésped"
+      },
+      "pitch": {
+        "name": "Cabeceo"
+      },
+      "roll": {
+        "name": "Alabeo"
+      },
+      "yaw": {
+        "name": "Guiñada"
+      },
+      "auto_schedule_nutrition": {
+        "name": "Auto schedule: Nutrition"
+      },
+      "auto_schedule_exclusion_schedules": {
+        "name": "Auto schedule: Exclusion schedules"
+      }
     },
+    "binary_sensor": {
+      "rain_sensor": {
+        "name": "Sensor de lluvia"
+      },
+      "charging": {
+        "name": "Cargando"
+      }
+    },
+    "switch": {
+      "lock": {
+        "name": "Bloqueo"
+      },
+      "off_limits": {
+        "name": "Off Limits"
+      },
+      "off_limits_shortcut": {
+        "name": "Accesos directos de Off Limits"
+      },
+      "acs": {
+        "name": "ACS"
+      },
+      "auto_schedule": {
+        "name": "Auto schedule"
+      },
+      "firmware_auto_update": {
+        "name": "Actualización automática de firmware"
+      },
+      "auto_schedule_irrigation": {
+        "name": "Auto schedule: Irrigation"
+      },
+      "auto_schedule_exclude_nights": {
+        "name": "Auto schedule: Exclude nights"
+      },
+      "party_mode": {
+        "name": "Modo pausa"
+      }
+    },
+    "button": {
+      "edge_cut": {
+        "name": "Corte de bordes"
+      },
+      "reset_blade_time": {
+        "name": "Restablecer tiempo de cuchillas"
+      },
+      "reset_battery_cycles": {
+        "name": "Restablecer ciclos de batería"
+      }
+    },
+    "number": {
+      "rain_delay": {
+        "name": "Retraso por lluvia"
+      },
+      "cutting_height": {
+        "name": "Altura de corte"
+      },
+      "time_extension": {
+        "name": "Extensión de tiempo"
+      },
+      "torque": {
+        "name": "Par motor"
+      },
+      "lawn_size": {
+        "name": "Lawn size"
+      },
+      "lawn_perimeter": {
+        "name": "Lawn perimeter"
+      }
+    },
+    "select": {
+      "zone": {
+        "name": "Zona"
+      },
+      "auto_schedule_boost": {
+        "name": "Auto schedule: Boost",
+        "state": {
+          "0": "0",
+          "1": "1",
+          "2": "2"
+        }
+      },
+      "auto_schedule_grass_type": {
+        "name": "Auto schedule: Grass type",
+        "state": {
+          "mixed_species": "Mixed species",
+          "festuca_arundinacea": "Tall fescue",
+          "lolium_perenne": "Perennial ryegrass",
+          "poa_pratensis": "Kentucky bluegrass",
+          "festuca_rubra": "Red fescue",
+          "agrostis_stolonifera": "Creeping bentgrass"
+        }
+      },
+      "auto_schedule_soil_type": {
+        "name": "Auto schedule: Soil type",
+        "state": {
+          "clay": "Clay",
+          "silt": "Silt",
+          "sand": "Sand",
+          "ignore": "Unknown"
+        }
+      }
+    },
+    "update": {
+      "firmware": {
+        "name": "Firmware"
+      }
+    },
+    "lawn_mower": {
+      "mower": {
+        "state": {
+          "edgecut": "Corte de borde",
+          "escaped_digital_fence": "Fuera del cercado digital",
+          "idle": "Inactivo",
+          "searching_zone": "Buscando zona",
+          "starting": "Iniciando",
+          "zoning": "Aprendizaje de zonas",
+          "rain_delayed": "Retraso por lluvia"
+        }
+      }
+    }
+  },
+  "device_automation": {
+    "action_type": {
+      "start_mowing": "Haz que {entity_name} empiece a cortar el césped",
+      "pause": "Pausa {entity_name}",
+      "dock": "Haz que {entity_name} vuelva a la estación de carga"
+    },
+    "condition_type": {
+      "is_mowing": "{entity_name} está cortando el césped",
+      "is_docked": "{entity_name} está en la estación de carga",
+      "has_error": "{entity_name} tiene un error",
+      "is_returning": "{entity_name} está volviendo a la estación de carga",
+      "is_edgecut": "{entity_name} está realizando el corte de borde",
+      "is_starting": "{entity_name} está iniciando",
+      "is_zoning": "{entity_name} está aprendiendo una zona",
+      "is_searching_zone": "{entity_name} está buscando una zona",
+      "is_idle": "{entity_name} está inactivo",
+      "is_escaped_digital_fence": "{entity_name} está fuera del cercado digital",
+      "is_rain_delayed": "{entity_name} está en retraso por lluvia"
+    },
+    "trigger_type": {
+      "mowing": "{entity_name} comenzó a cortar el césped",
+      "docked": "{entity_name} llegó a la estación de carga",
+      "error": "{entity_name} entró en estado de error",
+      "returning": "{entity_name} comenzó a volver a la estación de carga",
+      "edgecut": "{entity_name} comenzó el corte de borde",
+      "starting": "{entity_name} comenzó a iniciarse",
+      "zoning": "{entity_name} comenzó el aprendizaje de una zona",
+      "searching_zone": "{entity_name} comenzó a buscar una zona",
+      "idle": "{entity_name} quedó inactivo",
+      "escaped_digital_fence": "{entity_name} salió del cercado digital",
+      "rain_delayed": "{entity_name} entró en retraso por lluvia"
+    },
+    "extra_fields": {
+      "for": "[%key:common::device_automation::extra_fields::for%]"
+    }
+  },
+  "services": {
+    "ots": {
+      "name": "Iniciar programación única",
+      "description": "Inicia una programación de corte única si el cortacésped la admite.",
+      "fields": {
+        "boundary": {
+          "name": "Borde",
+          "description": "Si se debe incluir un corte de borde."
+        },
+        "runtime": {
+          "name": "Tiempo de ejecución",
+          "description": "Tiempo de ejecución en minutos."
+        },
+        "cut_over_border": {
+          "name": "Cortar sobre el borde",
+          "description": "Si su cortacésped lo admite, indica si el corte de borde puntual puede cruzar el borde del césped."
+        },
+        "border_distance_cm": {
+          "name": "Distancia al borde",
+          "description": "Si su cortacésped lo admite y cortar sobre el borde está desactivado, establece la distancia al borde en centímetros."
+        }
+      }
+    },
+    "set_nutrition": {
+      "name": "Set nutrition",
+      "description": "Set auto-schedule nutrition values.",
+      "fields": {
+        "n": {
+          "name": "Nitrogen (N)",
+          "description": "Nitrogen value for auto-schedule nutrition."
+        },
+        "p": {
+          "name": "Phosphorus (P)",
+          "description": "Phosphorus value for auto-schedule nutrition."
+        },
+        "k": {
+          "name": "Potassium (K)",
+          "description": "Potassium value for auto-schedule nutrition."
+        }
+      }
+    },
+    "clear_nutrition": {
+      "name": "Clear nutrition",
+      "description": "Clear auto-schedule nutrition values."
+    },
+    "set_exclusion_day": {
+      "name": "Set exclusion day",
+      "description": "Exclude or include one weekday in auto schedule.",
+      "fields": {
+        "day": {
+          "name": "Day",
+          "description": "Day to update in the exclusion scheduler."
+        },
+        "exclude_day": {
+          "name": "Exclude day",
+          "description": "Whether the selected day should be fully excluded."
+        }
+      }
+    },
+    "add_exclusion_schedule": {
+      "name": "Add exclusion schedule",
+      "description": "Add an exclusion schedule entry to auto schedule.",
+      "fields": {
+        "day": {
+          "name": "Day",
+          "description": "Day of week for the new exclusion schedule entry."
+        },
+        "start": {
+          "name": "Start",
+          "description": "Start time in HH:MM format."
+        },
+        "duration": {
+          "name": "Duration",
+          "description": "Duration in minutes."
+        },
+        "reason": {
+          "name": "Reason",
+          "description": "Reason for the exclusion schedule entry."
+        }
+      }
+    },
+    "edit_exclusion_schedule": {
+      "name": "Edit exclusion schedule",
+      "description": "Replace an existing exclusion schedule entry in auto schedule.",
+      "fields": {
+        "current_day": {
+          "name": "Current day",
+          "description": "Day for the exclusion schedule you want to change."
+        },
+        "current_start": {
+          "name": "Current start",
+          "description": "Start time for the exclusion schedule you want to change."
+        },
+        "day": {
+          "name": "Day",
+          "description": "New day of week for the exclusion schedule entry."
+        },
+        "start": {
+          "name": "Start",
+          "description": "New start time in HH:MM format."
+        },
+        "duration": {
+          "name": "Duration",
+          "description": "New duration in minutes."
+        },
+        "reason": {
+          "name": "Reason",
+          "description": "Reason for the exclusion schedule entry."
+        }
+      }
+    },
+    "delete_exclusion_schedule": {
+      "name": "Delete exclusion schedule",
+      "description": "Delete an exclusion schedule entry from auto schedule.",
+      "fields": {
+        "day": {
+          "name": "Day",
+          "description": "Day for the exclusion schedule you want to delete."
+        },
+        "start": {
+          "name": "Start",
+          "description": "Use this if the selected day has more than one exclusion schedule and you need to choose one by time."
+        }
+      }
+    }
+  }
 }
