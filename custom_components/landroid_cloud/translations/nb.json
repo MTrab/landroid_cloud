@@ -20,7 +20,8 @@
       "unknown": "Uventet feil"
     },
     "abort": {
-      "already_exists": "Denne kontoen er allerede konfigurert"
+      "already_exists": "Denne kontoen er allerede konfigurert",
+      "already_in_progress": "Konfigurasjonsflyten pågår allerede"
     }
   },
   "selector": {

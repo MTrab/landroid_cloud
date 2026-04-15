@@ -20,7 +20,8 @@
       "unknown": "Oväntat fel"
     },
     "abort": {
-      "already_exists": "Det här användarkontot har redan konfigurerats"
+      "already_exists": "Det här användarkontot har redan konfigurerats",
+      "already_in_progress": "Konfigurationsflödet pågår redan"
     }
   },
   "selector": {

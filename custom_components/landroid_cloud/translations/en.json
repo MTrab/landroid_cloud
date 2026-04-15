@@ -20,7 +20,8 @@
       "unknown": "Unexpected error"
     },
     "abort": {
-      "already_exists": "This account is already configured"
+      "already_exists": "This account is already configured",
+      "already_in_progress": "Configuration flow is already in progress"
     }
   },
   "selector": {
