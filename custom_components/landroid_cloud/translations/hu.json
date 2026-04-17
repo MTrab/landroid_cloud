@@ -200,9 +200,6 @@
       },
       "party_mode": {
         "name": "Szünet mód"
-      },
-      "cut_over_border": {
-        "name": "Vágás a határon túl"
       }
     },
     "button": {
@@ -234,9 +231,6 @@
       },
       "lawn_perimeter": {
         "name": "Lawn perimeter"
-      },
-      "border_distance": {
-        "name": "Szegélytávolság"
       }
     },
     "select": {
@@ -339,6 +333,14 @@
         "runtime": {
           "name": "Futási idő",
           "description": "Futási idő percben."
+        },
+        "cut_over_border": {
+          "name": "Vágás a határon túl",
+          "description": "Ha a fűnyíró támogatja, meghatározza, hogy az egyszeri szegélynyírás áthaladhat-e a gyep szélén."
+        },
+        "border_distance_cm": {
+          "name": "Szegélytávolság",
+          "description": "Ha a fűnyíró támogatja, és a határon túli vágás ki van kapcsolva, beállítja a szegélytávolságot centiméterben."
         }
       }
     },

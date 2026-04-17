@@ -1,16 +1,11 @@
 """Tests for Landroid numbers."""
 
 from types import SimpleNamespace
-from unittest.mock import AsyncMock
-
-import pytest
 
 from homeassistant.helpers.entity import EntityCategory
 
 from custom_components.landroid_cloud.number import (
-    LandroidNumber,
     NUMBERS,
-    _border_distance_value,
     _lawn_value,
     _rain_delay_value,
     _torque_value,
@@ -58,15 +53,6 @@ def test_lawn_values_are_exposed_without_decimals() -> None:
 
     assert _lawn_value(device, "size") == 250
     assert _lawn_value(device, "perimeter") == 115
-
-
-def test_border_distance_value_is_exposed_in_centimeters() -> None:
-    """Border distance should be converted from millimeters to centimeters."""
-    cloud = SimpleNamespace(
-        get_border_cut_settings=lambda _serial: {"border_distance": 150}
-    )
-
-    assert _border_distance_value(cloud, "serial") == 15
 
 
 def test_time_extension_is_configuration_entity() -> None:
@@ -119,44 +105,7 @@ def test_lawn_numbers_are_configuration_entities() -> None:
     assert lawn_perimeter.icon == "mdi:ruler-square"
 
 
-def test_border_distance_is_configuration_entity() -> None:
-    """Border distance should be a disabled protocol 1 configuration number."""
-    description = next(
-        description for description in NUMBERS if description.key == "border_distance"
-    )
-
-    assert description.entity_category is EntityCategory.CONFIG
-    assert description.entity_registry_enabled_default is False
-    assert description.requires_protocol == 1
-    assert description.native_min_value == 5
-    assert description.native_max_value == 20
-    assert description.native_step == 5
-    assert description.native_unit_of_measurement == "cm"
-
-
 def test_rain_delay_max_value_is_1440_minutes() -> None:
     """Rain delay max value should be 1440 minutes (24 hours) to match app."""
     rain_delay_desc = next(desc for desc in NUMBERS if desc.key == "rain_delay")
     assert rain_delay_desc.native_max_value == 1440
-
-
-@pytest.mark.asyncio
-async def test_border_distance_calls_border_cut_settings_writer() -> None:
-    """Border distance should write centimeters as supported millimeter steps."""
-    entity = object.__new__(LandroidNumber)
-    entity._serial_number = "serial"
-    entity.entity_description = next(
-        description for description in NUMBERS if description.key == "border_distance"
-    )
-    entity._attr_requires_online = True
-    entity.coordinator = SimpleNamespace(
-        cloud=SimpleNamespace(set_border_cut_settings=AsyncMock()),
-        data={"serial": SimpleNamespace(serial_number="serial", online=True)},
-    )
-
-    await entity.async_set_native_value(15)
-
-    entity.coordinator.cloud.set_border_cut_settings.assert_awaited_once_with(
-        "serial",
-        border_distance=150,
-    )

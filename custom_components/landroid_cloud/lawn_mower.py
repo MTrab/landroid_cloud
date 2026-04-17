@@ -159,12 +159,16 @@ class LandroidCloudMowerEntity(LandroidBaseEntity, LawnMowerEntity):
         self,
         boundary: bool,
         runtime: int,
+        cut_over_border: bool | None = None,
+        border_distance_cm: int | None = None,
     ) -> None:
         """Handle legacy OTS service call."""
         await async_handle_ots(
             self,
             boundary=boundary,
             runtime=runtime,
+            cut_over_border=cut_over_border,
+            border_distance_cm=border_distance_cm,
         )
 
     async def _async_service_add_schedule(

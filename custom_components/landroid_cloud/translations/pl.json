@@ -200,9 +200,6 @@
       },
       "party_mode": {
         "name": "Tryb pauzy"
-      },
-      "cut_over_border": {
-        "name": "Koś poza krawędzią"
       }
     },
     "button": {
@@ -234,9 +231,6 @@
       },
       "lawn_perimeter": {
         "name": "Lawn perimeter"
-      },
-      "border_distance": {
-        "name": "Odległość od krawędzi"
       }
     },
     "select": {
@@ -339,6 +333,14 @@
         "runtime": {
           "name": "Czas pracy",
           "description": "Czas pracy w minutach."
+        },
+        "cut_over_border": {
+          "name": "Koś poza krawędzią",
+          "description": "Jeśli kosiarka to obsługuje, określa, czy jednorazowe koszenie krawędzi może przekroczyć granicę trawnika."
+        },
+        "border_distance_cm": {
+          "name": "Odległość od krawędzi",
+          "description": "Jeśli kosiarka to obsługuje i koszenie poza krawędzią jest wyłączone, ustawia odległość od krawędzi w centymetrach."
         }
       }
     },

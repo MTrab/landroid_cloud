@@ -66,6 +66,14 @@
         "runtime": {
           "name": "Køretid",
           "description": "Køretid i minutter."
+        },
+        "cut_over_border": {
+          "name": "Kør over kant",
+          "description": "Hvis din klipper understøtter det, tilsidesætter dette om engangskantklip må krydse plænens kant."
+        },
+        "border_distance_cm": {
+          "name": "Kantafstand",
+          "description": "Hvis din klipper understøtter det, og kør over kant er slået fra, sættes kantafstanden i centimeter."
         }
       }
     },
@@ -424,9 +432,6 @@
       },
       "party_mode": {
         "name": "Pause tilstand"
-      },
-      "cut_over_border": {
-        "name": "Kør over kant"
       }
     },
     "button": {
@@ -458,9 +463,6 @@
       },
       "lawn_perimeter": {
         "name": "Plæneomkreds"
-      },
-      "border_distance": {
-        "name": "Kantafstand"
       }
     },
     "select": {

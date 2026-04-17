@@ -21,7 +21,6 @@ class LandroidSwitchDescription(SwitchEntityDescription):
 
     capability: DeviceCapability | None = None
     requires_auto_schedule: bool = False
-    requires_protocol: int | None = None
 
 
 SWITCHES: tuple[LandroidSwitchDescription, ...] = (
@@ -94,14 +93,6 @@ SWITCHES: tuple[LandroidSwitchDescription, ...] = (
         entity_registry_enabled_default=False,
         capability=DeviceCapability.ACS,
     ),
-    LandroidSwitchDescription(
-        key="cut_over_border",
-        translation_key="cut_over_border",
-        entity_category=EntityCategory.CONFIG,
-        entity_registry_enabled_default=False,
-        capability=DeviceCapability.ONE_TIME_SCHEDULE,
-        requires_protocol=1,
-    ),
 )
 
 
@@ -118,11 +109,6 @@ async def async_setup_entry(
         for description in SWITCHES:
             if description.capability and not device.capabilities.check(
                 description.capability
-            ):
-                continue
-            if (
-                description.requires_protocol is not None
-                and device.protocol != description.requires_protocol
             ):
                 continue
 
@@ -190,11 +176,6 @@ class LandroidSwitch(LandroidBaseEntity, SwitchEntity):
         if key == "acs":
             value = getattr(self.device, "acs_enabled", None)
             return None if value is None else bool(value)
-        if key == "cut_over_border":
-            value = self.coordinator.cloud.get_border_cut_settings(
-                str(self.device.serial_number)
-            ).get("cut_over_border")
-            return None if value is None else bool(value)
 
         return None
 
@@ -255,11 +236,4 @@ class LandroidSwitch(LandroidBaseEntity, SwitchEntity):
         elif self.entity_description.key == "acs":
             await async_run_cloud_command(
                 lambda: self.coordinator.cloud.set_acs(serial_number, state)
-            )
-        elif self.entity_description.key == "cut_over_border":
-            await async_run_cloud_command(
-                lambda: self.coordinator.cloud.set_border_cut_settings(
-                    serial_number,
-                    cut_over_border=state,
-                )
             )

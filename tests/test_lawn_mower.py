@@ -89,6 +89,57 @@ async def test_ots_service_calls_cloud_ots() -> None:
     entity.coordinator.cloud.ots.assert_awaited_once_with("serial", True, 45)
 
 
+@pytest.mark.asyncio
+async def test_ots_service_supports_vision_border_cut_overrides() -> None:
+    """OTS service should apply optional border-cut settings before OTS."""
+    entity = object.__new__(LandroidCloudMowerEntity)
+    entity._serial_number = "serial"
+    entity.coordinator = SimpleNamespace(
+        cloud=SimpleNamespace(
+            ots=AsyncMock(),
+            set_border_cut_settings=AsyncMock(),
+        ),
+        data={"serial": SimpleNamespace(serial_number="serial")},
+    )
+
+    await entity._async_service_ots(
+        boundary=True,
+        runtime=45,
+        cut_over_border=False,
+        border_distance_cm=15,
+    )
+
+    entity.coordinator.cloud.set_border_cut_settings.assert_awaited_once_with(
+        "serial",
+        cut_over_border=False,
+        border_distance=150,
+    )
+    entity.coordinator.cloud.ots.assert_awaited_once_with("serial", True, 45)
+
+
+@pytest.mark.asyncio
+async def test_ots_service_rejects_border_distance_without_cut_over_border_false() -> (
+    None
+):
+    """OTS service should reject invalid border-cut combinations early."""
+    entity = object.__new__(LandroidCloudMowerEntity)
+    entity._serial_number = "serial"
+    entity.coordinator = SimpleNamespace(
+        cloud=SimpleNamespace(ots=AsyncMock()),
+        data={"serial": SimpleNamespace(serial_number="serial")},
+    )
+
+    with pytest.raises(
+        HomeAssistantError,
+        match="border_distance_cm can only be used when cut_over_border is false",
+    ):
+        await entity._async_service_ots(
+            boundary=True,
+            runtime=45,
+            border_distance_cm=15,
+        )
+
+
 def _entity_with_cloud(protocol: int = 0) -> LandroidCloudMowerEntity:
     """Return a minimally initialized mower entity for service tests."""
     schedule = _schedule_model(protocol=protocol, entries=[])

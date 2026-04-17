@@ -200,9 +200,6 @@
       },
       "party_mode": {
         "name": "Pausemodus"
-      },
-      "cut_over_border": {
-        "name": "Klipp over kant"
       }
     },
     "button": {
@@ -234,9 +231,6 @@
       },
       "lawn_perimeter": {
         "name": "Lawn perimeter"
-      },
-      "border_distance": {
-        "name": "Kantavstand"
       }
     },
     "select": {
@@ -339,6 +333,14 @@
         "runtime": {
           "name": "Kjøretid",
           "description": "Kjøretid i minutter."
+        },
+        "cut_over_border": {
+          "name": "Klipp over kant",
+          "description": "Hvis klipperen støtter det, angir dette om engangs kantklipp kan krysse plenens kant."
+        },
+        "border_distance_cm": {
+          "name": "Kantavstand",
+          "description": "Hvis klipperen støtter det og klipp over kant er deaktivert, setter dette kantavstanden i centimeter."
         }
       }
     },
