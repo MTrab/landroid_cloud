@@ -200,6 +200,9 @@
       },
       "party_mode": {
         "name": "Pauzemodus"
+      },
+      "cut_over_border": {
+        "name": "Over de rand maaien"
       }
     },
     "button": {
@@ -231,6 +234,9 @@
       },
       "lawn_perimeter": {
         "name": "Lawn perimeter"
+      },
+      "border_distance": {
+        "name": "Randafstand"
       }
     },
     "select": {
@@ -333,14 +339,6 @@
         "runtime": {
           "name": "Looptijd",
           "description": "Looptijd in minuten."
-        },
-        "cut_over_border": {
-          "name": "Over de rand maaien",
-          "description": "Als uw maaier dit ondersteunt, bepaalt dit of de eenmalige randmaaibeurt over de gazonrand mag gaan."
-        },
-        "border_distance_cm": {
-          "name": "Randafstand",
-          "description": "Als uw maaier dit ondersteunt en over de rand maaien is uitgeschakeld, stelt dit de randafstand in centimeters in."
         }
       }
     },

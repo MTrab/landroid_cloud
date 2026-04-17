@@ -26,23 +26,6 @@ ots:
           step: 1
           unit_of_measurement: "minutes"
           mode: slider
-    cut_over_border:
-      name: Cut over border
-      description: If supported by your mower, override whether the one-time border cut may cross the lawn border
-      example: false
-      selector:
-        boolean:
-    border_distance_cm:
-      name: Border distance
-      description: If supported by your mower and cut over border is disabled, set the border distance in centimeters
-      example: 15
-      selector:
-        number:
-          min: 5
-          max: 20
-          step: 5
-          unit_of_measurement: "cm"
-          mode: slider
 add_schedule:
   description: Add a mowing schedule entry
   target:

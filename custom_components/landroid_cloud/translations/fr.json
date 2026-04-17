@@ -200,6 +200,9 @@
       },
       "party_mode": {
         "name": "Mode festif"
+      },
+      "cut_over_border": {
+        "name": "Couper au-delà de la bordure"
       }
     },
     "button": {
@@ -231,6 +234,9 @@
       },
       "lawn_perimeter": {
         "name": "Périmètre de la pelouse"
+      },
+      "border_distance": {
+        "name": "Distance de bordure"
       }
     },
     "select": {
@@ -333,14 +339,6 @@
         "runtime": {
           "name": "Durée",
           "description": "Durée de fonctionnement en minutes."
-        },
-        "cut_over_border": {
-          "name": "Couper au-delà de la bordure",
-          "description": "Si votre tondeuse le prend en charge, indique si la coupe de bordure ponctuelle peut dépasser la bordure de la pelouse."
-        },
-        "border_distance_cm": {
-          "name": "Distance de bordure",
-          "description": "Si votre tondeuse le prend en charge et que la coupe au-delà de la bordure est désactivée, définit la distance de bordure en centimètres."
         }
       }
     },

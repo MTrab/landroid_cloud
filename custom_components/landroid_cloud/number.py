@@ -25,6 +25,7 @@ class LandroidNumberDescription(NumberEntityDescription):
     """Description for Landroid numbers."""
 
     capability: DeviceCapability | None = None
+    requires_protocol: int | None = None
 
 
 def _rain_delay_value(device) -> int | None:
@@ -49,6 +50,12 @@ def _lawn_value(device, key: str) -> int | None:
     """Return one lawn parameter as an integer when available."""
     value = getattr(device, "lawn", {}).get(key)
     return None if value is None else int(value)
+
+
+def _border_distance_value(cloud, serial_number: str) -> int | None:
+    """Return border distance in centimeters when available."""
+    value = cloud.get_border_cut_settings(serial_number).get("border_distance")
+    return None if value is None else int(value / 10)
 
 
 NUMBERS: tuple[LandroidNumberDescription, ...] = (
@@ -125,6 +132,19 @@ NUMBERS: tuple[LandroidNumberDescription, ...] = (
         mode=NumberMode.BOX,
         icon="mdi:ruler-square",
     ),
+    LandroidNumberDescription(
+        key="border_distance",
+        translation_key="border_distance",
+        entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
+        native_min_value=5,
+        native_max_value=20,
+        native_step=5,
+        native_unit_of_measurement="cm",
+        mode=NumberMode.SLIDER,
+        capability=DeviceCapability.ONE_TIME_SCHEDULE,
+        requires_protocol=1,
+    ),
 )
 
 
@@ -141,6 +161,11 @@ async def async_setup_entry(
         for description in NUMBERS:
             if description.capability and not device.capabilities.check(
                 description.capability
+            ):
+                continue
+            if (
+                description.requires_protocol is not None
+                and device.protocol != description.requires_protocol
             ):
                 continue
 
@@ -201,6 +226,9 @@ class LandroidNumber(LandroidBaseEntity, NumberEntity):
         if self.entity_description.key == "lawn_perimeter":
             return _lawn_value(self.device, "perimeter")
 
+        if self.entity_description.key == "border_distance":
+            return _border_distance_value(self.coordinator.cloud, serial_number)
+
         return None
 
     async def async_set_native_value(self, value: float) -> None:
@@ -235,5 +263,12 @@ class LandroidNumber(LandroidBaseEntity, NumberEntity):
             await async_run_cloud_command(
                 lambda: self.coordinator.cloud.set_lawn_perimeter(
                     serial_number, int(value)
+                )
+            )
+        elif self.entity_description.key == "border_distance":
+            await async_run_cloud_command(
+                lambda: self.coordinator.cloud.set_border_cut_settings(
+                    serial_number,
+                    border_distance=int(value) * 10,
                 )
             )

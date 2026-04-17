@@ -200,6 +200,9 @@
       },
       "party_mode": {
         "name": "Rezim pauzy"
+      },
+      "cut_over_border": {
+        "name": "Sekat přes okraj"
       }
     },
     "button": {
@@ -231,6 +234,9 @@
       },
       "lawn_perimeter": {
         "name": "Lawn perimeter"
+      },
+      "border_distance": {
+        "name": "Vzdálenost od okraje"
       }
     },
     "select": {
@@ -333,14 +339,6 @@
         "runtime": {
           "name": "Doba běhu",
           "description": "Doba běhu v minutách."
-        },
-        "cut_over_border": {
-          "name": "Sekat přes okraj",
-          "description": "Pokud to vaše sekačka podporuje, určuje, zda jednorázové sekání okraje smí přejet přes okraj trávníku."
-        },
-        "border_distance_cm": {
-          "name": "Vzdálenost od okraje",
-          "description": "Pokud to vaše sekačka podporuje a sekání přes okraj je vypnuto, nastaví vzdálenost od okraje v centimetrech."
         }
       }
     },

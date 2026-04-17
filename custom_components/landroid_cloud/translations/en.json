@@ -72,14 +72,6 @@
         "runtime": {
           "name": "Run time",
           "description": "Run time in minutes."
-        },
-        "cut_over_border": {
-          "name": "Cut over border",
-          "description": "If supported by your mower, override whether the one-time border cut may cross the lawn border."
-        },
-        "border_distance_cm": {
-          "name": "Border distance",
-          "description": "If supported by your mower and cut_over_border is disabled, set the border distance in centimeters."
         }
       }
     },
@@ -438,6 +430,9 @@
       },
       "party_mode": {
         "name": "Party mode"
+      },
+      "cut_over_border": {
+        "name": "Cut over border"
       }
     },
     "button": {
@@ -469,6 +464,9 @@
       },
       "lawn_perimeter": {
         "name": "Lawn perimeter"
+      },
+      "border_distance": {
+        "name": "Border distance"
       }
     },
     "select": {
