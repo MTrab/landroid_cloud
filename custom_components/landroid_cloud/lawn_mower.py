@@ -16,7 +16,7 @@ from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers import entity_platform
 
 from .commands import async_run_cloud_command
-from .entity import LandroidBaseEntity
+from .entity import LandroidBaseEntity, device_location_attributes
 from . import services as integration_services
 from .const import (
     MOWER_STATE_EDGECUT,
@@ -136,6 +136,11 @@ class LandroidCloudMowerEntity(LandroidBaseEntity, LawnMowerEntity):
 
         status_id = int(getattr(self.device.status, "id", -1))
         return STATUS_ACTIVITY_MAP.get(status_id, LawnMowerActivity.ERROR)
+
+    @property
+    def extra_state_attributes(self) -> dict[str, float] | None:
+        """Return legacy GPS attributes for backwards compatibility."""
+        return device_location_attributes(self.device)
 
     async def async_start_mowing(self) -> None:
         """Handle start command."""

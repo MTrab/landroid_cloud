@@ -80,6 +80,21 @@ Each mower creates one lawn mower entity with these actions:
 - Pause
 - Return to dock
 
+When the mower reports GPS coordinates, the lawn mower entity also keeps the legacy `latitude` and `longitude` attributes for backward compatibility with existing dashboards and automations.
+
+#### Device trackers
+
+Mowers that expose location support create one GPS device tracker entity.
+
+| Entity | Category | Default | Notes |
+| --- | --- | --- | --- |
+| Location | Standard | Disabled | Only created for mowers with location support |
+
+Notes:
+
+- The location tracker is disabled by default.
+- The entity may appear as unavailable until the mower reports a real GPS fix.
+
 #### Sensors
 
 | Entity | Category | Default |
