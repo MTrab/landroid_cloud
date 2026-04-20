@@ -322,6 +322,28 @@
     }
   },
   "services": {
+    "ots": {
+      "name": "Start engangsplan",
+      "description": "Starter en engangsklipping hvis klipperen støtter det.",
+      "fields": {
+        "boundary": {
+          "name": "Kant",
+          "description": "Om kantklipp skal inkluderes."
+        },
+        "runtime": {
+          "name": "Kjøretid",
+          "description": "Kjøretid i minutter."
+        },
+        "cut_over_border": {
+          "name": "Klipp over kant",
+          "description": "Hvis klipperen støtter det, angir dette om engangs kantklipp kan krysse plenens kant."
+        },
+        "border_distance_cm": {
+          "name": "Kantavstand",
+          "description": "Hvis klipperen støtter det og klipp over kant er deaktivert, setter dette kantavstanden i centimeter."
+        }
+      }
+    },
     "set_nutrition": {
       "name": "Set nutrition",
       "description": "Set auto-schedule nutrition values.",

@@ -322,6 +322,28 @@
     }
   },
   "services": {
+    "ots": {
+      "name": "Eenmalig schema starten",
+      "description": "Start een eenmalige maaibeurt als de maaier dit ondersteunt.",
+      "fields": {
+        "boundary": {
+          "name": "Rand",
+          "description": "Of er een randmaaibeurt moet worden meegenomen."
+        },
+        "runtime": {
+          "name": "Looptijd",
+          "description": "Looptijd in minuten."
+        },
+        "cut_over_border": {
+          "name": "Over de rand maaien",
+          "description": "Als uw maaier dit ondersteunt, bepaalt dit of de eenmalige randmaaibeurt over de gazonrand mag gaan."
+        },
+        "border_distance_cm": {
+          "name": "Randafstand",
+          "description": "Als uw maaier dit ondersteunt en over de rand maaien is uitgeschakeld, stelt dit de randafstand in centimeters in."
+        }
+      }
+    },
     "set_nutrition": {
       "name": "Set nutrition",
       "description": "Set auto-schedule nutrition values.",

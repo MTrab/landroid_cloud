@@ -107,7 +107,5 @@ def test_lawn_numbers_are_configuration_entities() -> None:
 
 def test_rain_delay_max_value_is_1440_minutes() -> None:
     """Rain delay max value should be 1440 minutes (24 hours) to match app."""
-    rain_delay_desc = next(
-        desc for desc in NUMBERS if desc.key == "rain_delay"
-    )
+    rain_delay_desc = next(desc for desc in NUMBERS if desc.key == "rain_delay")
     assert rain_delay_desc.native_max_value == 1440

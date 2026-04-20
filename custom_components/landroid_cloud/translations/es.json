@@ -322,6 +322,28 @@
     }
   },
   "services": {
+    "ots": {
+      "name": "Iniciar programación única",
+      "description": "Inicia una programación de corte única si el cortacésped la admite.",
+      "fields": {
+        "boundary": {
+          "name": "Borde",
+          "description": "Si se debe incluir un corte de borde."
+        },
+        "runtime": {
+          "name": "Tiempo de ejecución",
+          "description": "Tiempo de ejecución en minutos."
+        },
+        "cut_over_border": {
+          "name": "Cortar sobre el borde",
+          "description": "Si su cortacésped lo admite, indica si el corte de borde puntual puede cruzar el borde del césped."
+        },
+        "border_distance_cm": {
+          "name": "Distancia al borde",
+          "description": "Si su cortacésped lo admite y cortar sobre el borde está desactivado, establece la distancia al borde en centímetros."
+        }
+      }
+    },
     "set_nutrition": {
       "name": "Set nutrition",
       "description": "Set auto-schedule nutrition values.",

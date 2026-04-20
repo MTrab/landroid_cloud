@@ -322,6 +322,28 @@
     }
   },
   "services": {
+    "ots": {
+      "name": "Käivita ühekordne ajakava",
+      "description": "Käivitab ühekordse niitmise, kui niiduk seda toetab.",
+      "fields": {
+        "boundary": {
+          "name": "Serv",
+          "description": "Kas lisada servaniitmine."
+        },
+        "runtime": {
+          "name": "Tööaeg",
+          "description": "Tööaeg minutites."
+        },
+        "cut_over_border": {
+          "name": "Niida üle serva",
+          "description": "Kui teie niiduk seda toetab, määrab see, kas ühekordne servaniitmine võib ületada murupiiri."
+        },
+        "border_distance_cm": {
+          "name": "Kaugus servast",
+          "description": "Kui teie niiduk seda toetab ja üle serva niitmine on keelatud, määrab see serva kauguse sentimeetrites."
+        }
+      }
+    },
     "set_nutrition": {
       "name": "Set nutrition",
       "description": "Set auto-schedule nutrition values.",

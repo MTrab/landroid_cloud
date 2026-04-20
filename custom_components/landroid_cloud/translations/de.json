@@ -322,6 +322,28 @@
     }
   },
   "services": {
+    "ots": {
+      "name": "Einmaligen Zeitplan starten",
+      "description": "Startet einen einmaligen Mähvorgang, wenn der Mäher ihn unterstützt.",
+      "fields": {
+        "boundary": {
+          "name": "Kante",
+          "description": "Ob ein Kantenmähvorgang enthalten sein soll."
+        },
+        "runtime": {
+          "name": "Laufzeit",
+          "description": "Laufzeit in Minuten."
+        },
+        "cut_over_border": {
+          "name": "Über die Kante mähen",
+          "description": "Falls Ihr Mäher dies unterstützt, wird damit überschrieben, ob der einmalige Kantenmähvorgang über die Rasenkante hinaus fahren darf."
+        },
+        "border_distance_cm": {
+          "name": "Kantenabstand",
+          "description": "Falls Ihr Mäher dies unterstützt und Über-die-Kante-Mähen deaktiviert ist, setzt dies den Kantenabstand in Zentimetern."
+        }
+      }
+    },
     "set_nutrition": {
       "name": "Set nutrition",
       "description": "Set auto-schedule nutrition values.",

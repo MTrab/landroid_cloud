@@ -1,7 +1,7 @@
 {
   "services": {
     "ots": {
-      "service": "mdi:calendar-play"
+      "service": "mdi:calendar-start"
     },
     "add_schedule": {
       "service": "mdi:calendar-plus"

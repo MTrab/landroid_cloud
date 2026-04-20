@@ -322,6 +322,28 @@
     }
   },
   "services": {
+    "ots": {
+      "name": "Spustit jednorázový plán",
+      "description": "Spustí jednorázové sečení, pokud ho sekačka podporuje.",
+      "fields": {
+        "boundary": {
+          "name": "Okraj",
+          "description": "Zda zahrnout sekání okraje."
+        },
+        "runtime": {
+          "name": "Doba běhu",
+          "description": "Doba běhu v minutách."
+        },
+        "cut_over_border": {
+          "name": "Sekat přes okraj",
+          "description": "Pokud to vaše sekačka podporuje, určuje, zda jednorázové sekání okraje smí přejet přes okraj trávníku."
+        },
+        "border_distance_cm": {
+          "name": "Vzdálenost od okraje",
+          "description": "Pokud to vaše sekačka podporuje a sekání přes okraj je vypnuto, nastaví vzdálenost od okraje v centimetrech."
+        }
+      }
+    },
     "set_nutrition": {
       "name": "Set nutrition",
       "description": "Set auto-schedule nutrition values.",

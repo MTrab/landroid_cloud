@@ -322,6 +322,28 @@
     }
   },
   "services": {
+    "ots": {
+      "name": "Egyszeri ütemezés indítása",
+      "description": "Egyszeri nyírást indít, ha a fűnyíró támogatja.",
+      "fields": {
+        "boundary": {
+          "name": "Szegély",
+          "description": "Legyen-e szegélynyírás."
+        },
+        "runtime": {
+          "name": "Futási idő",
+          "description": "Futási idő percben."
+        },
+        "cut_over_border": {
+          "name": "Vágás a határon túl",
+          "description": "Ha a fűnyíró támogatja, meghatározza, hogy az egyszeri szegélynyírás áthaladhat-e a gyep szélén."
+        },
+        "border_distance_cm": {
+          "name": "Szegélytávolság",
+          "description": "Ha a fűnyíró támogatja, és a határon túli vágás ki van kapcsolva, beállítja a szegélytávolságot centiméterben."
+        }
+      }
+    },
     "set_nutrition": {
       "name": "Set nutrition",
       "description": "Set auto-schedule nutrition values.",
