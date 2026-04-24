@@ -15,5 +15,5 @@
     "requirements": [
         "pyworxcloud==6.3.6"
     ],
-    "version": "7.0.4"
+    "version": "7.0.5"
 }
