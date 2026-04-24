@@ -74,6 +74,24 @@ def test_rain_delay_activity_overrides_docked_when_remaining_minutes_exist() -> 
     assert entity.activity == MOWER_STATE_RAIN_DELAY
 
 
+def test_mower_restores_legacy_location_attributes() -> None:
+    """The mower entity should keep latitude/longitude for compatibility."""
+    entity = object.__new__(LandroidCloudMowerEntity)
+    entity._serial_number = "serial"
+    entity.coordinator = SimpleNamespace(
+        data={
+            "serial": SimpleNamespace(
+                gps={"latitude": 51.815106289, "longitude": 5.855785009666666}
+            )
+        }
+    )
+
+    assert entity.extra_state_attributes == {
+        "latitude": 51.815106289,
+        "longitude": 5.855785009666666,
+    }
+
+
 @pytest.mark.asyncio
 async def test_ots_service_calls_cloud_ots() -> None:
     """OTS service should call the cloud command with legacy arguments."""
