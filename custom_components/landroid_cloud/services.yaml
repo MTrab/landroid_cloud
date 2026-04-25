@@ -424,3 +424,29 @@ delete_exclusion_schedule:
       example: "09:00"
       selector:
         text:
+set_border_cut_settings:
+  description: Set border cut distance and cut-over-border mode (Worx Vision models)
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: lawn_mower
+  fields:
+    border_distance:
+      name: Border distance
+      description: Distance from the border in mm (50, 100, 150 or 200)
+      example: 150
+      required: true
+      selector:
+        number:
+          min: 50
+          max: 200
+          step: 50
+          unit_of_measurement: mm
+          mode: slider
+    cut_over_border:
+      name: Cut over border
+      description: Enable cutting over the physical border
+      example: false
+      required: true
+      selector:
+        boolean:

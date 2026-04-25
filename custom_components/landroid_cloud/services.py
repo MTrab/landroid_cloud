@@ -32,6 +32,7 @@ SERVICE_SET_EXCLUSION_DAY: Final = "set_exclusion_day"
 SERVICE_ADD_EXCLUSION_SCHEDULE: Final = "add_exclusion_schedule"
 SERVICE_EDIT_EXCLUSION_SCHEDULE: Final = "edit_exclusion_schedule"
 SERVICE_DELETE_EXCLUSION_SCHEDULE: Final = "delete_exclusion_schedule"
+SERVICE_SET_BORDER_CUT_SETTINGS: Final = "set_border_cut_settings"
 ATTR_EXCLUDE_DAY: Final = "exclude_day"
 ATTR_K: Final = "k"
 ATTR_N: Final = "n"
@@ -46,6 +47,9 @@ ATTR_DAYS: Final = "days"
 ATTR_DURATION: Final = "duration"
 ATTR_RUNTIME: Final = "runtime"
 ATTR_START: Final = "start"
+ATTR_BORDER_DISTANCE: Final = "border_distance"
+ATTR_CUT_OVER_BORDER: Final = "cut_over_border"
+BORDER_DISTANCE_VALUES: Final = (50, 100, 150, 200)
 DAYS: Final = tuple(DAY_MAP[index] for index in sorted(DAY_MAP))
 EXCLUSION_REASONS: Final = ("generic", "irrigation")
 
@@ -240,6 +244,16 @@ def async_register_entity_services(platform: EntityPlatform) -> None:
             vol.Optional(ATTR_START): cv.string,
         },
         "_async_service_delete_exclusion_schedule",
+    )
+    platform.async_register_entity_service(
+        SERVICE_SET_BORDER_CUT_SETTINGS,
+        {
+            vol.Required(ATTR_BORDER_DISTANCE): vol.All(
+                vol.Coerce(int), vol.In(BORDER_DISTANCE_VALUES)
+            ),
+            vol.Required(ATTR_CUT_OVER_BORDER): bool,
+        },
+        "_async_service_set_border_cut_settings",
     )
 
 
@@ -752,5 +766,44 @@ async def async_handle_delete_exclusion_schedule(
     await async_run_cloud_command(
         lambda: entity.coordinator.cloud.set_auto_schedule_exclusion_slots(
             serial_number, day_index, updated_slots
+        )
+    )
+
+
+async def async_handle_set_border_cut_settings(
+    entity: LandroidCloudMowerEntity,
+    *,
+    border_distance: int,
+    cut_over_border: bool,
+) -> None:
+    """Set border cut distance and cut-over-border mode on the mower."""
+    cloud = entity.coordinator.cloud
+    serial_number = str(entity.device.serial_number)
+    mower = cloud.get_mower(serial_number)
+
+    if not mower["online"]:
+        raise HomeAssistantError("Mower is unavailable")
+
+    ob = 1 if cut_over_border else 0
+
+    if mower["protocol"] == 0:
+        payload = {"cfg": {"cut": {"bd": border_distance, "ob": ob}}}
+        identifier = serial_number
+    else:
+        # Protocol 1 (Vision): zone-level cfg — mirrors the mz.s payload structure
+        payload = {
+            "mz": {
+                "s": [{"id": 1, "c": 1, "cfg": {"cut": {"bd": border_distance, "ob": ob}}}],
+                "p": [],
+            }
+        }
+        identifier = mower["uuid"]
+
+    await async_run_cloud_command(
+        lambda: cloud.mqtt.apublish(
+            identifier,
+            mower["mqtt_topics"]["command_in"],
+            payload,
+            mower["protocol"],
         )
     )

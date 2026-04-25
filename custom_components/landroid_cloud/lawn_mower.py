@@ -36,6 +36,7 @@ from .services import (
     async_handle_edit_schedule,
     async_handle_edit_exclusion_schedule,
     async_handle_ots,
+    async_handle_set_border_cut_settings,
     async_handle_set_exclusion_day,
     async_handle_set_nutrition,
     async_register_entity_services,
@@ -282,4 +283,17 @@ class LandroidCloudMowerEntity(LandroidBaseEntity, LawnMowerEntity):
             self,
             day=day,
             start=start,
+        )
+
+    async def _async_service_set_border_cut_settings(
+        self,
+        *,
+        border_distance: int,
+        cut_over_border: bool,
+    ) -> None:
+        """Set border distance and cut-over-border mode."""
+        await async_handle_set_border_cut_settings(
+            self,
+            border_distance=border_distance,
+            cut_over_border=cut_over_border,
         )
