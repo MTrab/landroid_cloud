@@ -333,14 +333,6 @@
         "runtime": {
           "name": "Laufzeit",
           "description": "Laufzeit in Minuten."
-        },
-        "cut_over_border": {
-          "name": "Über die Kante mähen",
-          "description": "Falls Ihr Mäher dies unterstützt, wird damit überschrieben, ob der einmalige Kantenmähvorgang über die Rasenkante hinaus fahren darf."
-        },
-        "border_distance_cm": {
-          "name": "Kantenabstand",
-          "description": "Falls Ihr Mäher dies unterstützt und Über-die-Kante-Mähen deaktiviert ist, setzt dies den Kantenabstand in Zentimetern."
         }
       }
     },

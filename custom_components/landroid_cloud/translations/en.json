@@ -72,14 +72,20 @@
         "runtime": {
           "name": "Run time",
           "description": "Run time in minutes."
-        },
+        }
+      }
+    },
+    "set_border_cut_settings": {
+      "name": "Set border-cut settings",
+      "description": "Set Vision border-cut behavior without starting a mowing task.",
+      "fields": {
         "cut_over_border": {
           "name": "Cut over border",
-          "description": "If supported by your mower, override whether the one-time border cut may cross the lawn border."
+          "description": "Whether border cutting may cross the lawn border."
         },
         "border_distance_cm": {
           "name": "Border distance",
-          "description": "If supported by your mower and cut_over_border is disabled, set the border distance in centimeters."
+          "description": "Border distance in centimeters."
         }
       }
     },

@@ -3,6 +3,9 @@
     "ots": {
       "service": "mdi:calendar-start"
     },
+    "set_border_cut_settings": {
+      "service": "mdi:border-none-variant"
+    },
     "add_schedule": {
       "service": "mdi:calendar-plus"
     },

@@ -333,14 +333,6 @@
         "runtime": {
           "name": "Durata",
           "description": "Durata in minuti."
-        },
-        "cut_over_border": {
-          "name": "Taglia oltre il bordo",
-          "description": "Se supportato dal tosaerba, indica se il taglio bordo una tantum può oltrepassare il bordo del prato."
-        },
-        "border_distance_cm": {
-          "name": "Distanza dal bordo",
-          "description": "Se supportato dal tosaerba e taglia oltre il bordo è disattivato, imposta la distanza dal bordo in centimetri."
         }
       }
     },

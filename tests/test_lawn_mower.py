@@ -7,6 +7,7 @@ from homeassistant.components.lawn_mower import LawnMowerActivity
 from homeassistant.exceptions import HomeAssistantError
 import pytest
 from pyworxcloud import ScheduleEntry, ScheduleModel
+from pyworxcloud.exceptions import NoOneTimeScheduleError
 
 from custom_components.landroid_cloud.const import (
     MOWER_STATE_EDGECUT,
@@ -28,6 +29,7 @@ from custom_components.landroid_cloud.lawn_mower import (
     SERVICE_EDIT_SCHEDULE,
     SERVICE_EDIT_EXCLUSION_SCHEDULE,
     SERVICE_OTS,
+    SERVICE_SET_BORDER_CUT_SETTINGS,
     SERVICE_SET_EXCLUSION_DAY,
     SERVICE_SET_NUTRITION,
     async_setup_entry,
@@ -90,21 +92,44 @@ async def test_ots_service_calls_cloud_ots() -> None:
 
 
 @pytest.mark.asyncio
-async def test_ots_service_supports_vision_border_cut_overrides() -> None:
-    """OTS service should apply optional border-cut settings before OTS."""
+async def test_set_border_cut_settings_service_calls_dedicated_cloud_helpers() -> None:
+    """Border-cut settings service should use dedicated cloud helpers."""
     entity = object.__new__(LandroidCloudMowerEntity)
     entity._serial_number = "serial"
     entity.coordinator = SimpleNamespace(
         cloud=SimpleNamespace(
-            ots=AsyncMock(),
-            set_border_cut_settings=AsyncMock(),
+            set_cut_over_border=AsyncMock(),
+            set_border_distance=AsyncMock(),
         ),
         data={"serial": SimpleNamespace(serial_number="serial")},
     )
 
-    await entity._async_service_ots(
-        boundary=True,
-        runtime=45,
+    await entity._async_service_set_border_cut_settings(
+        cut_over_border=False,
+        border_distance_cm=15,
+    )
+
+    entity.coordinator.cloud.set_cut_over_border.assert_awaited_once_with(
+        "serial",
+        False,
+    )
+    entity.coordinator.cloud.set_border_distance.assert_awaited_once_with(
+        "serial",
+        150,
+    )
+
+
+@pytest.mark.asyncio
+async def test_set_border_cut_settings_service_supports_legacy_cloud_helper() -> None:
+    """Border-cut settings service should support the previous combined helper."""
+    entity = object.__new__(LandroidCloudMowerEntity)
+    entity._serial_number = "serial"
+    entity.coordinator = SimpleNamespace(
+        cloud=SimpleNamespace(set_border_cut_settings=AsyncMock()),
+        data={"serial": SimpleNamespace(serial_number="serial")},
+    )
+
+    await entity._async_service_set_border_cut_settings(
         cut_over_border=False,
         border_distance_cm=15,
     )
@@ -114,28 +139,86 @@ async def test_ots_service_supports_vision_border_cut_overrides() -> None:
         cut_over_border=False,
         border_distance=150,
     )
-    entity.coordinator.cloud.ots.assert_awaited_once_with("serial", True, 45)
 
 
 @pytest.mark.asyncio
-async def test_ots_service_rejects_border_distance_without_cut_over_border_false() -> (
+async def test_set_border_cut_settings_service_raises_clear_error_when_unsupported() -> (
     None
 ):
-    """OTS service should reject invalid border-cut combinations early."""
+    """Border-cut settings service should hide pyworxcloud unsupported errors."""
     entity = object.__new__(LandroidCloudMowerEntity)
     entity._serial_number = "serial"
     entity.coordinator = SimpleNamespace(
-        cloud=SimpleNamespace(ots=AsyncMock()),
+        cloud=SimpleNamespace(
+            set_cut_over_border=AsyncMock(
+                side_effect=ValueError(
+                    "Border-cut settings are only supported for protocol 1 devices"
+                )
+            ),
+            set_border_distance=AsyncMock(),
+        ),
         data={"serial": SimpleNamespace(serial_number="serial")},
     )
 
     with pytest.raises(
         HomeAssistantError,
-        match="border_distance_cm can only be used when cut_over_border is false",
+        match="Your mower doesn't support this function",
     ):
-        await entity._async_service_ots(
-            boundary=True,
-            runtime=45,
+        await entity._async_service_set_border_cut_settings(
+            cut_over_border=False,
+            border_distance_cm=15,
+        )
+
+    entity.coordinator.cloud.set_border_distance.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_set_border_cut_settings_service_raises_clear_error_when_helper_missing() -> (
+    None
+):
+    """Border-cut settings service should not leak AttributeError for old runtimes."""
+    entity = object.__new__(LandroidCloudMowerEntity)
+    entity._serial_number = "serial"
+    entity.coordinator = SimpleNamespace(
+        cloud=SimpleNamespace(),
+        data={"serial": SimpleNamespace(serial_number="serial")},
+    )
+
+    with pytest.raises(
+        HomeAssistantError,
+        match="Installed pyworxcloud version does not support border-cut settings",
+    ):
+        await entity._async_service_set_border_cut_settings(
+            cut_over_border=False,
+            border_distance_cm=15,
+        )
+
+
+@pytest.mark.asyncio
+async def test_set_border_cut_settings_service_handles_no_one_time_schedule_error() -> (
+    None
+):
+    """Border-cut settings service should map pyworxcloud support errors."""
+    entity = object.__new__(LandroidCloudMowerEntity)
+    entity._serial_number = "serial"
+    entity.coordinator = SimpleNamespace(
+        cloud=SimpleNamespace(
+            set_cut_over_border=AsyncMock(
+                side_effect=NoOneTimeScheduleError(
+                    "This device does not support border-cut settings"
+                )
+            ),
+            set_border_distance=AsyncMock(),
+        ),
+        data={"serial": SimpleNamespace(serial_number="serial")},
+    )
+
+    with pytest.raises(
+        HomeAssistantError,
+        match="Your mower doesn't support this function",
+    ):
+        await entity._async_service_set_border_cut_settings(
+            cut_over_border=False,
             border_distance_cm=15,
         )
 
@@ -1032,6 +1115,10 @@ async def test_async_setup_entry_registers_schedule_services(monkeypatch) -> Non
 
     assert registrations == [
         (SERVICE_OTS, "_async_service_ots"),
+        (
+            SERVICE_SET_BORDER_CUT_SETTINGS,
+            "_async_service_set_border_cut_settings",
+        ),
         (SERVICE_ADD_SCHEDULE, "_async_service_add_schedule"),
         (SERVICE_EDIT_SCHEDULE, "_async_service_edit_schedule"),
         (SERVICE_DELETE_SCHEDULE, "_async_service_delete_schedule"),

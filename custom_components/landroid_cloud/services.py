@@ -23,6 +23,7 @@ if TYPE_CHECKING:
     from .lawn_mower import LandroidCloudMowerEntity
 
 SERVICE_OTS: Final = "ots"
+SERVICE_SET_BORDER_CUT_SETTINGS: Final = "set_border_cut_settings"
 SERVICE_ADD_SCHEDULE: Final = "add_schedule"
 SERVICE_EDIT_SCHEDULE: Final = "edit_schedule"
 SERVICE_DELETE_SCHEDULE: Final = "delete_schedule"
@@ -150,12 +151,18 @@ def async_register_entity_services(platform: EntityPlatform) -> None:
             vol.Required(ATTR_RUNTIME): vol.All(
                 vol.Coerce(int), vol.Range(min=10, max=120)
             ),
-            vol.Optional(ATTR_CUT_OVER_BORDER): bool,
-            vol.Optional(ATTR_BORDER_DISTANCE_CM): vol.In(
+        },
+        "_async_service_ots",
+    )
+    platform.async_register_entity_service(
+        SERVICE_SET_BORDER_CUT_SETTINGS,
+        {
+            vol.Required(ATTR_CUT_OVER_BORDER): bool,
+            vol.Required(ATTR_BORDER_DISTANCE_CM): vol.In(
                 VISION_BORDER_DISTANCE_CM_VALUES
             ),
         },
-        "_async_service_ots",
+        "_async_service_set_border_cut_settings",
     )
     add_schedule_schema = {
         vol.Optional(ATTR_DAY): cv.string,
@@ -352,29 +359,9 @@ async def async_handle_ots(
     *,
     boundary: bool,
     runtime: int,
-    cut_over_border: bool | None = None,
-    border_distance_cm: int | None = None,
 ) -> None:
     """Handle legacy OTS service call."""
-    if border_distance_cm is not None and cut_over_border is not False:
-        raise HomeAssistantError(
-            "border_distance_cm can only be used when cut_over_border is false"
-        )
-    if (cut_over_border is not None or border_distance_cm is not None) and not boundary:
-        raise HomeAssistantError(
-            "Vision border-cut settings require boundary to be true"
-        )
     try:
-        if cut_over_border is not None or border_distance_cm is not None:
-            await async_run_cloud_command(
-                lambda: entity.coordinator.cloud.set_border_cut_settings(
-                    str(entity.device.serial_number),
-                    cut_over_border=cut_over_border,
-                    border_distance=(
-                        None if border_distance_cm is None else border_distance_cm * 10
-                    ),
-                )
-            )
         await async_run_cloud_command(
             lambda: entity.coordinator.cloud.ots(
                 str(entity.device.serial_number),
@@ -387,11 +374,62 @@ async def async_handle_ots(
             raise HomeAssistantError(
                 "Mower does not support one-time schedule"
             ) from err
-        if str(err) == "Border-cut settings are only supported for protocol 1 devices":
+        raise
+
+
+async def async_handle_set_border_cut_settings(
+    entity: LandroidCloudMowerEntity,
+    *,
+    cut_over_border: bool,
+    border_distance_cm: int,
+) -> None:
+    """Handle border-cut settings service call."""
+    serial_number = str(entity.device.serial_number)
+    border_distance = border_distance_cm * 10
+    cloud = entity.coordinator.cloud
+    set_cut_over_border = getattr(cloud, "set_cut_over_border", None)
+    set_border_distance = getattr(cloud, "set_border_distance", None)
+    set_border_cut_settings = getattr(cloud, "set_border_cut_settings", None)
+    try:
+        if callable(set_cut_over_border) and callable(set_border_distance):
+            await async_run_cloud_command(
+                lambda: set_cut_over_border(
+                    serial_number,
+                    cut_over_border,
+                )
+            )
+            await async_run_cloud_command(
+                lambda: set_border_distance(
+                    serial_number,
+                    border_distance,
+                )
+            )
+            return
+
+        if callable(set_border_cut_settings):
+            await async_run_cloud_command(
+                lambda: set_border_cut_settings(
+                    serial_number,
+                    cut_over_border=cut_over_border,
+                    border_distance=border_distance,
+                )
+            )
+            return
+
+        raise HomeAssistantError(
+            "Installed pyworxcloud version does not support border-cut settings"
+        )
+    except HomeAssistantError as err:
+        if str(err) in {
+            "Border-cut settings are only supported for protocol 1 devices",
+            "This device does not support border-cut settings",
+        }:
             raise HomeAssistantError(
                 "Your mower doesn't support this function"
             ) from err
         raise
+    except NoOneTimeScheduleError as err:
+        raise HomeAssistantError("Your mower doesn't support this function") from err
 
 
 def _build_schedule_entry(

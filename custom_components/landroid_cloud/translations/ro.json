@@ -333,14 +333,6 @@
         "runtime": {
           "name": "Durată",
           "description": "Durata în minute."
-        },
-        "cut_over_border": {
-          "name": "Taie peste margine",
-          "description": "Dacă mașina de tuns acceptă acest lucru, indică dacă tunderea unică a marginii poate depăși marginea gazonului."
-        },
-        "border_distance_cm": {
-          "name": "Distanța față de margine",
-          "description": "Dacă mașina de tuns acceptă acest lucru și tăierea peste margine este dezactivată, setează distanța față de margine în centimetri."
         }
       }
     },

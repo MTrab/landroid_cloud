@@ -26,15 +26,24 @@ ots:
           step: 1
           unit_of_measurement: "minutes"
           mode: slider
+set_border_cut_settings:
+  description: Set Vision border-cut behavior without starting a mowing task
+  target:
+    entity:
+      integration: landroid_cloud
+      domain: lawn_mower
+  fields:
     cut_over_border:
       name: Cut over border
-      description: If supported by your mower, override whether the one-time border cut may cross the lawn border
+      description: Whether border cutting may cross the lawn border
+      required: true
       example: false
       selector:
         boolean:
     border_distance_cm:
       name: Border distance
-      description: If supported by your mower and cut over border is disabled, set the border distance in centimeters
+      description: Border distance in centimeters
+      required: true
       example: 15
       selector:
         number:

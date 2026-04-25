@@ -36,6 +36,7 @@ from .services import (
     async_handle_edit_schedule,
     async_handle_edit_exclusion_schedule,
     async_handle_ots,
+    async_handle_set_border_cut_settings,
     async_handle_set_exclusion_day,
     async_handle_set_nutrition,
     async_register_entity_services,
@@ -68,6 +69,9 @@ MOWER_DESCRIPTION: Final = LawnMowerEntityEntityDescription(
     key="mower", translation_key="mower"
 )
 SERVICE_OTS: Final = integration_services.SERVICE_OTS
+SERVICE_SET_BORDER_CUT_SETTINGS: Final = (
+    integration_services.SERVICE_SET_BORDER_CUT_SETTINGS
+)
 SERVICE_ADD_SCHEDULE: Final = integration_services.SERVICE_ADD_SCHEDULE
 SERVICE_EDIT_SCHEDULE: Final = integration_services.SERVICE_EDIT_SCHEDULE
 SERVICE_DELETE_SCHEDULE: Final = integration_services.SERVICE_DELETE_SCHEDULE
@@ -159,14 +163,22 @@ class LandroidCloudMowerEntity(LandroidBaseEntity, LawnMowerEntity):
         self,
         boundary: bool,
         runtime: int,
-        cut_over_border: bool | None = None,
-        border_distance_cm: int | None = None,
     ) -> None:
         """Handle legacy OTS service call."""
         await async_handle_ots(
             self,
             boundary=boundary,
             runtime=runtime,
+        )
+
+    async def _async_service_set_border_cut_settings(
+        self,
+        cut_over_border: bool,
+        border_distance_cm: int,
+    ) -> None:
+        """Handle border-cut settings service call."""
+        await async_handle_set_border_cut_settings(
+            self,
             cut_over_border=cut_over_border,
             border_distance_cm=border_distance_cm,
         )

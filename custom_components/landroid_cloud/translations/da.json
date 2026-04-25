@@ -66,14 +66,20 @@
         "runtime": {
           "name": "Køretid",
           "description": "Køretid i minutter."
-        },
+        }
+      }
+    },
+    "set_border_cut_settings": {
+      "name": "Indstil kantklip",
+      "description": "Indstil Vision-kantklip uden at starte en klipning.",
+      "fields": {
         "cut_over_border": {
           "name": "Kør over kant",
-          "description": "Hvis din klipper understøtter det, tilsidesætter dette om engangskantklip må krydse plænens kant."
+          "description": "Om kantklip må krydse plænens kant."
         },
         "border_distance_cm": {
           "name": "Kantafstand",
-          "description": "Hvis din klipper understøtter det, og kør over kant er slået fra, sættes kantafstanden i centimeter."
+          "description": "Kantafstand i centimeter."
         }
       }
     },
