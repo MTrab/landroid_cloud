@@ -193,7 +193,7 @@ class LandroidFirmwareUpdateEntity(LandroidBaseEntity, UpdateEntity):
     """Representation of a Landroid firmware update entity."""
 
     entity_description: LandroidUpdateDescription
-    _attr_requires_online = True
+    _attr_requires_online = False
     _attr_supported_features = (
         UpdateEntityFeature.INSTALL | UpdateEntityFeature.RELEASE_NOTES
     )
@@ -308,6 +308,7 @@ class LandroidFirmwareUpdateEntity(LandroidBaseEntity, UpdateEntity):
     ) -> None:
         """Queue the firmware update."""
         del backup, kwargs
+        started_while_online = bool(getattr(self.device, "online", False))
         serial_number = str(self.device.serial_number)
         latest_version = self.latest_version
 
@@ -335,7 +336,15 @@ class LandroidFirmwareUpdateEntity(LandroidBaseEntity, UpdateEntity):
                 "No firmware update is currently available"
             ) from err
         except (NoConnectionError, OfflineError) as err:
-            raise HomeAssistantError("Mower is unavailable") from err
+            if started_while_online or self.in_progress:
+                _LOGGER.debug(
+                    "Ignoring transient firmware update availability error for %s (%s): %s",
+                    getattr(self.device, "name", serial_number),
+                    serial_number,
+                    err,
+                )
+            else:
+                raise HomeAssistantError("Mower is unavailable") from err
         except APIException as err:
             raise HomeAssistantError("Cloud command failed") from err
 

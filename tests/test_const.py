@@ -9,10 +9,12 @@ def test_platforms_use_home_assistant_platform_enum() -> None:
     """Merged branch should expose every currently supported platform."""
     assert PLATFORMS == [
         Platform.LAWN_MOWER,
+        Platform.DEVICE_TRACKER,
         Platform.SENSOR,
         Platform.SELECT,
         Platform.NUMBER,
         Platform.BUTTON,
         Platform.SWITCH,
         Platform.BINARY_SENSOR,
+        Platform.UPDATE,
     ]

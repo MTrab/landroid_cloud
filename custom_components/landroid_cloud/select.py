@@ -82,6 +82,11 @@ def _current_zone_option(device) -> str | None:
     return None
 
 
+def _selected_legacy_zone_index(option: str) -> int:
+    """Translate a displayed legacy zone number to the mower's zero-based index."""
+    return int(option) - 1
+
+
 def _auto_schedule_setting_option(device, key: str) -> str | None:
     """Return one auto-schedule setting as a string option."""
     value = auto_schedule_settings(device).get(key)
@@ -202,7 +207,7 @@ class LandroidZoneSelect(LandroidBaseEntity, SelectEntity):
             raise HomeAssistantError(
                 "Zone selection for RTK/Vision devices is not supported yet"
             )
-        zone = int(option)
+        zone = _selected_legacy_zone_index(option)
         serial_number = str(self.device.serial_number)
         await async_run_cloud_command(
             lambda: self.coordinator.cloud.setzone(serial_number, zone)

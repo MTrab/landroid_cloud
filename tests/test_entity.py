@@ -4,6 +4,9 @@ from types import SimpleNamespace
 
 from custom_components.landroid_cloud.entity import (
     LandroidBaseEntity,
+    device_coordinates,
+    device_location_attributes,
+    device_supports_location,
     _firmware_version,
 )
 
@@ -24,6 +27,30 @@ def test_firmware_version_defaults_to_unknown() -> None:
     """Missing firmware data should return fallback."""
     device = SimpleNamespace(firmware=None)
     assert _firmware_version(device) == "unknown"
+
+
+def test_device_coordinates_reads_mapping_values() -> None:
+    """GPS coordinates should be normalized from mapping-like payloads."""
+    device = SimpleNamespace(gps={"latitude": 51.5, "longitude": 5.1})
+
+    assert device_coordinates(device) == (51.5, 5.1)
+
+
+def test_device_location_attributes_returns_legacy_keys() -> None:
+    """Legacy mower attributes should expose GPS coordinates unchanged."""
+    device = SimpleNamespace(gps={"latitude": 51.5, "longitude": 5.1})
+
+    assert device_location_attributes(device) == {
+        "latitude": 51.5,
+        "longitude": 5.1,
+    }
+
+
+def test_device_supports_location_checks_module_markers() -> None:
+    """A 4G module marker should be enough to create a tracker entity."""
+    device = SimpleNamespace(module_config={"4G": {}})
+
+    assert device_supports_location(device) is True
 
 
 class _ReadonlyEntity(LandroidBaseEntity):

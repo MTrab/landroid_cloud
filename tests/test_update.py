@@ -8,6 +8,7 @@ from unittest.mock import AsyncMock, Mock
 import pytest
 from homeassistant.components.update import UpdateEntityFeature
 from homeassistant.exceptions import HomeAssistantError
+from pyworxcloud.exceptions import OfflineError
 
 from custom_components.landroid_cloud.update import (
     LandroidFirmwareUpdateEntity,
@@ -92,12 +93,12 @@ def test_update_entity_supports_install_and_release_notes() -> None:
     )
 
 
-def test_update_entity_is_unavailable_when_mower_is_offline() -> None:
-    """Firmware update entity should be unavailable while the mower is offline."""
+def test_update_entity_stays_available_when_mower_is_offline() -> None:
+    """Firmware update entity should stay available with cached metadata offline."""
     entity = _make_entity()
     entity.coordinator.data["serial"].online = False
 
-    assert entity.available is False
+    assert entity.available is True
 
 
 def test_release_notes_markdown_includes_product_and_head_sections() -> None:
@@ -249,4 +250,42 @@ async def test_async_install_surfaces_no_firmware_available() -> None:
     with pytest.raises(
         HomeAssistantError, match="No firmware update is currently available"
     ):
+        await entity.async_install(version=None, backup=False)
+
+
+@pytest.mark.asyncio
+async def test_async_install_ignores_offline_race_when_started_online() -> None:
+    """Transient offline races should not fail a queued install started online."""
+    listeners = Mock()
+    entity = _make_entity(
+        firmware={"version": "3.30"},
+        info={"latest_version": "3.31"},
+        start_firmware_upgrade=AsyncMock(
+            side_effect=OfflineError(
+                "The device is currently offline, no action was sent."
+            )
+        ),
+    )
+    entity.coordinator.async_update_listeners = listeners
+
+    await entity.async_install(version=None, backup=False)
+
+    listeners.assert_called_once_with()
+
+
+@pytest.mark.asyncio
+async def test_async_install_surfaces_offline_when_started_offline() -> None:
+    """Offline installs should still fail when the mower was already offline."""
+    entity = _make_entity(
+        firmware={"version": "3.30"},
+        info={"latest_version": "3.31"},
+        start_firmware_upgrade=AsyncMock(
+            side_effect=OfflineError(
+                "The device is currently offline, no action was sent."
+            )
+        ),
+    )
+    entity.coordinator.data["serial"].online = False
+
+    with pytest.raises(HomeAssistantError, match="Mower is unavailable"):
         await entity.async_install(version=None, backup=False)

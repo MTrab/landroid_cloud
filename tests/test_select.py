@@ -1,10 +1,14 @@
 """Tests for Landroid selects."""
 
 from types import SimpleNamespace
+from unittest.mock import AsyncMock
 
+import pytest
 from custom_components.landroid_cloud.select import LandroidAutoScheduleSelect
+from custom_components.landroid_cloud.select import LandroidZoneSelect
 from custom_components.landroid_cloud.select import SELECTS
 from custom_components.landroid_cloud.select import _current_zone_option, _zone_options
+from custom_components.landroid_cloud import select as select_module
 
 
 def test_zone_select_is_disabled_by_default() -> None:
@@ -102,3 +106,30 @@ def test_current_zone_option_falls_back_to_raw_legacy_zone_when_needed() -> None
     )
 
     assert _current_zone_option(device) == "2"
+
+
+@pytest.mark.asyncio
+async def test_zone_select_converts_legacy_option_to_zero_based_index(
+    monkeypatch,
+) -> None:
+    """Legacy zone selection should send the zero-based zone index to pyworxcloud."""
+    entity = object.__new__(LandroidZoneSelect)
+    entity._serial_number = "serial"
+    entity.coordinator = SimpleNamespace(
+        cloud=SimpleNamespace(setzone=AsyncMock()),
+        data={
+            "serial": SimpleNamespace(
+                serial_number="serial",
+                zone={"ids": [], "starting_point": [1, 7, 0, 0]},
+            )
+        },
+    )
+
+    async def _run_command(command):
+        await command()
+
+    monkeypatch.setattr(select_module, "async_run_cloud_command", _run_command)
+
+    await entity.async_select_option("1")
+
+    entity.coordinator.cloud.setzone.assert_awaited_once_with("serial", 0)

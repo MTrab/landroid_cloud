@@ -98,6 +98,47 @@ class LandroidBaseEntity(CoordinatorEntity[LandroidCloudCoordinator]):
         return DeviceInfo(**info)
 
 
+def device_coordinates(device: DeviceHandler) -> tuple[float, float] | None:
+    """Return normalized GPS coordinates when available."""
+    gps = getattr(device, "gps", None)
+
+    if isinstance(gps, dict):
+        latitude = gps.get("latitude")
+        longitude = gps.get("longitude")
+    else:
+        latitude = getattr(gps, "latitude", None)
+        longitude = getattr(gps, "longitude", None)
+
+    if not isinstance(latitude, int | float) or not isinstance(longitude, int | float):
+        return None
+
+    return float(latitude), float(longitude)
+
+
+def device_location_attributes(device: DeviceHandler) -> dict[str, float] | None:
+    """Return legacy location attributes for entities that expose them."""
+    if (coordinates := device_coordinates(device)) is None:
+        return None
+
+    latitude, longitude = coordinates
+    return {"latitude": latitude, "longitude": longitude}
+
+
+def device_supports_location(device: DeviceHandler) -> bool:
+    """Return whether the mower exposes a GPS-capable 4G module."""
+    if device_coordinates(device) is not None:
+        return True
+
+    for modules in (
+        getattr(device, "module_config", None),
+        getattr(device, "module_status", None),
+    ):
+        if isinstance(modules, dict) and "4G" in modules:
+            return True
+
+    return False
+
+
 def auto_schedule(device: DeviceHandler) -> dict:
     """Return the normalized auto-schedule block when available."""
     schedules = getattr(device, "schedules", None)
