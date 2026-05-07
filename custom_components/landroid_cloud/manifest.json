@@ -13,7 +13,7 @@
     "pyworxcloud"
   ],
   "requirements": [
-    "pyworxcloud@git+https://github.com/mtrab/pyworxcloud.git@feature/issue-876-border-cut-settings"
+    "pyworxcloud==6.4.0b1"
   ],
   "version": "7.0.3"
 }
