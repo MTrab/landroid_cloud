@@ -322,6 +322,20 @@
     }
   },
   "services": {
+    "ots": {
+      "name": "Starta engångsschema",
+      "description": "Startar en engångsklippning om klipparen stöder det.",
+      "fields": {
+        "boundary": {
+          "name": "Kant",
+          "description": "Om kantklippning ska inkluderas."
+        },
+        "runtime": {
+          "name": "Körtid",
+          "description": "Körtid i minuter."
+        }
+      }
+    },
     "set_nutrition": {
       "name": "Set nutrition",
       "description": "Set auto-schedule nutrition values.",

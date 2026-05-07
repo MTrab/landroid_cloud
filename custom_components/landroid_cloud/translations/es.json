@@ -322,6 +322,20 @@
     }
   },
   "services": {
+    "ots": {
+      "name": "Iniciar programación única",
+      "description": "Inicia una programación de corte única si el cortacésped la admite.",
+      "fields": {
+        "boundary": {
+          "name": "Borde",
+          "description": "Si se debe incluir un corte de borde."
+        },
+        "runtime": {
+          "name": "Tiempo de ejecución",
+          "description": "Tiempo de ejecución en minutos."
+        }
+      }
+    },
     "set_nutrition": {
       "name": "Set nutrition",
       "description": "Set auto-schedule nutrition values.",

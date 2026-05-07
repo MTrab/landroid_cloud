@@ -75,6 +75,20 @@
         }
       }
     },
+    "set_border_cut_settings": {
+      "name": "Set border-cut settings",
+      "description": "Set Vision border-cut behavior without starting a mowing task.",
+      "fields": {
+        "cut_over_border": {
+          "name": "Cut over border",
+          "description": "Whether border cutting may cross the lawn border."
+        },
+        "border_distance_cm": {
+          "name": "Border distance",
+          "description": "Border distance in centimeters."
+        }
+      }
+    },
     "add_schedule": {
       "name": "Add schedule",
       "description": "Add a mowing schedule entry.",

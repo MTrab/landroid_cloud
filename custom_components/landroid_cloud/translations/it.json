@@ -322,6 +322,20 @@
     }
   },
   "services": {
+    "ots": {
+      "name": "Avvia pianificazione una tantum",
+      "description": "Avvia una pianificazione di taglio una tantum se il tosaerba la supporta.",
+      "fields": {
+        "boundary": {
+          "name": "Bordo",
+          "description": "Indica se includere un taglio del bordo."
+        },
+        "runtime": {
+          "name": "Durata",
+          "description": "Durata in minuti."
+        }
+      }
+    },
     "set_nutrition": {
       "name": "Set nutrition",
       "description": "Set auto-schedule nutrition values.",

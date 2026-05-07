@@ -69,6 +69,20 @@
         }
       }
     },
+    "set_border_cut_settings": {
+      "name": "Indstil kantklip",
+      "description": "Indstil Vision-kantklip uden at starte en klipning.",
+      "fields": {
+        "cut_over_border": {
+          "name": "Kør over kant",
+          "description": "Om kantklip må krydse plænens kant."
+        },
+        "border_distance_cm": {
+          "name": "Kantafstand",
+          "description": "Kantafstand i centimeter."
+        }
+      }
+    },
     "add_schedule": {
       "name": "Tilføj tidsplan",
       "description": "Tilføj en post til klippetidsplanen.",

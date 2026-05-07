@@ -322,6 +322,20 @@
     }
   },
   "services": {
+    "ots": {
+      "name": "Uruchom harmonogram jednorazowy",
+      "description": "Uruchamia jednorazowe koszenie, jeśli kosiarka to obsługuje.",
+      "fields": {
+        "boundary": {
+          "name": "Krawędź",
+          "description": "Czy uwzględnić koszenie krawędzi."
+        },
+        "runtime": {
+          "name": "Czas pracy",
+          "description": "Czas pracy w minutach."
+        }
+      }
+    },
     "set_nutrition": {
       "name": "Set nutrition",
       "description": "Set auto-schedule nutrition values.",

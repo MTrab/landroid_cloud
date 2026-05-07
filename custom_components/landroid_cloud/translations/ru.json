@@ -322,6 +322,20 @@
     }
   },
   "services": {
+    "ots": {
+      "name": "Запустить одноразовое расписание",
+      "description": "Запускает одноразовое кошение, если газонокосилка это поддерживает.",
+      "fields": {
+        "boundary": {
+          "name": "Край",
+          "description": "Нужно ли включать проход по краю."
+        },
+        "runtime": {
+          "name": "Время работы",
+          "description": "Время работы в минутах."
+        }
+      }
+    },
     "set_nutrition": {
       "name": "Set nutrition",
       "description": "Set auto-schedule nutrition values.",

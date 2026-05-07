@@ -322,6 +322,20 @@
     }
   },
   "services": {
+    "ots": {
+      "name": "Einmaligen Zeitplan starten",
+      "description": "Startet einen einmaligen Mähvorgang, wenn der Mäher ihn unterstützt.",
+      "fields": {
+        "boundary": {
+          "name": "Kante",
+          "description": "Ob ein Kantenmähvorgang enthalten sein soll."
+        },
+        "runtime": {
+          "name": "Laufzeit",
+          "description": "Laufzeit in Minuten."
+        }
+      }
+    },
     "set_nutrition": {
       "name": "Set nutrition",
       "description": "Set auto-schedule nutrition values.",

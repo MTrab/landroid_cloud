@@ -322,6 +322,20 @@
     }
   },
   "services": {
+    "ots": {
+      "name": "Eenmalig schema starten",
+      "description": "Start een eenmalige maaibeurt als de maaier dit ondersteunt.",
+      "fields": {
+        "boundary": {
+          "name": "Rand",
+          "description": "Of er een randmaaibeurt moet worden meegenomen."
+        },
+        "runtime": {
+          "name": "Looptijd",
+          "description": "Looptijd in minuten."
+        }
+      }
+    },
     "set_nutrition": {
       "name": "Set nutrition",
       "description": "Set auto-schedule nutrition values.",

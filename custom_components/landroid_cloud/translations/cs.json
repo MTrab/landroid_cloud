@@ -322,6 +322,20 @@
     }
   },
   "services": {
+    "ots": {
+      "name": "Spustit jednorázový plán",
+      "description": "Spustí jednorázové sečení, pokud ho sekačka podporuje.",
+      "fields": {
+        "boundary": {
+          "name": "Okraj",
+          "description": "Zda zahrnout sekání okraje."
+        },
+        "runtime": {
+          "name": "Doba běhu",
+          "description": "Doba běhu v minutách."
+        }
+      }
+    },
     "set_nutrition": {
       "name": "Set nutrition",
       "description": "Set auto-schedule nutrition values.",

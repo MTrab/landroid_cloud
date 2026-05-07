@@ -23,6 +23,7 @@ if TYPE_CHECKING:
     from .lawn_mower import LandroidCloudMowerEntity
 
 SERVICE_OTS: Final = "ots"
+SERVICE_SET_BORDER_CUT_SETTINGS: Final = "set_border_cut_settings"
 SERVICE_ADD_SCHEDULE: Final = "add_schedule"
 SERVICE_EDIT_SCHEDULE: Final = "edit_schedule"
 SERVICE_DELETE_SCHEDULE: Final = "delete_schedule"
@@ -45,9 +46,12 @@ ATTR_DAY: Final = "day"
 ATTR_DAYS: Final = "days"
 ATTR_DURATION: Final = "duration"
 ATTR_RUNTIME: Final = "runtime"
+ATTR_CUT_OVER_BORDER: Final = "cut_over_border"
+ATTR_BORDER_DISTANCE_CM: Final = "border_distance_cm"
 ATTR_START: Final = "start"
 DAYS: Final = tuple(DAY_MAP[index] for index in sorted(DAY_MAP))
 EXCLUSION_REASONS: Final = ("generic", "irrigation")
+VISION_BORDER_DISTANCE_CM_VALUES: Final = (5, 10, 15, 20)
 
 
 def _normalize_day(day: str | None, field_name: str) -> str:
@@ -149,6 +153,16 @@ def async_register_entity_services(platform: EntityPlatform) -> None:
             ),
         },
         "_async_service_ots",
+    )
+    platform.async_register_entity_service(
+        SERVICE_SET_BORDER_CUT_SETTINGS,
+        {
+            vol.Required(ATTR_CUT_OVER_BORDER): bool,
+            vol.Required(ATTR_BORDER_DISTANCE_CM): vol.In(
+                VISION_BORDER_DISTANCE_CM_VALUES
+            ),
+        },
+        "_async_service_set_border_cut_settings",
     )
     add_schedule_schema = {
         vol.Optional(ATTR_DAY): cv.string,
@@ -341,13 +355,18 @@ def _resolve_exclusion_slot(
 
 
 async def async_handle_ots(
-    entity: LandroidCloudMowerEntity, *, boundary: bool, runtime: int
+    entity: LandroidCloudMowerEntity,
+    *,
+    boundary: bool,
+    runtime: int,
 ) -> None:
     """Handle legacy OTS service call."""
     try:
         await async_run_cloud_command(
             lambda: entity.coordinator.cloud.ots(
-                str(entity.device.serial_number), boundary, runtime
+                str(entity.device.serial_number),
+                boundary,
+                runtime,
             )
         )
     except HomeAssistantError as err:
@@ -356,6 +375,61 @@ async def async_handle_ots(
                 "Mower does not support one-time schedule"
             ) from err
         raise
+
+
+async def async_handle_set_border_cut_settings(
+    entity: LandroidCloudMowerEntity,
+    *,
+    cut_over_border: bool,
+    border_distance_cm: int,
+) -> None:
+    """Handle border-cut settings service call."""
+    serial_number = str(entity.device.serial_number)
+    border_distance = border_distance_cm * 10
+    cloud = entity.coordinator.cloud
+    set_cut_over_border = getattr(cloud, "set_cut_over_border", None)
+    set_border_distance = getattr(cloud, "set_border_distance", None)
+    set_border_cut_settings = getattr(cloud, "set_border_cut_settings", None)
+    try:
+        if callable(set_cut_over_border) and callable(set_border_distance):
+            await async_run_cloud_command(
+                lambda: set_cut_over_border(
+                    serial_number,
+                    cut_over_border,
+                )
+            )
+            await async_run_cloud_command(
+                lambda: set_border_distance(
+                    serial_number,
+                    border_distance,
+                )
+            )
+            return
+
+        if callable(set_border_cut_settings):
+            await async_run_cloud_command(
+                lambda: set_border_cut_settings(
+                    serial_number,
+                    cut_over_border=cut_over_border,
+                    border_distance=border_distance,
+                )
+            )
+            return
+
+        raise HomeAssistantError(
+            "Installed pyworxcloud version does not support border-cut settings"
+        )
+    except HomeAssistantError as err:
+        if str(err) in {
+            "Border-cut settings are only supported for protocol 1 devices",
+            "This device does not support border-cut settings",
+        }:
+            raise HomeAssistantError(
+                "Your mower doesn't support this function"
+            ) from err
+        raise
+    except NoOneTimeScheduleError as err:
+        raise HomeAssistantError("Your mower doesn't support this function") from err
 
 
 def _build_schedule_entry(

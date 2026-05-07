@@ -322,6 +322,20 @@
     }
   },
   "services": {
+    "ots": {
+      "name": "Egyszeri ütemezés indítása",
+      "description": "Egyszeri nyírást indít, ha a fűnyíró támogatja.",
+      "fields": {
+        "boundary": {
+          "name": "Szegély",
+          "description": "Legyen-e szegélynyírás."
+        },
+        "runtime": {
+          "name": "Futási idő",
+          "description": "Futási idő percben."
+        }
+      }
+    },
     "set_nutrition": {
       "name": "Set nutrition",
       "description": "Set auto-schedule nutrition values.",
