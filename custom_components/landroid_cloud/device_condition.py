@@ -6,6 +6,7 @@ from typing import Final
 
 import voluptuous as vol
 from homeassistant.components.lawn_mower import LawnMowerActivity
+from homeassistant.components.lawn_mower.const import DOMAIN as MOWER_DOMAIN
 from homeassistant.const import (
     CONF_CONDITION,
     CONF_DEVICE_ID,
@@ -22,8 +23,8 @@ from homeassistant.helpers import (
 from homeassistant.helpers.config_validation import DEVICE_CONDITION_BASE_SCHEMA
 from homeassistant.helpers.typing import ConfigType, TemplateVarsType
 
-from . import DOMAIN
 from .const import (
+    DOMAIN,
     MOWER_STATE_EDGECUT,
     MOWER_STATE_ESCAPED_DIGITAL_FENCE,
     MOWER_STATE_IDLE,
@@ -33,7 +34,6 @@ from .const import (
     MOWER_STATE_ZONING,
 )
 
-MOWER_DOMAIN: Final = "lawn_mower"
 CONDITION_STATE_MAP: Final[dict[str, tuple[str, ...]]] = {
     "is_mowing": (LawnMowerActivity.MOWING,),
     "is_docked": (LawnMowerActivity.DOCKED,),

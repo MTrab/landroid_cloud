@@ -13,18 +13,12 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
 from .commands import async_run_cloud_command
-from .entity import LandroidBaseEntity, auto_schedule_settings
-
-AUTO_SCHEDULE_BOOST_OPTIONS: Final = ("0", "1", "2")
-AUTO_SCHEDULE_GRASS_TYPE_OPTIONS: Final = (
-    "mixed_species",
-    "festuca_arundinacea",
-    "lolium_perenne",
-    "poa_pratensis",
-    "festuca_rubra",
-    "agrostis_stolonifera",
+from .const import (
+    AUTO_SCHEDULE_BOOST_OPTIONS,
+    AUTO_SCHEDULE_GRASS_TYPE_OPTIONS,
+    AUTO_SCHEDULE_SOIL_TYPE_OPTIONS,
 )
-AUTO_SCHEDULE_SOIL_TYPE_OPTIONS: Final = ("clay", "silt", "sand", "ignore")
+from .entity import LandroidBaseEntity, auto_schedule_settings
 
 
 def _configured_legacy_zone_options(device) -> list[str]:
