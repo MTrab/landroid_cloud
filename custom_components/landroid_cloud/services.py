@@ -2,56 +2,57 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Final
+from typing import TYPE_CHECKING
 
 import voluptuous as vol
 from homeassistant.helpers import config_validation as cv
 from homeassistant.exceptions import HomeAssistantError
 from pyworxcloud import ScheduleEntry, ScheduleModel
-from pyworxcloud.day_map import DAY_MAP
 from pyworxcloud.exceptions import NoOneTimeScheduleError
 from pyworxcloud.utils.schedule_codec import (
     add_schedule_entry as add_schedule_entry_model,
 )
 
 from .commands import async_run_cloud_command
+from .const import (
+    ATTR_ALL_SCHEDULES,
+    ATTR_BORDER_DISTANCE_CM,
+    ATTR_BOUNDARY,
+    ATTR_CURRENT_DAY,
+    ATTR_CURRENT_START,
+    ATTR_CUT_OVER_BORDER,
+    ATTR_DAY,
+    ATTR_DAYS,
+    ATTR_DURATION,
+    ATTR_EXCLUDE_DAY,
+    ATTR_K,
+    ATTR_N,
+    ATTR_P,
+    ATTR_REASON,
+    ATTR_RUNTIME,
+    ATTR_START,
+    DAYS,
+    DAY_MAP,
+    EXCLUSION_REASONS,
+    SERVICE_ADD_EXCLUSION_SCHEDULE,
+    SERVICE_ADD_SCHEDULE,
+    SERVICE_CLEAR_NUTRITION,
+    SERVICE_DELETE_EXCLUSION_SCHEDULE,
+    SERVICE_DELETE_SCHEDULE,
+    SERVICE_EDIT_EXCLUSION_SCHEDULE,
+    SERVICE_EDIT_SCHEDULE,
+    SERVICE_OTS,
+    SERVICE_SET_BORDER_CUT_SETTINGS,
+    SERVICE_SET_EXCLUSION_DAY,
+    SERVICE_SET_NUTRITION,
+    VISION_BORDER_DISTANCE_CM_VALUES,
+)
 from .entity import auto_schedule_enabled, auto_schedule_settings
 
 if TYPE_CHECKING:
     from homeassistant.helpers.entity_platform import EntityPlatform
 
     from .lawn_mower import LandroidCloudMowerEntity
-
-SERVICE_OTS: Final = "ots"
-SERVICE_SET_BORDER_CUT_SETTINGS: Final = "set_border_cut_settings"
-SERVICE_ADD_SCHEDULE: Final = "add_schedule"
-SERVICE_EDIT_SCHEDULE: Final = "edit_schedule"
-SERVICE_DELETE_SCHEDULE: Final = "delete_schedule"
-SERVICE_SET_NUTRITION: Final = "set_nutrition"
-SERVICE_CLEAR_NUTRITION: Final = "clear_nutrition"
-SERVICE_SET_EXCLUSION_DAY: Final = "set_exclusion_day"
-SERVICE_ADD_EXCLUSION_SCHEDULE: Final = "add_exclusion_schedule"
-SERVICE_EDIT_EXCLUSION_SCHEDULE: Final = "edit_exclusion_schedule"
-SERVICE_DELETE_EXCLUSION_SCHEDULE: Final = "delete_exclusion_schedule"
-ATTR_EXCLUDE_DAY: Final = "exclude_day"
-ATTR_K: Final = "k"
-ATTR_N: Final = "n"
-ATTR_P: Final = "p"
-ATTR_REASON: Final = "reason"
-ATTR_BOUNDARY: Final = "boundary"
-ATTR_ALL_SCHEDULES: Final = "all_schedules"
-ATTR_CURRENT_DAY: Final = "current_day"
-ATTR_CURRENT_START: Final = "current_start"
-ATTR_DAY: Final = "day"
-ATTR_DAYS: Final = "days"
-ATTR_DURATION: Final = "duration"
-ATTR_RUNTIME: Final = "runtime"
-ATTR_CUT_OVER_BORDER: Final = "cut_over_border"
-ATTR_BORDER_DISTANCE_CM: Final = "border_distance_cm"
-ATTR_START: Final = "start"
-DAYS: Final = tuple(DAY_MAP[index] for index in sorted(DAY_MAP))
-EXCLUSION_REASONS: Final = ("generic", "irrigation")
-VISION_BORDER_DISTANCE_CM_VALUES: Final = (5, 10, 15, 20)
 
 
 def _normalize_day(day: str | None, field_name: str) -> str:

@@ -8,6 +8,7 @@ import voluptuous as vol
 from homeassistant.components.device_automation import async_validate_entity_schema
 from homeassistant.components.lawn_mower import LawnMowerEntityFeature
 from homeassistant.components.lawn_mower.const import (
+    DOMAIN as MOWER_DOMAIN,
     SERVICE_DOCK,
     SERVICE_PAUSE,
     SERVICE_START_MOWING,
@@ -24,9 +25,8 @@ from homeassistant.helpers import config_validation as cv, entity_registry as er
 from homeassistant.helpers.entity import get_supported_features
 from homeassistant.helpers.typing import ConfigType, TemplateVarsType
 
-from . import DOMAIN
+from .const import DOMAIN
 
-MOWER_DOMAIN: Final = "lawn_mower"
 ACTION_TO_SERVICE: Final[dict[str, str]] = {
     "start_mowing": SERVICE_START_MOWING,
     "pause": SERVICE_PAUSE,

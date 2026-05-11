@@ -17,7 +17,6 @@ from homeassistant.helpers import entity_platform
 
 from .commands import async_run_cloud_command
 from .entity import LandroidBaseEntity, device_location_attributes
-from . import services as integration_services
 from .const import (
     MOWER_STATE_EDGECUT,
     MOWER_STATE_ESCAPED_DIGITAL_FENCE,
@@ -26,6 +25,17 @@ from .const import (
     MOWER_STATE_SEARCHING_ZONE,
     MOWER_STATE_STARTING,
     MOWER_STATE_ZONING,
+    SERVICE_ADD_EXCLUSION_SCHEDULE,
+    SERVICE_ADD_SCHEDULE,
+    SERVICE_CLEAR_NUTRITION,
+    SERVICE_DELETE_EXCLUSION_SCHEDULE,
+    SERVICE_DELETE_SCHEDULE,
+    SERVICE_EDIT_EXCLUSION_SCHEDULE,
+    SERVICE_EDIT_SCHEDULE,
+    SERVICE_OTS,
+    SERVICE_SET_BORDER_CUT_SETTINGS,
+    SERVICE_SET_EXCLUSION_DAY,
+    SERVICE_SET_NUTRITION,
 )
 from .services import (
     async_handle_add_schedule,
@@ -41,6 +51,20 @@ from .services import (
     async_handle_set_nutrition,
     async_register_entity_services,
 )
+
+__all__ = [
+    "SERVICE_ADD_EXCLUSION_SCHEDULE",
+    "SERVICE_ADD_SCHEDULE",
+    "SERVICE_CLEAR_NUTRITION",
+    "SERVICE_DELETE_EXCLUSION_SCHEDULE",
+    "SERVICE_DELETE_SCHEDULE",
+    "SERVICE_EDIT_EXCLUSION_SCHEDULE",
+    "SERVICE_EDIT_SCHEDULE",
+    "SERVICE_OTS",
+    "SERVICE_SET_BORDER_CUT_SETTINGS",
+    "SERVICE_SET_EXCLUSION_DAY",
+    "SERVICE_SET_NUTRITION",
+]
 
 STATUS_ACTIVITY_MAP: Final[dict[int, str]] = {
     0: MOWER_STATE_IDLE,
@@ -67,25 +91,6 @@ STATUS_ACTIVITY_MAP: Final[dict[int, str]] = {
 }
 MOWER_DESCRIPTION: Final = LawnMowerEntityEntityDescription(
     key="mower", translation_key="mower"
-)
-SERVICE_OTS: Final = integration_services.SERVICE_OTS
-SERVICE_SET_BORDER_CUT_SETTINGS: Final = (
-    integration_services.SERVICE_SET_BORDER_CUT_SETTINGS
-)
-SERVICE_ADD_SCHEDULE: Final = integration_services.SERVICE_ADD_SCHEDULE
-SERVICE_EDIT_SCHEDULE: Final = integration_services.SERVICE_EDIT_SCHEDULE
-SERVICE_DELETE_SCHEDULE: Final = integration_services.SERVICE_DELETE_SCHEDULE
-SERVICE_SET_NUTRITION: Final = integration_services.SERVICE_SET_NUTRITION
-SERVICE_CLEAR_NUTRITION: Final = integration_services.SERVICE_CLEAR_NUTRITION
-SERVICE_SET_EXCLUSION_DAY: Final = integration_services.SERVICE_SET_EXCLUSION_DAY
-SERVICE_ADD_EXCLUSION_SCHEDULE: Final = (
-    integration_services.SERVICE_ADD_EXCLUSION_SCHEDULE
-)
-SERVICE_EDIT_EXCLUSION_SCHEDULE: Final = (
-    integration_services.SERVICE_EDIT_EXCLUSION_SCHEDULE
-)
-SERVICE_DELETE_EXCLUSION_SCHEDULE: Final = (
-    integration_services.SERVICE_DELETE_EXCLUSION_SCHEDULE
 )
 
 
