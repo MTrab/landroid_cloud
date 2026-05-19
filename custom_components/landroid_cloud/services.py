@@ -390,8 +390,20 @@ async def async_handle_set_border_cut_settings(
     cloud = entity.coordinator.cloud
     set_cut_over_border = getattr(cloud, "set_cut_over_border", None)
     set_border_distance = getattr(cloud, "set_border_distance", None)
-    set_border_cut_settings = getattr(cloud, "set_border_cut_settings", None)
+    set_border_cut_settings = getattr(
+        cloud, "set_border_cut_settings", None
+    ) or getattr(cloud, "_set_border_cut_settings", None)
     try:
+        if callable(set_border_cut_settings):
+            await async_run_cloud_command(
+                lambda: set_border_cut_settings(
+                    serial_number,
+                    cut_over_border=cut_over_border,
+                    border_distance=border_distance,
+                )
+            )
+            return
+
         if callable(set_cut_over_border) and callable(set_border_distance):
             await async_run_cloud_command(
                 lambda: set_cut_over_border(
@@ -403,16 +415,6 @@ async def async_handle_set_border_cut_settings(
                 lambda: set_border_distance(
                     serial_number,
                     border_distance,
-                )
-            )
-            return
-
-        if callable(set_border_cut_settings):
-            await async_run_cloud_command(
-                lambda: set_border_cut_settings(
-                    serial_number,
-                    cut_over_border=cut_over_border,
-                    border_distance=border_distance,
                 )
             )
             return
