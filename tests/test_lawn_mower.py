@@ -110,8 +110,58 @@ async def test_ots_service_calls_cloud_ots() -> None:
 
 
 @pytest.mark.asyncio
-async def test_set_border_cut_settings_service_calls_dedicated_cloud_helpers() -> None:
-    """Border-cut settings service should use dedicated cloud helpers."""
+async def test_set_border_cut_settings_service_prefers_combined_cloud_helper() -> None:
+    """Border-cut settings service should send both values in one cloud command."""
+    entity = object.__new__(LandroidCloudMowerEntity)
+    entity._serial_number = "serial"
+    entity.coordinator = SimpleNamespace(
+        cloud=SimpleNamespace(
+            set_border_cut_settings=AsyncMock(),
+            set_cut_over_border=AsyncMock(),
+            set_border_distance=AsyncMock(),
+        ),
+        data={"serial": SimpleNamespace(serial_number="serial")},
+    )
+
+    await entity._async_service_set_border_cut_settings(
+        cut_over_border=False,
+        border_distance_cm=15,
+    )
+
+    entity.coordinator.cloud.set_border_cut_settings.assert_awaited_once_with(
+        "serial",
+        cut_over_border=False,
+        border_distance=150,
+    )
+    entity.coordinator.cloud.set_cut_over_border.assert_not_awaited()
+    entity.coordinator.cloud.set_border_distance.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_set_border_cut_settings_service_supports_private_beta_helper() -> None:
+    """Border-cut settings service should support the beta combined helper."""
+    entity = object.__new__(LandroidCloudMowerEntity)
+    entity._serial_number = "serial"
+    entity.coordinator = SimpleNamespace(
+        cloud=SimpleNamespace(_set_border_cut_settings=AsyncMock()),
+        data={"serial": SimpleNamespace(serial_number="serial")},
+    )
+
+    await entity._async_service_set_border_cut_settings(
+        cut_over_border=False,
+        border_distance_cm=15,
+    )
+
+    entity.coordinator.cloud._set_border_cut_settings.assert_awaited_once_with(
+        "serial",
+        cut_over_border=False,
+        border_distance=150,
+    )
+
+
+@pytest.mark.asyncio
+async def test_set_border_cut_settings_service_falls_back_to_separate_helpers() -> None:
+    """Border-cut settings service should support older separate cloud helpers."""
     entity = object.__new__(LandroidCloudMowerEntity)
     entity._serial_number = "serial"
     entity.coordinator = SimpleNamespace(
@@ -134,28 +184,6 @@ async def test_set_border_cut_settings_service_calls_dedicated_cloud_helpers() -
     entity.coordinator.cloud.set_border_distance.assert_awaited_once_with(
         "serial",
         150,
-    )
-
-
-@pytest.mark.asyncio
-async def test_set_border_cut_settings_service_supports_legacy_cloud_helper() -> None:
-    """Border-cut settings service should support the previous combined helper."""
-    entity = object.__new__(LandroidCloudMowerEntity)
-    entity._serial_number = "serial"
-    entity.coordinator = SimpleNamespace(
-        cloud=SimpleNamespace(set_border_cut_settings=AsyncMock()),
-        data={"serial": SimpleNamespace(serial_number="serial")},
-    )
-
-    await entity._async_service_set_border_cut_settings(
-        cut_over_border=False,
-        border_distance_cm=15,
-    )
-
-    entity.coordinator.cloud.set_border_cut_settings.assert_awaited_once_with(
-        "serial",
-        cut_over_border=False,
-        border_distance=150,
     )
 
 
