@@ -49,9 +49,19 @@
       "init": {
         "title": "Landroid Cloud-alternativ",
         "data": {
-          "command_timeout": "Timeout för kommando (sekunder)"
+          "email": "E-post",
+          "password": "Lösenord"
         }
       }
+    },
+    "error": {
+      "cannot_connect": "Misslyckades med att ansluta",
+      "invalid_auth": "Fel vid autentisering",
+      "too_many_requests": "För många API-förfrågningar. Försök igen om 24 timmar",
+      "api_error": "Moln-API:t avvisade begäran",
+      "timeout": "Tidsgräns för anslutning överskreds",
+      "unknown": "Oväntat fel",
+      "already_exists": "Det här användarkontot har redan konfigurerats"
     }
   },
   "entity": {

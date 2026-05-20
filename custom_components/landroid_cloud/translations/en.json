@@ -55,9 +55,19 @@
       "init": {
         "title": "Landroid Cloud options",
         "data": {
-          "command_timeout": "Command timeout (seconds)"
+          "email": "Email",
+          "password": "Password"
         }
       }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to cloud service",
+      "invalid_auth": "Invalid credentials",
+      "too_many_requests": "Too many requests",
+      "api_error": "Cloud API rejected the request",
+      "timeout": "Connection timed out",
+      "unknown": "Unexpected error",
+      "already_exists": "This account is already configured"
     }
   },
   "services": {

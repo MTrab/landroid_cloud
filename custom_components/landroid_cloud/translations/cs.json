@@ -49,9 +49,19 @@
       "init": {
         "title": "Možnosti Landroid Cloud",
         "data": {
-          "command_timeout": "Časový limit příkazu (sekundy)"
+          "email": "Email",
+          "password": "Heslo"
         }
       }
+    },
+    "error": {
+      "cannot_connect": "Chyba připojení",
+      "invalid_auth": "Chyba přihlášení",
+      "too_many_requests": "Příliš mnoho požadavků na API – Zkuste to znovu za 24 hodin.",
+      "api_error": "Cloud API požadavek odmítlo",
+      "timeout": "Vypršel časový limit připojení",
+      "unknown": "Neočekávaná chyba",
+      "already_exists": "Tento uživatelský účet již byl nastaven"
     }
   },
   "entity": {

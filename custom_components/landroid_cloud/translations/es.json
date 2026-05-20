@@ -49,9 +49,19 @@
       "init": {
         "title": "Opciones de Landroid Cloud",
         "data": {
-          "command_timeout": "Tiempo de espera del comando (segundos)"
+          "email": "Envíe un correo electrónico a",
+          "password": "Contraseña"
         }
       }
+    },
+    "error": {
+      "cannot_connect": "Fallo en la conexión",
+      "invalid_auth": "Error en la autentificación",
+      "too_many_requests": "Demasiadas solicitudes a la API: vuelva a intentarlo en 24 horas",
+      "api_error": "La API en la nube rechazó la solicitud",
+      "timeout": "Tiempo de espera de conexión agotado",
+      "unknown": "Error inesperado",
+      "already_exists": "Esta cuenta de usuario ya ha sido configurada"
     }
   },
   "entity": {

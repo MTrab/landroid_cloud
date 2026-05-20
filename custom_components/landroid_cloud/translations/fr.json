@@ -49,9 +49,19 @@
       "init": {
         "title": "Options Landroid Cloud",
         "data": {
-          "command_timeout": "Délai d'expiration des commandes (secondes)"
+          "email": "Email",
+          "password": "Mot de passe"
         }
       }
+    },
+    "error": {
+      "cannot_connect": "Échec de la connexion",
+      "invalid_auth": "Erreur d'authentification",
+      "too_many_requests": "Trop de requêtes",
+      "api_error": "L'API cloud a rejeté la requête",
+      "timeout": "Délai de connexion dépassé",
+      "unknown": "Erreur inattendue",
+      "already_exists": "Ce compte d'utilisateur a déjà été configuré"
     }
   },
   "entity": {

@@ -49,9 +49,19 @@
       "init": {
         "title": "Landroid Cloud seaded",
         "data": {
-          "command_timeout": "Käsu ajalimiit (sekundites)"
+          "email": "E-post",
+          "password": "Salasõna"
         }
       }
+    },
+    "error": {
+      "cannot_connect": "Ühendamine ebaõnnestus",
+      "invalid_auth": "Viga autentimisel",
+      "too_many_requests": "Liiga palju päringuid API-le - proovige uuesti 24 tunni pärast.",
+      "api_error": "Pilve API lükkas päringu tagasi",
+      "timeout": "Ühenduse ajalimiit ületatud",
+      "unknown": "Ootamatu viga",
+      "already_exists": "See kasutajakonto on juba konfigureeritud"
     }
   },
   "entity": {
