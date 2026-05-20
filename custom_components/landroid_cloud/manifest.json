@@ -13,7 +13,7 @@
         "pyworxcloud"
     ],
     "requirements": [
-        "pyworxcloud==6.4.0b3"
+        "pyworxcloud@git+https://github.com/MTrab/pyworxcloud.git@fix/border-cut-settings-cut-payload"
     ],
     "version": "7.1.0b2"
 }
