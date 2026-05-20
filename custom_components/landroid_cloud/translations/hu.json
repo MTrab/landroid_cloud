@@ -49,9 +49,19 @@
       "init": {
         "title": "Landroid Cloud beállítások",
         "data": {
-          "command_timeout": "Parancs időtúllépés (másodperc)"
+          "email": "E-mail",
+          "password": "Jelszó"
         }
       }
+    },
+    "error": {
+      "cannot_connect": "Kapcsolódási hiba",
+      "invalid_auth": "Hitelesítési hiba",
+      "too_many_requests": "Túl sok API hívás. Próbálja meg 24 óra múlva",
+      "api_error": "A felhő API elutasította a kérést",
+      "timeout": "Kapcsolódási időtúllépés",
+      "unknown": "Váratlan hiba",
+      "already_exists": "Ez a felhasználói fiók már be van állítva"
     }
   },
   "entity": {

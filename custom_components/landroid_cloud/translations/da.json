@@ -49,9 +49,19 @@
       "init": {
         "title": "Landroid Cloud-indstillinger",
         "data": {
-          "command_timeout": "Kommandotimeout (sekunder)"
+          "email": "E-mail",
+          "password": "Kodeord"
         }
       }
+    },
+    "error": {
+      "cannot_connect": "Kunne ikke forbinde",
+      "invalid_auth": "Fejl i brugernavn og/eller password",
+      "too_many_requests": "For mange forespørgsler mod API - Prøv igen om 24 timer",
+      "api_error": "Cloud-API afviste forespørgslen",
+      "timeout": "Forbindelsen fik timeout",
+      "unknown": "Ukendt fejl",
+      "already_exists": "Denne konto er allerede konfigureret"
     }
   },
   "services": {

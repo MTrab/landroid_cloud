@@ -49,9 +49,19 @@
       "init": {
         "title": "Landroid Cloud-alternativer",
         "data": {
-          "command_timeout": "Tidsavbrudd for kommando (sekunder)"
+          "email": "E-post",
+          "password": "Passord"
         }
       }
+    },
+    "error": {
+      "cannot_connect": "Tilkobling mislyktes",
+      "invalid_auth": "Feil ved autentisering",
+      "too_many_requests": "For mange forespørsler",
+      "api_error": "Sky-API-et avviste forespørselen",
+      "timeout": "Tidsavbrudd ved tilkobling",
+      "unknown": "Uventet feil",
+      "already_exists": "Denne brukerkontoen er allerede konfigurert"
     }
   },
   "entity": {

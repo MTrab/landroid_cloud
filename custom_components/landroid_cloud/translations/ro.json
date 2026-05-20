@@ -49,9 +49,19 @@
       "init": {
         "title": "Opțiuni Landroid Cloud",
         "data": {
-          "command_timeout": "Timp limită comandă (secunde)"
+          "email": "E-mail",
+          "password": "Parolă"
         }
       }
+    },
+    "error": {
+      "cannot_connect": "A eșuat conectarea",
+      "invalid_auth": "Eroare la autentificare",
+      "too_many_requests": "Prea multe solicitări",
+      "api_error": "API-ul cloud a respins cererea",
+      "timeout": "Timpul de conectare a expirat",
+      "unknown": "Eroare neașteptată",
+      "already_exists": "Acest cont a fost deja configurat"
     }
   },
   "entity": {

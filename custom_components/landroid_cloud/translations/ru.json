@@ -49,9 +49,19 @@
       "init": {
         "title": "Параметры Landroid Cloud",
         "data": {
-          "command_timeout": "Таймаут команды (секунды)"
+          "email": "Email",
+          "password": "Пароль"
         }
       }
+    },
+    "error": {
+      "cannot_connect": "Не удалось подключиться",
+      "invalid_auth": "Ошибка аутентификации",
+      "too_many_requests": "Слишком много запросов",
+      "api_error": "Облачный API отклонил запрос",
+      "timeout": "Истекло время ожидания подключения",
+      "unknown": "Неожиданная ошибка",
+      "already_exists": "Эта учетная запись пользователя уже настроена"
     }
   },
   "entity": {
