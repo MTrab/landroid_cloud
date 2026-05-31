@@ -26,6 +26,12 @@ class LandroidBinarySensorDescription(BinarySensorEntityDescription):
 
 BINARY_SENSORS: tuple[LandroidBinarySensorDescription, ...] = (
     LandroidBinarySensorDescription(
+        key="mqtt_connected",
+        translation_key="mqtt_connected",
+        device_class=BinarySensorDeviceClass.CONNECTIVITY,
+        entity_category=EntityCategory.DIAGNOSTIC,
+    ),
+    LandroidBinarySensorDescription(
         key="rain_sensor",
         translation_key="rain_sensor",
         device_class=BinarySensorDeviceClass.MOISTURE,
@@ -90,6 +96,12 @@ class LandroidBinarySensor(LandroidBaseEntity, BinarySensorEntity):
         key = self.entity_description.key
         if key == "rain_sensor":
             return bool(self.device.rainsensor.get("triggered", False))
+
+        if key == "mqtt_connected":
+            connected = getattr(self.coordinator.cloud, "mqtt_connected", None)
+            if isinstance(connected, bool):
+                return connected
+            return None
 
         if key == "charging":
             charging = self.device.battery.get("charging")

@@ -202,9 +202,6 @@ async def test_async_setup_entry_falls_back_to_legacy_type_field(monkeypatch) ->
     async def _async_forward_entry_setups(_entry, _platforms):
         return True
 
-    async def _async_prime_awsiot_metrics() -> None:
-        return None
-
     entry = SimpleNamespace(
         data={
             "email": "user@example.com",
@@ -227,10 +224,6 @@ async def test_async_setup_entry_falls_back_to_legacy_type_field(monkeypatch) ->
     monkeypatch.setattr(
         "custom_components.landroid_cloud.async_get_integration",
         _async_get_integration,
-    )
-    monkeypatch.setattr(
-        "custom_components.landroid_cloud.async_prime_awsiot_metrics",
-        _async_prime_awsiot_metrics,
     )
     monkeypatch.setattr("custom_components.landroid_cloud.WorxCloud", FakeCloud)
     monkeypatch.setattr(

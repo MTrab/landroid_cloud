@@ -29,6 +29,7 @@ except ImportError:
         """Fallback for older pyworxcloud versions without OTA exception support."""
 
 
+from .commands import cloud_connection_error_message, is_mqtt_connection_not_ready
 from .entity import LandroidBaseEntity
 
 _LOGGER = logging.getLogger(__name__)
@@ -336,6 +337,8 @@ class LandroidFirmwareUpdateEntity(LandroidBaseEntity, UpdateEntity):
                 "No firmware update is currently available"
             ) from err
         except (NoConnectionError, OfflineError) as err:
+            if is_mqtt_connection_not_ready(err):
+                raise HomeAssistantError(cloud_connection_error_message(err)) from err
             if started_while_online or self.in_progress:
                 _LOGGER.debug(
                     "Ignoring transient firmware update availability error for %s (%s): %s",
@@ -344,7 +347,7 @@ class LandroidFirmwareUpdateEntity(LandroidBaseEntity, UpdateEntity):
                     err,
                 )
             else:
-                raise HomeAssistantError("Mower is unavailable") from err
+                raise HomeAssistantError(cloud_connection_error_message(err)) from err
         except APIException as err:
             raise HomeAssistantError("Cloud command failed") from err
 
