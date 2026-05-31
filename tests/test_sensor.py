@@ -12,6 +12,7 @@ import custom_components.landroid_cloud.sensor as sensor_module
 from custom_components.landroid_cloud.const import ERROR_STATE_MAP, ERROR_STATE_OPTIONS
 from custom_components.landroid_cloud.sensor import (
     LandroidSensor,
+    SCHEDULE_UNRECORDED_ATTRIBUTES,
     SENSORS,
     _battery_cycle_value,
     _battery_charging_attribute,
@@ -163,6 +164,27 @@ def test_next_schedule_is_timestamp_sensor() -> None:
     )
 
     assert next_schedule.device_class is SensorDeviceClass.TIMESTAMP
+
+
+def test_schedule_attributes_are_excluded_from_recorder_history() -> None:
+    """Schedule sensors should not persist bulky attributes in recorder."""
+    assert LandroidSensor._unrecorded_attributes == SCHEDULE_UNRECORDED_ATTRIBUTES
+    assert {
+        "active",
+        "daily_progress",
+        "days",
+        "enabled",
+        "exclude_nights",
+        "next_schedule_start",
+        "one_time_schedule",
+        "party_mode_enabled",
+        "schedule_enabled",
+        "schedule_entries",
+        "schedule_protocol",
+        "schedule_time_extension",
+        "slots",
+        "time_extension",
+    } == SCHEDULE_UNRECORDED_ATTRIBUTES
 
 
 def test_schedule_attributes_expose_known_schedule_fields() -> None:

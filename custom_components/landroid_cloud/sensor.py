@@ -44,6 +44,26 @@ class LandroidSensorDescription(SensorEntityDescription):
     requires_online: bool = False
 
 
+SCHEDULE_UNRECORDED_ATTRIBUTES = frozenset(
+    {
+        "active",
+        "daily_progress",
+        "days",
+        "enabled",
+        "exclude_nights",
+        "next_schedule_start",
+        "one_time_schedule",
+        "party_mode_enabled",
+        "schedule_enabled",
+        "schedule_entries",
+        "schedule_protocol",
+        "schedule_time_extension",
+        "slots",
+        "time_extension",
+    }
+)
+
+
 def _battery_charging_attribute(device) -> dict[str, bool] | None:
     """Return Home Assistant battery charging attribute when available."""
     charging = getattr(device, "battery", {}).get("charging")
@@ -557,6 +577,8 @@ async def async_setup_entry(
 
 class LandroidSensor(LandroidBaseEntity, SensorEntity):
     """Representation of a Landroid cloud sensor."""
+
+    _unrecorded_attributes = SCHEDULE_UNRECORDED_ATTRIBUTES
 
     entity_description: LandroidSensorDescription
 
