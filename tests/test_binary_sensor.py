@@ -10,8 +10,13 @@ from custom_components.landroid_cloud.binary_sensor import (
 )
 
 
-def test_rain_sensor_and_charging_are_diagnostic_entities() -> None:
-    """Rain sensor and charging should be categorized as diagnostics."""
+def test_binary_sensors_are_diagnostic_entities() -> None:
+    """Binary sensors should be categorized as diagnostics."""
+    mqtt_connected = next(
+        description
+        for description in BINARY_SENSORS
+        if description.key == "mqtt_connected"
+    )
     rain_sensor = next(
         description
         for description in BINARY_SENSORS
@@ -21,12 +26,20 @@ def test_rain_sensor_and_charging_are_diagnostic_entities() -> None:
         description for description in BINARY_SENSORS if description.key == "charging"
     )
 
+    assert mqtt_connected.entity_category is EntityCategory.DIAGNOSTIC
     assert rain_sensor.entity_category is EntityCategory.DIAGNOSTIC
     assert charging.entity_category is EntityCategory.DIAGNOSTIC
 
 
-def test_charging_is_enabled_by_default_but_rain_sensor_is_not() -> None:
-    """Charging should be enabled by default while rain sensor stays disabled."""
+def test_charging_and_mqtt_connected_are_enabled_by_default_but_rain_sensor_is_not() -> (
+    None
+):
+    """Charging and MQTT connected should be enabled by default."""
+    mqtt_connected = next(
+        description
+        for description in BINARY_SENSORS
+        if description.key == "mqtt_connected"
+    )
     rain_sensor = next(
         description
         for description in BINARY_SENSORS
@@ -36,8 +49,43 @@ def test_charging_is_enabled_by_default_but_rain_sensor_is_not() -> None:
         description for description in BINARY_SENSORS if description.key == "charging"
     )
 
+    assert mqtt_connected.entity_registry_enabled_default is True
     assert rain_sensor.entity_registry_enabled_default is False
     assert charging.entity_registry_enabled_default is True
+
+
+def test_mqtt_connected_reads_cloud_property() -> None:
+    """MQTT connected should expose the pyworxcloud cloud property."""
+    entity = object.__new__(LandroidBinarySensor)
+    entity.entity_description = next(
+        description
+        for description in BINARY_SENSORS
+        if description.key == "mqtt_connected"
+    )
+    entity.coordinator = SimpleNamespace(
+        cloud=SimpleNamespace(mqtt_connected=True),
+        data={"serial": SimpleNamespace()},
+    )
+    entity._serial_number = "serial"
+
+    assert entity.is_on is True
+
+
+def test_mqtt_connected_is_unknown_without_boolean_cloud_property() -> None:
+    """MQTT connected should be unknown when pyworxcloud has no boolean value."""
+    entity = object.__new__(LandroidBinarySensor)
+    entity.entity_description = next(
+        description
+        for description in BINARY_SENSORS
+        if description.key == "mqtt_connected"
+    )
+    entity.coordinator = SimpleNamespace(
+        cloud=SimpleNamespace(mqtt_connected=None),
+        data={"serial": SimpleNamespace()},
+    )
+    entity._serial_number = "serial"
+
+    assert entity.is_on is None
 
 
 def test_charging_binary_sensor_is_unavailable_when_mower_is_offline() -> None:

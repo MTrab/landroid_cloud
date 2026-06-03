@@ -8,7 +8,7 @@ from unittest.mock import AsyncMock, Mock
 import pytest
 from homeassistant.components.update import UpdateEntityFeature
 from homeassistant.exceptions import HomeAssistantError
-from pyworxcloud.exceptions import OfflineError
+from pyworxcloud.exceptions import NoConnectionError, OfflineError
 
 from custom_components.landroid_cloud.update import (
     LandroidFirmwareUpdateEntity,
@@ -271,6 +271,21 @@ async def test_async_install_ignores_offline_race_when_started_online() -> None:
     await entity.async_install(version=None, backup=False)
 
     listeners.assert_called_once_with()
+
+
+@pytest.mark.asyncio
+async def test_async_install_surfaces_mqtt_not_ready() -> None:
+    """Firmware commands should explain when MQTT is disconnected."""
+    entity = _make_entity(
+        firmware={"version": "3.30"},
+        info={"latest_version": "3.31"},
+        start_firmware_upgrade=AsyncMock(
+            side_effect=NoConnectionError("MQTT connection is not ready")
+        ),
+    )
+
+    with pytest.raises(HomeAssistantError, match="MQTT is not connected"):
+        await entity.async_install(version=None, backup=False)
 
 
 @pytest.mark.asyncio
