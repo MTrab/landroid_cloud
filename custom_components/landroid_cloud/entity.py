@@ -98,6 +98,37 @@ class LandroidBaseEntity(CoordinatorEntity[LandroidCloudCoordinator]):
         return DeviceInfo(**info)
 
 
+def _rtk_position(device: DeviceHandler) -> tuple[float, float] | None:
+    """Return position from the RTK payload (dat.rtk.pos = [lat, lon]).
+
+    GPS-equipped Vision/RTK mowers report their fix under ``dat.rtk.pos``
+    instead of the legacy ``modules.4G.gps.coo`` schema parsed into
+    ``device.gps``. The full payload is retained on the device object, so
+    scan it (attribute name varies by pyworxcloud version) for ``rtk.pos``.
+    """
+    for attr in ("raw_dat", "raw_data", "_raw_dat", "data", "raw"):
+        raw = getattr(device, attr, None)
+        if not isinstance(raw, dict):
+            continue
+        candidates = [raw]
+        nested = raw.get("dat")
+        if isinstance(nested, dict):
+            candidates.append(nested)
+        for candidate in candidates:
+            rtk = candidate.get("rtk")
+            if not isinstance(rtk, dict):
+                continue
+            pos = rtk.get("pos")
+            if (
+                isinstance(pos, (list, tuple))
+                and len(pos) >= 2
+                and isinstance(pos[0], (int, float))
+                and isinstance(pos[1], (int, float))
+            ):
+                return float(pos[0]), float(pos[1])
+    return None
+
+
 def device_coordinates(device: DeviceHandler) -> tuple[float, float] | None:
     """Return normalized GPS coordinates when available."""
     gps = getattr(device, "gps", None)
@@ -110,7 +141,8 @@ def device_coordinates(device: DeviceHandler) -> tuple[float, float] | None:
         longitude = getattr(gps, "longitude", None)
 
     if not isinstance(latitude, int | float) or not isinstance(longitude, int | float):
-        return None
+        # Vision/RTK mowers report position under dat.rtk.pos, not device.gps.
+        return _rtk_position(device)
 
     return float(latitude), float(longitude)
 
