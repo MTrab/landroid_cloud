@@ -50,8 +50,13 @@ class LandroidCloudCoordinator(DataUpdateCoordinator[dict[str, DeviceHandler]]):
             del api_data
             self._schedule_api_refresh()
 
+        def _on_mqtt_connection(state: bool) -> None:
+            del state
+            self._schedule_connection_update()
+
         self.cloud.set_callback(LandroidEvent.DATA_RECEIVED, _on_data_received)
         self.cloud.set_callback(LandroidEvent.API, _on_api_update)
+        self.cloud.set_callback(LandroidEvent.MQTT_CONNECTION, _on_mqtt_connection)
 
     async def async_shutdown(self) -> None:
         """Detach callbacks for push updates."""
@@ -59,6 +64,7 @@ class LandroidCloudCoordinator(DataUpdateCoordinator[dict[str, DeviceHandler]]):
         # Reset handlers to no-op before cloud disconnect to avoid stale callbacks.
         self.cloud.set_callback(LandroidEvent.DATA_RECEIVED, lambda **_: None)
         self.cloud.set_callback(LandroidEvent.API, lambda **_: None)
+        self.cloud.set_callback(LandroidEvent.MQTT_CONNECTION, lambda **_: None)
 
     async def _handle_push_update(self, device: DeviceHandler) -> None:
         """Merge push update into coordinator data in a race-safe manner."""
@@ -94,6 +100,13 @@ class LandroidCloudCoordinator(DataUpdateCoordinator[dict[str, DeviceHandler]]):
         except RuntimeError:
             _LOGGER.debug("Ignoring API refresh scheduling after loop shutdown")
 
+    def _schedule_connection_update(self) -> None:
+        """Schedule a connectivity-state refresh on Home Assistant's event loop."""
+        try:
+            self.hass.loop.call_soon_threadsafe(self._notify_connection_update)
+        except RuntimeError:
+            _LOGGER.debug("Ignoring connection update scheduling after loop shutdown")
+
     def _create_push_update_task(self, device: DeviceHandler) -> None:
         """Create task for processing a push update."""
         self.hass.async_create_task(self._handle_push_update(device))
@@ -101,6 +114,10 @@ class LandroidCloudCoordinator(DataUpdateCoordinator[dict[str, DeviceHandler]]):
     def _create_api_refresh_task(self) -> None:
         """Create task for processing an API refresh event."""
         self.hass.async_create_task(self._refresh_from_cloud())
+
+    def _notify_connection_update(self) -> None:
+        """Notify listeners of an MQTT connectivity change without refetching data."""
+        self.async_update_listeners()
 
     async def _async_update_data(self) -> dict[str, DeviceHandler]:
         """Return current cloud cache without triggering device updates."""
