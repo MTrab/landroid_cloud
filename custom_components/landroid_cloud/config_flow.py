@@ -105,9 +105,17 @@ class LandroidCloudConfigFlow(ConfigFlow, domain=DOMAIN):
                 errors["base"] = "invalid_auth"
             except TooManyRequestsError:
                 errors["base"] = "too_many_requests"
-            except NoConnectionError, ServiceUnavailableError:
+            except (
+                NoConnectionError,
+                ServiceUnavailableError,
+            ):
                 errors["base"] = "cannot_connect"
-            except RequestError, ForbiddenError, NotFoundError, InternalServerError:
+            except (
+                RequestError,
+                ForbiddenError,
+                NotFoundError,
+                InternalServerError,
+            ):
                 errors["base"] = "api_error"
             except APIException:
                 errors["base"] = "unknown"
@@ -158,9 +166,17 @@ class LandroidCloudOptionsFlow(OptionsFlow):
                     errors["base"] = "invalid_auth"
                 except TooManyRequestsError:
                     errors["base"] = "too_many_requests"
-                except NoConnectionError, ServiceUnavailableError:
+                except (
+                    NoConnectionError,
+                    ServiceUnavailableError,
+                ):
                     errors["base"] = "cannot_connect"
-                except RequestError, ForbiddenError, NotFoundError, InternalServerError:
+                except (
+                    RequestError,
+                    ForbiddenError,
+                    NotFoundError,
+                    InternalServerError,
+                ):
                     errors["base"] = "api_error"
                 except APIException:
                     errors["base"] = "unknown"
