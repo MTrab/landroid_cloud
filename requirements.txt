@@ -5,4 +5,4 @@ pytest-asyncio==1.4.0
 pytest-cov==7.1.0
 pip>=26.2.1,<26.3
 pyworxcloud==6.4.2
-ruff==0.16.0
+ruff==0.16.5
