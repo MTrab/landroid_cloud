@@ -40,12 +40,18 @@ def _capabilities_value(device: Any) -> int | None:
     if callable(raw_int):
         try:
             return int(raw_int())
-        except TypeError, ValueError:
+        except (
+            TypeError,
+            ValueError,
+        ):
             return None
 
     try:
         return int(capabilities)
-    except TypeError, ValueError:
+    except (
+        TypeError,
+        ValueError,
+    ):
         return None
 
 
