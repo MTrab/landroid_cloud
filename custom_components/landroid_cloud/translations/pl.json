@@ -233,6 +233,9 @@
       "cutting_height": {
         "name": "Wysokość koszenia"
       },
+      "zone_cutting_height": {
+        "name": "Wysokość koszenia strefy {zone}"
+      },
       "time_extension": {
         "name": "Wydłużenie czasu"
       },

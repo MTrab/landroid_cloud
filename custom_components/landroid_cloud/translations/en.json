@@ -477,6 +477,9 @@
       "cutting_height": {
         "name": "Cutting height"
       },
+      "zone_cutting_height": {
+        "name": "Cutting height zone {zone}"
+      },
       "time_extension": {
         "name": "Time extension"
       },

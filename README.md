@@ -186,6 +186,7 @@ Numbers require the mower to be online and are disabled by default.
 | --- | --- | --- | --- | --- |
 | Rain delay | Configuration | 0-300 min | 1 | |
 | Cutting height | Configuration | 20-70 mm | 1 | Requires cutting height support |
+| Cutting height zone {zone} | Configuration | 20-70 mm | 5 | One per RTK zone with electric height adjustment |
 | Time extension | Configuration | -100% to 100% | 10 | |
 | Torque | Configuration | -50% to 50% | 1 | Requires torque support |
 | Lawn size | Configuration | 0-100000 m² | 1 | |
@@ -209,7 +210,7 @@ You can control the mower through native entities and custom `landroid_cloud` se
 - Update entities for firmware version tracking, release notes, and OTA installs
 - Buttons for one-shot actions such as edge cut and counter resets
 - Switches for boolean features such as auto schedule, firmware auto update, party mode, ACS, lock, and Off Limits
-- Numbers for writable values such as rain delay, cutting height, time extension, torque, and lawn metadata
+- Numbers for writable values such as rain delay, mower-wide and per-zone cutting height, time extension, torque, and lawn metadata
 - Select entities for zone choice and auto-schedule tuning
 - The `landroid_cloud.ots` service for starting a one-time schedule
 - The `landroid_cloud.add_schedule`, `landroid_cloud.edit_schedule`, and `landroid_cloud.delete_schedule` services for schedule management

@@ -233,6 +233,9 @@
       "cutting_height": {
         "name": "Lõikekõrgus"
       },
+      "zone_cutting_height": {
+        "name": "Lõikekõrgus tsoonis {zone}"
+      },
       "time_extension": {
         "name": "Aja pikendus"
       },
