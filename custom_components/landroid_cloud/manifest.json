@@ -13,7 +13,7 @@
         "pyworxcloud"
     ],
     "requirements": [
-        "pyworxcloud@git+https://github.com/MTrab/pyworxcloud.git@da93d02b91cabd11dffec80dd7a98429e60d1bd0"
+        "pyworxcloud==6.5.0"
     ],
     "version": "7.1.3"
 }
