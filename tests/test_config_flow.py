@@ -1,5 +1,6 @@
 """Tests for Landroid Cloud config flow schema."""
 
+import asyncio
 import json
 from pathlib import Path
 from types import SimpleNamespace
@@ -11,6 +12,7 @@ from homeassistant.helpers.selector import SelectSelector
 from custom_components.landroid_cloud.config_flow import (
     STEP_USER_DATA_SCHEMA,
     LandroidCloudOptionsFlow,
+    _validate_input,
 )
 from custom_components.landroid_cloud.const import CONF_CLOUD, CONF_COMMAND_TIMEOUT
 
@@ -38,6 +40,49 @@ def test_abort_translation_covers_already_in_progress() -> None:
         assert content["config"]["abort"]["already_in_progress"], (
             f"Missing already_in_progress abort translation for {translation_file.name}"
         )
+
+
+@pytest.mark.asyncio
+async def test_validate_input_does_not_impose_connection_timeout(monkeypatch) -> None:
+    """Cloud connection handling should be left to pyworxcloud."""
+    calls: list[str] = []
+    validation_task = asyncio.current_task()
+
+    class FakeCloud:
+        """Minimal WorxCloud stub for input validation."""
+
+        devices = {"serial": object()}
+
+        async def authenticate(self) -> None:
+            calls.append("authenticate")
+
+        async def connect(self) -> bool:
+            # asyncio.wait_for would run this in a separate task.
+            assert asyncio.current_task() is validation_task
+            calls.append("connect")
+            return True
+
+        async def disconnect(self) -> None:
+            calls.append("disconnect")
+
+    monkeypatch.setattr(
+        "custom_components.landroid_cloud.config_flow.WorxCloud",
+        lambda *_args: FakeCloud(),
+    )
+
+    result = await _validate_input(
+        {
+            CONF_EMAIL: "user@example.com",
+            CONF_PASSWORD: "secret",
+            CONF_CLOUD: "worx",
+        }
+    )
+
+    assert result == {
+        "title": "user@example.com (worx)",
+        "device_count": 1,
+    }
+    assert calls == ["authenticate", "connect", "disconnect"]
 
 
 @pytest.mark.asyncio

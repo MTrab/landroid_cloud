@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 from types import MappingProxyType, SimpleNamespace
 
 import pytest
@@ -174,6 +175,8 @@ async def test_async_setup_entry_falls_back_to_legacy_type_field(monkeypatch) ->
             return True
 
         async def connect(self) -> bool:
+            # asyncio.wait_for would run this in a separate task.
+            assert asyncio.current_task() is setup_task
             return True
 
         async def disconnect(self) -> None:
@@ -231,6 +234,7 @@ async def test_async_setup_entry_falls_back_to_legacy_type_field(monkeypatch) ->
         FakeCoordinator,
     )
 
+    setup_task = asyncio.current_task()
     assert await async_setup_entry(hass, entry) is True
     assert captured == {
         "email": "user@example.com",
