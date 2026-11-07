@@ -233,6 +233,9 @@
       "cutting_height": {
         "name": "Výška sečení"
       },
+      "zone_cutting_height": {
+        "name": "Výška sečení zóny {zone}"
+      },
       "time_extension": {
         "name": "Časové prodloužení"
       },

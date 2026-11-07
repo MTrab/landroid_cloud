@@ -233,6 +233,9 @@
       "cutting_height": {
         "name": "Klipphöjd"
       },
+      "zone_cutting_height": {
+        "name": "Klipphöjd zon {zone}"
+      },
       "time_extension": {
         "name": "Tidsförlängning"
       },

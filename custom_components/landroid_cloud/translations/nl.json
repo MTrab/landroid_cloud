@@ -233,6 +233,9 @@
       "cutting_height": {
         "name": "Maaihoogte"
       },
+      "zone_cutting_height": {
+        "name": "Maaihoogte zone {zone}"
+      },
       "time_extension": {
         "name": "Tijdsverlenging"
       },

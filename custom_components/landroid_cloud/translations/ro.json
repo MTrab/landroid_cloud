@@ -233,6 +233,9 @@
       "cutting_height": {
         "name": "Înălțime de tăiere"
       },
+      "zone_cutting_height": {
+        "name": "Înălțime de tăiere zona {zone}"
+      },
       "time_extension": {
         "name": "Extensie de timp"
       },

@@ -233,6 +233,9 @@
       "cutting_height": {
         "name": "Altura de corte"
       },
+      "zone_cutting_height": {
+        "name": "Altura de corte zona {zone}"
+      },
       "time_extension": {
         "name": "Extensión de tiempo"
       },
