@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import asyncio
 import logging
 from typing import Any
 
@@ -165,7 +164,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: LandroidConfigEntry) -> 
 
     try:
         await cloud.authenticate()
-        connected = await asyncio.wait_for(cloud.connect(), timeout=30)
+        connected = await cloud.connect()
     except AuthorizationError as err:
         raise ConfigEntryAuthFailed("Invalid credentials") from err
     except (RequestError, ForbiddenError, NotFoundError) as err:
