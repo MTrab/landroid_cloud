@@ -93,6 +93,14 @@ SWITCHES: tuple[LandroidSwitchDescription, ...] = (
         entity_registry_enabled_default=False,
         capability=DeviceCapability.ACS,
     ),
+    LandroidSwitchDescription(
+        key="position_light",
+        translation_key="position_light",
+        icon="mdi:car-parking-lights",
+        entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
+        capability=DeviceCapability.POSITION_LIGHT,
+    ),
 )
 
 
@@ -176,6 +184,9 @@ class LandroidSwitch(LandroidBaseEntity, SwitchEntity):
         if key == "acs":
             value = getattr(self.device, "acs_enabled", None)
             return None if value is None else bool(value)
+        if key == "position_light":
+            value = getattr(self.device, "position_light_enabled", None)
+            return None if value is None else bool(value)
 
         return None
 
@@ -236,4 +247,8 @@ class LandroidSwitch(LandroidBaseEntity, SwitchEntity):
         elif self.entity_description.key == "acs":
             await async_run_cloud_command(
                 lambda: self.coordinator.cloud.set_acs(serial_number, state)
+            )
+        elif self.entity_description.key == "position_light":
+            await async_run_cloud_command(
+                lambda: self.coordinator.cloud.set_position_light(serial_number, state)
             )
