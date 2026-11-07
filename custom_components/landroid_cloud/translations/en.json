@@ -455,6 +455,9 @@
       "acs": {
         "name": "ACS"
       },
+      "position_light": {
+        "name": "Position light"
+      },
       "party_mode": {
         "name": "Party mode"
       }
