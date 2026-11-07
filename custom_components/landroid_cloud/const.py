@@ -99,6 +99,7 @@ ERROR_STATE_MAP: dict[int, str] = {
 ERROR_STATE_OPTIONS: tuple[str, ...] = tuple(dict.fromkeys(ERROR_STATE_MAP.values()))
 
 SERVICE_OTS = "ots"
+MAX_OTS_RUNTIME = 480
 SERVICE_SET_BORDER_CUT_SETTINGS = "set_border_cut_settings"
 SERVICE_ADD_SCHEDULE = "add_schedule"
 SERVICE_EDIT_SCHEDULE = "edit_schedule"
