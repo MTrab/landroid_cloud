@@ -233,6 +233,9 @@
       "cutting_height": {
         "name": "Schnitthöhe"
       },
+      "zone_cutting_height": {
+        "name": "Schnitthöhe Zone {zone}"
+      },
       "time_extension": {
         "name": "Zeitverlängerung"
       },

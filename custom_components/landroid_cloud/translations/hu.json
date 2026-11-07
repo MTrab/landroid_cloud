@@ -233,6 +233,9 @@
       "cutting_height": {
         "name": "Vágási magasság"
       },
+      "zone_cutting_height": {
+        "name": "{zone}. zóna vágási magassága"
+      },
       "time_extension": {
         "name": "Időkiterjesztés"
       },

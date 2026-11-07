@@ -233,6 +233,9 @@
       "cutting_height": {
         "name": "Hauteur de coupe"
       },
+      "zone_cutting_height": {
+        "name": "Hauteur de coupe zone {zone}"
+      },
       "time_extension": {
         "name": "Modifier (+/-) le temps de travail"
       },

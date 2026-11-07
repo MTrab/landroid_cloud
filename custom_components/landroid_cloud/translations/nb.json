@@ -233,6 +233,9 @@
       "cutting_height": {
         "name": "Klippehøyde"
       },
+      "zone_cutting_height": {
+        "name": "Klippehøyde sone {zone}"
+      },
       "time_extension": {
         "name": "Tidsutvidelse"
       },

@@ -233,6 +233,9 @@
       "cutting_height": {
         "name": "Высота стрижки"
       },
+      "zone_cutting_height": {
+        "name": "Высота стрижки зоны {zone}"
+      },
       "time_extension": {
         "name": "Продление времени"
       },
