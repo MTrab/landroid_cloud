@@ -8,6 +8,7 @@ from homeassistant.exceptions import HomeAssistantError
 import pytest
 from pyworxcloud import ScheduleEntry, ScheduleModel
 from pyworxcloud.exceptions import NoOneTimeScheduleError
+import voluptuous as vol
 
 from custom_components.landroid_cloud.const import (
     MOWER_STATE_EDGECUT,
@@ -1137,12 +1138,11 @@ async def test_delete_exclusion_schedule_requires_start_when_day_has_multiple() 
 @pytest.mark.asyncio
 async def test_async_setup_entry_registers_schedule_services(monkeypatch) -> None:
     """Setup should register OTS and schedule services on the mower platform."""
-    registrations: list[tuple[str, str]] = []
+    registrations: list[tuple[str, dict, str]] = []
 
     class FakePlatform:
         def async_register_entity_service(self, name, schema, method):
-            del schema
-            registrations.append((name, method))
+            registrations.append((name, schema, method))
 
     monkeypatch.setattr(
         "custom_components.landroid_cloud.lawn_mower.entity_platform.async_get_current_platform",
@@ -1159,7 +1159,7 @@ async def test_async_setup_entry_registers_schedule_services(monkeypatch) -> Non
         lambda entities: None,
     )
 
-    assert registrations == [
+    assert [(name, method) for name, _, method in registrations] == [
         (SERVICE_OTS, "_async_service_ots"),
         (
             SERVICE_SET_BORDER_CUT_SETTINGS,
@@ -1175,3 +1175,15 @@ async def test_async_setup_entry_registers_schedule_services(monkeypatch) -> Non
         (SERVICE_EDIT_EXCLUSION_SCHEDULE, "_async_service_edit_exclusion_schedule"),
         (SERVICE_DELETE_EXCLUSION_SCHEDULE, "_async_service_delete_exclusion_schedule"),
     ]
+
+    ots_schema = next(
+        schema for name, schema, _ in registrations if name == SERVICE_OTS
+    )
+    runtime_validator = next(
+        validator
+        for marker, validator in ots_schema.items()
+        if marker.schema == "runtime"
+    )
+    assert runtime_validator(480) == 480
+    with pytest.raises(vol.Invalid):
+        runtime_validator(481)

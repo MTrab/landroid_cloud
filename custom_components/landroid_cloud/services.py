@@ -34,6 +34,7 @@ from .const import (
     DAYS,
     DAY_MAP,
     EXCLUSION_REASONS,
+    MAX_OTS_RUNTIME,
     SERVICE_ADD_EXCLUSION_SCHEDULE,
     SERVICE_ADD_SCHEDULE,
     SERVICE_CLEAR_NUTRITION,
@@ -150,7 +151,7 @@ def async_register_entity_services(platform: EntityPlatform) -> None:
         {
             vol.Required(ATTR_BOUNDARY): bool,
             vol.Required(ATTR_RUNTIME): vol.All(
-                vol.Coerce(int), vol.Range(min=10, max=120)
+                vol.Coerce(int), vol.Range(min=10, max=MAX_OTS_RUNTIME)
             ),
         },
         "_async_service_ots",
